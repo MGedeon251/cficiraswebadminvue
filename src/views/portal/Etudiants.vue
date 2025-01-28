@@ -25,62 +25,43 @@ import sidebar from '@/components/Header.vue'
                 </div>
             </div>
             
-            <div class="row">
-                
+        <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Liste des Etudiants</h4>
+                        <p class="card-description">Liste des etudiants inscrits</p>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Matricule</th>
+                                        <th>Nom</th>
+                                        <th>Prenom</th>
+                                        <th>Email</th>
+                                        <th>Telephone</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>DOE</td>
+                                        <td>John</td>
+                                        <td>Johdoe@gmail.com</td>
+                                        <td>+242066034357</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+        </div>
 
             
         </sidebar>
     </div>
 </template>
-
-<script>
-export default {
-  data() {
-    return {
-      searchQuery: "",
-      tasks: [
-        { id: "TASK-7103", label: "Feature", title: "Parse EXE bandwidth!", status: "Canceled", priority: "Low" },
-        { id: "TASK-4314", label: "Bug", title: "Compress program for XML alarm", status: "In Progress", priority: "High" },
-        { id: "TASK-3415", label: "Feature", title: "Use cross-platform XML", status: "Todo", priority: "Medium" },
-        { id: "TASK-4336", label: "Documentation", title: "Synthesize microchip", status: "Done", priority: "Medium" },
-      ],
-    };
-  },
-  computed: {
-    filteredTasks() {
-      return this.tasks.filter(task => task.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
-    },
-  },
-  methods: {
-    statusClass(status) {
-      return {
-        "badge bg-danger text-white": status === "Canceled",
-        "badge bg-warning text-dark": status === "In Progress",
-        "badge bg-info text-white": status === "Todo",
-        "badge bg-success text-white": status === "Done",
-      };
-    },
-    priorityClass(priority) {
-      return {
-        "text-danger fw-bold": priority === "High",
-        "text-warning fw-bold": priority === "Medium",
-        "text-muted": priority === "Low",
-      };
-    },
-  },
-};
-</script>
-
-<style scoped>
-/* Styles spécifiques */
-.dropdown-submenu {
-  position: relative;
-}
-
-.dropdown-submenu .dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-}
-</style>
