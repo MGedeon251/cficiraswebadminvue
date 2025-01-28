@@ -107,8 +107,10 @@ import sidebar from '@/components/Header.vue'
             <h4>Importer | Export (.csv, .xlsx)</h4>
         </div>
         <div class="card p-4">
-    <p class="text-muted">Importer une liste existant de matieres</p>
-
+          
+          <div class="card-body dashboard-tabs p-0">
+          <p class="text-muted">Importer une liste existant de matieres</p>
+          </div>
     <!-- Drag & Drop File Upload -->
         <div
           class="drag-drop-area border rounded p-4 text-center"
@@ -127,7 +129,7 @@ import sidebar from '@/components/Header.vue'
         </div>
 
     <!-- Liste des fichiers importés -->
-        <div v-if="uploadedFiles.length" class="mt-3">
+    <div v-if="uploadedFiles.length" class="mt-3">
           <h5 class="text-dark">Uploaded Files:</h5>
           <ul class="list-group">
             <li v-for="(file, index) in uploadedFiles" :key="index" class="list-group-item d-flex justify-content-between">
@@ -137,15 +139,13 @@ import sidebar from '@/components/Header.vue'
               </button>
             </li>
           </ul>
-        </div>
+    </div>
       </div>
-
-      </div>
-
+      </div></div>
+    </sidebar>
     </div>
 
-        </sidebar>
-    </div>
+
 </template>
 
 <script>
