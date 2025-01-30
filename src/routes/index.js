@@ -9,6 +9,8 @@ import Inscription from '../views/Inscription.vue';
 import Schedule from '../views/Schedule.vue';
 import Etudiants from '../views/portal/Etudiants.vue';
 import Modules from '../views/portal/Modules.vue';
+import Examens from '../views/portal/Examens.vue';
+import Notes from '../views/portal/Notes.vue';
 
 const routes = [
   { path: '/', name: 'home', component: Home }, // Route vers la page d'accueil
@@ -21,6 +23,8 @@ const routes = [
   { path: '/schedule', name: 'Schedule', component: Schedule },
   { path: '/etudiants', name: 'Etudiants', component: Etudiants },
   { path: '/modules', name: 'Modules', component: Modules},
+  { path: '/examens', name: 'Examens', component: Examens},
+  { path: '/notes', name: 'Notes', component: Notes},
   
 ];
 
