@@ -23,40 +23,163 @@ import sidebar from '@/components/Header.vue'
                     </div>
                   </div>
             </div>
+            
         <div class="row">
             <div class="container my-2">
         <!-- Header Section -->
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4>Planifications </h4>
         </div>
-        <!-- Product Table -->
-        <div class="card p-4">
-            <div class="d-flex mb-3">
-                <button class="btn btn-outline-dark me-2">Tout</button>
-                <button class="btn btn-outline-dark me-2">Sessions ordinaire</button>
-                <button class="btn btn-outline-dark me-2">Sessions de rappels</button>
-            </div>
-            
-            <p>Manage your products and view their sales performance.</p>
-            
-            <table class="table table-hover align-middle">
+        <div class="row">
+                <div class="col-md-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body dashboard-tabs p-0">
+                  <ul class="nav nav-tabs px-4" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" id="overview-tab" data-bs-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Tout</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="sales-tab" data-bs-toggle="tab" href="#sales" role="tab" aria-controls="sales" aria-selected="false">Semestre 1</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="purchases-tab" data-bs-toggle="tab" href="#purchases" role="tab" aria-controls="purchases" aria-selected="false">Semestre 2</a>
+                    </li>
+                  </ul>
+                  <div class="tab-content py-0 px-0">
+                    <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+                        <div class="d-flex flex-wrap justify-content-xl-between">
+                            <div class="card-body">
+                            <h4 class="card-title">Tout les examens </h4>
+                            <p class="card-description">Liste des examens pour une année académique</p>
+                           <div class="table-responsive">
+                            <table class="table table-hover align-middle">
                     <thead>
                             <tr>
                                 <th scope="col">Designation</th>
                                 <th scope="col">Etat</th>
-                                <th scope="col">Coef</th>
-                                <th scope="col">Nombre Heure</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Durée</th>
                                 <th scope="col">Formateur</th>
                                 <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
+                
                             </tr>
                     </thead>
                     <tbody>
-                            
+                            <tr>
+                                <td>Examen Partiel session de fevrier 2025</td>
+                                <td><span class="status-badge status-draft">Inactive</span></td>
+                                <td>5 Fevrier 2025</td>
+                                <td>10j</td>
+                                <td>OYERE Morel Garvey</td>
+                                <td><button class="btn btn-sm btn-outline-primary">...</button></td>
+                            </tr>
+                            <tr>
+                                <td>Examen Rappel session de Mars 2025</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>24 Mars 2025</td>
+                                <td>10j</td>
+                                <td>OYERE Morel Garvey</td>
+                                <td><button class="btn btn-sm btn-outline-primary">...</button></td>
+                            </tr>
+                            <tr>
+                                <td>Examen Partiel session de Juin 2025</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>5 Juin 2025</td>
+                                <td>10j</td>
+                                <td>OYERE Morel Garvey</td>
+                                <td><button class="btn btn-sm btn-outline-primary">...</button></td>
+                            </tr>
+                            <tr>
+                                <td>Examen Partiel session de Aout 2025</td>
+                                <td><span class="status-badge status-draft">Inactive</span></td>
+                                <td>3 Aout 2025</td>
+                                <td>10j</td>
+                                <td>LEKOUNDA Mardochet Gédéon</td>
+                                <td><button class="btn btn-sm btn-outline-primary">...</button></td>
+                            </tr>
                     </tbody>
             </table>
-        </div>
+                        </div>
+                    </div>
+                        </div>   
+                    </div>
+                    <div class="tab-pane fade" id="sales" role="tabpanel" aria-labelledby="sales-tab">
+                      <div class="d-flex flex-wrap justify-content-xl-between">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <button class="btn btn-outline-dark me-2">Partiel</button>
+                                <button class="btn btn-outline-dark me-2">Rappel</button>
+                            </div>
+                            <h4 class="card-title">Liste des Etudiants v2</h4>
+                            <p class="card-description">Liste des etudiants inscrits</p>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Matricule</th>
+                                            <th>Nom</th>
+                                            <th>Prenom</th>
+                                            <th>Email</th>
+                                            <th>Telephone</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>DOE</td>
+                                            <td>John</td>
+                                            <td>Johdoe@gmail.com</td>
+                                            <td>+242066034357</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="purchases" role="tabpanel" aria-labelledby="purchases-tab">
+                      <div class="d-flex flex-wrap justify-content-xl-between">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                              <button class="btn btn-outline-dark me-2">Partiel</button>
+                              <button class="btn btn-outline-dark me-2">Rappel</button>
+                            </div>
+                            <h4 class="card-title">Liste des Etudiants v2</h4>
+                            <p class="card-description">Liste des etudiants inscrits</p>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Matricule</th>
+                                            <th>Nom</th>
+                                            <th>Prenom</th>
+                                            <th>Email</th>
+                                            <th>Telephone</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>DOE</td>
+                                            <td>John</td>
+                                            <td>Johdoe@gmail.com</td>
+                                            <td>+242066034357</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
     </div>
     <!-- Bootstrap JS --> 
     </div>

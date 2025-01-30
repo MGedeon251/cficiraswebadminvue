@@ -24,6 +24,18 @@ import sidebar from '@/components/Header.vue'
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="container my-2">
+                    <div class="col-md-12 grid margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+                
+            </div>
             
         <div class="row">
             <div class="col-md-12 grid-margin stretch-card">
