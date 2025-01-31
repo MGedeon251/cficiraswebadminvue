@@ -135,10 +135,11 @@ import sidebar from '@/components/Header.vue'
             <li v-for="(file, index) in uploadedFiles" :key="index" class="list-group-item d-flex justify-content-between">
               {{ file.name }}
               <button class="btn btn-sm btn-danger" @click="removeFile(index)">
-                <i class="bi bi-trash"></i>
+                <i class="mdi mdi-close-circle-outline"></i>
               </button>
             </li>
           </ul>
+    <button class="btn btn-primary mt-2">Upload</button>
     </div>
       </div>
       </div></div>
