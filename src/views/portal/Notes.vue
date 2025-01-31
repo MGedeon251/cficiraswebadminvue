@@ -239,9 +239,7 @@ import sidebar from '@/components/Header.vue'
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                    </tr>
-                                    
-                                        
+                                    </tr> 
                                     </tbody>
                                 </table>
                             </div>
@@ -253,7 +251,6 @@ import sidebar from '@/components/Header.vue'
               </div>
             </div>
             </div>
-
         </sidebar>
     </div>
 </template>

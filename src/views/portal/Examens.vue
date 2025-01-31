@@ -61,7 +61,6 @@ import sidebar from '@/components/Header.vue'
                                           <th scope="col">Durée</th>
                                           <th scope="col">Formateur</th>
                                           <th scope="col"></th>
-                          
                                       </tr>
                               </thead>
                               <tbody>
@@ -125,10 +124,15 @@ import sidebar from '@/components/Header.vue'
                                       </tr>
                               </thead>
                               <tbody>
+                                <tr>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                </tr>
                               </tbody>
-
-                              </table>
-                                
+                              </table> 
                             </div>
                         </div>
                       </div>
@@ -156,9 +160,7 @@ import sidebar from '@/components/Header.vue'
                               </thead>
                               <tbody>
                               </tbody>
-
                               </table>
-                                
                             </div>
                         </div>
                       </div>
@@ -221,7 +223,35 @@ import sidebar from '@/components/Header.vue'
             <div class="card-body dashboard-tabs p-0">
               <h4 class="card-title">Planification</h4>
               <p class="card-description"> </p>
-          </div>
+              <div class="d-flex gap-2 mb-3">
+                            <button type="button" class="btn btn-outline-dark btn-icon me-3 d-none d-md-block ">
+                                <i class="mdi mdi-filter"></i>
+                            </button>
+                       
+                            <button type="button" class="btn btn-outline-dark btn-icon me-3 mt-2 mt-xl-0">
+                                <i class="mdi mdi-alert-circle"></i>
+                            </button>
+                            <button class="btn btn-primary mt-2 mt-xl-0">
+                                <span class="">Ajouter</span>
+                            </button>
+                            </div>
+                          <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                              <thead>
+                                      <tr>
+                                          <th scope="col">Designation</th>
+                                          <th scope="col">Date</th>
+                                          <th scope="col">Examens</th>
+                                          <th scope="col">Semestre</th>
+                                          <th scope="col">Formateur</th>
+                                          <th scope="col"></th>
+                                      </tr>
+                              </thead>
+                              <tbody>
+                              </tbody>
+                              </table>
+                            </div>
+            </div>
           </div>
         </div>
       </div>

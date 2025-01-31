@@ -6,6 +6,7 @@ import sidebar from '@/components/Header.vue'
     <div>
         <sidebar>
             <div class="row">
+                
             </div>
         </sidebar>
     </div>
