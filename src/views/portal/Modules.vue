@@ -122,7 +122,7 @@ import sidebar from '@/components/Header.vue'
         >
           <p class="text-muted">
             <i class="bi bi-upload text-primary fs-3"></i><br />
-            Drag & drop your files here or <span class="text-primary">click to upload</span>
+            Glissez deposer vos fichier ici ou <span class="text-primary">cliquer pour charger</span>
           </p>
           <input type="file" ref="fileInput" hidden @change="handleFileUpload" accept=".csv, .xlsx" multiple />
           <button class="btn btn-outline-primary mt-2" @click="openFileInput">Select Files</button>

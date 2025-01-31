@@ -106,13 +106,13 @@ import sidebar from '@/components/Header.vue'
                     <div class="tab-pane fade" id="sales" role="tabpanel" aria-labelledby="sales-tab">
                       <div class="d-flex flex-wrap justify-content-xl-between">
                         <div class="card-body">
-                            <div class="d-flex mb-3">
+                            <h4 class="card-title">Examens semestre 1 | 3 | 5 </h4>
+                            <p class="card-description"></p>
+                            <div class="table-responsive">
+                              <div class="d-flex mb-3">
                                 <button class="btn btn-outline-dark me-2">Partiel</button>
                                 <button class="btn btn-outline-dark me-2">Rappel</button>
                             </div>
-                            <h4 class="card-title">Sessions examens</h4>
-                            <p class="card-description">Liste des etudiants inscrits</p>
-                            <div class="table-responsive">
                             <table class="table table-hover align-middle">
                               <thead>
                                       <tr>
@@ -136,12 +136,12 @@ import sidebar from '@/components/Header.vue'
                     <div class="tab-pane fade" id="purchases" role="tabpanel" aria-labelledby="purchases-tab">
                       <div class="d-flex flex-wrap justify-content-xl-between">
                         <div class="card-body">
+                            <h4 class="card-title">Examens semestre 2 | 4 | 6 </h4>
                             <div class="d-flex mb-3">
                               <button class="btn btn-outline-dark me-2">Partiel</button>
                               <button class="btn btn-outline-dark me-2">Rappel</button>
                             </div>
-                            <h4 class="card-title">Liste des Etudiants v2</h4>
-                            <p class="card-description">Liste des etudiants inscrits</p>
+                            <p class="card-description"></p>
                             <div class="table-responsive">
                             <table class="table table-hover align-middle">
                               <thead>
@@ -179,7 +179,7 @@ import sidebar from '@/components/Header.vue'
         <div class="card p-4">
           
           <div class="card-body dashboard-tabs p-0">
-          <p class="text-muted">Listes des salles d'examens </p>
+          <p class="text-muted">Repartition automatiques des salles d'examens </p>
           </div>
     <!-- Drag & Drop File Upload -->
         <div
@@ -192,7 +192,7 @@ import sidebar from '@/components/Header.vue'
         >
           <p class="text-muted">
             <i class="bi bi-upload text-primary fs-3"></i><br />
-            Drag & drop your files here or <span class="text-primary">click to upload</span>
+            Glissez deposer vos fichier ici ou <span class="text-primary">cliquer pour charger</span>
           </p>
           <input type="file" ref="fileInput" hidden @change="handleFileUpload" accept=".csv, .xlsx" multiple />
           <button class="btn btn-outline-primary mt-2" @click="openFileInput">Select Files</button>
@@ -200,18 +200,31 @@ import sidebar from '@/components/Header.vue'
 
     <!-- Liste des fichiers importés -->
     <div v-if="uploadedFiles.length" class="mt-3">
-          <h5 class="text-dark">Uploaded Files:</h5>
+          <h5 class="text-dark">Fichiers chargés:</h5>
           <ul class="list-group">
             <li v-for="(file, index) in uploadedFiles" :key="index" class="list-group-item d-flex justify-content-between">
               {{ file.name }}
               <button class="btn btn-sm btn-danger" @click="removeFile(index)">
-                <i class="bi bi-trash"></i>
+                <i class="mdi mdi-close-circle-outline"></i>
               </button>
             </li>
           </ul>
+      <button class="btn btn-outline-primary mt-2">Repartition</button>
     </div>
       </div>
       </div></div>
+      <div class="row">
+        <div class="container my-2">
+          <h4>Calendrier </h4>
+          <p class="text-muted">Planifications et repartitions des salles matieres </p>
+          <div class="card p-4">
+            <div class="card-body dashboard-tabs p-0">
+              <h4 class="card-title">Planification</h4>
+              <p class="card-description"> </p>
+          </div>
+          </div>
+        </div>
+      </div>
     </sidebar>
     </div>
 
