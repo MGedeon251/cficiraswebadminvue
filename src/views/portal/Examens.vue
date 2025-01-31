@@ -53,18 +53,18 @@ import sidebar from '@/components/Header.vue'
                             <p class="card-description">Liste des examens pour une année académique</p>
                            <div class="table-responsive">
                             <table class="table table-hover align-middle">
-                    <thead>
-                            <tr>
-                                <th scope="col">Designation</th>
-                                <th scope="col">Etat</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Durée</th>
-                                <th scope="col">Formateur</th>
-                                <th scope="col"></th>
-                
-                            </tr>
-                    </thead>
-                    <tbody>
+                              <thead>
+                                      <tr>
+                                          <th scope="col">Designation</th>
+                                          <th scope="col">Etat</th>
+                                          <th scope="col">Date</th>
+                                          <th scope="col">Durée</th>
+                                          <th scope="col">Formateur</th>
+                                          <th scope="col"></th>
+                          
+                                      </tr>
+                              </thead>
+                              <tbody>
                             <tr>
                                 <td>Examen Partiel session de fevrier 2025</td>
                                 <td><span class="status-badge status-draft">Inactive</span></td>
@@ -110,31 +110,25 @@ import sidebar from '@/components/Header.vue'
                                 <button class="btn btn-outline-dark me-2">Partiel</button>
                                 <button class="btn btn-outline-dark me-2">Rappel</button>
                             </div>
-                            <h4 class="card-title">Liste des Etudiants v2</h4>
+                            <h4 class="card-title">Sessions examens</h4>
                             <p class="card-description">Liste des etudiants inscrits</p>
                             <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Matricule</th>
-                                            <th>Nom</th>
-                                            <th>Prenom</th>
-                                            <th>Email</th>
-                                            <th>Telephone</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>DOE</td>
-                                            <td>John</td>
-                                            <td>Johdoe@gmail.com</td>
-                                            <td>+242066034357</td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <table class="table table-hover align-middle">
+                              <thead>
+                                      <tr>
+                                          <th scope="col">Designation</th>
+                                          <th scope="col">Etat</th>
+                                          <th scope="col">Date</th>
+                                          <th scope="col">Durée</th>
+                                          <th scope="col">Formateur</th>
+                                          <th scope="col"></th>
+                                      </tr>
+                              </thead>
+                              <tbody>
+                              </tbody>
+
+                              </table>
+                                
                             </div>
                         </div>
                       </div>
@@ -149,28 +143,22 @@ import sidebar from '@/components/Header.vue'
                             <h4 class="card-title">Liste des Etudiants v2</h4>
                             <p class="card-description">Liste des etudiants inscrits</p>
                             <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Matricule</th>
-                                            <th>Nom</th>
-                                            <th>Prenom</th>
-                                            <th>Email</th>
-                                            <th>Telephone</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>DOE</td>
-                                            <td>John</td>
-                                            <td>Johdoe@gmail.com</td>
-                                            <td>+242066034357</td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <table class="table table-hover align-middle">
+                              <thead>
+                                      <tr>
+                                          <th scope="col">Designation</th>
+                                          <th scope="col">Etat</th>
+                                          <th scope="col">Date</th>
+                                          <th scope="col">Durée</th>
+                                          <th scope="col">Formateur</th>
+                                          <th scope="col"></th>
+                                      </tr>
+                              </thead>
+                              <tbody>
+                              </tbody>
+
+                              </table>
+                                
                             </div>
                         </div>
                       </div>
