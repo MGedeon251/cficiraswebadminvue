@@ -107,32 +107,60 @@ import sidebar from '@/components/Header.vue'
                         <div class="card-body">
                             <h4 class="card-title">Examens semestre 1 | 3 | 5 </h4>
                             <p class="card-description"></p>
+
                             <div class="table-responsive">
                               <div class="d-flex mb-3">
-                                <button class="btn btn-outline-dark me-2">Partiel</button>
-                                <button class="btn btn-outline-dark me-2">Rappel</button>
-                            </div>
-                            <table class="table table-hover align-middle">
-                              <thead>
-                                      <tr>
-                                          <th scope="col">Designation</th>
-                                          <th scope="col">Etat</th>
-                                          <th scope="col">Date</th>
-                                          <th scope="col">Durée</th>
-                                          <th scope="col">Formateur</th>
-                                          <th scope="col"></th>
-                                      </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                </tr>
-                              </tbody>
-                              </table> 
+                                <ul class="nav nav-pills nav-pills-custom" id="pills-tab-custom" role="tablist">
+                                  <li class="nav-item">
+                                    <a class="nav-link active " id="pills-home-tab-custom" data-bs-toggle="pill" href="#pills-health" role="tab" aria-controls="pills-home" aria-selected="true">
+                                      Partiel
+                                    </a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a class="nav-link" id="pills-profile-tab-custom" data-bs-toggle="pill" href="#pills-career" role="tab" aria-controls="pills-profile" aria-selected="false">
+                                      Rappel
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
+                              <div class="tab-content tab-content-custom-pill" id="pills-tabContent-custom">
+                                <div class="tab-pane fade show active" id="pills-health" role="tabpanel" aria-labelledby="pills-home-tab-custom">
+                                  <div class="table-responsive">
+                                      <table class="table table-hover align-middle">
+                                        <thead>
+                                                <tr>
+                                                    <th scope="col">Designation</th>
+                                                    <th scope="col">Etat</th>
+                                                    <th scope="col">Date</th>
+                                                    <th scope="col">Durée</th>
+                                                    <th scope="col">Formateur</th>
+                                                    <th scope="col"></th>
+                                                </tr>
+                                        </thead>
+                                          <tbody>
+                                          </tbody>
+                                      </table>
+                                  </div>
+                                </div>
+                                <div class="tab-pane fade" id="pills-career" role="tabpanel" aria-labelledby="pills-profile-tab-custom">
+                                  <div class="table-responsive">
+                                      <table class="table table-hover align-middle">
+                                        <thead>
+                                                <tr>
+                                                    <th scope="col">Designation</th>
+                                                    <th scope="col">Etat</th>
+                                                    <th scope="col">Date</th>
+                                                    <th scope="col">Durée</th>
+                                                    <th scope="col">Formateur</th>
+                                                    <th scope="col"></th>
+                                                </tr>
+                                        </thead>
+                                          <tbody>
+                                          </tbody>
+                                      </table>
+                                  </div>
+                                  </div>
+                              </div>
                             </div>
                         </div>
                       </div>
@@ -249,8 +277,7 @@ import sidebar from '@/components/Header.vue'
                               </thead>
                               <tbody>
                               </tbody>
-                              </table>
-                            </div>
+                              </table></div>
             </div>
           </div>
         </div>

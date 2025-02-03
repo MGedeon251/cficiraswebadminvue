@@ -13,6 +13,7 @@ import Examens from '../views/portal/Examens.vue';
 import Notes from '../views/portal/Notes.vue';
 import Parcours from '../views/portal/Parcours.vue';
 import Support from '../views/portal/Support.vue';
+import Settings from '../views/Settings.vue';
 
 const routes = [
   { path: '/', name: 'home', component: Home }, // Route vers la page d'accueil
@@ -28,7 +29,8 @@ const routes = [
   { path: '/examens', name: 'Examens', component: Examens},
   { path: '/notes', name: 'Notes', component: Notes},
   { path: '/parcours', name: 'Parcours', component: Parcours}, 
-  { path: '/supcours', name: 'Support', component: Support}, 
+  { path: '/supcours', name: 'Support', component: Support},
+  { path: '/settings', name: 'Settings', component: Settings},  
 
   
 ];

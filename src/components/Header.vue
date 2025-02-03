@@ -138,6 +138,12 @@ import Footer from './Footer.vue'
             </div>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="/settings">
+              <i class="mdi mdi-server menu-icon"></i>
+              <span class="menu-title">Preferences</span>
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="/documentation">
               <i class="mdi mdi-file-document-box-outline menu-icon"></i>
               <span class="menu-title">Documentation</span>
