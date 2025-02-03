@@ -10,7 +10,7 @@ import sidebar from '@/components/Header.vue'
                     <div class="d-flex justify-content-between flex-wrap">
                         <div class="d-flex align-items-end flex-wrap">
                             <div class="me-md-3 me-xl-5">
-                                <h2>Portails Etudiants</h2>
+                                <h2>Portail Etudiants</h2>
                                 <p class="mb-md-0">Gestion des etudiants</p>
                             </div>
                         <div class="d-flex">
