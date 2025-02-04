@@ -62,6 +62,47 @@ import sidebar from '@/components/Header.vue'
 </div>
 </template>
 
+<script>
+export default {
+  name: "Setting",
+  data() {
+    return {
+      email: "gedeon.lekounda@gmail.com",
+      selectedTheme: "light",
+      loading: true,
+    };
+  },
+  mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 2000);
+  },
+};
+</script>
 <style scoped>
-
+.container {
+  max-width: 800px;
+}
+.skeleton-loader {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.skeleton-item {
+  height: 20px;
+  background: #f3f3f3;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
 </style>
