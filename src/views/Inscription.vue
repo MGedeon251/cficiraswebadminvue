@@ -1,233 +1,173 @@
-<script setup lang="ts">
+<template>
+  <div>
+      <sidebar>
+        <h2>Gestion des Inscriptions</h2>
+        <div class="row">
+                <div class="container my-2">
+                    <div class="col-md-12 grid margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+
+    
+    
+    <!-- Filtres de recherche -->
+    <div class="filters d-flex gap-2 mb-3">
+      <select v-model="selectedYear" class="form-select">
+        <option v-for="year in academicYears" :key="year" :value="year">{{ year }}</option>
+      </select>
+      <select v-model="selectedClass" class="form-select">
+        <option v-for="classItem in classes" :key="classItem" :value="classItem">{{ classItem }}</option>
+      </select>
+      <select v-model="selectedPaymentStatus" class="form-select">
+        <option value="all">Tous</option>
+        <option value="paid">Payé</option>
+        <option value="unpaid">Non payé</option>
+      </select>
+    </div>
+
+    <!-- Tableau des inscriptions -->
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Classe</th>
+          <th>Année</th>
+          <th>Statut de paiement</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="student in filteredStudents" :key="student.id">
+          <td>{{ student.name }}</td>
+          <td>{{ student.class }}</td>
+          <td>{{ student.year }}</td>
+          <td :class="{'text-success': student.paymentStatus === 'paid', 'text-danger': student.paymentStatus === 'unpaid'}">
+            {{ student.paymentStatus === 'paid' ? 'Payé' : 'Non payé' }}
+          </td>
+          <td>
+            <button class="btn btn-primary btn-sm me-2" @click="editStudent(student)">Modifier</button>
+            <button class="btn btn-success btn-sm" @click="updatePayment(student)">Valider paiement</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Boutons d'action -->
+    <div class="d-flex gap-2">
+      <button class="btn btn-success" @click="exportToPDF">Exporter PDF</button>
+      <button class="btn btn-info" @click="exportToExcel">Exporter Excel</button>
+      <button class="btn btn-primary" @click="openModal">Nouvelle inscription</button>
+    </div>
+
+    <!-- Modal d'inscription -->
+    <div v-if="showModal" class="modal-backdrop">
+      <div class="modal-content">
+        <h3>{{ editingStudent ? 'Modifier l’inscription' : 'Nouvelle inscription' }}</h3>
+        <input v-model="form.name" type="text" placeholder="Nom de l’étudiant" class="form-control mb-2">
+        <select v-model="form.class" class="form-select mb-2">
+          <option v-for="classItem in classes" :key="classItem" :value="classItem">{{ classItem }}</option>
+        </select>
+        <select v-model="form.year" class="form-select mb-2">
+          <option v-for="year in academicYears" :key="year" :value="year">{{ year }}</option>
+        </select>
+        <button class="btn btn-primary" @click="saveStudent">{{ editingStudent ? 'Mettre à jour' : 'Enregistrer' }}</button>
+        <button class="btn btn-secondary" @click="closeModal">Annuler</button>
+      </div>
+    </div>
+  
+                        </div>
+                    </div>
+                </div>
+                </div>
+                
+            </div>
+      </sidebar>
+  </div>
+
+  
+</template>
+
+<script setup>
 import sidebar from '@/components/Header.vue'
+import { ref, computed } from "vue";
+
+const academicYears = ref(["2023-2024", "2024-2025"]);
+const classes = ref(["Licence 1", "Licence 2", "Master 1"]);
+const selectedYear = ref("2023-2024");
+const selectedClass = ref("Licence 1");
+const selectedPaymentStatus = ref("all");
+const showModal = ref(false);
+const editingStudent = ref(null);
+const students = ref([
+  { id: 1, name: "Alice", class: "Licence 1", year: "2023-2024", paymentStatus: "paid" },
+  { id: 2, name: "Bob", class: "Licence 2", year: "2023-2024", paymentStatus: "unpaid" },
+]);
+
+const form = ref({ name: "", class: selectedClass.value, year: selectedYear.value });
+
+const filteredStudents = computed(() => {
+  return students.value.filter(
+    (student) =>
+      student.year === selectedYear.value &&
+      student.class === selectedClass.value &&
+      (selectedPaymentStatus.value === "all" || student.paymentStatus === selectedPaymentStatus.value)
+  );
+});
+
+const openModal = () => {
+  showModal.value = true;
+  editingStudent.value = null;
+  form.value = { name: "", class: selectedClass.value, year: selectedYear.value };
+};
+
+const closeModal = () => {
+  showModal.value = false;
+};
+
+const saveStudent = () => {
+  if (editingStudent.value) {
+    Object.assign(editingStudent.value, form.value);
+  } else {
+    students.value.push({ id: Date.now(), ...form.value, paymentStatus: "unpaid" });
+  }
+  closeModal();
+};
+
+const editStudent = (student) => {
+  editingStudent.value = student;
+  form.value = { ...student };
+  showModal.value = true;
+};
+
+const updatePayment = (student) => {
+  student.paymentStatus = "paid";
+};
+
+const exportToPDF = () => {
+  alert("Export PDF en cours...");
+};
+
+const exportToExcel = () => {
+  alert("Export Excel en cours...");
+};
 </script>
 
-<template>
-    <div>
-        <sidebar>
-      <div class="row">
-              <div class="col-md-12 grid-margin">
-                <div class="d-flex justify-content-between flex-wrap">
-                  <div class="d-flex align-items-end flex-wrap">
-                    <div class="me-md-3 me-xl-5">
-                      <h2>Inscriptions</h2>
-                      <p class="mb-md-0">Gestion des inscriptions</p>
-                    </div>
-                    <div class="d-flex">
-                      <i class="mdi mdi-home text-muted hover-cursor"></i>
-                      <p class="text-muted mb-0 hover-cursor">&nbsp;/&nbsp;Inscriptions&nbsp;/&nbsp;</p>
-                    </div>
-                  </div>
-                  <div class="d-flex justify-content-between align-items-end flex-wrap">
-                  </div>
-                </div>
-              </div>
-      </div>
-      <div class="row">
-            <div class="col-12 grid-margin">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Large Modal</h4>
-                  <p class="card-description">Large sized modal with max-width set to <code>90%</code></p>
-                  <!-- Modal starts -->
-                  <div class="text-center">
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">Click for demo<i class="mdi mdi-play-circle ms-1"></i></button>
-                  </div>
-                  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <p>Modal body text goes here.</p>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-success">Submit</button>
-                          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Modal Ends -->
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Medium Modal</h4>
-                  <p class="card-description">Normal modal with default bootstrap settings</p>
-                  <!-- Modal starts -->
-                  <div class="text-center">
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal-2">Click for demo<i class="mdi mdi-play-circle ms-1"></i></button>
-                  </div>
-                  <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel-2">Modal title</h5>
-                          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <p>Modal body text goes here.</p>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-success">Submit</button>
-                          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Modal Ends -->
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Bordered accordions</h4>
-                  <p class="card-description">Use class <code>.accordion-bordered</code> for bordered accordions</p>
-                  <div class="mt-4">
-                    <div class="accordion accordion-bordered" id="accordion-2" role="tablist">
-                      <div class="card">
-                        <div class="card-header" role="tab" id="heading-4">
-                          <h6 class="mb-0">
-                            <a data-bs-toggle="collapse" href="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
-                              How can I pay for an order I placed?
-                            </a>
-                          </h6>
-                        </div>
-                        <div id="collapse-4" class="collapse" role="tabpanel" aria-labelledby="heading-4" data-bs-parent="#accordion-2">
-                          <div class="card-body">
-                            <p class="mb-0">You can pay for the product you have purchased using credit cards, debit cards, or via online banking. We also provide cash-on-delivery services for most of our products. You can also use your account wallet for payment. </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card">
-                        <div class="card-header" role="tab" id="heading-5">
-                          <h6 class="mb-0">
-                            <a class="collapsed" data-bs-toggle="collapse" href="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
-                              I can’t sign in to my account
-                            </a>
-                          </h6>
-                        </div>
-                        <div id="collapse-5" class="collapse" role="tabpanel" aria-labelledby="heading-5" data-bs-parent="#accordion-2">
-                          <div class="card-body">
-                              <p>If while signing in to your account you see an error message, you can do the following</p>
-                            <ol class="pl-3">
-                              <li>Check your network connection and try again</li>
-                              <li>Make sure your account credentials are correct while signing in</li>
-                              <li>Check whether your account is accessible in your region</li>
-                            </ol>
-                            <br>
-                            <i class="mdi mdi-alert-octagon me-2"></i>If the problem persists, you can contact our support.
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card">
-                        <div class="card-header" role="tab" id="heading-6">
-                          <h6 class="mb-0">
-                            <a class="collapsed" data-bs-toggle="collapse" href="#collapse-6" aria-expanded="true" aria-controls="collapse-6">
-                              How can I deactivate my account?
-                            </a>
-                          </h6>
-                        </div>
-                        <div id="collapse-6" class="collapse show" role="tabpanel" aria-labelledby="heading-6" data-bs-parent="#accordion-2">
-                          <div class="card-body">
-                            <p class="mb-0">If you wish to deactivate your account, you can go to the Settings page of your account. Click on Account Settings and then click on Deactivate.
-                            You can join again as and when you wish.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Default accordion</h4>
-                  <p class="card-description">Use class <code>.accordion</code> for basic accordion</p>
-                  <div class="mt-4">
-                    <div class="accordion" id="accordion" role="tablist">
-                      <div class="card">
-                        <div class="card-header" role="tab" id="heading-1">
-                          <h6 class="mb-0">
-                            <a data-bs-toggle="collapse" href="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
-                              How can I pay for an order I placed?
-                            </a>
-                          </h6>
-                        </div>
-                        <div id="collapse-1" class="collapse show" role="tabpanel" aria-labelledby="heading-1" data-bs-parent="#accordion">
-                          <div class="card-body">
-                            <div class="row">
-                              <div class="col-3">
-                                <img src="../../../assets/images/samples/300x300/10.jpg" class="mw-100" alt="image"/>                              
-                              </div>
-                              <div class="col-9">
-                                <p class="mb-0">You can pay for the product you have purchased using credit cards, debit cards, or via online banking. 
-                                We also on-delivery services.</p>                          
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card">
-                        <div class="card-header" role="tab" id="heading-2">
-                          <h6 class="mb-0">
-                            <a class="collapsed" data-bs-toggle="collapse" href="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
-                              I can’t sign in to my account
-                            </a>
-                          </h6>
-                        </div>
-                        <div id="collapse-2" class="collapse" role="tabpanel" aria-labelledby="heading-2" data-bs-parent="#accordion">
-                          <div class="card-body">
-                              <p>If while signing in to your account you see an error message, you can do the following</p>
-                            <ol class="pl-3 mt-4">
-                              <li>Check your network connection and try again</li>
-                              <li>Make sure your account credentials are correct while signing in</li>
-                              <li>Check whether your account is accessible in your region</li>
-                            </ol>
-                            <br>
-                            <p class="text-success">
-                              <i class="mdi mdi-alert-octagon me-2"></i>If the problem persists, you can contact our support.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card">
-                        <div class="card-header" role="tab" id="heading-3">
-                          <h6 class="mb-0">
-                            <a class="collapsed" data-bs-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
-                              Can I add money to the wallet?
-                            </a>
-                          </h6>
-                        </div>
-                        <div id="collapse-3" class="collapse" role="tabpanel" aria-labelledby="heading-3" data-bs-parent="#accordion">
-                          <div class="card-body">
-                            <p class="mb-0">You can add money to the wallet for any future transaction from your bank account using net-banking, or credit/debit card transaction. The money in the wallet can be used for an easier and faster transaction.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </sidebar>
-    </div>
-</template>
+
+<style scoped>
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+}
+</style>

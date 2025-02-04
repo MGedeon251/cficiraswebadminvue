@@ -50,9 +50,7 @@ import sidebar from '@/components/Header.vue'
         </select>
       </div>
     </div>
-  </div>
-
-                        </div>
+  </div>            </div>
                     </div>
                 </div>
                 </div>
