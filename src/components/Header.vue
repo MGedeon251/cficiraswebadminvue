@@ -116,13 +116,13 @@ import Footer from './Footer.vue'
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="pages/icons/mdi.html">
+            <a class="nav-link" href="/administration">
               <i class="mdi mdi-briefcase menu-icon"></i>
-              <span class="menu-title">Feedback</span>
+              <span class="menu-title">Administration</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/settings">
+            <a class="nav-link" href="/formateur">
               <i class="mdi mdi-account-multiple menu-icon"></i>
               <span class="menu-title">Formateurs</span>
             </a>

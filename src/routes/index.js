@@ -14,6 +14,8 @@ import Notes from '../views/portal/Notes.vue';
 import Parcours from '../views/portal/Parcours.vue';
 import Support from '../views/portal/Support.vue';
 import Settings from '../views/Settings.vue';
+import Formateur from '../views/Formateur.vue';
+import Admins from '../views/admin/Administration.vue';
 
 const routes = [
   { path: '/', name: 'home', component: Home }, // Route vers la page d'accueil
@@ -30,7 +32,9 @@ const routes = [
   { path: '/notes', name: 'Notes', component: Notes},
   { path: '/parcours', name: 'Parcours', component: Parcours}, 
   { path: '/supcours', name: 'Support', component: Support},
-  { path: '/settings', name: 'Settings', component: Settings},  
+  { path: '/settings', name: 'Settings', component: Settings}, 
+  { path: '/formateur', name: 'Formateur', component: Formateur}, 
+  { path: '/administration', name: 'Administration', component: Admins}, 
 
   
 ];
