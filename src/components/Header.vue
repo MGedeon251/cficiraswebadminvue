@@ -122,9 +122,27 @@ import Footer from './Footer.vue'
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="/settings">
+              <i class="mdi mdi-account-multiple menu-icon"></i>
+              <span class="menu-title">Formateurs</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/documentation">
+              <i class="mdi mdi-file-document-box-outline menu-icon"></i>
+              <span class="menu-title">Documents</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/settings">
+              <i class="mdi mdi-server menu-icon"></i>
+              <span class="menu-title">Preferences</span>
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-              <i class="mdi mdi-account menu-icon"></i>
-              <span class="menu-title">Utilisateurs</span>
+              <i class="mdi mdi-account-circle menu-icon"></i>
+              <span class="menu-title">Compte</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="auth">
@@ -136,18 +154,6 @@ import Footer from './Footer.vue'
                 <li class="nav-item"> <a class="nav-link" href="pages/samples/lock-screen.html"> Lockscreen </a></li>
               </ul>
             </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/settings">
-              <i class="mdi mdi-server menu-icon"></i>
-              <span class="menu-title">Preferences</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/documentation">
-              <i class="mdi mdi-file-document-box-outline menu-icon"></i>
-              <span class="menu-title">Documentation</span>
-            </a>
           </li>
         </ul>
       </nav>

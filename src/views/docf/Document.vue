@@ -10,8 +10,8 @@ import sidebar from '@/components/Header.vue'
           <div class="d-flex justify-content-between flex-wrap">
             <div class="d-flex align-items-end flex-wrap">
               <div class="me-md-3 me-xl-5">
-                <h2>Documents </h2>
-                <p class="mb-md-0">Documents et ressources du CFI-CIRAS</p>
+                <h2>Documents académiques </h2>
+                <p class="mb-md-0">Gestion des demandes de documents académiques</p>
               </div>
               <div class="d-flex">
                 <i class="mdi mdi-home text-muted hover-cursor"></i>
