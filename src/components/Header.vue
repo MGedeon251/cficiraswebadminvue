@@ -118,7 +118,7 @@ import Footer from './Footer.vue'
           <li class="nav-item">
             <a class="nav-link" href="/administration">
               <i class="mdi mdi-briefcase menu-icon"></i>
-              <span class="menu-title">SSE</span>
+              <span class="menu-title">Services</span>
             </a>
           </li>
           <li class="nav-item">

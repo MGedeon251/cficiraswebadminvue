@@ -7,15 +7,14 @@ import sidebar from '@/components/Header.vue'
     <sidebar>
     <div class="row">
                 <div class="container my-2">
+                  <h2>Settings</h2>
+                  <p>Control over your Kaggle account and all communications</p>
                     <div class="col-md-12 grid margin stretch-card">
                     <div class="card">
                         <div class="card-body dashboard-tabs">
 
                     <div>
-    <div class="container mt-2">
-      <h2>Settings</h2>
-      <p>Control over your Kaggle account and all communications</p>
-
+  
       <ul class="nav nav-tabs px-4" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" href="#">Account</a>
@@ -52,7 +51,6 @@ import sidebar from '@/components/Header.vue'
     </div>
   </div>            </div>
                     </div>
-                </div>
                 </div>
                 
         </div>
