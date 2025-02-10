@@ -16,7 +16,7 @@ import sidebar from '@/components/Header.vue'
                       <div class="d-flex">
                         <i class="mdi mdi-home text-muted hover-cursor"></i>
                         <p class="text-muted mb-0 hover-cursor">&nbsp;/&nbsp;Schedule&nbsp;/&nbsp;</p>
-                        <p class="text-primary mb-0 hover-cursor">schedule</p>
+                        <p class="text-primary mb-0 hover-cursor">Analytics</p>
                       </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-end flex-wrap">
@@ -24,67 +24,88 @@ import sidebar from '@/components/Header.vue'
                   </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="container my-2">
-                    <div class="col-md-12 grid margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </div>
+          
             <div class="row">
               <div class="col-12">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Custom pills</h4>
-                  <p class="card-description">Add class <code>.nav-pills-custom</code> and <code>.tab-content-custom-pill</code> to <code>.nav-pills</code> and <code>.tab-content</code></p>
-                  <div class="row">
-                    <div class="col-md-10 mx-auto">
-                      <ul class="nav nav-pills nav-pills-custom" id="pills-tab-custom" role="tablist">
+                  <h4 class="card-title">Planing Journalier | Hebdomadaire </h4>
+                  <p>Listes des matiere journalier et hebdomadaire pour une année académique </p>
+                      <ul class="nav nav-pills nav-pills-custom mt-4" id="pills-tab-custom" role="tablist">
                         <li class="nav-item">
                           <a class="nav-link active" id="pills-home-tab-custom" data-bs-toggle="pill" href="#pills-health" role="tab" aria-controls="pills-home" aria-selected="true">
-                            Health
+                            Lundi
                           </a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" id="pills-profile-tab-custom" data-bs-toggle="pill" href="#pills-career" role="tab" aria-controls="pills-profile" aria-selected="false">
-                            Career
+                            Mardi
                           </a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" id="pills-contact-tab-custom" data-bs-toggle="pill" href="#pills-music" role="tab" aria-controls="pills-contact" aria-selected="false">
-                            Music
+                            Mercredi
                           </a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" id="pills-vibes-tab-custom" data-bs-toggle="pill" href="#pills-vibes" role="tab" aria-controls="pills-contact" aria-selected="false">
-                            Vibes
+                            Jeudi
                           </a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" id="pills-energy-tab-custom" data-bs-toggle="pill" href="#pills-energy" role="tab" aria-controls="pills-contact" aria-selected="false">
-                            Energy
+                            Vendredi
                           </a>
                         </li>
                       </ul>
                       <div class="tab-content tab-content-custom-pill" id="pills-tabContent-custom">
                         <div class="tab-pane fade show active" id="pills-health" role="tabpanel" aria-labelledby="pills-home-tab-custom">
-                          <div class="d-flex mb-4">
-                            <img src="../../../assets/images/samples/300x300/12.jpg" class="w-25 h-100 rounded" alt="sample image">
-                            <img src="../../../assets/images/samples/300x300/1.jpg" class="w-25 h-100 ms-4 rounded" alt="sample image">
-                            <img src="../../../assets/images/samples/300x300/2.jpg" class="w-25 h-100 ms-4 rounded" alt="sample image">
+                          <div class="d-flex mt-4">
+                            <div class="d-flex align-items-end flex-wrap">
+                                                <div class="me-md-4 me-xl-5">
+                                                    <div class="filters d-flex gap-2 mb-3">
+                                                        <select class="form-select">
+                                                            <option value="year">2022-2023</option>
+                                                            <option value="year">2023-2024</option>
+                                                            <option value="year">2024-2025</option>
+                                                        </select>
+                                                        <select class="form-select">
+                                                            <option key="classItem" value="classItem">LAP 1 </option>
+                                                            <option key="classItem" value="classItem">LAP 2 </option>
+                                                            <option key="classItem" value="classItem">LAP 3 </option>
+                                                        </select>
+                                                        <select class="form-select">
+                                                            <option value="all" selected>Tout semestres</option>
+                                                            <option value="paid">Semestre 1</option>
+                                                            <option value="unpaid">Semestre 2</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
                           </div>
-                          <p>
-                              I'm not the monster he wants me to be. So I'm neither man nor beast. I'm something new entirely. With 
-                              my own set of rules. I'm Dexter. Boo. Only you could make those words cute. I'm thinking two circus clowns dancing. You?
-                          </p>
-                          <p>
-                              Under normal circumstances, I'd take that as a compliment. Tell him time is of the essence. I'm really more 
-                              an apartment person. Finding a needle in a haystack isn't hard when every straw is computerized.
-                          </p>
+                          <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                              <thead>
+                                      <tr>
+                                          <th scope="col">Horaire</th>
+                                          <th scope="col">Classe</th>
+                                          <th scope="col">Semestre</th>
+                                          <th scope="col">Matiere</th>
+                                          <th scope="col">Formateur</th>
+                                          <th scope="col"></th>
+                                      </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                </tr>
+                              </tbody>
+                            </table></div>
                         </div>
                         <div class="tab-pane fade" id="pills-career" role="tabpanel" aria-labelledby="pills-profile-tab-custom">
                           <div class="media">
@@ -133,8 +154,7 @@ import sidebar from '@/components/Header.vue'
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
+                    
                   </div>
                 </div>
               </div>
