@@ -36,7 +36,7 @@ import sidebar from '@/components/Header.vue'
                                     <div class="skeleton-item" v-for="i in 5" :key="i"></div>
                                     </div>
                                 <div v-else class="mt-3">
-                                    <table class="table table-striped">
+                                    <table class="table table-hover align-middle">
                                     <thead>
                                     <tr>
                                         <th>Matricule</th>
@@ -48,8 +48,14 @@ import sidebar from '@/components/Header.vue'
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        <tr> 
-                                        </tr>
+                                  <tr>
+                                      <td colspan="9" class="text-center py-4" style="width: 1020px; position: sticky; left: 0px; overflow: hidden;">
+                                          <div class="d-flex flex-column align-items-center">
+                                            <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="64" height="41" />
+                                          </div>
+                                          <div class="text-pr">Aucune donnée</div>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
