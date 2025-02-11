@@ -27,7 +27,7 @@
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between flex-wrap">
                                             <div class="d-flex align-items-end flex-wrap">
-                                                <div class="me-md-3 me-xl-5">
+                                                <div class="me-md-4 me-xl-5">
                                                     <div class="filters d-flex gap-2 mb-3">
                                                         <select v-model="selectedYear" class="form-select">
                                                             <option v-for="year in academicYears" :key="year" :value="year">{{ year }}</option>

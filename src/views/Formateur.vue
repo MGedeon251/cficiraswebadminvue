@@ -24,18 +24,6 @@ import sidebar from '@/components/Header.vue'
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="container my-2">
-                    <div class="col-md-12 grid margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-
-                        </div>
-                    </div>
-                </div>
-                </div>
-                
-            </div>
             
         <div class="row">
             <div class="col-md-12 grid-margin stretch-card">
@@ -44,8 +32,12 @@ import sidebar from '@/components/Header.vue'
                         <h4 class="card-title">Liste des Formateurs</h4>
                         <p class="card-description">Liste de formateurs actifs </p>
                         <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
+                            <div v-if="loading" class="skeleton-loader">
+                                    <div class="skeleton-item" v-for="i in 5" :key="i"></div>
+                                    </div>
+                                <div v-else class="mt-3">
+                                    <table class="table table-striped">
+                                    <thead>
                                     <tr>
                                         <th>Matricule</th>
                                         <th>Nom</th>
@@ -56,11 +48,11 @@ import sidebar from '@/components/Header.vue'
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        
-                                    </tr>
+                                        <tr> 
+                                        </tr>
                                 </tbody>
                             </table>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -72,3 +64,47 @@ import sidebar from '@/components/Header.vue'
         </sidebar>
     </div>
 </template>
+<script>
+export default {
+  name: "Setting",
+  data() {
+    return {
+      email: "gedeon.lekounda@gmail.com",
+      selectedTheme: "light",
+      loading: true,
+    };
+  },
+  mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 2000);
+  },
+};
+</script>
+<style scoped>
+.container {
+  max-width: 800px;
+}
+.skeleton-loader {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.skeleton-item {
+  height: 20px;
+  background: #f3f3f3;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+</style>
