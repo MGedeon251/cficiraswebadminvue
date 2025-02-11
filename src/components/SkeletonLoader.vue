@@ -29,21 +29,21 @@
             </div>
         </div>
 
-        <div v-else="v-else">
+        <div v-else>
             <div
                 class="skeleton-box"
                 v-for="i in 3"
                 :key="'text-' + i"
                 style="width: 80%; height: 15px; margin-bottom: 10px;"></div>
+            </div>
         </div>
-    </div>
 </template>
   
   <script setup>
   defineProps({
     type: {
       type: String,
-      default: 'table', // 'table', 'card', 'text'
+      default: 'table',  // 'table', 'card', 'text'
     },
     rows: {
       type: Number,
