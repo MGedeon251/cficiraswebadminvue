@@ -4,7 +4,6 @@ import { ref, onMounted } from 'vue';
 
 // Liste des factures (vide au départ)
 const factures = ref([]);
-
 // Simulation du chargement (optionnel)
 onMounted(() => {
   setTimeout(() => {
@@ -42,15 +41,16 @@ onMounted(() => {
 
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h2 class="h4">Liste des factures</h2>
-                                <div class="d-flex gap-2">
-                                    <input type="text" placeholder="Recherche" class="form-control w-auto"/>
-                                    <button class="btn btn-outline-secondary d-flex align-items-center">
-                                        🔄 Actualiser
-                                    </button>
-                                    <button class="btn btn-primary d-flex align-items-center">
-                                        ➕ Ajouter une nouvelle facture
-                                    </button>
-                                </div>
+                                <div class="d-flex justify-content-between align-items-end flex-wrap">
+                                  
+                                  <button class="btn btn-outline-dark me-2">Exporter</button>
+                                  <button
+                                      class="btn btn-primary mt-2 mt-xl-0"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#exampleModal">
+                                      Nouvelle inscription
+                                  </button>
+                                  </div>
                             </div>
 
                             <div class="table-responsive">

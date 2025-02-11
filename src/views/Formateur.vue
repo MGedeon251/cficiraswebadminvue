@@ -49,9 +49,9 @@ import sidebar from '@/components/Header.vue'
                                 </thead>
                                 <tbody>
                                   <tr>
-                                      <td colspan="9" class="text-center py-4" style="width: 1020px; position: sticky; left: 0px; overflow: hidden;">
+                                      <td colspan="9" class="text-center py-4">
                                           <div class="d-flex flex-column align-items-center">
-                                            <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="64" height="41" />
+                                            <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="auto"/>
                                           </div>
                                           <div class="text-pr">Aucune donnée</div>
                                         </td>
