@@ -18,15 +18,12 @@ import sidebar from '@/components/Header.vue'
                     <li class="nav-item">
                       <a class="nav-link" id="sales-tab" data-bs-toggle="tab" href="#notification" role="tab" aria-controls="sales" aria-selected="false">Notification</a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link" id="purchases-tab" data-bs-toggle="tab" href="#purchases" role="tab" aria-controls="purchases" aria-selected="false">Semestre 2</a>
-                    </li>
                   </ul>
                   <div class="tab-content py-0 px-0">
                     <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
                         <div class="d-flex flex-wrap justify-content-xl-between">
                           <div class="card-body">
-                            <h4 class="card-title">Tout les examens </h4>
+                            <h4 class="card-title"> </h4>
                             <p class="card-description"></p>
                             <div v-if="loading" class="skeleton-loader">
                               <div class="skeleton-item" v-for="i in 5" :key="i"></div>

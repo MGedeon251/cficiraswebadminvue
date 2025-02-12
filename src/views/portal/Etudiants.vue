@@ -31,7 +31,7 @@
                             <p class="card-description">Liste des etudiants inscrits</p>
                             <div class="d-flex justify-content-between flex-wrap">
                                <div class="d-flex justify-content-between align-items-end flex-wrap">
-                                                <button class="btn btn-outline-dark me-2">Exporter</button>
+                                                <button class="btn btn-outline-dark me-2">Actualiser</button>
                                                 <button class="btn btn-outline-dark me-2">Exporter</button>
                                                 <button
                                                     class="btn btn-primary mt-2 mt-xl-0"

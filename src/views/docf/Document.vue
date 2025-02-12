@@ -40,7 +40,7 @@ onMounted(() => {
                         <div class="card-body">
 
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h2 class="h4">Liste des factures</h2>
+                                <h2 class="h4">Liste des demandes </h2>
                                 <div class="d-flex justify-content-between align-items-end flex-wrap">
                                   
                                   <button class="btn btn-outline-dark me-2">Exporter</button>
@@ -48,7 +48,7 @@ onMounted(() => {
                                       class="btn btn-primary mt-2 mt-xl-0"
                                       data-bs-toggle="modal"
                                       data-bs-target="#exampleModal">
-                                      Nouvelle inscription
+                                      Nouvelle demandes
                                   </button>
                                   </div>
                             </div>
