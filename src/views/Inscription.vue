@@ -24,7 +24,8 @@
                         <div class="container my-2">
                             <div class="col-md-12 grid margin stretch-card">
                                 <div class="card">
-                                    <div class="card-body">
+                                    <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1"/>
+                                    <div v-else class="card-body">
                                         <div class="d-flex justify-content-between flex-wrap">
                                             <div class="d-flex align-items-end flex-wrap">
                                                 <div class="me-md-4 me-xl-5">
@@ -134,12 +135,13 @@
                 <div class="row">
                     <div class="container my-2">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4>Importer | Export (.csv, .xlsx)</h4>
+                            <h4>Importer liste(s)</h4>
                         </div>
-                        <div class="card p-4">
-
+                        <SkeletonLoader v-if="loading" type="card" :rows="3" :columns="1"/>
+                        <div v-else class="card p-4">
+                            
                             <div class="card-body dashboard-tabs p-0">
-                                <p class="text-muted">Importer une liste des etudiant en format .csv et .xlsx</p>
+                                <p class="text-muted">Importer une liste existant des etudiant en format .csv et .xlsx</p>
                             </div>
                             <!-- Drag & Drop File Upload -->
                             <div
@@ -187,9 +189,12 @@
     </template>
 
 <script setup>
+import SkeletonLoader from '@/components/SkeletonLoader.vue';
 import sidebar from '@/components/Header.vue'
 import {ref, computed} from "vue";
 
+const loading = ref(true);
+const formateurs = ref([]);
 const academicYears = ref(["2023-2024", "2024-2025"]);
 const classes = ref(["Licence 1", "Licence 2", "Master 1"]);
 const selectedYear = ref("2023-2024");

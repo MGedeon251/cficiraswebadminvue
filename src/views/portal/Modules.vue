@@ -139,7 +139,7 @@ import sidebar from '@/components/Header.vue'
               </button>
             </li>
           </ul>
-    <button class="btn btn-primary mt-2">Upload</button>
+          <button class="btn btn-primary mt-2">Upload</button>
     </div>
       </div>
       </div></div>
