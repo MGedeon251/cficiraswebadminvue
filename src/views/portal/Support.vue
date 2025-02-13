@@ -29,12 +29,11 @@ import sidebar from '@/components/Header.vue'
                     <div class="col-md-12 grid margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Gestion des cours</h4>
+                          <h2 class="mb-4">Gestionnaire de fichier</h2>
                             <p class="card-description"> </p>
                             <div class="d-flex gap-2 mb-3">
                             </div>
                             <div class="container mt-4">
-                                <h2 class="mb-4">File Manager</h2>
                                 
                                 <div class="d-flex justify-content-between mb-3">
                                     <FileUploader @upload="handleUpload" />
@@ -53,8 +52,8 @@ import sidebar from '@/components/Header.vue'
 
  
   <script>
-  import FileTable from "@/components/FileTable.vue";
-  import FileUploader from "@/components/FileUploader.vue";
+  import FileTable from "@/components/FileVue/FileTable.vue";
+  import FileUploader from "@/components/FileVue/FileUploader.vue";
   
   export default {
     components: { FileTable, FileUploader },

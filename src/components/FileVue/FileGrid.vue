@@ -20,11 +20,6 @@ table {
   width: 100%;
 }
 </style>
-<script>
-export default {
-  props: ['files'],
-};
-</script>
 
 <style scoped>
 .grid-container {
