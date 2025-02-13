@@ -90,7 +90,7 @@
                         <div class="d-flex flex-wrap justify-content-xl-between">
                             <div class="card-body">
                            
-                            <p class="text-muted">Importer une liste existant de matieres</p>
+                            <p class="text-muted">Importer une liste existant des etudiants</p>
                             <div
                                 class="drag-drop-area border rounded p-4 text-center"
                                 @dragover.prevent
@@ -123,7 +123,7 @@
                     <div class="tab-pane fade" id="sales" role="tabpanel" aria-labelledby="sales-tab">
                         <div class="d-flex flex-wrap justify-content-xl-between">
                             <div class="card-body">
-                                <h4 class="card-title">Examens semestre 1 | 3 | 5 </h4>
+                                <h4 class="card-title"> </h4>
                                 <p class="card-description"></p>
                             </div>
                         </div>

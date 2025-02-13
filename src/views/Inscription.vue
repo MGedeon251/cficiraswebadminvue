@@ -135,7 +135,7 @@
                 <div class="row">
                     <div class="container my-2">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4>Importer liste(s)</h4>
+                            <h4>Importer | Exporter liste(s)</h4>
                         </div>
                         <SkeletonLoader v-if="loading" type="card" :rows="3" :columns="1"/>
                         <div v-else class="card p-4">
