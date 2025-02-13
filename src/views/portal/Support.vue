@@ -32,16 +32,15 @@ import sidebar from '@/components/Header.vue'
                             <h4 class="card-title">Gestion des cours</h4>
                             <p class="card-description"> </p>
                             <div class="d-flex gap-2 mb-3">
-                            <button type="button" class="btn btn-outline-dark btn-icon me-3 d-none d-md-block ">
-                                <i class="mdi mdi-filter"></i>
-                            </button>
-                       
-                            <button type="button" class="btn btn-outline-dark btn-icon me-3 mt-2 mt-xl-0">
-                                <i class="mdi mdi-alert-circle"></i>
-                            </button>
-                            <button class="btn btn-primary mt-2 mt-xl-0">
-                                <span class="">Ajouter</span>
-                            </button>
+                            </div>
+                            <div class="container mt-4">
+                                <h2 class="mb-4">File Manager</h2>
+                                
+                                <div class="d-flex justify-content-between mb-3">
+                                    <FileUploader @upload="handleUpload" />
+                                </div>
+                            
+                                <FileTable :files="files" @download="handleDownload" @delete="handleDelete" />
                             </div>
                         </div>
                     </div>
@@ -52,5 +51,37 @@ import sidebar from '@/components/Header.vue'
     </div>
 </template>
 
-
+ 
+  <script>
+  import FileTable from "@/components/FileTable.vue";
+  import FileUploader from "@/components/FileUploader.vue";
+  
+  export default {
+    components: { FileTable, FileUploader },
+    data() {
+      return {
+        files: [
+          { id: 1, name: "5_dark_support.jpg", date: "20/11/2015", time: "10:11", size: "24,555 KB", type: "JPG" },
+          { id: 2, name: "Chart2_recovered.psd", date: "20/11/2015", time: "10:11", size: "24,555 KB", type: "PSD" },
+          { id: 3, name: "Doodle_templatemonster.jpg", date: "20/11/2015", time: "10:11", size: "24,555 KB", type: "JPG" },
+          { id: 4, name: "Hound-Thumb2-1.png", date: "10/11/2017", time: "19:11", size: "24,555 KB", type: "PNG" },
+          { id: 5, name: "Prototip_v1.0", date: "20/11/2015", time: "10:11", size: "24,555 KB", type: "Folder" },
+          { id: 6, name: "Video.mp4", date: "21/11/2016", time: "10:11", size: "24,555 KB", type: "MP4" }
+        ]
+      };
+    },
+    methods: {
+      handleUpload(file) {
+        this.files.push(file);
+      },
+      handleDownload(file) {
+        alert(`Downloading ${file.name}`);
+      },
+      handleDelete(fileId) {
+        this.files = this.files.filter(file => file.id !== fileId);
+      }
+    }
+  };
+  </script>
+  
 
