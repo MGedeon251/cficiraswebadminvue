@@ -38,7 +38,6 @@ import sidebar from '@/components/Header.vue'
                                 <div class="d-flex justify-content-between mb-3">
                                     <FileUploader @upload="handleUpload" />
                                 </div>
-                            
                                 <FileTable :files="files" @download="handleDownload" @delete="handleDelete" />
                             </div>
                         </div>
@@ -52,8 +51,8 @@ import sidebar from '@/components/Header.vue'
 
  
   <script>
-  import FileTable from "@/components/FileVue/FileTable.vue";
-  import FileUploader from "@/components/FileVue/FileUploader.vue";
+  import FileTable from "@/components/files/FileTable.vue";
+  import FileUploader from "@/components/files/FileUploader.vue";
   
   export default {
     components: { FileTable, FileUploader },
