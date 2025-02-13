@@ -1,7 +1,3 @@
-<script setup>
-import sidebar from '@/components/Header.vue'
-</script>
-
 <template>
     <div>
         <sidebar>
@@ -28,7 +24,8 @@ import sidebar from '@/components/Header.vue'
                 <div class="container my-2">
                     <div class="col-md-12 grid margin stretch-card">
                     <div class="card">
-                        <div class="card-body">
+                        <SkeletonLoader v-if="loading" type="card" :rows="3" :columns="1"/>
+                        <div v-else class="card-body">
                             <h4 class="card-title">Historiques des parcours</h4>
                             <p class="card-description"> </p>
                             <div class="d-flex gap-2 mb-3">
@@ -52,5 +49,23 @@ import sidebar from '@/components/Header.vue'
     </div>
 </template>
 
+<script setup>
 
+import { ref, onMounted } from 'vue';
+import sidebar from '@/components/Header.vue'
+import SkeletonLoader from '@/components/SkeletonLoader.vue';
+  
+  const loading = ref(true);
+  const formateurs = ref([]);
+  
+  onMounted(() => {
+    setTimeout(() => {
+      formateurs.value = [
+        { id: 1, matricule: 'F001', nom: 'Doe', prenom: 'John', email: 'john@example.com', telephone: '0123456789' },
+        { id: 2, matricule: 'F002', nom: 'Smith', prenom: 'Anna', email: 'anna@example.com', telephone: '0987654321' },
+      ];
+      loading.value = false;
+    }, 3000);
+  });
+</script>
 

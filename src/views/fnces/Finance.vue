@@ -12,7 +12,7 @@ import sidebar from '@/components/Header.vue'
                         <div class="d-flex align-items-end flex-wrap">
                             <div class="me-md-3 me-xl-5">
                                 <h2>Gestions des Finances</h2>
-                                <p class="mb-md-0">Gestion des formateurs et enseignant</p>
+                                <p class="mb-md-0">Gestion des finances </p>
                             </div>
                         <div class="d-flex">
                             <i class="mdi mdi-home text-muted hover-cursor"></i>
@@ -42,8 +42,8 @@ import sidebar from '@/components/Header.vue'
             <div class="col-md-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Liste des Formateurs</h4>
-                        <p class="card-description">Liste de formateurs actifs </p>
+                        <h4 class="card-title">Rapports financiers </h4>
+                        <p class="card-description">Liste des factures et reçus </p>
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>

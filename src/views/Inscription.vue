@@ -191,7 +191,7 @@
 <script setup>
 import SkeletonLoader from '@/components/SkeletonLoader.vue';
 import sidebar from '@/components/Header.vue'
-import {ref, computed} from "vue";
+import {ref, computed, onMounted} from "vue";
 
 const loading = ref(true);
 const formateurs = ref([]);
@@ -200,84 +200,17 @@ const classes = ref(["Licence 1", "Licence 2", "Master 1"]);
 const selectedYear = ref("2023-2024");
 const selectedClass = ref("Licence 1");
 const selectedPaymentStatus = ref("all");
-const showModal = ref(false);
-const editingStudent = ref(null);
-const students = ref([
-    {
-        id: 1,
-        name: "Alice",
-        class: "Licence 1",
-        year: "2023-2024",
-        paymentStatus: "paid"
-    }, {
-        id: 2,
-        name: "Bob",
-        class: "Licence 2",
-        year: "2023-2024",
-        paymentStatus: "unpaid"
-    }
-]);
 
-const form = ref(
-    {name: "", class: selectedClass.value, year: selectedYear.value}
-);
+onMounted(() => {
+    setTimeout(() => {
+      formateurs.value = [
+        { id: 1, matricule: 'F001', nom: 'Doe', prenom: 'John', email: 'john@example.com', telephone: '0123456789' },
+        { id: 2, matricule: 'F002', nom: 'Smith', prenom: 'Anna', email: 'anna@example.com', telephone: '0987654321' },
+      ];
+      loading.value = false;
+    }, 3000);
+  });
 
-const filteredStudents = computed(() => {
-    return students
-        .value
-        .filter(
-            (student) => student.year === selectedYear.value && student.class === selectedClass.value && (selectedPaymentStatus.value === "all" || student.paymentStatus === selectedPaymentStatus.value)
-        );
-});
-
-const openModal = () => {
-    showModal.value = true;
-    editingStudent.value = null;
-    form.value = {
-        name: "",
-        class: selectedClass.value,
-        year: selectedYear.value
-    };
-};
-
-const closeModal = () => {
-    showModal.value = false;
-};
-
-const saveStudent = () => {
-    if (editingStudent.value) {
-        Object.assign(editingStudent.value, form.value);
-    } else {
-        students
-            .value
-            .push({
-                id: Date.now(),
-                ...form.value,
-                paymentStatus: "unpaid"
-            });
-    }
-    closeModal();
-};
-
-const editStudent = (student) => {
-    editingStudent.value = student;
-    form.value = {
-        ...student
-    };
-    showModal.value = true;
-};
-
-const updatePayment = (student) => {
-    student.paymentStatus = "paid";
-};
-
-const exportToPDF = () => {
-    alert("Export PDF en cours...");
-};
-
-const exportToExcel = () => {
-    alert("Export Excel en cours...");
-};
 </script>
 
 <script>

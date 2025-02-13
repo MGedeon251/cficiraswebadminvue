@@ -16,7 +16,7 @@ import Support from '../views/portal/Support.vue';
 import Settings from '../views/Settings.vue';
 import Formateur from '../views/Formateur.vue';
 import Admins from '../views/admin/Administration.vue';
-import Finance from '../views/Enseignant.vue';
+import Finance from '../views/fnces/Finance.vue';
 
 const routes = [
   { path: '/', name: 'home', component: Home }, // Route vers la page d'accueil
