@@ -10,7 +10,7 @@ import Schedule from '../views/Schedule.vue';
 import Etudiants from '../views/portal/Etudiants.vue';
 import Modules from '../views/portal/Modules.vue';
 import Examens from '../views/portal/Examens.vue';
-import Notes from '../views/portal/Notes.vue';
+import Notes from '../views/portal/notes/Notes.vue';
 import Parcours from '../views/portal/Parcours.vue';
 import Support from '../views/portal/Support.vue';
 import Settings from '../views/Settings.vue';

@@ -2,9 +2,9 @@
     <table class="table table-striped table-hover">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Modified</th>
-          <th>Size</th>
+          <th>Nom</th>
+          <th>Modifié le</th>
+          <th>Taille</th>
           <th>Type</th>
           <th>Actions</th>
         </tr>

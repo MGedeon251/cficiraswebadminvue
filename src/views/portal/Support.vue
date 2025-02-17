@@ -1,5 +1,6 @@
 <script setup>
 import sidebar from '@/components/Header.vue'
+import SkeletonLoader from '@/components/SkeletonLoader.vue';
 </script>
 
 <template>
@@ -11,7 +12,7 @@ import sidebar from '@/components/Header.vue'
                         <div class="d-flex align-items-end flex-wrap">
                             <div class="me-md-3 me-xl-5">
                                 <h2>Gestions & support cours</h2>
-                                <p class="mb-md-0">Gestion des etudiants</p>
+                                <p class="mb-md-0">Gestion des fichiers des supports de cours etudiant etc. </p>
                             </div>
                         <div class="d-flex">
                             <i class="mdi mdi-home text-muted hover-cursor"></i>
@@ -29,13 +30,11 @@ import sidebar from '@/components/Header.vue'
                     <div class="col-md-12 grid margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                          <h2 class="mb-4">Gestionnaire de fichier</h2>
                             <p class="card-description"> </p>
                             <div class="d-flex gap-2 mb-3">
                             </div>
-                            <div class="container mt-4">
-                                
-                                <div class="d-flex justify-content-between mb-3">
+                            <SkeletonLoader v-if="loading" type="card" :rows="3" :columns="1"/>
+                                <div v-else class="d-flex justify-content-between mb-3">
                                     <FileUploader @upload="handleUpload" />
                                 </div>
                                 <FileTable :files="files" @download="handleDownload" @delete="handleDelete" />
@@ -43,8 +42,7 @@ import sidebar from '@/components/Header.vue'
                         </div>
                     </div>
                 </div>
-                </div>  
-            </div> 
+                </div>   
         </sidebar>
     </div>
 </template>
