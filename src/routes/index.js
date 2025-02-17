@@ -7,12 +7,12 @@ import Statistique from '../views/stats/Statistiques.vue'; // Page des statistiq
 import Documentation from '../views/docf/Document.vue'; // Page de la documentation
 import Inscription from '../views/Inscription.vue';
 import Schedule from '../views/Schedule.vue';
-import Etudiants from '../views/portal/Etudiants.vue';
-import Modules from '../views/portal/Modules.vue';
-import Examens from '../views/portal/Examens.vue';
+import Etudiants from '../views/portal/etudiants/Etudiants.vue';
+import Modules from '../views/portal/matieres/Modules.vue';
+import Examens from '../views/portal/examens/Examens.vue';
 import Notes from '../views/portal/notes/Notes.vue';
-import Parcours from '../views/portal/Parcours.vue';
-import Support from '../views/portal/Support.vue';
+import Parcours from '../views/portal/parcours/Parcours.vue';
+import Support from '../views/portal/support/Support.vue';
 import Settings from '../views/Settings.vue';
 import Formateur from '../views/Formateur.vue';
 import Admins from '../views/admin/Administration.vue';
