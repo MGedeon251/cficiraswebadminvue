@@ -1,8 +1,18 @@
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL + "/api",
+  baseURL: import.meta.env.VITE_API_URL + "/api/v1",
   headers: { "Content-Type": "application/json" },
+});
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token"); // Récupère le token
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`; // L'ajoute aux requêtes
+  }
+  return config;
 });
 
 export const getUsers = async () => {
