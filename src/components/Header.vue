@@ -165,7 +165,7 @@ import Footer from './Footer.vue'
       </nav>
       <div class="main-panel">
         <div class="content-wrapper">
-          <slot></slot>
+          
         </div>
         <Footer></Footer>
       </div>
