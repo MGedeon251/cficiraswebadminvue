@@ -1,9 +1,11 @@
 <script setup>
-import dashboard from './views/Dashboard.vue'
+import DefaultLayout from '@/layouts/DefaultLayout.vue'
 </script>
 
 <template>
- <router-view>
- </router-view>
-  
+  <!-- Utilise DefaultLayout comme wrapper autour du router-view -->
+  <DefaultLayout>
+    <router-view />
+  </DefaultLayout>
 </template>
+

@@ -1,6 +1,8 @@
 <template>
+  <DefaultLayout>
+    
+  </DefaultLayout>
     <div>
-        <sidebar>
             <div class="row">
                 <div class="col-md-12 grid-margin">
                     <div class="d-flex justify-content-between flex-wrap">
@@ -30,17 +32,48 @@
                         <div v-else class="table-responsive">
                             <p class="card-description">Liste des etudiants inscrits</p>
                             <div class="d-flex justify-content-between flex-wrap">
-                               <div class="d-flex justify-content-between align-items-end flex-wrap">
+                                            <div class="d-flex align-items-end flex-wrap">
+                                              <div class="me-md-4 me-xl-5">
+                                                <div class="filters d-flex gap-2 mb-2">
+                                                    <div class="col-md-4">
+                                                        <select class="form-select">
+                                                            <option value="year">2022-2023</option>
+                                                            <option value="year">2023-2024</option>
+                                                            <option value="year">2024-2025</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <select class="form-select">
+                                                            <option key="classItem" value="classItem">LAP 1
+                                                            </option>
+                                                            <option key="classItem" value="classItem">LAP 2
+                                                            </option>
+                                                            <option key="classItem" value="classItem">LAP 3
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <select class="form-select">
+                                                            <option value="all" selected>Tout</option>
+                                                            <option value="paid">Informatique</option>
+                                                            <option value="unpaid">Administration</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between align-items-end flex-wrap">
                                                 <button class="btn btn-outline-dark me-2">Actualiser</button>
                                                 <button class="btn btn-outline-dark me-2">Exporter</button>
                                                 <button
-                                                    class="btn btn-primary mt-2 mt-xl-0"
+                                                    class="btn btn-primary mt-2 me-2 mt-xl-0"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#exampleModal">
-                                                    Ajouter
+                                                    + Ajouter
                                                 </button>
-                                            </div> 
-                            </div>
+                                              </div>
+                                          </div>
                             
                             <table class="table table-hover align-middle">
                                     <thead>
@@ -134,19 +167,20 @@
          </div>
         </div>
     </div>
-
-        </sidebar>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import sidebar from '@/components/Header.vue'
 import SkeletonLoader from '@/components/SkeletonLoader.vue';
   
   const loading = ref(true);
   const formateurs = ref([]);
-  
+  const academicYears = ref(["2023-2024", "2024-2025"]);
+  const classes = ref(["Licence 1", "Licence 2", "Master 1"]);
+  const selectedYear = ref("2023-2024");
+  const selectedClass = ref("Licence 1");
+  const selectedPaymentStatus = ref("all");
   onMounted(() => {
     setTimeout(() => {
       formateurs.value = [
