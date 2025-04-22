@@ -6,16 +6,16 @@ import Dashboard from '../views/dashboard/Dashboard.vue'; // Page du tableau de 
 import NotificationView from '../views/notifications/notification.vue'
 import Statistique from '../views/stats/Statistiques.vue'; // Page des statistiques
 import Documentation from '../views/docf/Document.vue'; // Page de la documentation
-import Inscription from '../views/Inscription.vue';
-import Schedule from '../views/Schedule.vue';
+import Inscription from '../views/inscriptions/Inscription.vue';
+import Schedule from '../views/schedule/Schedule.vue';
 import Etudiants from '../views/etudiants/Etudiants.vue';
 import Modules from '../views/matieres/Modules.vue';
 import Examens from '../views/examens/Examens.vue';
 import Notes from '../views/notes/Notes.vue';
 import Parcours from '../views/parcours/Parcours.vue';
 import Support from '../views/support/Support.vue';
-import Settings from '../views/Settings.vue';
-import Formateur from '../views/Formateur.vue';
+import Settings from '../views/settings/Settings.vue';
+import Formateur from '../views/formateurs/Formateur.vue';
 import Admins from '../views/admin/Administration.vue';
 import Finance from '../views/fnces/Finance.vue';
 
