@@ -1,10 +1,10 @@
-import serviceApi from "../config/serviceApi";
+import serviceApi from '../config/serviceApi';
 
 /** Ici les appels apis de :
  *  evaluations
  *  notes
  *  examens
- *  sessions 
+ *  sessions
  *  salle_examens
  *  resultats tout les etudiants
  *  resultats par classes

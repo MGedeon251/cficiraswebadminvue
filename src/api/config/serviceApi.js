@@ -1,5 +1,5 @@
-import apiClient from "./axiosClients";
-import { useErrorStore } from "@/stores/errorStore";
+import apiClient from './axiosClients';
+import { useErrorStore } from '@/stores/errorStore';
 
 const serviceApi = {
   get: async (url, params = {}) => {

@@ -3,10 +3,10 @@
  *  cours (et type de cours)
  *  creanau (emploi du temps)
  *  support de cours
- *  typecours 
+ *  typecours
  */
 
-import serviceApi from "../config/serviceApi";
+import serviceApi from '../config/serviceApi';
 
 // API pour gérer les modules
 export const getModules = () => serviceApi.get('/modules');

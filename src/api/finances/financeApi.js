@@ -1,4 +1,4 @@
-import serviceApi from "../config/serviceApi";
+import serviceApi from '../config/serviceApi';
 
 // API pour gérer les finances
 export const getFinances = () => serviceApi.get('/finances');
@@ -25,5 +25,6 @@ export const deletePaiement = (id) => serviceApi.delete(`/paiements/${id}`);
 export const getFraisInscription = () => serviceApi.get('/frais_inscription');
 export const getFraisInscriptionById = (id) => serviceApi.get(`/frais_inscription/${id}`);
 export const createFraisInscription = (data) => serviceApi.post('/frais_inscription', data);
-export const updateFraisInscription = (id, data) => serviceApi.put(`/frais_inscription/${id}`, data);
+export const updateFraisInscription = (id, data) =>
+  serviceApi.put(`/frais_inscription/${id}`, data);
 export const deleteFraisInscription = (id) => serviceApi.delete(`/frais_inscription/${id}`);

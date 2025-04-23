@@ -1,4 +1,4 @@
-import serviceApi from "../config/serviceApi";
+import serviceApi from '../config/serviceApi';
 
 // API pour gérer les enseignants
 export const getEnseignants = () => serviceApi.get('/enseignants');
@@ -22,16 +22,25 @@ export const updateDiplome = (id, data) => serviceApi.put(`/diplomes/${id}`, dat
 export const deleteDiplome = (id) => serviceApi.delete(`/diplomes/${id}`);
 
 // API pour gérer les enseignants par module
-export const getEnseignantsByModule = (moduleId) => serviceApi.get(`/modules/${moduleId}/enseignants`);
-export const assignEnseignantToModule = (moduleId, enseignantId) => serviceApi.post(`/modules/${moduleId}/enseignants`, { enseignantId });
-export const removeEnseignantFromModule = (moduleId, enseignantId) => serviceApi.delete(`/modules/${moduleId}/enseignants/${enseignantId}`);
+export const getEnseignantsByModule = (moduleId) =>
+  serviceApi.get(`/modules/${moduleId}/enseignants`);
+export const assignEnseignantToModule = (moduleId, enseignantId) =>
+  serviceApi.post(`/modules/${moduleId}/enseignants`, { enseignantId });
+export const removeEnseignantFromModule = (moduleId, enseignantId) =>
+  serviceApi.delete(`/modules/${moduleId}/enseignants/${enseignantId}`);
 
 // API pour gérer les enseignants par classe
-export const getEnseignantsByClasse = (classeId) => serviceApi.get(`/classes/${classeId}/enseignants`);
-export const assignEnseignantToClasse = (classeId, enseignantId) => serviceApi.post(`/classes/${classeId}/enseignants`, { enseignantId });
-export const removeEnseignantFromClasse = (classeId, enseignantId) => serviceApi.delete(`/classes/${classeId}/enseignants/${enseignantId}`);
+export const getEnseignantsByClasse = (classeId) =>
+  serviceApi.get(`/classes/${classeId}/enseignants`);
+export const assignEnseignantToClasse = (classeId, enseignantId) =>
+  serviceApi.post(`/classes/${classeId}/enseignants`, { enseignantId });
+export const removeEnseignantFromClasse = (classeId, enseignantId) =>
+  serviceApi.delete(`/classes/${classeId}/enseignants/${enseignantId}`);
 
 // API pour gérer les créneaux des enseignants
-export const getCreneauxByEnseignant = (enseignantId) => serviceApi.get(`/enseignants/${enseignantId}/creneaux`);
-export const assignCreneauToEnseignant = (enseignantId, creneauId) => serviceApi.post(`/enseignants/${enseignantId}/creneaux`, { creneauId });
-export const removeCreneauFromEnseignant = (enseignantId, creneauId) => serviceApi.delete(`/enseignants/${enseignantId}/creneaux/${creneauId}`);
+export const getCreneauxByEnseignant = (enseignantId) =>
+  serviceApi.get(`/enseignants/${enseignantId}/creneaux`);
+export const assignCreneauToEnseignant = (enseignantId, creneauId) =>
+  serviceApi.post(`/enseignants/${enseignantId}/creneaux`, { creneauId });
+export const removeCreneauFromEnseignant = (enseignantId, creneauId) =>
+  serviceApi.delete(`/enseignants/${enseignantId}/creneaux/${creneauId}`);

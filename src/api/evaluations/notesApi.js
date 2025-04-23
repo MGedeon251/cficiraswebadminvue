@@ -1,4 +1,4 @@
-import serviceApi from "../config/serviceApi";
+import serviceApi from '../config/serviceApi';
 
 // API pour gérer les notes
 export const getNotes = () => serviceApi.get('/notes');

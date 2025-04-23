@@ -17,7 +17,8 @@ export const useAuthStore = defineStore('auth', {
     async fetchUser(force = false) {
       const now = Date.now();
       // Vérification du cache pour éviter les requêtes redondantes
-      if (!force && this.user && now - this.lastFetch < 300000) { // 5min cache
+      if (!force && this.user && now - this.lastFetch < 300000) {
+        // 5min cache
         return this.user;
       }
 
@@ -32,7 +33,7 @@ export const useAuthStore = defineStore('auth', {
 
       // Simule la mise à jour du cache
       this.lastFetch = now;
-      
+
       return this.user;
     },
 
@@ -40,6 +41,6 @@ export const useAuthStore = defineStore('auth', {
     setUser(newUser) {
       this.user = newUser;
       this.lastFetch = Date.now(); // Met à jour la date de dernière récupération
-    }
+    },
   },
 });

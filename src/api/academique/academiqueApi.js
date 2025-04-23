@@ -1,4 +1,4 @@
-import serviceApi from "../config/serviceApi";
+import serviceApi from '../config/serviceApi';
 
 // API pour gérer les années académiques
 export const getAnneesAcademiques = () => serviceApi.get('/anneacademique');
@@ -41,5 +41,3 @@ export const getSemestres = () => serviceApi.get('/semestre');
 export const createSemestre = (data) => serviceApi.post('/semestre', data);
 export const updateSemestre = (id, data) => serviceApi.put(`/semestre/${id}`, data);
 export const deleteSemestre = (id) => serviceApi.delete(`/semestre/${id}`);
-
-

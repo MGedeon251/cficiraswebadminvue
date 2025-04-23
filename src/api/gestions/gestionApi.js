@@ -1,11 +1,11 @@
-import serviceApi from "../config/serviceApi";
+import serviceApi from '../config/serviceApi';
 
 /** Ici les appels apis de :
- *  concours 
+ *  concours
  *  candidature
  *  creanau (emploi du temps)
- *  inscription 
- *  salle 
+ *  inscription
+ *  salle
  */
 
 // API pour gérer les concours
