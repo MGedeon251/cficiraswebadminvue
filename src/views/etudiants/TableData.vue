@@ -11,7 +11,7 @@ const etudiants = ref([]);
 const anneesAcademiques = ref([]);
 const filieres = ref([]);
 const classes = ref([]);
-const loading = ref(false);
+const loading = ref(true);
 
 // Charger les données au montage du composant
 onMounted(async () => {
@@ -23,7 +23,7 @@ onMounted(async () => {
     await etudiantStore.fetchClasses();
 
     // Assignation des données du store aux références locales
-    etudiants.value = etudiantStore.etudiants;
+    etudiants.value = etudiantStore.etudiants
     anneesAcademiques.value = etudiantStore.anneesAcademiques;
     filieres.value = etudiantStore.filieres;
     classes.value = etudiantStore.classes;
@@ -92,7 +92,7 @@ onMounted(async () => {
           <td>{{ etudiant.filiere.nom }}</td>
           <td>{{ etudiant.classe.nom }}</td>
         </tr>
-        <tr v-if="etudiants.length === 0">
+        <tr v-if="!loading && Array.isArray(etudiants) && etudiants.length === 0">
           <td colspan="7" class="text-center py-4">
             <div class="d-flex flex-column align-items-center">
               <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="auto" />
