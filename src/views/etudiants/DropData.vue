@@ -4,7 +4,7 @@
 
 <template>
 
-<div class="card-body">
+<div class="card-body" id="drop_table">
 
 <p class="text-muted">Importer une liste existant des etudiants</p>
 <div

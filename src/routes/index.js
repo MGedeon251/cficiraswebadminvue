@@ -18,18 +18,23 @@ import Settings from '../views/settings/Settings.vue';
 import Formateur from '../views/formateurs/Formateur.vue';
 import Admins from '../views/admin/Administration.vue';
 import Finance from '../views/finances/Finance.vue';
+import NotFound from '../views/errors/NotFound.vue' ;
 
 const routes = [
   // Route de login (pas besoin de layout global ici)
   { path: '/login', name: 'Login', component: Login }, 
+  { path: '/:pathMatch(.*)*', name: 'NotFound',
+    component: NotFound, meta: { public: true }
+  },
 
   // Routes qui utilisent le layout global DefaultLayout
   {
     path: '/',
     component: DefaultLayout,  // Enveloppe tout le contenu avec le DefaultLayout
     children: [
-      { path: 'home', name: 'Home', component: Home }, 
-      { path: 'dashboard', name: 'Dashboard', component: Dashboard }, // Tableau de bord
+      { path: '', name: 'Home', component: Home },
+      { path: '/home', name: 'Home', component: Home }, 
+      { path: '/dashboard', name: 'Dashboard', component: Dashboard }, // Tableau de bord
       { path: '/statistiques', name: 'Statistique', component: Statistique }, // Statistiques
       { path: '/documentation', name: 'Documentations', component: Documentation },
       { path: '/inscriptions', name: 'Inscriptions', component: Inscription },

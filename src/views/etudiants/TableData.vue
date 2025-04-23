@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import SkeletonLoader from '@/components/SkeletonLoader.vue';
+import addEtudiant from './addEtudiant.vue'; 
 
 </script>
 
@@ -41,25 +42,40 @@ import SkeletonLoader from '@/components/SkeletonLoader.vue';
             <div class="d-flex justify-content-between align-items-end flex-wrap">
                 <button class="btn btn-outline-dark me-2">Actualiser</button>
                 <button class="btn btn-outline-dark me-2">Exporter</button>
-                <button
-                    class="btn btn-primary mt-2 me-2 mt-xl-0"
-                    data-bs-toggle="modal"
-                    data-bs-target="#exampleModal">
-                    + Ajouter
-                </button>
-            </div>
+                <div class="btn-group">
+                    <button
+                        type="button"
+                        class="btn btn-primary mt-2 mt-xl-0"
+                        data-bs-toggle="modal"
+                        data-bs-target="#exampleModal"
+                        aria-hidden="true"
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false">+ Ajouter</button>
+                    <button
+                        type="button"
+                        class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="#drop_table">Importer une liste</a>
+                        </li>
+                    </ul>
+                </div>
+              </div>
         </div>
-
         <table class="table table-hover align-middle">
             <thead>
                 <tr>
-                   <th>#</th>
+                    <th>#</th>
                     <th>Matricule</th>
                     <th>Noms</th>
                     <th>Prenoms</th>
-                    <th>Email</th>
-                    <th>Telephone</th>
-                    <th>Filiere</th>
+                    <th>sexe</th>
+                    <th>filiere</th>
+                    <th>niveau</th>
                     <th></th>
                 </tr>
             </thead>

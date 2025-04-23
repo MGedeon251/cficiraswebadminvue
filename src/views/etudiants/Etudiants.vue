@@ -43,7 +43,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import TableData from './TableData.vue' ; 
-import TabContent from './TabContent.vue' ; 
+import TabContent from './TabContent.vue' ;
 </script>
 
 <style scoped>
