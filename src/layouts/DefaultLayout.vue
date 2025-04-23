@@ -1,22 +1,22 @@
 <template>
-    <div class="container-scroller">
-      <!-- Header component -->
-      <Header />
-  
-      <div class="container-fluid page-body-wrapper">
-        <!-- Sidebar component -->
-        <Sidebar />
-  
-        <!-- Main content -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <slot></slot>
+  <div class="container-scroller">
+    <Header />
+    
+    <div class="container-fluid page-body-wrapper">
+      <Sidebar />
+      
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <!-- Ajoutez ceci pour déboguer -->
+          <div>
+            <router-view></router-view>
           </div>
-          <Footer />
         </div>
+        <Footer />
       </div>
     </div>
-  </template>
+  </div>
+</template>
   
   <script setup>
 import Header from  '@/components/partials/header.vue'

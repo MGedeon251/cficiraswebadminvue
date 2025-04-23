@@ -17,7 +17,7 @@ import Support from '../views/support/Support.vue';
 import Settings from '../views/settings/Settings.vue';
 import Formateur from '../views/formateurs/Formateur.vue';
 import Admins from '../views/admin/Administration.vue';
-import Finance from '../views/fnces/Finance.vue';
+import Finance from '../views/finances/Finance.vue';
 
 const routes = [
   // Route de login (pas besoin de layout global ici)
@@ -28,9 +28,8 @@ const routes = [
     path: '/',
     component: DefaultLayout,  // Enveloppe tout le contenu avec le DefaultLayout
     children: [
-      { path: '', name: 'home', component: Home }, // Page d'accueil
-      { path: '/home', name: 'Home', component: Home }, 
-      { path: '/dashboard', name: 'Dashboard', component: Dashboard }, // Tableau de bord
+      { path: 'home', name: 'Home', component: Home }, 
+      { path: 'dashboard', name: 'Dashboard', component: Dashboard }, // Tableau de bord
       { path: '/statistiques', name: 'Statistique', component: Statistique }, // Statistiques
       { path: '/documentation', name: 'Documentations', component: Documentation },
       { path: '/inscriptions', name: 'Inscriptions', component: Inscription },
