@@ -1,44 +1,43 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
 import {
   getEtudiants,
   getEtudiantById,
   createEtudiant,
   updateEtudiant,
   deleteEtudiant,
-  getResultatsByEtudiant,
-  getNotesByEtudiant,
-  getMoyenneByEtudiant,
-  getEvaluationsByEtudiant,
-  createEvaluationForEtudiant,
-  updateEvaluationForEtudiant,
-  deleteEvaluationForEtudiant,
-} from '@/api/academique/etudiantApi';
-import { useMessageStore } from '@/stores/messages/messageStore';
+} from "@/api/academique/etudiantApi";
+import {
+  getAnneesAcademiques,
+  getFilieres,
+  getClasses,
+} from "@/api/academique/academiqueApi";
+import { useMessageStore } from "@/stores/messages/messageStore";
 
-export const useEtudiantStore = defineStore('etudiantStore', {
+export const useEtudiantStore = defineStore("etudiantStore", {
   state: () => ({
     etudiants: [],
     etudiant: null,
-    resultats: [],
-    notes: [],
-    moyenne: null,
-    evaluations: [],
+    anneesAcademiques: [],
+    filieres: [],
+    classes: [],
     loading: false,
   }),
 
   actions: {
+    // Récupérer tous les étudiants
     async fetchEtudiants() {
       this.loading = true;
       try {
         const response = await getEtudiants();
         this.etudiants = response.data;
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la récupération des étudiants.');
+        useMessageStore().addError("Erreur lors de la récupération des étudiants.");
       } finally {
         this.loading = false;
       }
     },
 
+    // Récupérer un étudiant par ID
     async fetchEtudiantById(id) {
       this.loading = true;
       try {
@@ -51,11 +50,12 @@ export const useEtudiantStore = defineStore('etudiantStore', {
       }
     },
 
+    // Ajouter un nouvel étudiant
     async addEtudiant(data) {
       this.loading = true;
       try {
         await createEtudiant(data);
-        useMessageStore().addSuccess('Étudiant créé avec succès.');
+        useMessageStore().addSuccess("Étudiant créé avec succès.");
         this.fetchEtudiants();
       } catch (error) {
         useMessageStore().addError("Erreur lors de la création de l'étudiant.");
@@ -64,11 +64,12 @@ export const useEtudiantStore = defineStore('etudiantStore', {
       }
     },
 
+    // Modifier un étudiant existant
     async editEtudiant(id, data) {
       this.loading = true;
       try {
         await updateEtudiant(id, data);
-        useMessageStore().addSuccess('Étudiant mis à jour avec succès.');
+        useMessageStore().addSuccess("Étudiant mis à jour avec succès.");
         this.fetchEtudiants();
       } catch (error) {
         useMessageStore().addError("Erreur lors de la mise à jour de l'étudiant.");
@@ -77,11 +78,12 @@ export const useEtudiantStore = defineStore('etudiantStore', {
       }
     },
 
+    // Supprimer un étudiant
     async removeEtudiant(id) {
       this.loading = true;
       try {
         await deleteEtudiant(id);
-        useMessageStore().addSuccess('Étudiant supprimé avec succès.');
+        useMessageStore().addSuccess("Étudiant supprimé avec succès.");
         this.fetchEtudiants();
       } catch (error) {
         useMessageStore().addError("Erreur lors de la suppression de l'étudiant.");
@@ -90,88 +92,40 @@ export const useEtudiantStore = defineStore('etudiantStore', {
       }
     },
 
-    async fetchResultatsByEtudiant(etudiantId) {
+    // Récupérer toutes les années académiques
+    async fetchAnneesAcademiques() {
       this.loading = true;
       try {
-        const response = await getResultatsByEtudiant(etudiantId);
-        this.resultats = response.data;
+        const response = await getAnneesAcademiques();
+        this.anneesAcademiques = response.data;
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la récupération des résultats.');
+        useMessageStore().addError("Erreur lors de la récupération des années académiques.");
       } finally {
         this.loading = false;
       }
     },
 
-    async fetchNotesByEtudiant(etudiantId) {
+    // Récupérer toutes les filières
+    async fetchFilieres() {
       this.loading = true;
       try {
-        const response = await getNotesByEtudiant(etudiantId);
-        this.notes = response.data;
+        const response = await getFilieres();
+        this.filieres = response.data;
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la récupération des notes.');
+        useMessageStore().addError("Erreur lors de la récupération des filières.");
       } finally {
         this.loading = false;
       }
     },
 
-    async fetchMoyenneByEtudiant(etudiantId) {
+    // Récupérer toutes les classes
+    async fetchClasses() {
       this.loading = true;
       try {
-        const response = await getMoyenneByEtudiant(etudiantId);
-        this.moyenne = response.data;
+        const response = await getClasses();
+        this.classes = response.data;
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la récupération de la moyenne.');
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async fetchEvaluationsByEtudiant(etudiantId) {
-      this.loading = true;
-      try {
-        const response = await getEvaluationsByEtudiant(etudiantId);
-        this.evaluations = response.data;
-      } catch (error) {
-        useMessageStore().addError('Erreur lors de la récupération des évaluations.');
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async addEvaluationForEtudiant(etudiantId, data) {
-      this.loading = true;
-      try {
-        await createEvaluationForEtudiant(etudiantId, data);
-        useMessageStore().addSuccess('Évaluation ajoutée avec succès.');
-        this.fetchEvaluationsByEtudiant(etudiantId);
-      } catch (error) {
-        useMessageStore().addError("Erreur lors de l'ajout de l'évaluation.");
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async editEvaluationForEtudiant(etudiantId, evaluationId, data) {
-      this.loading = true;
-      try {
-        await updateEvaluationForEtudiant(etudiantId, evaluationId, data);
-        useMessageStore().addSuccess('Évaluation mise à jour avec succès.');
-        this.fetchEvaluationsByEtudiant(etudiantId);
-      } catch (error) {
-        useMessageStore().addError("Erreur lors de la mise à jour de l'évaluation.");
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async removeEvaluationForEtudiant(etudiantId, evaluationId) {
-      this.loading = true;
-      try {
-        await deleteEvaluationForEtudiant(etudiantId, evaluationId);
-        useMessageStore().addSuccess('Évaluation supprimée avec succès.');
-        this.fetchEvaluationsByEtudiant(etudiantId);
-      } catch (error) {
-        useMessageStore().addError("Erreur lors de la suppression de l'évaluation.");
+        useMessageStore().addError("Erreur lors de la récupération des classes.");
       } finally {
         this.loading = false;
       }

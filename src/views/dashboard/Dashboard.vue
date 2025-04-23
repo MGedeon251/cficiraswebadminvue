@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-    <TabNavigation>
+        <TabNavigation>
         <TabContent tabId="overview">
           <DashboardStats />
         </TabContent>
@@ -12,7 +12,12 @@
           <DashboardStats /> <!-- Adapter avec les données spécifiques -->
         </TabContent>
     </TabNavigation>
-    <RecentPurchases :purchases="recentPurchases" />
+    
+      <div class="row">
+      <div class="card">
+        <RecentPurchases :purchases="recentPurchases" />
+      </div>
+    </div>
   </div>
 </template>
 

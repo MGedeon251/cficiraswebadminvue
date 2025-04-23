@@ -1,10 +1,9 @@
-import apiClient from './axiosClients';
-import { useErrorStore } from '@/stores/errorStore';
+import { useErrorStore } from '@/stores/messages/errorStore';
 
-const serviceApi = {
+const buildService = (client) => ({
   get: async (url, params = {}) => {
     try {
-      const response = await apiClient.get(url, { params });
+      const response = await client.get(url, { params });
       return response.data;
     } catch (error) {
       useErrorStore().addError(error);
@@ -14,7 +13,7 @@ const serviceApi = {
 
   post: async (url, data) => {
     try {
-      const response = await apiClient.post(url, data);
+      const response = await client.post(url, data);
       return response.data;
     } catch (error) {
       useErrorStore().addError(error);
@@ -24,7 +23,7 @@ const serviceApi = {
 
   put: async (url, data) => {
     try {
-      const response = await apiClient.put(url, data);
+      const response = await client.put(url, data);
       return response.data;
     } catch (error) {
       useErrorStore().addError(error);
@@ -34,13 +33,13 @@ const serviceApi = {
 
   delete: async (url) => {
     try {
-      const response = await apiClient.delete(url);
+      const response = await client.delete(url);
       return response.data;
     } catch (error) {
       useErrorStore().addError(error);
       throw error;
     }
   },
-};
+});
 
-export default serviceApi;
+export default buildService;
