@@ -1,29 +1,22 @@
-<!-- settings.vue -->
 <template>
-  <div class="row">
-    <h2>Statistiques</h2>
-    <p>Personnalizez votre compte</p>
-
-    <div class="col-md-12 grid-margin stretch-card">
-      <!-- Votre contenu existant -->
-    </div>
+  <div>
+    <button @click="notify">Notify !</button>
   </div>
 </template>
 
 <script>
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 export default {
-  name: 'Setting',
-  data() {
-    return {
-      email: 'gedeon.lekounda@gmail.com',
-      selectedTheme: 'light',
-      loading: true,
+  name: 'App',
+  setup() {
+    const notify = () => {
+      toast('Wow so easy !', {
+        autoClose: 3000,
+      }); // ToastOptions
     };
-  },
-  mounted() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 2000);
+    return { notify };
   },
 };
 </script>
