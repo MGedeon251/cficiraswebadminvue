@@ -1,6 +1,5 @@
 <template>
     <div>
-        <sidebar>
             <div class="row">
                 <div class="container my-2">
                     <div class="col-md-12 grid margin stretch-card">
@@ -36,8 +35,6 @@
                     </div>
                 </div>
             </div>
-        </sidebar>
-
     </div>
 </template>
   

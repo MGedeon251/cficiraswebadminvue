@@ -4,7 +4,6 @@ import sidebar from '@/components/Header.vue'
 
 <template>
     <div>
-        <sidebar>
             <div class="row">
                 <div class="col-md-12 grid-margin">
                     <div class="d-flex justify-content-between flex-wrap">
@@ -20,16 +19,22 @@ import sidebar from '@/components/Header.vue'
                         </div>
                         </div>
                         <div class="d-flex justify-content-between align-items-end flex-wrap">
-                        <button type="button" class="btn btn-light bg-white btn-icon me-3 d-none d-md-block ">
-                            <i class="mdi mdi-filter text-muted"></i>
-                        </button>
-                       
-                        <button type="button" class="btn btn-light bg-white btn-icon me-3 mt-2 mt-xl-0">
-                            <i class=" mdi mdi-file-export text-muted"></i>
-                        </button>
-                        <button class="btn btn-primary mt-2 mt-xl-0">
-                            <span class="">Ajouter modules</span>
-                        </button>
+                          <button class="btn btn-outline-dark me-2">Exporter</button>
+                                                <div class="btn-group">
+                                                        <button type="button" 
+                                                        class="btn btn-primary mt-2 mt-xl-0"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModal"
+                                                        aria-hidden="true"
+                                                        data-bs-backdrop="static" 
+                                                        data-bs-keyboard="false" >+ Ajouter</button>
+                                                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <span class="visually-hidden">Toggle Dropdown</span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a class="dropdown-item" href="#drag-drop-area">Importer fichier</a></li>
+                                                        </ul>
+                                                </div>
             </div>
                     </div>
                 </div>
@@ -112,7 +117,7 @@ import sidebar from '@/components/Header.vue'
           <p class="text-muted">Importer une liste existant de matieres</p>
           </div>
     <!-- Drag & Drop File Upload -->
-        <div
+        <div id="drag-drop-area"
           class="drag-drop-area border rounded p-4 text-center"
           @dragover.prevent
           @dragenter.prevent="isDragging = true"
@@ -143,7 +148,6 @@ import sidebar from '@/components/Header.vue'
     </div>
       </div>
       </div></div>
-    </sidebar>
     </div>
 
 

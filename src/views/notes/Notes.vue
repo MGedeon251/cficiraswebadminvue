@@ -1,6 +1,5 @@
 <template>
     <div>
-        <sidebar>
             <div class="row">
                 <div class="col-md-12 grid-margin">
                     <div class="d-flex justify-content-between flex-wrap">
@@ -87,9 +86,12 @@
                                                 <button type="button" class="btn btn-light bg-white btn-icon me-3 mt-2 mt-xl-0">
                                                     <i class=" mdi mdi-file-export text-muted"></i>
                                                 </button>
-                                                <button class="btn btn-primary mt-2 mt-xl-0">
+                                                <a href="/addNotes" target="_blank" rel="noopener noreferrer">
+                                                    <button class="btn btn-primary mt-2 mt-xl-0">
                                                     <span class="">Attribuer des notes</span>
                                                 </button>
+                                                </a>
+                                                
                                             </div>
                                             <div class="table-responsive">
 
@@ -326,7 +328,7 @@
                     </div>
                 </div>
             </div>
-        </sidebar>
+
     </div>
 </template>
 

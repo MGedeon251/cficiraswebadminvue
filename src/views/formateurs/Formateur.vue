@@ -4,7 +4,6 @@ import sidebar from '@/components/Header.vue'
 
 <template>
     <div>
-        <sidebar>
             <div class="row">
                 <div class="col-md-12 grid-margin">
                     <div class="d-flex justify-content-between flex-wrap">
@@ -65,9 +64,6 @@ import sidebar from '@/components/Header.vue'
             </div>
 
         </div>
-
-            
-        </sidebar>
     </div>
 </template>
 <script>

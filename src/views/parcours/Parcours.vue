@@ -1,6 +1,5 @@
 <template>
     <div>
-        <sidebar>
             <div class="row">
                 <div class="col-md-12 grid-margin">
                     <div class="d-flex justify-content-between flex-wrap">
@@ -45,14 +44,12 @@
                 </div>
                 </div>  
             </div> 
-        </sidebar>
     </div>
 </template>
 
 <script setup>
 
 import { ref, onMounted } from 'vue';
-import sidebar from '@/components/Header.vue'
 import SkeletonLoader from '@/components/SkeletonLoader.vue';
   
   const loading = ref(true);

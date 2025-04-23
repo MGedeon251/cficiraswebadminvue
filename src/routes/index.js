@@ -12,6 +12,7 @@ import Etudiants from '../views/etudiants/Etudiants.vue';
 import Modules from '../views/matieres/Modules.vue';
 import Examens from '../views/examens/Examens.vue';
 import Notes from '../views/notes/Notes.vue';
+import appNotes from '../views/notes/addNotes/notev3.vue'
 import Parcours from '../views/parcours/Parcours.vue';
 import Support from '../views/support/Support.vue';
 import Settings from '../views/settings/Settings.vue';
@@ -26,6 +27,7 @@ const routes = [
   { path: '/:pathMatch(.*)*', name: 'NotFound',
     component: NotFound, meta: { public: true }
   },
+  { path: '/addNotes', name: 'appNotes',  component: appNotes },
 
   // Routes qui utilisent le layout global DefaultLayout
   {
