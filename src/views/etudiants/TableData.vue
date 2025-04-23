@@ -39,32 +39,6 @@ import addEtudiant from './addEtudiant.vue';
                     </div>
                 </div>
             </div>
-            <div class="d-flex justify-content-between align-items-end flex-wrap">
-                <button class="btn btn-outline-dark me-2">Actualiser</button>
-                <button class="btn btn-outline-dark me-2">Exporter</button>
-                <div class="btn-group">
-                    <button
-                        type="button"
-                        class="btn btn-primary mt-2 mt-xl-0"
-                        data-bs-toggle="modal"
-                        data-bs-target="#exampleModal"
-                        aria-hidden="true"
-                        data-bs-backdrop="static"
-                        data-bs-keyboard="false">+ Ajouter</button>
-                    <button
-                        type="button"
-                        class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <span class="visually-hidden">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href="#drop_table">Importer une liste</a>
-                        </li>
-                    </ul>
-                </div>
-              </div>
         </div>
         <table class="table table-hover align-middle">
             <thead>

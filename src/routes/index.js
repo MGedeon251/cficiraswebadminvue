@@ -34,7 +34,7 @@ const routes = [
     path: '/',
     component: DefaultLayout,  // Enveloppe tout le contenu avec le DefaultLayout
     children: [
-      { path: '', name: 'Home', component: Home },
+      { path: '', name: 'root', component: Home },
       { path: '/home', name: 'Home', component: Home }, 
       { path: '/dashboard', name: 'Dashboard', component: Dashboard }, // Tableau de bord
       { path: '/statistiques', name: 'Statistique', component: Statistique }, // Statistiques
