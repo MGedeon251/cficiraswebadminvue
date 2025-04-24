@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
+import SkeletonLoader from '@/components/SkeletonLoader.vue';
 import { getModules } from '@/api/academique/moduleApi';
 import Pagination from '@/components/shared/Pagination.vue';
 import ItemActions from '@/components/ItemActions.vue';
@@ -58,7 +59,8 @@ onMounted(fetchModules);
     {{ error }}
     <button type="button" class="btn-close" @click="error = null"></button>
   </div>
-  <div class="card p-4">
+  <SkeletonLoader v-if="isLoading" type="table" :rows="3" :columns="1" />
+  <div v-else class="card p-4">
     <div class="d-flex mb-3">
       <button class="btn btn-outline-dark me-2">Tout</button>
       <button class="btn btn-outline-dark me-2">Actives</button>
@@ -69,12 +71,8 @@ onMounted(fetchModules);
         <span v-else>Chargement...</span>
       </button>
     </div>
-    <div v-if="isLoading" class="skeleton-loader">
-      <div class="skeleton-line" v-for="n in 5" :key="n"></div>
-    </div>
-
+   
     <p>Listes de toutes les modules.</p>
-
     <table class="table table-hover align-middle">
       <thead class="table-light">
         <tr>

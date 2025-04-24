@@ -1,15 +1,6 @@
 import serviceApi from '../config/serviceApi';
 
-/** Ici les appels apis de :
- *  evaluations
- *  notes
- *  examens
- *  sessions
- *  salle_examens
- *  resultats tout les etudiants
- *  resultats par classes
- *  statistique
- */
+
 
 // API pour gérer les évaluations
 export const getEvaluations = () => serviceApi.get('/evaluations');

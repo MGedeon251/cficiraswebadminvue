@@ -1,13 +1,5 @@
 import serviceApi from '../config/serviceApi';
 
-/** Ici les appels apis de :
- *  concours
- *  candidature
- *  creanau (emploi du temps)
- *  inscription
- *  salle
- */
-
 // API pour gérer les concours
 export const getConcours = () => serviceApi.get('/concours');
 export const getConcoursById = (id) => serviceApi.get(`/concours/${id}`);

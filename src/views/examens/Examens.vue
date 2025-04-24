@@ -1,6 +1,7 @@
 <script setup>
 import sidebar from '@/components/Header.vue';
 import Planification from './planification/Planification.vue';
+import Salles from './salles/SalleExamen.vue'
 </script>
 
 <template>
@@ -23,6 +24,7 @@ import Planification from './planification/Planification.vue';
       </div>
     </div>
     <Planification />
+    <Salles />
   </div>
 </template>
 
