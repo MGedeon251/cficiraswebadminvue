@@ -1,13 +1,13 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 import {
   getAnneesAcademiques,
   createAnneeAcademique,
   updateAnneeAcademique,
   deleteAnneeAcademique,
-} from "@/api/academique/academiqueApi";
-import { useMessageStore } from "@/stores/messages/messageStore";
+} from '@/api/academique/academiqueApi';
+import { useMessageStore } from '@/stores/messages/messageStore';
 
-export const useAnneeStore = defineStore("anneeStore", {
+export const useAnneeStore = defineStore('anneeStore', {
   state: () => ({
     anneesAcademiques: [],
     anneeAcademique: null,
@@ -22,7 +22,7 @@ export const useAnneeStore = defineStore("anneeStore", {
         const response = await getAnneesAcademiques();
         this.anneesAcademiques = response.data;
       } catch (error) {
-        useMessageStore().addError("Erreur lors de la récupération des années académiques.");
+        useMessageStore().addError('Erreur lors de la récupération des années académiques.');
       } finally {
         this.loading = false;
       }
@@ -33,7 +33,7 @@ export const useAnneeStore = defineStore("anneeStore", {
       this.loading = true;
       try {
         await createAnneeAcademique(data);
-        useMessageStore().addSuccess("Année académique créée avec succès.");
+        useMessageStore().addSuccess('Année académique créée avec succès.');
         this.fetchAnneesAcademiques();
       } catch (error) {
         useMessageStore().addError("Erreur lors de la création de l'année académique.");
@@ -47,7 +47,7 @@ export const useAnneeStore = defineStore("anneeStore", {
       this.loading = true;
       try {
         await updateAnneeAcademique(id, data);
-        useMessageStore().addSuccess("Année académique mise à jour avec succès.");
+        useMessageStore().addSuccess('Année académique mise à jour avec succès.');
         this.fetchAnneesAcademiques();
       } catch (error) {
         useMessageStore().addError("Erreur lors de la mise à jour de l'année académique.");
@@ -61,7 +61,7 @@ export const useAnneeStore = defineStore("anneeStore", {
       this.loading = true;
       try {
         await deleteAnneeAcademique(id);
-        useMessageStore().addSuccess("Année académique supprimée avec succès.");
+        useMessageStore().addSuccess('Année académique supprimée avec succès.');
         this.fetchAnneesAcademiques();
       } catch (error) {
         useMessageStore().addError("Erreur lors de la suppression de l'année académique.");
@@ -71,4 +71,3 @@ export const useAnneeStore = defineStore("anneeStore", {
     },
   },
 });
-

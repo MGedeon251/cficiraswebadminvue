@@ -1,14 +1,14 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
-import { 
+import { onMounted, ref, watch } from 'vue';
+import {
   getAnneesAcademiques,
   getFilieres,
   getClasses,
   getFilieresByAnnee,
-  getClassesByAnnee
-} from "@/api/academique/academiqueApi";
-import { getEtudiantsByClasseFiliereAnnee } from "@/api/academique/etudiantApi";
-import SkeletonLoader from "@/components/SkeletonLoader.vue";
+  getClassesByAnnee,
+} from '@/api/academique/academiqueApi';
+import { getEtudiantsByClasseFiliereAnnee } from '@/api/academique/etudiantApi';
+import SkeletonLoader from '@/components/SkeletonLoader.vue';
 
 // Références pour les données
 const etudiants = ref([]);
@@ -28,14 +28,14 @@ onMounted(async () => {
     const [anneesResponse, filieresResponse, classesResponse] = await Promise.all([
       getAnneesAcademiques(),
       getFilieres(),
-      getClasses()
+      getClasses(),
     ]);
-    
+
     anneesAcademiques.value = anneesResponse.data;
     filieres.value = filieresResponse.data;
     classes.value = classesResponse.data;
   } catch (error) {
-    console.error("Erreur lors du chargement des données:", error);
+    console.error('Erreur lors du chargement des données:', error);
   } finally {
     loading.value = false;
   }
@@ -48,17 +48,17 @@ watch(selectedAnnee, async (newAnnee) => {
     try {
       const [filieresResponse, classesResponse] = await Promise.all([
         getFilieresByAnnee(newAnnee),
-        getClassesByAnnee(newAnnee)
+        getClassesByAnnee(newAnnee),
       ]);
-      
+
       filieres.value = filieresResponse.data;
       classes.value = classesResponse.data;
-      
+
       // Réinitialiser les sélections
       selectedFiliere.value = null;
       selectedClasse.value = null;
     } catch (error) {
-      console.error("Erreur lors du chargement des filières/classes:", error);
+      console.error('Erreur lors du chargement des filières/classes:', error);
     } finally {
       loading.value = false;
     }
@@ -80,7 +80,7 @@ const fetchFilteredEtudiants = async () => {
       );
       etudiants.value = response.data;
     } catch (error) {
-      console.error("Erreur lors du chargement des étudiants:", error);
+      console.error('Erreur lors du chargement des étudiants:', error);
       etudiants.value = [];
     } finally {
       loading.value = false;
@@ -91,7 +91,6 @@ const fetchFilteredEtudiants = async () => {
 // Surveiller les changements des filtres et mettre à jour les étudiants
 watch([selectedAnnee, selectedFiliere, selectedClasse], fetchFilteredEtudiants);
 </script>
-
 
 <template>
   <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1" />
@@ -174,6 +173,4 @@ watch([selectedAnnee, selectedFiliere, selectedClasse], fetchFilteredEtudiants);
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

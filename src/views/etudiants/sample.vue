@@ -1,7 +1,7 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import { useEtudiantStore } from "@/stores/etudiants/etudiantStore";
-import SkeletonLoader from "@/components/SkeletonLoader.vue";
+import { onMounted, ref } from 'vue';
+import { useEtudiantStore } from '@/stores/etudiants/etudiantStore';
+import SkeletonLoader from '@/components/SkeletonLoader.vue';
 
 // Initialisation du store
 const etudiantStore = useEtudiantStore();
@@ -111,6 +111,4 @@ onMounted(async () => {
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

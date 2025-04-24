@@ -1,39 +1,7 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { getModules } from '@/api/academique/moduleApi'
-import TabModule from './TabModule.vue'
-
-// Déclaration des variables réactives
-const modules = ref([])
-const isLoading = ref(false)
-const error = ref(null)
-
-// Fonction de récupération des modules
-const fetchModules = async () => {
-  isLoading.value = true
-  error.value = null
-
-  try {
-    const response = await getModules()
-    modules.value = response
-    console.log('Modules:', response) ;
-  } catch (err) {
-    error.value = 'Erreur lors du chargement des modules'
-    console.error(err)
-  } finally {
-    isLoading.value = false
-  }
-}
-
-// Fonction pour rafraîchir les modules
-const refreshModules = () => {
-  fetchModules()
-}
-
-// Appel lors du montage du composant
-onMounted(fetchModules)
+import TabModule from './ModuleList.vue';
 </script>
-//     console.error("Erreur lors du chargement des filières et classes:", error);
+// console.error("Erreur lors du chargement des filières et classes:", error);
 
 <template>
   <div>
@@ -90,11 +58,10 @@ onMounted(fetchModules)
           <h4>Liste modules | matieres</h4>
         </div>
         <!-- Product Table -->
-        <TabModule/>
+        <TabModule></TabModule>
       </div>
-  
+      <!-- Bootstrap JS -->
     </div>
-
   </div>
 </template>
 <style scoped>

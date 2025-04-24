@@ -15,7 +15,8 @@ export const getResultatsByEtudiant = (etudiantId) =>
   etudiantService.get(`/etudiants/${etudiantId}/resultats`);
 
 // API pour les notes spécifiques à un étudiant
-export const getNotesByEtudiant = (etudiantId) => etudiantService.get(`/etudiants/${etudiantId}/notes`);
+export const getNotesByEtudiant = (etudiantId) =>
+  etudiantService.get(`/etudiants/${etudiantId}/notes`);
 
 // API pour la moyenne spécifique à un étudiant
 export const getMoyenneByEtudiant = (etudiantId) =>
@@ -35,4 +36,4 @@ export const deleteEvaluationForEtudiant = (etudiantId, evaluationId) =>
 export const getEtudiantsByClasseFiliereAnnee = (classeId, filiereId, anneeAcademiqueId) =>
   etudiantService.get(
     `/etudiants/classe/${classeId}/filiere/${filiereId}/annee/${anneeAcademiqueId}`
-);
+  );

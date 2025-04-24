@@ -9,12 +9,12 @@ export const useErrorStore = defineStore('errorStore', {
 
   actions: {
     addError(error) {
-      let message = "Une erreur est survenue.";
+      let message = 'Une erreur est survenue.';
 
       if (error.response) {
         message = error.response.data?.message || `Erreur ${error.response.status}`;
       } else if (error.request) {
-        message = "Impossible de se connecter au serveur.";
+        message = 'Impossible de se connecter au serveur.';
       }
 
       this.errors.push(message);

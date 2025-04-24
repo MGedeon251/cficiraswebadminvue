@@ -41,6 +41,12 @@ const routes = [
       { path: '/schedule', name: 'Schedule', component: Schedule },
       { path: '/etudiants', name: 'Etudiants', component: Etudiants },
       { path: '/modules', name: 'Modules', component: Modules },
+      {
+        path: '/modules/:id',
+        name: 'ModuleDetails',
+        component: () => import('@/views/matieres/DetailsPanel.vue'),
+        props: true,
+      },
       { path: '/examens', name: 'Examens', component: Examens },
       { path: '/notes', name: 'Notes', component: Notes },
       { path: '/parcours', name: 'Parcours', component: Parcours },

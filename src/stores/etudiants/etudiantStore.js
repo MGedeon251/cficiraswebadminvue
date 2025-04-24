@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 import {
   getEtudiants,
   getEtudiantById,
@@ -6,15 +6,11 @@ import {
   updateEtudiant,
   deleteEtudiant,
   getEtudiantsByClasseFiliereAnnee,
-} from "@/api/academique/etudiantApi";
-import {
-  getAnneesAcademiques,
-  getFilieres,
-  getClasses,
-} from "@/api/academique/academiqueApi";
-import { useMessageStore } from "@/stores/messages/messageStore";
+} from '@/api/academique/etudiantApi';
+import { getAnneesAcademiques, getFilieres, getClasses } from '@/api/academique/academiqueApi';
+import { useMessageStore } from '@/stores/messages/messageStore';
 
-export const useEtudiantStore = defineStore("etudiantStore", {
+export const useEtudiantStore = defineStore('etudiantStore', {
   state: () => ({
     etudiants: [],
     etudiant: null,
@@ -33,7 +29,7 @@ export const useEtudiantStore = defineStore("etudiantStore", {
         const response = await getEtudiants();
         this.etudiants = response.data;
       } catch (error) {
-        useMessageStore().addError("Erreur lors de la récupération des étudiants.");
+        useMessageStore().addError('Erreur lors de la récupération des étudiants.');
       } finally {
         this.loading = false;
       }
@@ -57,7 +53,7 @@ export const useEtudiantStore = defineStore("etudiantStore", {
       this.loading = true;
       try {
         await createEtudiant(data);
-        useMessageStore().addSuccess("Étudiant créé avec succès.");
+        useMessageStore().addSuccess('Étudiant créé avec succès.');
         this.fetchEtudiants();
       } catch (error) {
         useMessageStore().addError("Erreur lors de la création de l'étudiant.");
@@ -71,7 +67,7 @@ export const useEtudiantStore = defineStore("etudiantStore", {
       this.loading = true;
       try {
         await updateEtudiant(id, data);
-        useMessageStore().addSuccess("Étudiant mis à jour avec succès.");
+        useMessageStore().addSuccess('Étudiant mis à jour avec succès.');
         this.fetchEtudiants();
       } catch (error) {
         useMessageStore().addError("Erreur lors de la mise à jour de l'étudiant.");
@@ -85,7 +81,7 @@ export const useEtudiantStore = defineStore("etudiantStore", {
       this.loading = true;
       try {
         await deleteEtudiant(id);
-        useMessageStore().addSuccess("Étudiant supprimé avec succès.");
+        useMessageStore().addSuccess('Étudiant supprimé avec succès.');
         this.fetchEtudiants();
       } catch (error) {
         useMessageStore().addError("Erreur lors de la suppression de l'étudiant.");
@@ -101,7 +97,7 @@ export const useEtudiantStore = defineStore("etudiantStore", {
         const response = await getAnneesAcademiques();
         this.anneesAcademiques = response.data;
       } catch (error) {
-        useMessageStore().addError("Erreur lors de la récupération des années académiques.");
+        useMessageStore().addError('Erreur lors de la récupération des années académiques.');
       } finally {
         this.loading = false;
       }
@@ -114,7 +110,7 @@ export const useEtudiantStore = defineStore("etudiantStore", {
         const response = await getFilieres();
         this.filieres = response.data;
       } catch (error) {
-        useMessageStore().addError("Erreur lors de la récupération des filières.");
+        useMessageStore().addError('Erreur lors de la récupération des filières.');
       } finally {
         this.loading = false;
       }
@@ -127,7 +123,7 @@ export const useEtudiantStore = defineStore("etudiantStore", {
         const response = await getClasses();
         this.classes = response.data;
       } catch (error) {
-        useMessageStore().addError("Erreur lors de la récupération des classes.");
+        useMessageStore().addError('Erreur lors de la récupération des classes.');
       } finally {
         this.loading = false;
       }
@@ -144,9 +140,7 @@ export const useEtudiantStore = defineStore("etudiantStore", {
         );
         this.filteredEtudiants = response.data;
       } catch (error) {
-        useMessageStore().addError(
-          "Erreur lors de la récupération des étudiants filtrés."
-        );
+        useMessageStore().addError('Erreur lors de la récupération des étudiants filtrés.');
       } finally {
         this.loading = false;
       }
