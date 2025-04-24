@@ -1,10 +1,8 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { getModules } from '@/api/academique/moduleApi';
-import Pagination from '@/components/Pagination.vue';
-import ItemActions from '@/components/ItemDetails.vue';
-import DetailsPanel from './DetailsPanelv1.vue';
-const selectedModule = ref(null);
+import Pagination from '@/components/shared/Pagination.vue';
+import ItemActions from '@/components/shared/ItemDetails.vue';
 
 // Données principales
 const modules = ref([]);
@@ -19,6 +17,7 @@ const paginatedModules = computed(() => {
   const end = start + itemsPerPage.value;
   return modules.value.slice(start, end);
 });
+
 // Récupération des modules
 const fetchModules = async () => {
   isLoading.value = true;
@@ -39,21 +38,11 @@ const fetchModules = async () => {
 const refreshModules = () => {
   fetchModules();
 };
-
-const showDetails = (module) => (selectedModule.value = module);
-
-const editModule = (item) => {
-  console.log('Modifier module', item);
-};
-
-const confirmDelete = (item) => {
-  console.log('Supprimer module', item);
-};
-
 onMounted(fetchModules);
 </script>
 
 <template>
+  <div v-if="error" class="alert alert-danger">{{ error }}</div>
   <div class="card p-4">
     <div class="d-flex mb-3">
       <button @click="refreshModules" class="btn btn-outline-dark me-2" :disabled="isLoading">
@@ -61,18 +50,15 @@ onMounted(fetchModules);
         <span v-else>Chargement...</span>
       </button>
     </div>
-
-    <div v-if="error" class="alert alert-danger">{{ error }}</div>
-
     <table class="table table-hover align-middle">
-      <thead>
+      <thead class="table-light">
         <tr>
           <th>Code</th>
           <th>Désignation</th>
           <th>Crédit</th>
           <th>Coefficient</th>
           <th>Volume Horaire</th>
-          <th>Actions</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -80,8 +66,8 @@ onMounted(fetchModules);
           <td>{{ module.code }}</td>
           <td>{{ module.designation }}</td>
           <td>{{ module.credit }}</td>
-          <td>{{ module.coefficient }}</td>
-          <td>{{ module.volume_horaire }}</td>
+          <td>{{ module.coefficient + '.00' }}</td>
+          <td>{{ module.volume_horaire + 'h' }}</td>
           <td>
             <ItemActions :item="module" moduleRoute="/modules" />
           </td>
@@ -103,9 +89,5 @@ onMounted(fetchModules);
       :total-items="totalItems"
       @update:itemsPerPage="itemsPerPage = $event"
     />
-
-    <!-- Section des détails -->
-    <!-- Affichage des détails via le composant -->
-    <DetailsPanel v-if="selectedModule" :item="selectedModule" @close="selectedModule = null" />
   </div>
 </template>

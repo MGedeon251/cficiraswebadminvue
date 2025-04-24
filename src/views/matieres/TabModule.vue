@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { getModules } from '@/api/academique/moduleApi';
-import Pagination from '@/components/Pagination.vue';
+import Pagination from '@/components/shared/Pagination.vue';
 import ItemActions from '@/components/ItemActions.vue';
 
 // Données principales
@@ -76,7 +76,7 @@ onMounted(fetchModules);
     <p>Listes de toutes les modules.</p>
 
     <table class="table table-hover align-middle">
-      <thead>
+      <thead class="table-light">
         <tr>
           <th scope="col">code</th>
           <th scope="col">designation</th>
