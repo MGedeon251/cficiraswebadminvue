@@ -1,78 +1,74 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
+import {
+  getAnneesAcademiques,
+  createAnneeAcademique,
+  updateAnneeAcademique,
+  deleteAnneeAcademique,
+} from "@/api/academique/academiqueApi";
+import { useMessageStore } from "@/stores/messages/messageStore";
 
-export const useAnneStore = defineStore('anneStore', {
+export const useAnneeStore = defineStore("anneeStore", {
   state: () => ({
-    annees: [], // Liste des années académiques
-    selectedAnnee: null, // Année académique sélectionnée
-    loading: false, // Indicateur de chargement
-    error: null, // Gestion des erreurs
+    anneesAcademiques: [],
+    anneeAcademique: null,
+    loading: false,
   }),
 
-  getters: {
-    getAnneeById: (state) => (id) => state.annees.find((annee) => annee.id === id),
-  },
-
   actions: {
-    async fetchAnnees() {
+    // Récupérer toutes les années académiques
+    async fetchAnneesAcademiques() {
       this.loading = true;
-      this.error = null;
       try {
-        // Remplacez par un appel API réel
-        const response = await fetch('/api/annees');
-        const data = await response.json();
-        this.annees = data;
-      } catch (err) {
-        this.error = 'Erreur lors du chargement des années académiques';
+        const response = await getAnneesAcademiques();
+        this.anneesAcademiques = response.data;
+      } catch (error) {
+        useMessageStore().addError("Erreur lors de la récupération des années académiques.");
       } finally {
         this.loading = false;
       }
     },
 
-    async addAnnee(newAnnee) {
+    // Ajouter une nouvelle année académique
+    async addAnneeAcademique(data) {
+      this.loading = true;
       try {
-        // Remplacez par un appel API réel
-        const response = await fetch('/api/annees', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newAnnee),
-        });
-        const createdAnnee = await response.json();
-        this.annees.push(createdAnnee);
-      } catch (err) {
-        this.error = "Erreur lors de l'ajout de l'année académique";
+        await createAnneeAcademique(data);
+        useMessageStore().addSuccess("Année académique créée avec succès.");
+        this.fetchAnneesAcademiques();
+      } catch (error) {
+        useMessageStore().addError("Erreur lors de la création de l'année académique.");
+      } finally {
+        this.loading = false;
       }
     },
 
-    async updateAnnee(updatedAnnee) {
+    // Modifier une année académique existante
+    async editAnneeAcademique(id, data) {
+      this.loading = true;
       try {
-        // Remplacez par un appel API réel
-        const response = await fetch(`/api/annees/${updatedAnnee.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(updatedAnnee),
-        });
-        const data = await response.json();
-        const index = this.annees.findIndex((annee) => annee.id === updatedAnnee.id);
-        if (index !== -1) {
-          this.annees[index] = data;
-        }
-      } catch (err) {
-        this.error = "Erreur lors de la mise à jour de l'année académique";
+        await updateAnneeAcademique(id, data);
+        useMessageStore().addSuccess("Année académique mise à jour avec succès.");
+        this.fetchAnneesAcademiques();
+      } catch (error) {
+        useMessageStore().addError("Erreur lors de la mise à jour de l'année académique.");
+      } finally {
+        this.loading = false;
       }
     },
 
-    async deleteAnnee(id) {
+    // Supprimer une année académique
+    async removeAnneeAcademique(id) {
+      this.loading = true;
       try {
-        // Remplacez par un appel API réel
-        await fetch(`/api/annees/${id}`, { method: 'DELETE' });
-        this.annees = this.annees.filter((annee) => annee.id !== id);
-      } catch (err) {
-        this.error = "Erreur lors de la suppression de l'année académique";
+        await deleteAnneeAcademique(id);
+        useMessageStore().addSuccess("Année académique supprimée avec succès.");
+        this.fetchAnneesAcademiques();
+      } catch (error) {
+        useMessageStore().addError("Erreur lors de la suppression de l'année académique.");
+      } finally {
+        this.loading = false;
       }
-    },
-
-    selectAnnee(id) {
-      this.selectedAnnee = this.annees.find((annee) => annee.id === id) || null;
     },
   },
 });
+

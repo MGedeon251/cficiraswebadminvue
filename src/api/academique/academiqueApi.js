@@ -44,3 +44,10 @@ export const getSemestres = () => academiqueService.get('/semestres');
 export const createSemestre = (data) => academiqueService.post('/semestres', data);
 export const updateSemestre = (id, data) => academiqueService.put(`/semestres/${id}`, data);
 export const deleteSemestre = (id) => academiqueService.delete(`/semestres/${id}`);
+
+// Ajoutez ces nouvelles fonctions si elles n'existent pas
+export const getClassesByAnnee = (anneeId) => 
+    academiqueService.get(`/classes/annee/${anneeId}`);
+  
+export const getFilieresByAnnee = (anneeId) =>
+    academiqueService.get(`/filieres/annee/${anneeId}`);

@@ -5,7 +5,7 @@ import {
   createModule,
   updateModule,
   deleteModule,
-} from '@/api/gestions/moduleApi';
+} from '@/api/academique/moduleApi';
 import { useMessageStore } from '@/stores/messages/messageStore';
 
 export const useModuleStore = defineStore('moduleStore', {

@@ -1,67 +1,135 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import { useEtudiantStore } from "@/stores/etudiants/etudiantStore";
+import { onMounted, ref, watch } from "vue";
+import { 
+  getAnneesAcademiques,
+  getFilieres,
+  getClasses,
+  getFilieresByAnnee,
+  getClassesByAnnee
+} from "@/api/academique/academiqueApi";
+import { getEtudiantsByClasseFiliereAnnee } from "@/api/academique/etudiantApi";
 import SkeletonLoader from "@/components/SkeletonLoader.vue";
-
-// Initialisation du store
-const etudiantStore = useEtudiantStore();
 
 // Références pour les données
 const etudiants = ref([]);
 const anneesAcademiques = ref([]);
 const filieres = ref([]);
 const classes = ref([]);
+const selectedAnnee = ref(null);
+const selectedFiliere = ref(null);
+const selectedClasse = ref(null);
 const loading = ref(true);
 
 // Charger les données au montage du composant
 onMounted(async () => {
   loading.value = true;
   try {
-    await etudiantStore.fetchEtudiants();
-    await etudiantStore.fetchAnneesAcademiques();
-    await etudiantStore.fetchFilieres();
-    await etudiantStore.fetchClasses();
-
-    // Assignation des données du store aux références locales
-    etudiants.value = etudiantStore.etudiants
-    anneesAcademiques.value = etudiantStore.anneesAcademiques;
-    filieres.value = etudiantStore.filieres;
-    classes.value = etudiantStore.classes;
+    // Récupérer les données directement depuis les API
+    const [anneesResponse, filieresResponse, classesResponse] = await Promise.all([
+      getAnneesAcademiques(),
+      getFilieres(),
+      getClasses()
+    ]);
+    
+    anneesAcademiques.value = anneesResponse.data;
+    filieres.value = filieresResponse.data;
+    classes.value = classesResponse.data;
+  } catch (error) {
+    console.error("Erreur lors du chargement des données:", error);
   } finally {
     loading.value = false;
   }
 });
+
+// Charger les filières et classes lorsque l'année académique change
+watch(selectedAnnee, async (newAnnee) => {
+  if (newAnnee) {
+    loading.value = true;
+    try {
+      const [filieresResponse, classesResponse] = await Promise.all([
+        getFilieresByAnnee(newAnnee),
+        getClassesByAnnee(newAnnee)
+      ]);
+      
+      filieres.value = filieresResponse.data;
+      classes.value = classesResponse.data;
+      
+      // Réinitialiser les sélections
+      selectedFiliere.value = null;
+      selectedClasse.value = null;
+    } catch (error) {
+      console.error("Erreur lors du chargement des filières/classes:", error);
+    } finally {
+      loading.value = false;
+    }
+  } else {
+    filieres.value = [];
+    classes.value = [];
+  }
+});
+
+// Fonction pour filtrer les étudiants
+const fetchFilteredEtudiants = async () => {
+  if (selectedAnnee.value && selectedFiliere.value && selectedClasse.value) {
+    loading.value = true;
+    try {
+      const response = await getEtudiantsByClasseFiliereAnnee(
+        selectedClasse.value,
+        selectedFiliere.value,
+        selectedAnnee.value
+      );
+      etudiants.value = response.data;
+    } catch (error) {
+      console.error("Erreur lors du chargement des étudiants:", error);
+      etudiants.value = [];
+    } finally {
+      loading.value = false;
+    }
+  }
+};
+
+// Surveiller les changements des filtres et mettre à jour les étudiants
+watch([selectedAnnee, selectedFiliere, selectedClasse], fetchFilteredEtudiants);
 </script>
+
 
 <template>
   <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1" />
   <div v-else class="table-responsive">
-    <p class="card-description">Liste des etudiants inscrits</p>
+    <p class="card-description">Liste des étudiants inscrits</p>
     <div class="d-flex justify-content-between flex-wrap">
       <div class="d-flex align-items-end flex-wrap">
         <div class="me-md-4 me-xl-5">
           <div class="filters d-flex gap-2 mb-2">
+            <!-- Filtre par année académique -->
             <div class="col-md-6">
-              <label class="form-label">Année academique</label>
-              <select class="form-select">
+              <label class="form-label">Année académique</label>
+              <select class="form-select" v-model="selectedAnnee">
+                <option value="" disabled>Choisir une année</option>
                 <option v-for="annee in anneesAcademiques" :key="annee.id" :value="annee.id">
-                  {{ annee.nom }}
+                  {{ annee.code }}
                 </option>
               </select>
             </div>
+
+            <!-- Filtre par filière -->
             <div class="col-md-6">
-              <label class="form-label">Filiere</label>
-              <select class="form-select">
+              <label class="form-label">Filière</label>
+              <select class="form-select" v-model="selectedFiliere">
+                <option value="" disabled>Choisir une filière</option>
                 <option v-for="filiere in filieres" :key="filiere.id" :value="filiere.id">
-                  {{ filiere.nom }}
+                  {{ filiere.code }}
                 </option>
               </select>
             </div>
+
+            <!-- Filtre par classe -->
             <div class="col-md-6">
               <label class="form-label">Classe</label>
-              <select class="form-select">
+              <select class="form-select" v-model="selectedClasse">
+                <option value="" disabled>Choisir une classe</option>
                 <option v-for="classe in classes" :key="classe.id" :value="classe.id">
-                  {{ classe.nom }}
+                  {{ classe.code }}
                 </option>
               </select>
             </div>
@@ -69,17 +137,18 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+
+    <!-- Table des étudiants -->
     <table class="table table-hover align-middle">
       <thead>
         <tr>
           <th>#</th>
           <th>Matricule</th>
           <th>Noms</th>
-          <th>Prenoms</th>
-          <th>sexe</th>
-          <th>filiere</th>
-          <th>niveau</th>
-          <th></th>
+          <th>Prénoms</th>
+          <th>Sexe</th>
+          <th>Filière</th>
+          <th>Classe</th>
         </tr>
       </thead>
       <tbody>
@@ -92,7 +161,7 @@ onMounted(async () => {
           <td>{{ etudiant.filiere.nom }}</td>
           <td>{{ etudiant.classe.nom }}</td>
         </tr>
-        <tr v-if="!loading && Array.isArray(etudiants) && etudiants.length === 0">
+        <tr v-if="!loading && etudiants.length === 0">
           <td colspan="7" class="text-center py-4">
             <div class="d-flex flex-column align-items-center">
               <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="auto" />
@@ -105,100 +174,6 @@ onMounted(async () => {
   </div>
 </template>
 
-<script>
-import { ref, computed } from 'vue';
-
-const searchQuery = ref('');
-const isDragging = ref(false);
-const uploadedFiles = ref([]);
-const tasks = ref([
-  {
-    id: 'TASK-7103',
-    label: 'Feature',
-    title: 'Parse EXE bandwidth!',
-    status: 'Canceled',
-    priority: 'Low',
-  },
-  {
-    id: 'TASK-4314',
-    label: 'Bug',
-    title: 'Compress program for XML alarm',
-    status: 'In Progress',
-    priority: 'High',
-  },
-  {
-    id: 'TASK-3415',
-    label: 'Feature',
-    title: 'Use cross-platform XML',
-    status: 'Todo',
-    priority: 'Medium',
-  },
-  {
-    id: 'TASK-4336',
-    label: 'Documentation',
-    title: 'Synthesize microchip',
-    status: 'Done',
-    priority: 'Medium',
-  },
-]);
-
-const filteredTasks = computed(() =>
-  tasks.value.filter((task) =>
-    task.title.toLowerCase().includes(searchQuery.value.toLowerCase())
-  )
-);
-
-function openFileInput() {
-  const fileInput = document.querySelector('#fileInput');
-  fileInput.click();
-}
-
-function handleDrop(event) {
-  isDragging.value = false;
-  const files = Array.from(event.dataTransfer.files);
-  processFiles(files);
-}
-
-function handleFileUpload(event) {
-  const files = Array.from(event.target.files);
-  processFiles(files);
-}
-
-function processFiles(files) {
-  files.forEach((file) => {
-    if (
-      file.type === 'application/vnd.ms-excel' ||
-      file.type === 'text/csv' ||
-      file.name.endsWith('.xlsx')
-    ) {
-      uploadedFiles.value.push(file);
-    }
-  });
-}
-
-function removeFile(index) {
-  uploadedFiles.value.splice(index, 1);
-}
-
-function statusClass(status) {
-  const statusClasses = {
-    'Canceled': 'badge bg-danger text-white',
-    'In Progress': 'badge bg-warning text-dark',
-    'Todo': 'badge bg-info text-white',
-    'Done': 'badge bg-success text-white',
-  };
-  return statusClasses[status] || '';
-}
-
-function priorityClass(priority) {
-  const priorityClasses = {
-    'High': 'text-danger fw-bold',
-    'Medium': 'text-warning fw-bold',
-    'Low': 'text-muted',
-  };
-  return priorityClasses[priority] || '';
-}
-</script>
 <style scoped>
 
 </style>

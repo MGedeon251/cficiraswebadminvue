@@ -5,6 +5,7 @@ import {
   createEtudiant,
   updateEtudiant,
   deleteEtudiant,
+  getEtudiantsByClasseFiliereAnnee,
 } from "@/api/academique/etudiantApi";
 import {
   getAnneesAcademiques,
@@ -20,6 +21,7 @@ export const useEtudiantStore = defineStore("etudiantStore", {
     anneesAcademiques: [],
     filieres: [],
     classes: [],
+    filteredEtudiants: [],
     loading: false,
   }),
 
@@ -126,6 +128,25 @@ export const useEtudiantStore = defineStore("etudiantStore", {
         this.classes = response.data;
       } catch (error) {
         useMessageStore().addError("Erreur lors de la récupération des classes.");
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    // Récupérer les étudiants par classe, filière et année académique
+    async fetchEtudiantsByClasseFiliereAnnee(classeId, filiereId, anneeAcademiqueId) {
+      this.loading = true;
+      try {
+        const response = await getEtudiantsByClasseFiliereAnnee(
+          classeId,
+          filiereId,
+          anneeAcademiqueId
+        );
+        this.filteredEtudiants = response.data;
+      } catch (error) {
+        useMessageStore().addError(
+          "Erreur lors de la récupération des étudiants filtrés."
+        );
       } finally {
         this.loading = false;
       }
