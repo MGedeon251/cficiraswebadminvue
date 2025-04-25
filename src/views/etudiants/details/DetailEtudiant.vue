@@ -26,7 +26,6 @@
             <h4 class="card-title">Informations Étudiant</h4>
             <form @submit.prevent>
               <div class="row">
-
                 <!-- Informations Personnelles -->
                 <div class="col-md-8">
                   <div class="card p-3">
