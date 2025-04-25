@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import SkeletonLoader from '@/components/SkeletonLoader.vue';
-import DropData from './DropData.vue';
-import ExportData from './ExportData.vue';
+import DropData from '../data-io/DropData.vue';
+import ExportData from '../data-io/ExportData.vue';
 </script>
 
 <template>

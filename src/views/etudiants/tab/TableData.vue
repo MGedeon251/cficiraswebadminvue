@@ -1,5 +1,6 @@
 <script setup>
-import { onMounted, ref, watch , computed } from 'vue';
+import { onMounted, ref, defineExpose, 
+  watch , computed } from 'vue';
 import {
   getAnneesAcademiques,
   getFilieres,
@@ -7,7 +8,7 @@ import {
   getClassesByFiliere 
 } from '@/api/academique/academiqueApi';
 import Pagination from '@/components/shared/Pagination.vue';
-import ItemActions from './ItemDetails.vue';
+import ItemActions from '../details/ItemDetails.vue';
 import { getEtudiantsByClasseFiliereAnnee } from '@/api/academique/etudiantApi';
 import SkeletonLoader from '@/components/SkeletonLoader.vue';
 
@@ -95,6 +96,15 @@ const fetchFilteredEtudiants = async () => {
 
 // Surveiller les changements des filtres et mettre à jour les étudiants
 watch([selectedAnnee, selectedFiliere, selectedClasse], fetchFilteredEtudiants);
+
+const getTableData = () => {
+  return etudiants.value;
+};
+
+// Exposer la méthode au parent
+defineExpose({
+  getTableData
+});
 </script>
 
 <template>
@@ -194,6 +204,14 @@ watch([selectedAnnee, selectedFiliere, selectedClasse], fetchFilteredEtudiants);
             />
           </td>
         </tr>
+        <tr v-if="!loading && Array.isArray(etudiants) && etudiants.length === 0">
+            <td colspan="8" class="text-center py-4">
+                <div class="d-flex flex-column align-items-center">
+                    <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="auto" />
+                </div>
+                <div class="text-pr">Aucune donnée</div>
+            </td>
+         </tr>
       </tbody>
     </table>
 

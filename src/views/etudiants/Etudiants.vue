@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="d-flex justify-content-between align-items-end flex-wrap">
-          <button class="btn btn-outline-dark me-2">Exporter</button>
+          <button class="btn btn-outline-dark me-2" @click="exportToExcel">Exporter</button>
           <div class="btn-group">
             <button
               type="button"
@@ -51,7 +51,7 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">Informations & Details</h4>
-          <TableData></TableData>
+          <TableData ref="tableDataRef"></TableData>
         </div>
       </div>
     </div>
@@ -65,54 +65,43 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import TableData from './TableData.vue';
-import TabContent from './TabContent.vue';
+import { ref } from 'vue';
+import * as XLSX from 'xlsx';
+import TableData from './tab/TableData.vue';
+import TabContent from './tab/TabContent.vue';
+
+const tableDataRef = ref(null);
+
+const exportToExcel = async () => {
+  try {
+    // Récupère les données des étudiants depuis le composant TableData
+    const etudiants = await tableDataRef.value.getTableData();
+    
+    if (!etudiants || !etudiants.length) {
+      return alert('Aucune donnée à exporter.');
+    }
+
+    // Transforme les données en format JSON plat
+    const data = etudiants.map((etudiant) => ({
+      ID: etudiant.id,
+      Matricule: etudiant.matricule,
+      Nom: etudiant.nom,
+      Prénom: etudiant.prenom,
+      Sexe: etudiant.sexe,
+      Classe: etudiant.classe,
+      Filière: etudiant.filiere
+    }));
+
+    // Crée le fichier Excel
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Étudiants');
+    XLSX.writeFile(workbook, 'etudiants.xlsx');
+    
+  } catch (error) {
+    console.error("Erreur lors de l'export:", error);
+    alert("Une erreur est survenue lors de l'export");
+  }
+};
+
 </script>
-
-<style scoped>
-.drag-drop-area {
-  background: #f8f9fa;
-  border: 2px dashed #007bff;
-  cursor: pointer;
-}
-.drag-drop-area.drag-over {
-  background: #e9ecef;
-}
-</style>
-
-<style scoped>
-body {
-  background-color: #f8f9fa;
-  color: #212529;
-}
-.card {
-  background-color: #ffffff;
-  border: 1px solid #dee2e6;
-  border-radius: 12px;
-}
-.btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
-  color: #fff;
-}
-.btn-primary:hover {
-  background-color: #0056b3;
-  border-color: #004080;
-}
-.status-badge {
-  padding: 0.5em 1em;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  color: #fff;
-}
-.status-draft {
-  background-color: #6c757d;
-}
-.status-active {
-  background-color: #0d6efd;
-}
-.table thead th {
-  border-bottom: 2px solid #dee2e6;
-}
-</style>
