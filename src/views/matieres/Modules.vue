@@ -1,5 +1,5 @@
 <script setup>
-import TabModule from './ModuleList.vue';
+import TabModule from './tab/ModuleList.vue';
 </script>
 // console.error("Erreur lors du chargement des filières et classes:", error);
 

@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import ModuleHeader from './ModuleHeader.vue';
+import ModuleHeader from '../ModuleHeader.vue';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { getModuleById } from '@/api/academique/moduleApi';

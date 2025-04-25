@@ -50,7 +50,7 @@ const routes = [
       {
         path: '/modules/:id',
         name: 'ModuleDetails',
-        component: () => import('@/views/matieres/DetailsPanel.vue'),
+        component: () => import('@/views/matieres/details/DetailsPanel.vue'),
         props: true,
       },
       { path: '/examens', name: 'Examens', component: Examens },
