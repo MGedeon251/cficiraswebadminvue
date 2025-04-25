@@ -1,26 +1,26 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { onMounted, ref, watch , computed } from 'vue';
 import {
   getAnneesAcademiques,
   getFilieres,
   getClasses,
+  getClassesByFiliere 
 } from '@/api/academique/academiqueApi';
-import { getEtudiantsByClasseFiliereAnnee } from '@/api/academique/etudiantApi';
 import Pagination from '@/components/shared/Pagination.vue';
-import ItemActions from '@/components/ItemActions.vue';
+import ItemActions from './ItemDetails.vue';
+import { getEtudiantsByClasseFiliereAnnee } from '@/api/academique/etudiantApi';
+import SkeletonLoader from '@/components/SkeletonLoader.vue';
 
-// Données principales
+// Références pour les données
 const etudiants = ref([]);
 const anneesAcademiques = ref([]);
 const filieres = ref([]);
-const classes = ref([]);// Données principales
+const classes = ref([]);
 
 const selectedAnnee = ref(null);
 const selectedFiliere = ref(null);
 const selectedClasse = ref(null);
-
-const isLoading = ref(false);
-const error = ref(null);
+const loading = ref(true);
 
 const currentPage = ref(1);
 const itemsPerPage = ref(5);
@@ -31,60 +31,70 @@ const paginatedEtudiant = computed(() => {
   return etudiants.value.slice(start, end);
 });
 
-const editModule = (item) => {
-  console.log('Modifier module', item);
-};
-const confirmDelete = (item) => {
-  console.log('Supprimer module', item);
-};
-
-
-const fetchFilterData = async () => {
-  isLoading.value = true;
-  error.value = null;
-
+// Charger les données au montage du composant
+onMounted(async () => {
+  loading.value = true;
   try {
-    const responseAnnees = await getAnneesAcademiques();
-    anneesAcademiques.value = responseAnnees ; 
-    const responseFilieres = await getFilieres();
-    filieres.value = responseFilieres ;
-    const responseClasses = await getClasses();
-    classes.value = responseClasses ;
+    // Récupérer les données directement depuis les API
+    const [anneesResponse, filieresResponse, classesResponse] = await Promise.all([
+      getAnneesAcademiques(),
+      getFilieres(),
+      getClasses(),
+    ]);
 
-    console.log('Annee:', anneesAcademiques.value);
-    console.log('Filiere:',filieres.value);
-    console.log('Classes:', classes.value);
-
-  } catch (err) {
-    error.value = 'Erreur lors du chargement des modules';
-    console.error(err);
+    anneesAcademiques.value = anneesResponse;
+    filieres.value = filieresResponse;
+    classes.value = classesResponse;
+  } catch (error) {
+    console.error('Erreur lors du chargement des données:', error);
   } finally {
-    isLoading.value = false;
+    loading.value = false;
   }
-};
-const fetchEtudiants = async () => {
-    isLoading.value = true;
-    error.value = null;
-  
+});
+
+// Charger les classes lorsque la filiere change
+watch(selectedFiliere, async (newFiliere) => {
+  if (newFiliere) {
+    loading.value = true;
+    try {
+      const [classesResponse] = await Promise.all([
+        getClassesByFiliere(newFiliere)
+      ]);
+      classes.value = classesResponse;
+      // Réinitialiser les sélections
+      selectedClasse.value = null;
+    } catch (error) {
+      console.error('Erreur lors du chargement des filières/classes:', error);
+    } finally {
+      loading.value = false;
+    }
+  } else {
+    classes.value = [];
+  }
+});
+
+// Fonction pour filtrer les étudiants
+const fetchFilteredEtudiants = async () => {
+  if (selectedAnnee.value && selectedFiliere.value && selectedClasse.value) {
+    loading.value = true;
     try {
       const response = await getEtudiantsByClasseFiliereAnnee(
-        selectedClasse,
-        selectedFiliere,
-        selectedAnnee
+        selectedClasse.value,
+        selectedFiliere.value,
+        selectedAnnee.value
       );
-      etudiants.value = response ; 
-      console.log('Etudiants:',  etudiants.value);
-  
-    } catch (err) {
-      error.value = 'Erreur lors du chargement des modules';
-      console.error(err);
+      etudiants.value = response.data;
+    } catch (error) {
+      console.error('Erreur lors du chargement des étudiants:', error);
+      etudiants.value = [];
     } finally {
-      isLoading.value = false;
+      loading.value = false;
     }
-  };
-onMounted(
-  fetchFilterData);
+  }
+};
 
+// Surveiller les changements des filtres et mettre à jour les étudiants
+watch([selectedAnnee, selectedFiliere, selectedClasse], fetchFilteredEtudiants);
 </script>
 
 <template>
@@ -96,7 +106,7 @@ onMounted(
         <div class="me-md-4 me-xl-5">
           <div class="filters d-flex gap-2 mb-2">
             <!-- Filtre par année académique -->
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label class="form-label">Année académique</label>
               <select class="form-select" v-model="selectedAnnee">
                 <option value="" disabled>Choisir une année</option>
@@ -106,8 +116,8 @@ onMounted(
               </select>
             </div>
 
-            <!-- Filtre par filière -->
-            <div class="col-md-6">
+            <!-- Filtre par filière (sert uniquement à charger les classes) -->
+            <div class="col-md-4">
               <label class="form-label">Filière</label>
               <select class="form-select" v-model="selectedFiliere">
                 <option value="" disabled>Choisir une filière</option>
@@ -118,7 +128,7 @@ onMounted(
             </div>
 
             <!-- Filtre par classe -->
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label class="form-label">Classe</label>
               <select class="form-select" v-model="selectedClasse">
                 <option value="" disabled>Choisir une classe</option>
@@ -143,38 +153,34 @@ onMounted(
           <th>Sexe</th>
           <th>Filière</th>
           <th>Classe</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="etudiant in paginatedEtudiant" :key="etudiant.id">
+        <tr v-for="(etudiant, index) in paginatedEtudiant" :key="etudiant.id">
           <td>{{ index + 1 }}</td>
           <td>{{ etudiant.matricule }}</td>
           <td>{{ etudiant.nom }}</td>
           <td>{{ etudiant.prenom }}</td>
           <td>{{ etudiant.sexe }}</td>
-          <td>{{ etudiant.filiere.nom }}</td>
-          <td>{{ etudiant.classe.nom }}</td>
+          <td>{{ etudiant.filiere }}</td>
+          <td>{{ etudiant.classe }}</td>
           <td>
-            <ItemActions
-              :item="module"
-              :fields="{
-                code: 'Code',
-                designation: 'Désignation',
-                credit: 'Crédit',
-                coefficient: 'Coefficient',
-                volume_horaire: 'Volume horaire',
-              }"
-              :showAdd="false"
-              editModalTarget="#editModuleModal"
-              @edit="editModule"
-              @delete="confirmDelete"
-            />
-          </td>-
+            <ItemActions :item="etudiant" etudiantRoute="/etudiant" />
+          </td>
         </tr>
-        
+        <tr v-if="!loading && etudiants.length === 0">
+          <td colspan="8" class="text-center py-4">
+            <div class="d-flex flex-column align-items-center">
+              <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="auto" />
+              <div class="text-pr">Aucune donnée</div>
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
 
+    <!-- Pagination -->
     <Pagination
       v-model="currentPage"
       :items-per-page="itemsPerPage"
@@ -183,5 +189,3 @@ onMounted(
     />
   </div>
 </template>
-
-<style scoped></style>

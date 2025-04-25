@@ -40,6 +40,12 @@ const routes = [
       { path: '/inscriptions', name: 'Inscriptions', component: Inscription },
       { path: '/schedule', name: 'Schedule', component: Schedule },
       { path: '/etudiants', name: 'Etudiants', component: Etudiants },
+      {
+        path: '/etudiants/:id',
+        name: 'EtudiantDetails',
+        component: () => import('@/views/etudiants/DetailEtudiant.vue'),
+        props: true,
+      },
       { path: '/modules', name: 'Modules', component: Modules },
       {
         path: '/modules/:id',

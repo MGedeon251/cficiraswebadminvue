@@ -11,6 +11,7 @@ export const deleteAnneeAcademique = (id) => academiqueService.delete(`/annes/${
 
 // API pour gérer les classes
 export const getClasses = () => academiqueService.get('/classes');
+export const getClassesByFiliere = (id) => academiqueService.get(`/classes/filiere/${id}`);
 export const createClasse = (data) => academiqueService.post('/classes', data);
 export const updateClasse = (id, data) => academiqueService.put(`/classes/${id}`, data);
 export const deleteClasse = (id) => academiqueService.delete(`/classes/${id}`);
@@ -47,5 +48,4 @@ export const deleteSemestre = (id) => academiqueService.delete(`/semestres/${id}
 
 // Ajoutez ces nouvelles fonctions si elles n'existent pas
 export const getClassesByAnnee = (anneeId) => academiqueService.get(`/classes/annee/${anneeId}`);
-
 export const getFilieresByAnnee = (anneeId) => academiqueService.get(`/filieres/annee/${anneeId}`);
