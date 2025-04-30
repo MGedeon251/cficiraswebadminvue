@@ -176,6 +176,7 @@
       </main>
     </div>
   </div>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </template>
 
 <script>
@@ -211,28 +212,86 @@ export default {
 </script>
 
 <style scoped>
+
+body {
+    font-family: 'Inter', sans-serif;
+  }
 .sidebar {
   position: fixed;
-  top: 0;
+  top: 56px;
   bottom: 0;
   left: 0;
   z-index: 100;
-  padding: 48px 0 0;
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  width: 220px;
+  background-color: #f9f9f9;
+  border-right: 1px solid #dee2e6;
+  overflow-y: auto;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
 }
 
 .sidebar .nav-link {
-  font-weight: auto;
-  color: #333;
+  font-weight: 500;
+  color: #495057;
+  transition: color 0.2s ease;
 }
 
+.sidebar .nav-link:hover,
 .sidebar .nav-link.active {
   color: #0d6efd;
+  background-color: #e9f2ff;
+  border-radius: 0.375rem;
+  padding-left: 1rem;
+}
+
+.table-responsive {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f1f3f5;
+  transition: background-color 0.2s ease;
 }
 
 main {
-  padding-top: 1.5rem;
+  margin-left: 220px;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  background-color: #fefefe;
+  min-height: 100vh;
 }
+
+.form-control-sm {
+  max-width: 90px;
+}
+
+.card {
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.btn-primary {
+  border-radius: 0.375rem;
+}
+
+.btn-outline-secondary {
+  border-radius: 0.375rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #e2e6ea;
+  color: #000;
+}
+
 
 .table-responsive {
   max-height: 500px;
@@ -246,4 +305,6 @@ main {
 .card-header {
   background-color: #f8f9fa;
 }
+
+
 </style>

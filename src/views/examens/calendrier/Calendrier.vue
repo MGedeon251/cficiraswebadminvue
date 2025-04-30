@@ -23,13 +23,17 @@
             </button>
           </div>
           <!-- 🔁 Onglets dynamiques : Tout, Semestre 1, Semestre 2 -->
-          <Tabs />
+          <div class="d-flex flex-column flex-md-row gap-2">
+            <div class="col-12 col-md-4">
+              <Tabs :tabs="['Tout', 'Semestre 1', 'Semestre 2']" />
+            </div>  
         </div>
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script setup>
-import Tabs from '@/components/Tabs.vue'; // Assure-toi que le chemin est correct
+import Tabs from '../semestres/TabTout.vue'; // Assure-toi que le chemin est correct
 </script>
