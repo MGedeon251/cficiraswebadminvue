@@ -3,11 +3,11 @@ import serviceApi from '../config/serviceApi';
 
 
 // API pour gérer les évaluations
-export const getEvaluations = () => serviceApi.get('/evaluations');
-export const getEvaluationById = (id) => serviceApi.get(`/evaluations/${id}`);
-export const createEvaluation = (data) => serviceApi.post('/evaluations', data);
-export const updateEvaluation = (id, data) => serviceApi.put(`/evaluations/${id}`, data);
-export const deleteEvaluation = (id) => serviceApi.delete(`/evaluations/${id}`);
+export const getEvaluations = () => serviceApi.get('/controle');
+export const getEvaluationById = (id) => serviceApi.get(`/controle/${id}`);
+export const createEvaluation = (data) => serviceApi.post('/controle', data);
+export const updateEvaluation = (id, data) => serviceApi.put(`/controle/${id}`, data);
+export const deleteEvaluation = (id) => serviceApi.delete(`/controle/${id}`);
 
 // API pour gérer les notes
 export const getNotes = () => serviceApi.get('/notes');
