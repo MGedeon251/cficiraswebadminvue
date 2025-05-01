@@ -1,8 +1,10 @@
 <template>
   <div class="d-flex flex-wrap justify-content-xl-between">
     <div class="card-body">
-      <h4 class="card-title">Examens semestre {{ semestre }}</h4>
-      <p class="card-description">Liste des examens pour le semestre {{ semestre }}</p>
+      <h4 class="card-title">Examens semestre {{ semestreLabel }}</h4>
+      <p class="card-description">
+        Liste des examens pour {{ semestre === 0 ? "tous les semestres" : `le semestre ${semestre}` }}
+      </p>
 
       <div class="d-flex mb-3">
         <button
@@ -19,12 +21,12 @@
         <table class="table table-hover align-middle">
           <thead>
             <tr>
-              <th scope="col">Designation</th>
-              <th scope="col">Etat</th>
-              <th scope="col">Date</th>
-              <th scope="col">Durée</th>
-              <th scope="col">Formateur</th>
-              <th scope="col"></th>
+              <th>Designation</th>
+              <th>État</th>
+              <th>Date début</th>
+              <th>Date fin</th>
+              <th>Responsable</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -33,14 +35,25 @@
               <td>
                 <span
                   class="status-badge"
-                  :class="exam.status === 'active' ? 'status-active' : 'status-draft'"
-                  >{{ exam.status }}</span
+                  :class="exam.etat === 'active' ? 'status-active' : 'status-draft'"
                 >
+                  {{ exam.etat }}
+                </span>
               </td>
-              <td>{{ exam.date }}</td>
-              <td>{{ exam.duree }} jours</td>
-              <td>{{ exam.formateur }}</td>
-              <td><button class="btn btn-sm btn-outline-primary">...</button></td>
+              <td>{{ exam.date_debut }}</td>
+              <td>{{ exam.date_fin }}</td>
+              <td>{{ exam.responsable }}</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary">...</button>
+              </td>
+            </tr>
+            <tr v-if="!loading && filteredExams.length === 0">
+              <td colspan="6" class="text-center py-4">
+                <div class="d-flex flex-column align-items-center">
+                  <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="auto" />
+                  <div class="text-pr">Aucune donnée</div>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -50,6 +63,9 @@
 </template>
 
 <script>
+import { onMounted, ref, computed } from "vue";
+import { getSessions } from "@/api/evaluations/evaluationApi";
+
 export default {
   props: {
     semestre: {
@@ -57,69 +73,66 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      types: ['Partiel', 'Rappel'],
-      selectedType: 'Partiel',
-      exams: [
-        {
-          id: 1,
-          designation: 'Examen Partiel session de février 2025',
-          status: 'inactive',
-          date: '5 Février 2025',
-          duree: 10,
-          formateur: 'OYERE Morel Garvey',
-          semestre: 1,
-          type: 'Partiel',
-        },
-        {
-          id: 2,
-          designation: 'Examen Rappel session de Mars 2025',
-          status: 'active',
-          date: '24 Mars 2025',
-          duree: 10,
-          formateur: 'OYERE Morel Garvey',
-          semestre: 1,
-          type: 'Rappel',
-        },
-        {
-          id: 3,
-          designation: 'Examen Partiel session de Juin 2025',
-          status: 'active',
-          date: '5 Juin 2025',
-          duree: 10,
-          formateur: 'OYERE Morel Garvey',
-          semestre: 2,
-          type: 'Partiel',
-        },
-        {
-          id: 4,
-          designation: 'Examen Partiel session de Aout 2025',
-          status: 'inactive',
-          date: '3 Aout 2025',
-          duree: 10,
-          formateur: 'LEKOUNDA Mardochet Gédéon',
-          semestre: 2,
-          type: 'Partiel',
-        },
-      ],
+  setup(props) {
+    const exams = ref([]);
+    const types = ref(["Partiel", "Rattrapage"]); 
+    const selectedType = ref("Partiel");
+    const loading = ref(true);
+
+    const fetchSessions = async () => {
+      loading.value = true;
+      try {
+        const response = await getSessions();
+        exams.value = response.map((exam) => ({
+          ...exam,
+          date_debut: new Date(exam.date_debut).toLocaleDateString(),
+          date_fin: new Date(exam.date_fin).toLocaleDateString(),
+          // Ajout d'un champ type dérivé du code
+          type: exam.code.includes("PARTIEL") ? "Partiel" : "Rattrapage"
+        }));
+      } catch (error) {
+        console.error("Erreur lors de la récupération des sessions :", error);
+      } finally {
+        loading.value = false;
+      }
     };
-  },
-  computed: {
-    filteredExams() {
-      return this.exams.filter(
-        (exam) => exam.semestre === this.semestre && exam.type === this.selectedType
-      );
-    },
-  },
-  methods: {
-    setType(type) {
-      this.selectedType = type;
-    },
+    const filteredExams = computed(() =>
+      exams.value.filter(
+        (exam) => 
+          exam.semestre === `S${props.semestre}` && // Comparaison avec "S1" ou "S2"
+          exam.type.includes(selectedType.value) // Filtre sur le type calculé
+      )
+    );
+
+    const setType = (type) => {
+      selectedType.value = type;
+    };
+
+    onMounted(fetchSessions);
+
+    return {
+      exams,
+      types,
+      selectedType,
+      filteredExams,
+      setType,
+      loading,
+    };
   },
 };
 </script>
 
 <style scoped>
-/* Your styles here */
+.status-badge {
+  padding: 0.5em 1em;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #fff;
+}
+.status-draft {
+  background-color: #6c757d;
+}
+.status-active {
+  background-color: #0d6efd;
+}
 </style>

@@ -23,7 +23,7 @@ import Calendrier from './calendrier/Calendrier.vue';
         </div>
       </div>
     </div>
-    <Planification />
+    <Planification/>
     <Salles />
     <Calendrier/>
   </div>
