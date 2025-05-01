@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex flex-wrap justify-content-xl-between">
     <div class="card-body">
-      <h4 class="card-title">Examens semestre {{ semestreLabel }}</h4>
+      <h4 class="card-title">Examens {{ semestre === 0 ? 'tous les semestres' : `semestre ${semestre}` }}</h4>
       <p class="card-description">
-        Liste des examens pour {{ semestre === 0 ? "tous les semestres" : `le semestre ${semestre}` }}
+        Liste des examens {{ semestre === 0 ? 'tous semestres confondus' : `pour le semestre ${semestre}` }}
       </p>
 
       <div class="d-flex mb-3">
@@ -96,13 +96,14 @@ export default {
         loading.value = false;
       }
     };
-    const filteredExams = computed(() =>
-      exams.value.filter(
-        (exam) => 
-          exam.semestre === `S${props.semestre}` && // Comparaison avec "S1" ou "S2"
-          exam.type.includes(selectedType.value) // Filtre sur le type calculé
-      )
-    );
+    const filteredExams = computed(() => {
+      // Si semestre=0, on ne filtre pas par semestre
+      const bySemestre = props.semestre === 0 
+        ? exams.value 
+        : exams.value.filter(exam => exam.semestre === `S${props.semestre}`);
+      // Filtrage par type
+      return bySemestre.filter(exam => exam.type.includes(selectedType.value));
+    });
 
     const setType = (type) => {
       selectedType.value = type;
