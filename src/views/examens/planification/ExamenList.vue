@@ -119,6 +119,11 @@ const filteredExams = computed(() => {
 const setType = (type) => {
   selectedType.value = type;
 };
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Non défini';
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('fr-FR', options);
+  };
 
 // Appel lors du montage
 onMounted(fetchSessions);

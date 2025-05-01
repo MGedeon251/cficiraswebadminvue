@@ -24,8 +24,8 @@ import Calendrier from './calendrier/Calendrier.vue';
       </div>
     </div>
     <Planification/>
-    <Salles />
     <Calendrier/>
+    <Salles />
   </div>
 </template>
 
