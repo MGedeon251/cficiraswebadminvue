@@ -1,3 +1,4 @@
+
 <template>
   <div class="d-flex flex-wrap justify-content-xl-between">
     <div class="card-body">
@@ -17,7 +18,7 @@
         </button>
       </div>
 
-      <div class="table-responsive">
+      <div class="table-scrollable">
         <table class="table table-hover align-middle">
           <thead>
             <tr>
@@ -30,8 +31,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="exam in filteredExams" :key="exam.id">
-              <td>{{ exam.designation }}</td>
+            <tr v-for="exam in filteredExams" :key="exam.session_id">
+              <td>{{ exam.nom_session }}</td>
               <td>
                 <span
                   class="status-badge"
@@ -44,7 +45,14 @@
               <td>{{ exam.date_fin }}</td>
               <td>{{ exam.responsable }}</td>
               <td>
-                <button class="btn btn-sm btn-outline-primary">...</button>
+                <ItemActions
+                  :item="exam"
+                  moduleRoute="/examens"
+                  :showAdd="false"
+                  editModalTarget="#editExamModal"
+                  @edit="editExam"
+                  @delete="confirmDelete"
+                />
               </td>
             </tr>
             <tr v-if="!loading && filteredExams.length === 0">
@@ -62,66 +70,60 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { onMounted, ref, computed } from "vue";
 import { getSessions } from "@/api/evaluations/evaluationApi";
+import ItemActions from "./DetailsItem.vue";
 
-export default {
-  props: {
-    semestre: {
-      type: Number,
-      required: true,
-    },
+// Props (avec defineProps pour <script setup>)
+const props = defineProps({
+  semestre: {
+    type: Number,
+    required: true,
   },
-  setup(props) {
-    const exams = ref([]);
-    const types = ref(["Partiel", "Rattrapage"]); 
-    const selectedType = ref("Partiel");
-    const loading = ref(true);
+});
 
-    const fetchSessions = async () => {
-      loading.value = true;
-      try {
-        const response = await getSessions();
-        exams.value = response.map((exam) => ({
-          ...exam,
-          date_debut: new Date(exam.date_debut).toLocaleDateString(),
-          date_fin: new Date(exam.date_fin).toLocaleDateString(),
-          // Ajout d'un champ type dérivé du code
-          type: exam.code.includes("PARTIEL") ? "Partiel" : "Rattrapage"
-        }));
-      } catch (error) {
-        console.error("Erreur lors de la récupération des sessions :", error);
-      } finally {
-        loading.value = false;
-      }
-    };
-    const filteredExams = computed(() => {
-      // Si semestre=0, on ne filtre pas par semestre
-      const bySemestre = props.semestre === 0 
-        ? exams.value 
-        : exams.value.filter(exam => exam.semestre === `S${props.semestre}`);
-      // Filtrage par type
-      return bySemestre.filter(exam => exam.type.includes(selectedType.value));
-    });
+// Références et état local
+const exams = ref([]);
+const types = ref(["Partiel", "Rattrapage"]);
+const selectedType = ref("Partiel");
+const loading = ref(true);
 
-    const setType = (type) => {
-      selectedType.value = type;
-    };
-
-    onMounted(fetchSessions);
-
-    return {
-      exams,
-      types,
-      selectedType,
-      filteredExams,
-      setType,
-      loading,
-    };
-  },
+// Méthode de récupération des examens
+const fetchSessions = async () => {
+  loading.value = true;
+  try {
+    const response = await getSessions();
+    exams.value = response.map((exam) => ({
+      ...exam,
+      date_debut: new Date(exam.date_debut).toLocaleDateString(),
+      date_fin: new Date(exam.date_fin).toLocaleDateString(),
+      type: exam.code_session.includes("PARTIEL") ? "Partiel" : "Rattrapage",
+    }));
+  } catch (error) {
+    console.error("Erreur lors de la récupération des sessions :", error);
+  } finally {
+    loading.value = false;
+  }
 };
+
+// Filtrage dynamique
+const filteredExams = computed(() => {
+  const bySemestre = props.semestre === 0
+    ? exams.value
+    : exams.value.filter(exam => exam.semestre === `S${props.semestre}`);
+  return bySemestre.filter(exam => exam.type.includes(selectedType.value));
+});
+
+// Action pour changer de type
+const setType = (type) => {
+  selectedType.value = type;
+};
+
+// Appel lors du montage
+onMounted(fetchSessions);
 </script>
+
 
 <style scoped>
 .status-badge {
