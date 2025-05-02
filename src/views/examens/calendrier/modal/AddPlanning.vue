@@ -1,65 +1,92 @@
 <template>
-        <!-- Modal -->
-        <div class="modal fade" id="addPlanningModal" tabindex="-1" aria-labelledby="addPlanningModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addPlanningModalLabel">Ajouter un examens</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form @submit.prevent="submitPlanning">
-                            <div class="mb-3">
-                                <label for="examName" class="form-label">Nom de l'examen</label>
-                                <input type="text" class="form-control" id="examName" v-model="planning.examName" required />
-                            </div>
-                            <div class="mb-3">
-                                <label for="examDate" class="form-label">Date de l'examen</label>
-                                <input type="date" class="form-control" id="examDate" v-model="planning.examDate" required />
-                            </div>
-                            <div class="mb-3">
-                                <label for="examTime" class="form-label">Heure de l'examen</label>
-                                <input type="time" class="form-control" id="examTime" v-model="planning.examTime" required />
-                            </div>
-                            <div class="mb-3">
-                                <label for="examLocation" class="form-label">Lieu de l'examen</label>
-                                <input type="text" class="form-control" id="examLocation" v-model="planning.examLocation" required />
-                            </div>
-                            <button type="submit" class="btn btn-success">Ajouter</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+    <div class="modal fade" id="addPlanningModal" tabindex="-1" aria-labelledby="addPlanningModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addPlanningModalLabel">Ajouter un examen</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+  
+          <div class="modal-body">
+            <form @submit.prevent="submitPlanning">
+              <!-- Sélection de l'examen -->
+              <div class="mb-3">
+                <label class="form-label">Nom de l'examen</label>
+                <select class="form-select" v-model="selectedExamId" @change="onSelectExam" required>
+                  <option value="" disabled>Choisir un examen</option>
+                  <option v-for="ex in examens" :key="ex.session_id" :value="ex.session_id">
+                    {{ ex.nom_session }}
+                  </option>
+                </select>
+              </div>
+  
+              <!-- Champs affichés automatiquement -->
+              <div class="mb-3">
+                <label class="form-label">Type</label>
+                <input type="text" class="form-control" v-model="examen.type_session" readonly />
+              </div>
+  
+              <div class="mb-3">
+                <label class="form-label">Semestre</label>
+                <input type="text" class="form-control" v-model="examen.semestre" readonly />
+              </div>
+  
+              <div class="mb-3">
+                <label class="form-label">Date prévue</label>
+                <input type="text" class="form-control" v-model="examen.date_debut" readonly />
+              </div>
+  
+              <div class="mb-3">
+                <label class="form-label">État</label>
+                <input type="text" class="form-control" v-model="examen.etat" readonly />
+              </div>
+  
+              <button type="submit" class="btn btn-success">Ajouter</button>
+            </form>
+          </div>
         </div>
-</template>
-
-<script setup>
-import { ref } from 'vue';
-const planning = ref({
-  examName: '',
-  examDate: '',
-  examTime: '',
-  examLocation: ''
+      </div>
+    </div>
+  </template>
+  
+  <script setup>
+  import { ref, onMounted } from 'vue';
+  import { getSessions } from "@/api/evaluations/evaluationApi";
+  
+  const examens = ref([]); // Liste de tous les examens
+  const selectedExamId = ref(''); // ID sélectionné
+  const examen = ref({ // Examen sélectionné
+    designation: '',
+    type_session: '',
+    semestre: '',
+    date_debut: '',
+    etat: ''
+  });
+  
+  onMounted(async () => {
+  try {
+    const response = await getSessions();
+    examens.value = response;
+    console.log("Examens chargés :", examens.value);
+  } catch (err) {
+    console.error("Erreur lors du chargement des examens :", err);
+  }
 });
-
-function submitPlanning() {
-  console.log('Planning ajouté:', planning.value);
-
-  // Réinitialiser le formulaire
-  planning.value = {
-    examName: '',
-    examDate: '',
-    examTime: '',
-    examLocation: ''
-  };
-
-  // Fermer la modale
-  const modal = document.getElementById('addPlanningModal');
-  const bootstrapModal = bootstrap.Modal.getInstance(modal);
-  bootstrapModal.hide();
-}
-</script>
-
-<style scoped>
-/* Add custom styles here if needed */
-</style>
+  
+  function onSelectExam() {
+    const selected = examens.value.find(ex => ex.session_id === selectedExamId.value);
+    if (selected) {
+      examen.value = { ...selected };
+    }
+  }
+  
+  function submitPlanning() {
+    console.log("Examen sélectionné :", examen.value);
+  
+    // Fermer la modale
+    const modal = document.getElementById('addPlanningModal');
+    const bootstrapModal = bootstrap.Modal.getInstance(modal);
+    bootstrapModal.hide();
+  }
+  </script>
+  
