@@ -5,11 +5,15 @@
     </button>
     <ul class="dropdown-menu dropdown-menu-light">
       <li>
-        <button class="dropdown-item" @click="isDetailsVisible = true">📝 Détails</button>
-      </li>
+          <button class="dropdown-item" @click="isDetailsVisible = true">
+            <i class="mdi mdi-information-outline me-2"></i> Détails
+          </button>
+        </li>
       <li v-if="showAdd">
-        <button class="dropdown-item" @click="$emit('add', item)">➕ Ajouter</button>
-      </li>
+        <RouterLink class="dropdown-item" :to="`/examens/calendrier`">
+            <i class="mdi mdi mdi-launch me-2"></i> Editer
+        </RouterLink>
+        </li>
       <li>
         <button
           class="dropdown-item"
@@ -17,7 +21,7 @@
           :data-bs-target="editModalTarget"
           @click="$emit('edit', item)"
         >
-          ✏️ Modifier
+        <i class="mdi mdi-pencil-outline me-2"></i> Modifier
         </button>
       </li>
       <li class="dropdown-divider"></li>

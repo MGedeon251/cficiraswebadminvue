@@ -88,11 +88,11 @@
                     <div class="info-content">
                       <div class="info-item">
                         <span class="info-label">Date début:</span>
-                        <span class="info-value">{{ formatDate(item.date_debut) }}</span>
+                        <span class="info-value">{{ toInputDateFormat(item.date_debut) }}</span>
                       </div>
                       <div class="info-item">
                         <span class="info-label">Date fin:</span>
-                        <span class="info-value">{{ formatDate(item.date_fin) }}</span>
+                        <span class="info-value">{{ toInputDateFormat(item.date_fin) }}</span>
                       </div>
                       <div class="info-item">
                         <span class="info-label">Responsable:</span>
@@ -178,6 +178,9 @@
   
   <script setup>
   import { ref, computed } from 'vue';
+  import dayjs from 'dayjs';
+  import 'dayjs/locale/fr'
+  import localizedFormat from 'dayjs/plugin/localizedFormat'
   
   const props = defineProps({
     item: Object,
@@ -197,13 +200,7 @@
     isDetailsVisible.value = false;
   };
   
-  const formatDate = (dateString) => {
-    if (!dateString) return 'Non défini';
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('fr-FR', options);
-  };
-  
-  const calculateCompletionRate = () => {
+   const calculateCompletionRate = () => {
     const modules = parseInt(props.item.modules_evalues) || 1;
     const notes = parseInt(props.item.nombre_notes_saisies) || 0;
     return Math.min(Math.round((notes / modules) * 100), 100);
@@ -217,6 +214,12 @@
       'completed': 'bg-info'
     }[status] || 'bg-light text-dark';
   };
+
+  dayjs.extend(localizedFormat)
+  dayjs.locale('fr') // Set the locale to French
+function toInputDateFormat(dateString) {
+  return dayjs(dateString).format('DD MMMM YYYY');
+}
   </script>
   
   <style scoped>

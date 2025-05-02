@@ -3,9 +3,9 @@
         <div class="container my-2">
             <h4>Calendrier</h4>
             <p class="text-muted">Planifications et repartitions des salles matieres</p>
-
             <div class="card p-4">
                 <div class="card-body dashboard-tabs p-0">
+                    
                     <h4 class="card-title">Planification</h4>
                     <p class="card-description"></p>
 
@@ -51,8 +51,8 @@
                                 <td>
                                     <ItemActions
                                         :item="exam"
-                                        moduleRoute="/calendrier"
-                                        :showAdd="false"
+                                        moduleRoute="/calendrier/"
+                                        :showAdd="true"
                                         editModalTarget="#editExamModal"
                                         @edit="editExam"
                                         @delete="confirmDelete"

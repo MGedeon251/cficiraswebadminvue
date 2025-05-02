@@ -14,12 +14,35 @@
             </p>
           </div>
           <div class="d-flex gap-2">
-            <button class="btn btn-outline-secondary">
-              <i class="mdi mdi-printer me-1"></i> Exporter
+
+            <button class="btn btn-outline-dark me-2" @click="exportToExcel">
+              Exporter</button>
+          <div class="btn-group">
+            <button
+              type="button"
+              class="btn btn-primary mt-2 mt-xl-0"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              aria-hidden="true"
+              data-bs-backdrop="static"
+              data-bs-keyboard="false"
+            >
+              + Ajouter
             </button>
-            <button class="btn btn-primary" @click="openAddModal">
-              <i class="mdi mdi-plus me-1"></i> Nouvelle Planification
+            <button
+              type="button"
+              class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span class="visually-hidden">Toggle Dropdown</span>
             </button>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="#drop_table">Importer fichier</a>
+              </li>
+            </ul>
+          </div>
           </div>
         </div>
 
@@ -28,7 +51,8 @@
           <div class="card-body">
             <!-- Barre d'outils -->
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
-              <div class="d-flex gap-2 mb-2">
+              <div class="d-flex mb-3">
+                <div class="d-flex gap-2 mb-2">
                 <div class="input-group" style="width: 250px;">
                   <span class="input-group-text bg-transparent">
                     <i class="mdi mdi-magnify"></i>
@@ -40,17 +64,20 @@
                     v-model="searchQuery"
                   >
                 </div>
-                <button class="btn btn-outline-secondary" @click="refreshData">
-                  <i class="mdi mdi-refresh"></i>
-                </button>
+                
+                  <button @click="refreshModules" class="btn btn-outline-dark me-2" :disabled="isLoading">
+                    <i class="mdi mdi-cached"></i>
+                  </button>
+              </div>
+
               </div>
 
               <div class="d-flex gap-2">
-                <button class="btn btn-outline-primary" @click="toggleFilters">
-                  <i class="mdi mdi-filter me-1"></i> Filtres
+                <button class="btn btn-sm btn-outline-primary" @click="toggleFilters">
+                  <i class="mdi mdi-filter me-1"></i>
                 </button>
                 <div class="dropdown">
-                  <button class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                  <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
                     <i class="mdi mdi-dots-vertical"></i>
                   </button>
                   <ul class="dropdown-menu dropdown-menu-end">
@@ -92,26 +119,7 @@
             </div>
 
             <!-- Onglets -->
-            <ul class="nav nav-tabs mb-4">
-              <li class="nav-item">
-                <a class="nav-link" :class="{ active: activeTab === 'all' }" 
-                   @click="activeTab = 'all'">
-                  Toutes les sessions
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" :class="{ active: activeTab === 's1' }" 
-                   @click="activeTab = 's1'">
-                  Semestre 1
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" :class="{ active: activeTab === 's2' }" 
-                   @click="activeTab = 's2'">
-                  Semestre 2
-                </a>
-              </li>
-            </ul>
+            
 
             <!-- Contenu des onglets -->
             <div class="tab-content">
@@ -123,7 +131,6 @@
                       <th>Session</th>
                       <th>Date</th>
                       <th>Matière</th>
-                      <th>Salle</th>
                       <th>Surveillants</th>
                       <th>Étudiants</th>
                       <th>Statut</th>
@@ -135,7 +142,6 @@
                       <td>{{ exam.session }}</td>
                       <td>{{ formatDate(exam.date) }}</td>
                       <td>{{ exam.matiere }}</td>
-                      <td>{{ exam.salle }}</td>
                       <td>{{ exam.surveillants.join(', ') }}</td>
                       <td>{{ exam.etudiants }}</td>
                       <td>
