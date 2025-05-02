@@ -200,7 +200,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import ExamPlanningModal from './ExamPlanningModal.vue';
+import ExamPlanningModal from './modal/ExamPlanningModal.vue';
 
 // Données simulées
 const activeSessions = ref([
