@@ -29,33 +29,52 @@
                                 + Ajouter
                             </button>
                         </div>
-                        <addPlanning/>
+                        <addPlanning @examen-ajoute="ajouterExamen"/>
                     </div>
 
                     <table class="table table-hover table-nowrap mb-0">
-                  <thead>
-                    <tr>
-                      <th>designation</th>
-                      <th>type</th>
-                      <th>semestre</th>
-                      <th>date prevue</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                </table>
-                    
-                </div>                
+                        <thead>
+                            <tr>
+                                <th>designation</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(exam, index) in examens" :key="index">
+                                <td>{{ exam.designation }}</td>
+                                <td>{{ exam.type_session }}</td>
+                                <td>{{ exam.semestre }}</td>
+                                <td>{{ exam.date_debut }}</td>
+                                <td>
+                                    <ItemActions
+                                        :item="exam"
+                                        moduleRoute="/calendrier"
+                                        :showAdd="false"
+                                        editModalTarget="#editExamModal"
+                                        @edit="editExam"
+                                        @delete="confirmDelete"
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup="setup">
-    import Tabs from '../semestres/TabTout.vue'; // Assure-toi que le chemin est correct
     import addPlanning from './modal/AddPlanning.vue'; // Assure-toi que le chemin est correct
+    import ItemActions from '@/components/ItemActions.vue'; // Assure-toi que le chemin est correct
     
-    import { ref } from 'vue';
-    const plannings = ref([]);  
+    import {ref} from 'vue';
+    const examens = ref([]);
+    function ajouterExamen(nouvelExamen) {
+  examens.value.push(nouvelExamen);
+}
 </script>

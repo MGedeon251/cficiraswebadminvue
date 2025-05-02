@@ -50,9 +50,14 @@
   </template>
   
   <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, defineEmits } from 'vue';
+
+  const emit = defineEmits(['examen-ajoute']);
+
   import { getSessions } from "@/api/evaluations/evaluationApi";
-  
+  import dayjs from 'dayjs';
+  import 'dayjs/locale/fr'
+  import localizedFormat from 'dayjs/plugin/localizedFormat'
   const examens = ref([]); // Liste de tous les examens
   const selectedExamId = ref(''); // ID sélectionné
   const examen = ref({ // Examen sélectionné
@@ -76,17 +81,30 @@
   function onSelectExam() {
     const selected = examens.value.find(ex => ex.session_id === selectedExamId.value);
     if (selected) {
-      examen.value = { ...selected };
-    }
+    examen.value = {
+      designation: selected.nom_session,
+      type_session: selected.type_session,
+      semestre: selected.semestre,
+      date_debut: toInputDateFormat(selected.date_debut),
+      etat: selected.etat,
+    };
+   }
   }
-  
   function submitPlanning() {
-    console.log("Examen sélectionné :", examen.value);
-  
+
+    const newExamen = { ...examen.value };
+    emit('examen-ajoute', newExamen); // <-- émettre l'examen ajouté
+
     // Fermer la modale
     const modal = document.getElementById('addPlanningModal');
     const bootstrapModal = bootstrap.Modal.getInstance(modal);
     bootstrapModal.hide();
   }
+
+  dayjs.extend(localizedFormat)
+  dayjs.locale('fr') // Set the locale to French
+function toInputDateFormat(dateString) {
+  return dayjs(dateString).format('DD MMMM YYYY');
+}
   </script>
   
