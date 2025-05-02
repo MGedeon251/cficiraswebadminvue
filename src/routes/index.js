@@ -55,6 +55,10 @@ const routes = [
         props: true,
       },
       { path: '/examens', name: 'Examens', component: Examens },
+      { path: '/examens/calendrier', 
+        name: 'Calendrier', 
+        component: calendrier,
+        props: true, },
       { path: '/notes', name: 'Notes', component: Notes },
       { path: '/parcours', name: 'Parcours', component: Parcours },
       { path: '/supcours', name: 'Support', component: Support },
@@ -63,7 +67,7 @@ const routes = [
       { path: '/administration', name: 'Administration', component: Admins },
       { path: '/finance', name: 'Finance', component: Finance },
       { path: '/notification', name: 'Notification', component: NotificationView },
-      { path: '/calendrier', name: 'Notification', component: calendrier },
+      
     ],
   },
 ];

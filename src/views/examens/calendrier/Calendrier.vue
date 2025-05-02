@@ -10,18 +10,30 @@
           <p class="card-description"></p>
 
           <div class="d-flex gap-2 mb-3">
-            <button type="button" class="btn btn-outline-dark btn-icon me-3 d-none d-md-block">
-              <i class="mdi mdi-filter"></i>
-            </button>
-
-            <button type="button" class="btn btn-outline-dark btn-icon me-3 mt-2 mt-xl-0">
-              <i class="mdi mdi-alert-circle"></i>
-            </button>
-
-            <button class="btn btn-primary mt-2 mt-xl-0">
-              <span class="">Ajouter</span>
-            </button>
+            <div class="d-flex justify-content-between align-items-end flex-wrap">
+                                          <button
+                                              type="button"
+                                              class="btn btn-outline-dark btn-icon me-2 d-none d-md-block ">
+                                              <i class="mdi mdi-filter"></i>
+                                          </button>
+                                          <button
+                                            type="button"
+                                            class="btn btn-outline-dark btn-icon me-2 d-none d-md-block"
+                                            @click="exportToExcel"
+                                          >
+                                            <i class="mdi mdi-alert-circle"></i>
+                                          </button>
+                                          <button
+                                              class="btn btn-primary mt-2 mt-xl-0"
+                                              data-bs-toggle="modal"
+                                              data-bs-target="#addPlanningModal">
+                                              + Ajouter
+                                          </button>
+                                      </div>
+                                      <addPlanning/>
+          <div class="btn-group">
           </div>
+        </div>
           <!-- 🔁 Onglets dynamiques : Tout, Semestre 1, Semestre 2 -->
           <div class="d-flex flex-column flex-md-row gap-2">
             <div class="col-12 col-md-4">
@@ -36,4 +48,5 @@
 
 <script setup>
 import Tabs from '../semestres/TabTout.vue'; // Assure-toi que le chemin est correct
+import addPlanning from './AddPlanning.vue'; // Assure-toi que le chemin est correct
 </script>
