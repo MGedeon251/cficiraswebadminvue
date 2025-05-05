@@ -44,12 +44,29 @@ onMounted(fetchModules);
 <template>
   <div v-if="error" class="alert alert-danger">{{ error }}</div>
   <div class="card p-4">
-    <div class="d-flex mb-3">
+    <div class="d-flex justify-content-between flex-wrap">
+      <div class="d-flex mb-3">
       <button @click="refreshModules" class="btn btn-outline-dark me-2" :disabled="isLoading">
         <span v-if="!isLoading">🔄 Rafraîchir</span>
         <span v-else>Chargement...</span>
       </button>
     </div>
+      <div class="d-flex justify-content-between align-items-end flex-wrap mb-3">
+        <div class="input-group" style="width: 250px;">
+                    
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      placeholder="Rechercher..." 
+                      v-model="searchQuery"
+                    >
+                    <span class="input-group-text bg-transparent">
+                      <i class="mdi mdi-magnify"></i>
+                    </span>
+          </div>
+        </div>
+      </div>
+    
     <table class="table table-hover align-middle">
       <thead class="table-light">
         <tr>

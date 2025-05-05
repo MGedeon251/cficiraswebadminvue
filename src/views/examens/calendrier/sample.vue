@@ -53,17 +53,17 @@
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
               <div class="d-flex mb-3">
                 <div class="d-flex gap-2 mb-2">
-                <div class="input-group" style="width: 250px;">
-                  <span class="input-group-text bg-transparent">
-                    <i class="mdi mdi-magnify"></i>
-                  </span>
-                  <input 
-                    type="text" 
-                    class="form-control" 
-                    placeholder="Rechercher..." 
-                    v-model="searchQuery"
-                  >
-                </div>
+                  <div class="input-group" style="width: 250px;">
+                    <span class="input-group-text bg-transparent">
+                      <i class="mdi mdi-magnify"></i>
+                    </span>
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      placeholder="Rechercher..." 
+                      v-model="searchQuery"
+                    >
+                    </div>
                 
                   <button @click="refreshModules" class="btn btn-outline-dark me-2" :disabled="isLoading">
                     <i class="mdi mdi-cached"></i>
