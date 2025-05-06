@@ -36,18 +36,22 @@
                         <thead>
                             <tr>
                                 <th>designation</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
+                                <th>debut</th>
+                                <th>fin</th>
+                                <th>statut</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(exam, index) in examens" :key="index">
                                 <td>{{ exam.designation }}</td>
-                                <td>{{ exam.type_session }}</td>
-                                <td>{{ exam.semestre }}</td>
                                 <td>{{ exam.date_debut }}</td>
+                                <td>{{ exam.date_debut }}</td>
+                                <td>
+                                    <span class="badge" :class="getStatusClass(exam.etat)">
+                                        {{ 'confirmé' }}
+                                    </span>
+                                </td>
                                 <td>
                                     <ItemActions
                                         :item="exam"
@@ -77,4 +81,21 @@
     function ajouterExamen(nouvelExamen) {
   examens.value.push(nouvelExamen);
 }
+const getStatusClass = (status) => {
+  const classes = {
+    'planifié': 'bg-primary',
+    'confirmé': 'bg-success',
+    'annulé': 'bg-danger',
+    'terminé': 'bg-secondary'
+  };
+  return classes[status] || 'bg-light text-dark';
+};
 </script>
+<style>
+.badge {
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  font-weight: 500;
+  border-radius: 50rem;
+}
+</style>

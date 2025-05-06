@@ -145,9 +145,9 @@
                       <td>{{ exam.surveillants.join(', ') }}</td>
                       <td>{{ exam.etudiants }}</td>
                       <td>
-                        <span class="badge" :class="getStatusClass(exam.statut)">
-                          {{ exam.statut }}
-                        </span>
+                            <span class="badge" :class="getStatusClass(exam.statut)">
+                              {{ exam.statut }}
+                            </span>
                       </td>
                       <td>
                         <div class="d-flex gap-2">
