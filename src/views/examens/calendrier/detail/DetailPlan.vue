@@ -49,16 +49,69 @@
               <button type="button" class="btn-close" @click="closeDetails"></button>
             </div>
             <div class="modal-body">
-              <p><strong>Code session:</strong> {{ item.code_session }}</p>
-              <p><strong>Désignation:</strong> {{ item.designation }}</p>
-              <p><strong>Date début:</strong> {{ item.date_debut }}</p>
-              <p><strong>Date fin:</strong> {{ item.date_fin }}</p>
-              <p><strong>Statut:</strong> {{ item.statut }}</p>
-              <p><strong>Commentaire:</strong> {{ item.commentaire }}</p>
-              <p><strong>Désignation session:</strong> {{ item.designation_session }}</p>
-              <p><strong>Code filière:</strong> {{ item.code_filiere }}</p>
-              <p><strong>Désignation filière:</strong> {{ item.designation_filiere }}</p>
-              <p><strong>Code année académique:</strong> {{ item.code_annee_academique }}</p>
+                <div class="info-card">
+                    <div class="info-title">Informations sur la planification</div>
+                    <div class="info-item">
+                        <span class="info-label">ID:</span>
+                        <span class="info-value">{{ item.planification_id }}</span>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-item">
+                            <span class="info-label">Designation:</span>
+                            <span class="info-value">{{ item.designation }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Code session:</span>
+                            <span class="info-value ">{{ item.code_session }}</span>    
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Date début:</span>
+                            <span class="info-value">{{ item.date_debut }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Date fin:</span>
+                            <span class="info-value">{{ item.date_fin }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Statut:</span>
+                            <span class="info-value">{{ item.statut }}</span>   
+                        <div>
+                            <span class="info-label">Commentaire:</span>
+                            <span class="info-value">{{ item.commentaire }}</span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Désignation session:</span>
+                            <span class="info-value">{{ item.designation_session }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Code filière:</span>
+                            <span class="info-value">{{ item.code_filiere }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Désignation filière:</span>
+                            <span class="info-value">{{ item.designation_filiere }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Code année académique:</span>
+                            <span class="info-value">{{ item.code_annee_academique }}</span>
+                        <div>
+
+                        </div>
+
+
+                    </div>
+                    <p><strong>Code session:</strong> {{ item.code_session }}</p>
+                        <p><strong>Désignation:</strong> {{ item.designation }}</p>
+                        <p><strong>Date début:</strong> {{ item.date_debut }}</p>
+                        <p><strong>Date fin:</strong> {{ item.date_fin }}</p>
+                        <p><strong>Statut:</strong> {{ item.statut }}</p>
+                        <p><strong>Commentaire:</strong> {{ item.commentaire }}</p>
+                        <p><strong>Désignation session:</strong> {{ item.designation_session }}</p>
+                        <p><strong>Code filière:</strong> {{ item.code_filiere }}</p>
+                        <p><strong>Désignation filière:</strong> {{ item.designation_filiere }}</p>
+                        <p><strong>Code année académique:</strong> {{ item.code_annee_academique }}</p>
+                </div>
             </div>
             <div class="modal-footer">
               <button class="btn btn-secondary" @click="closeDetails">Fermer</button>
@@ -66,6 +119,7 @@
           </div>
         </div>
       </div>
+    </div>
     </teleport>
   </template>
   
@@ -132,3 +186,4 @@
     font-weight: 500;
   }
 </style>
+
