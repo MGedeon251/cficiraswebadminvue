@@ -20,7 +20,7 @@ import Formateur from '../views/formateurs/Formateur.vue';
 import Admins from '../views/admin/Administration.vue';
 import Finance from '../views/finances/Finance.vue';
 import NotFound from '../views/errors/NotFound.vue';
-import calendrier from '../views/examens/calendrier/sample.vue';
+import Planning from '../views/examens/calendrier/sample.vue';
 
 const routes = [
   // Route de login (pas besoin de layout global ici)
@@ -55,9 +55,9 @@ const routes = [
         props: true,
       },
       { path: '/examens', name: 'Examens', component: Examens },
-      { path: '/examens/calendrier', 
-        name: 'Calendrier', 
-        component: calendrier,
+      { path: '/examens/planning/:id', 
+        name: 'Planning', 
+        component: Planning,
         props: true, },
       { path: '/notes', name: 'Notes', component: Notes },
       { path: '/parcours', name: 'Parcours', component: Parcours },

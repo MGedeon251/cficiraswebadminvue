@@ -33,6 +33,15 @@ export const createSession = (data) => evaluationService.post('/sessions', data)
 export const updateSession = (id, data) => evaluationService.put(`/sessions/${id}`, data);
 export const deleteSession = (id) => evaluationService.delete(`/sessions/${id}`);
 
+//API pour gerer les planings
+export const getPlanning = () => evaluationService.get('/planning');   
+export const getPlanningById = (id) => evaluationService.get(`/planning/${id}`);    
+export const createPlanning = (data) => evaluationService.post('/planning', data);
+export const updatePlanning = (id, data) => evaluationService.put(`/planning/${id}`, data); 
+export const deletePlanning = (id) => evaluationService.delete(`/planning/${id}`);
+export const getPlanningByExamenId = (classeId) => evaluationService.get(`/planning/classe/${classeId}`);
+export const getPlanningBySessionId = (sessionId) => evaluationService.get(`/planning/session/${sessionId}`);
+
 // API pour gérer les salles d'examens
 export const getSalleExamens = () => evaluationService.get('/salle_examens');
 export const getSalleExamenById = (id) => evaluationService.get(`/salle_examens/${id}`);

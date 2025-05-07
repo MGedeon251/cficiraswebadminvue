@@ -2,13 +2,10 @@
     <div class="row">
         <div class="container my-2">
             <h4>Calendrier</h4>
-            <p class="text-muted">Planifications et repartitions des salles matieres</p>
             <div class="card p-4">
                 <div class="card-body dashboard-tabs p-0">
-                    
                     <h4 class="card-title">Planification</h4>
-                    <p class="card-description"></p>
-
+                    <p class="text-muted">Planning et calendrier des deroulement des examens</p>
                     <div class="d-flex gap-2 mb-3">
                         <div class="d-flex justify-content-between align-items-end flex-wrap">
                             <button
@@ -31,40 +28,7 @@
                         </div>
                         <addPlanning @examen-ajoute="ajouterExamen"/>
                     </div>
-
-                    <table class="table table-hover table-nowrap mb-0">
-                        <thead>
-                            <tr>
-                                <th>designation</th>
-                                <th>debut</th>
-                                <th>fin</th>
-                                <th>statut</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(exam, index) in examens" :key="index">
-                                <td>{{ exam.designation }}</td>
-                                <td>{{ exam.date_debut }}</td>
-                                <td>{{ exam.date_debut }}</td>
-                                <td>
-                                    <span class="badge" :class="getStatusClass(exam.etat)">
-                                        {{ 'confirmé' }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <ItemActions
-                                        :item="exam"
-                                        moduleRoute="/calendrier/"
-                                        :showAdd="true"
-                                        editModalTarget="#editExamModal"
-                                        @edit="editExam"
-                                        @delete="confirmDelete"
-                                    />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <PlanningList/>
 
                 </div>
             </div>
@@ -74,7 +38,7 @@
 
 <script setup="setup">
     import addPlanning from './modal/AddPlanning.vue'; // Assure-toi que le chemin est correct
-    import ItemActions from '@/components/ItemActions.vue'; // Assure-toi que le chemin est correct
+    import PlanningList from './tab/PlanningList.vue';
     
     import {ref} from 'vue';
     const examens = ref([]);
