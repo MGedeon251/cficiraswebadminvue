@@ -22,8 +22,8 @@
                         <td>{{ plan.classe_nom}}</td>
                         <td>{{  45 }}</td>
                         <td>
-                            <span class="badge" :class="getStatusClass(plan.examen_statut)">
-                                {{ plan.examen_statut }}
+                          <span class="badge" :class="getStatusClass(plan.examen_statut)">
+                                {{ getStatusLabel(plan.examen_statut) }}
                             </span>
                         </td>
                         <td>
@@ -78,6 +78,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { getExamenByPlanning } from "@/api/evaluations/evaluationApi";
+import { useRoute } from 'vue-router';
+const route = useRoute();
 
 // Données principales
 const planningData = ref([]);
@@ -92,8 +94,8 @@ const currentExam = ref(null);
 
 // Filtres
 const filters = ref({
-  session: '',
-  startDate: '',
+  session_code: '',
+  Date: '',
   endDate: ''
 });
 
@@ -179,16 +181,29 @@ const formatDate = (dateString) => {
 };
 
 const getStatusClass = (status) => {
-  const classes = {
-    'planifié': 'bg-primary',
-    'confirmé': 'bg-success',
-    'annulé': 'bg-danger',
-    'terminé': 'bg-secondary'
-  };
-  return classes[status] || 'bg-light text-dark';
+    const classes = {
+        'planifiée': 'bg-primary',
+        'en_attente': 'bg-warning', 
+        'annulé': 'bg-danger',
+        'terminé': 'bg-success'
+    };
+    return classes[status] || 'bg-light text-dark';
+};
+const getStatusLabel = (status) => {
+    if (status === 'planifiée') return 'Planifiée';
+    if (status === 'en_attente') return 'En attente';
+    if (status === 'annulé') return 'Annulé';
+    if (status === 'terminé') return 'Terminé';
+    return status;
 };
 
-onMounted(() => {
-  fetchPlanning();
+onMounted(async () => {
+  const id = route.params.id;
+  try {
+    const response = await getExamenByPlanning(id);
+    planningData.value = response;
+  } catch (error) {
+    console.error('Erreur lors du chargement du module :', error);
+  }
 });
 </script>

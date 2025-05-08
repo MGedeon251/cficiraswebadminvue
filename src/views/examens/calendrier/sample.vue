@@ -122,73 +122,7 @@
             
 
             <!-- Contenu des onglets -->
-            <div class="tab-content">
-              <!-- Tableau des examens -->
-              <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                  <thead class="table-light">
-                    <tr>
-                      <th>Session</th>
-                      <th>Date</th>
-                      <th>Matière</th>
-                      <th>Surveillants</th>
-                      <th>Étudiants</th>
-                      <th>Statut</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="exam in filteredExams" :key="exam.id">
-                      <td>{{ exam.session }}</td>
-                      <td>{{ formatDate(exam.date) }}</td>
-                      <td>{{ exam.matiere }}</td>
-                      <td>{{ exam.surveillants.join(', ') }}</td>
-                      <td>{{ exam.etudiants }}</td>
-                      <td>
-                            <span class="badge" :class="getStatusClass(exam.statut)">
-                              {{ exam.statut }}
-                            </span>
-                      </td>
-                      <td>
-                        <div class="d-flex gap-2">
-                          <button class="btn btn-sm btn-outline-primary" @click="editExam(exam)">
-                            <i class="mdi mdi-pencil"></i>
-                          </button>
-                          <button class="btn btn-sm btn-outline-danger" @click="confirmDelete(exam)">
-                            <i class="mdi mdi-delete"></i>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr v-if="filteredExams.length === 0">
-                      <td colspan="8" class="text-center py-5 text-muted">
-                        Aucune planification trouvée
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <!-- Pagination -->
-              <div class="d-flex justify-content-between align-items-center mt-3">
-                <div class="text-muted">
-                  Affichage de {{ filteredExams.length }} éléments
-                </div>
-                <nav aria-label="Page navigation">
-                  <ul class="pagination pagination-sm">
-                    <li class="page-item disabled">
-                      <a class="page-link" href="#" tabindex="-1">Précédent</a>
-                    </li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                      <a class="page-link" href="#">Suivant</a>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-            </div>
+            <ExamenPlanList/>
           </div>
         </div>
       </div>
@@ -207,6 +141,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import ExamPlanningModal from './modal/ExamPlanningModal.vue';
+import ExamenPlanList from './tab/ExamenPlanList.vue';
 
 // Données simulées
 const activeSessions = ref([

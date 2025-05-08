@@ -40,7 +40,7 @@ export const createPlanning = (data) => evaluationService.post('/planning', data
 export const updatePlanning = (id, data) => evaluationService.put(`/planning/${id}`, data); 
 export const deletePlanning = (id) => evaluationService.delete(`/planning/${id}`);
 export const getPlanningByExamenId = (classeId) => evaluationService.get(`/planning/classe/${classeId}`);
-export const getExamenByPlanning = (id) => evaluationService.get(`/classes/planning/${id}`);
+export const getExamenByPlanning = (id) => evaluationService.get(`/planning/classes/planning/${id}`);
 export const getPlanningBySessionId = (sessionId) => evaluationService.get(`/planning/session/${sessionId}`);
 
 // API pour gérer les salles d'examens
