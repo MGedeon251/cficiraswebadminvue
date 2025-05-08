@@ -38,7 +38,6 @@
             </li>
         </ul>
     </div>
-
     <!-- Modal pour les détails -->
     <teleport to="body">
         <div
