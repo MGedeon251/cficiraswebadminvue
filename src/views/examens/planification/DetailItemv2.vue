@@ -81,7 +81,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="col-md-6">
                 <div class="info-card mb-3">
                   <h6 class="info-title">Dates et responsable</h6>
@@ -128,10 +128,10 @@
                     </div>
                     <div class="info-item">
                       <span class="info-label">Taux de saisie:</span>
-                      <div class="progress mt-2" style="height: 10px;">
-                        <div 
-                          class="progress-bar bg-success" 
-                          role="progressbar" 
+                      <div class="progress mt-2" style="height: 10px">
+                        <div
+                          class="progress-bar bg-success"
+                          role="progressbar"
                           :style="{ width: calculateCompletionRate() + '%' }"
                           :aria-valuenow="calculateCompletionRate()"
                           aria-valuemin="0"
@@ -143,7 +143,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div class="col-md-6">
                 <div class="info-card">
                   <h6 class="info-title">Actions rapides</h6>
@@ -210,12 +210,14 @@ const calculateCompletionRate = () => {
 };
 
 const getStatusClass = (status) => {
-  return {
-    'active': 'bg-success',
-    'inactive': 'bg-secondary',
-    'draft': 'bg-warning text-dark',
-    'completed': 'bg-info'
-  }[status] || 'bg-light text-dark';
+  return (
+    {
+      active: 'bg-success',
+      inactive: 'bg-secondary',
+      draft: 'bg-warning text-dark',
+      completed: 'bg-info',
+    }[status] || 'bg-light text-dark'
+  );
 };
 </script>
 

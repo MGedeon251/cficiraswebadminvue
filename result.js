@@ -1,17 +1,12 @@
-
 import { ref, onMounted, computed } from 'vue';
-import {
-  getAnneesAcademiques,
-  getFilieres,
-  getClasses,
-} from '@/api/academique/academiqueApi';
+import { getAnneesAcademiques, getFilieres, getClasses } from '@/api/academique/academiqueApi';
 import Pagination from '@/components/shared/Pagination.vue';
 import ItemActions from '@/components/ItemActions.vue';
 
 const etudiants = ref([]);
 const anneesAcademiques = ref([]);
 const filieres = ref([]);
-const classes = ref([]);// Données principales
+const classes = ref([]); // Données principales
 
 const selectedAnnee = ref(null);
 const selectedFiliere = ref(null);
@@ -30,23 +25,21 @@ const paginatedModules = computed(() => {
   return modules.value.slice(start, end);
 });
 
-
 const fetchFilterData = async () => {
   isLoading.value = true;
   error.value = null;
 
   try {
     const responseAnnees = await getAnneesAcademiques();
-    anneesAcademiques.value = responseAnnees ; 
+    anneesAcademiques.value = responseAnnees;
     const responseFilieres = await getFilieres();
-    filieres.value = responseFilieres ;
+    filieres.value = responseFilieres;
     const responseClasses = await getClasses();
-    classes.value = responseClasses ;
+    classes.value = responseClasses;
 
     console.log('Annee:', anneesAcademiques.value);
-    console.log('Filiere:',filieres.value);
+    console.log('Filiere:', filieres.value);
     console.log('Classes:', classes.value);
-
   } catch (err) {
     error.value = 'Erreur lors du chargement des modules';
     console.error(err);
@@ -57,31 +50,26 @@ const fetchFilterData = async () => {
 onMounted(fetchFilterData);
 
 const fetchEtudiants = async () => {
-    isLoading.value = true;
-    error.value = null;
-  
-    try {
-      const response = await getEtudiantsByClasseFiliereAnnee(
-        selectedClasse,
-        selectedFiliere,
-        selectedAnnee
-      );
-      etudiants.value = response ; 
-      console.log('Annee:',etudiants.value);
-  
-    } catch (err) {
-      error.value = 'Erreur lors du chargement des modules';
-      console.error(err);
-    } finally {
-      isLoading.value = false;
-    }
-  };
+  isLoading.value = true;
+  error.value = null;
 
+  try {
+    const response = await getEtudiantsByClasseFiliereAnnee(
+      selectedClasse,
+      selectedFiliere,
+      selectedAnnee
+    );
+    etudiants.value = response;
+    console.log('Annee:', etudiants.value);
+  } catch (err) {
+    error.value = 'Erreur lors du chargement des modules';
+    console.error(err);
+  } finally {
+    isLoading.value = false;
+  }
+};
 
-onMounted(
-    fetchFilterData,
-    fetchEtudiants
-);
+onMounted(fetchFilterData, fetchEtudiants);
 const editModule = (item) => {
   console.log('Modifier module', item);
 };

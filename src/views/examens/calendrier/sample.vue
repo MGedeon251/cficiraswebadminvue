@@ -14,35 +14,33 @@
             </p>
           </div>
           <div class="d-flex gap-2">
-
-            <button class="btn btn-outline-dark me-2" @click="exportToExcel">
-              Exporter</button>
+            <button class="btn btn-outline-dark me-2" @click="exportToExcel">Exporter</button>
             <div class="btn-group">
-            <button
-              type="button"
-              class="btn btn-primary mt-2 mt-xl-0"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-              aria-hidden="true"
-              data-bs-backdrop="static"
-              data-bs-keyboard="false"
-            >
-              + Ajouter
-            </button>
-            <button
-              type="button"
-              class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <span class="visually-hidden">Toggle Dropdown</span>
-            </button>
-            <ul class="dropdown-menu">
-              <li>
-                <a class="dropdown-item" href="#drop_table">Importer fichier</a>
-              </li>
-            </ul>
-          </div>
+              <button
+                type="button"
+                class="btn btn-primary mt-2 mt-xl-0"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+                aria-hidden="true"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+              >
+                + Ajouter
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span class="visually-hidden">Toggle Dropdown</span>
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="#drop_table">Importer fichier</a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
@@ -53,23 +51,26 @@
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
               <div class="d-flex mb-3">
                 <div class="d-flex gap-2 mb-2">
-                  <div class="input-group" style="width: 250px;">
+                  <div class="input-group" style="width: 250px">
                     <span class="input-group-text bg-transparent">
                       <i class="mdi mdi-magnify"></i>
                     </span>
-                    <input 
-                      type="text" 
-                      class="form-control" 
-                      placeholder="Rechercher..." 
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Rechercher..."
                       v-model="searchQuery"
-                    >
-                    </div>
-                
-                  <button @click="refreshModules" class="btn btn-outline-dark me-2" :disabled="isLoading">
+                    />
+                  </div>
+
+                  <button
+                    @click="refreshModules"
+                    class="btn btn-outline-dark me-2"
+                    :disabled="isLoading"
+                  >
                     <i class="mdi mdi-cached"></i>
                   </button>
-              </div>
-
+                </div>
               </div>
 
               <div class="d-flex gap-2">
@@ -81,10 +82,22 @@
                     <i class="mdi mdi-dots-vertical"></i>
                   </button>
                   <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#"><i class="mdi mdi-file-excel me-2"></i> Exporter Excel</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="mdi mdi-printer me-2"></i> Imprimer</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#"><i class="mdi mdi-cog me-2"></i> Paramètres</a></li>
+                    <li>
+                      <a class="dropdown-item" href="#"
+                        ><i class="mdi mdi-file-excel me-2"></i> Exporter Excel</a
+                      >
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#"
+                        ><i class="mdi mdi-printer me-2"></i> Imprimer</a
+                      >
+                    </li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                      <a class="dropdown-item" href="#"
+                        ><i class="mdi mdi-cog me-2"></i> Paramètres</a
+                      >
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -104,11 +117,11 @@
                 </div>
                 <div class="col-md-3">
                   <label class="form-label">Date de début</label>
-                  <input type="date" class="form-control" v-model="filters.startDate">
+                  <input type="date" class="form-control" v-model="filters.startDate" />
                 </div>
                 <div class="col-md-3">
                   <label class="form-label">Date de fin</label>
-                  <input type="date" class="form-control" v-model="filters.endDate">
+                  <input type="date" class="form-control" v-model="filters.endDate" />
                 </div>
                 <div class="col-md-3 d-flex align-items-end">
                   <button class="btn btn-primary w-100" @click="applyFilters">
@@ -119,22 +132,16 @@
             </div>
 
             <!-- Onglets -->
-            
 
             <!-- Contenu des onglets -->
-            <ExamenPlanList/>
+            <ExamenPlanList />
           </div>
         </div>
       </div>
     </div>
 
     <!-- Modal d'ajout/modification -->
-    <ExamPlanningModal 
-      v-if="showModal"
-      :exam="currentExam"
-      @close="closeModal"
-      @save="saveExam"
-    />
+    <ExamPlanningModal v-if="showModal" :exam="currentExam" @close="closeModal" @save="saveExam" />
   </div>
 </template>
 
@@ -160,7 +167,7 @@ const examsData = ref([
     surveillants: ['Prof. Dupont', 'Prof. Martin'],
     etudiants: 45,
     statut: 'planifié',
-    semestre: 'S1'
+    semestre: 'S1',
   },
   // ... autres données
 ]);
@@ -176,26 +183,29 @@ const currentExam = ref(null);
 const filters = ref({
   session: '',
   startDate: '',
-  endDate: ''
+  endDate: '',
 });
 
 // Computed
 const filteredExams = computed(() => {
-  return examsData.value.filter(exam => {
+  return examsData.value.filter((exam) => {
     // Filtre par onglet
     if (activeTab.value === 's1' && exam.semestre !== 'S1') return false;
     if (activeTab.value === 's2' && exam.semestre !== 'S2') return false;
-    
+
     // Filtre par recherche
-    if (searchQuery.value && !exam.matiere.toLowerCase().includes(searchQuery.value.toLowerCase())) {
+    if (
+      searchQuery.value &&
+      !exam.matiere.toLowerCase().includes(searchQuery.value.toLowerCase())
+    ) {
       return false;
     }
-    
+
     // Filtres supplémentaires
     if (filters.value.session && exam.sessionId !== filters.value.session) return false;
     if (filters.value.startDate && exam.date < filters.value.startDate) return false;
     if (filters.value.endDate && exam.date > filters.value.endDate) return false;
-    
+
     return true;
   });
 });
@@ -249,10 +259,10 @@ const formatDate = (dateString) => {
 
 const getStatusClass = (status) => {
   const classes = {
-    'planifié': 'bg-primary',
-    'confirmé': 'bg-success',
-    'annulé': 'bg-danger',
-    'terminé': 'bg-secondary'
+    planifié: 'bg-primary',
+    confirmé: 'bg-success',
+    annulé: 'bg-danger',
+    terminé: 'bg-secondary',
   };
   return classes[status] || 'bg-light text-dark';
 };
@@ -290,8 +300,8 @@ onMounted(() => {
 }
 
 .nav-tabs .nav-link.active {
-  color: #4C74F4;
-  border-bottom: 3px solid #4C74F4;
+  color: #4c74f4;
+  border-bottom: 3px solid #4c74f4;
   background-color: transparent;
 }
 

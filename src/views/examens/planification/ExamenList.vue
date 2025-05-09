@@ -1,10 +1,12 @@
-
 <template>
   <div class="d-flex flex-wrap justify-content-xl-between">
     <div class="card-body">
-      <h4 class="card-title">Examens {{ semestre === 0 ? 'tous les semestres' : `semestre ${semestre}` }}</h4>
+      <h4 class="card-title">
+        Examens {{ semestre === 0 ? 'tous les semestres' : `semestre ${semestre}` }}
+      </h4>
       <p class="card-description">
-        Liste des examens {{ semestre === 0 ? 'tous semestres confondus' : `pour le semestre ${semestre}` }}
+        Liste des examens
+        {{ semestre === 0 ? 'tous semestres confondus' : `pour le semestre ${semestre}` }}
       </p>
 
       <div class="d-flex mb-3">
@@ -71,9 +73,9 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
-import { getSessions } from "@/api/evaluations/evaluationApi";
-import ItemActions from "./DetailsItem.vue";
+import { onMounted, ref, computed } from 'vue';
+import { getSessions } from '@/api/evaluations/evaluationApi';
+import ItemActions from './DetailsItem.vue';
 
 // Props (avec defineProps pour <script setup>)
 const props = defineProps({
@@ -85,8 +87,8 @@ const props = defineProps({
 
 // Références et état local
 const exams = ref([]);
-const types = ref(["Partiel", "Rattrapage"]);
-const selectedType = ref("Partiel");
+const types = ref(['Partiel', 'Rattrapage']);
+const selectedType = ref('Partiel');
 const loading = ref(true);
 
 // Méthode de récupération des examens
@@ -98,10 +100,10 @@ const fetchSessions = async () => {
       ...exam,
       date_debut: new Date(exam.date_debut).toLocaleDateString(),
       date_fin: new Date(exam.date_fin).toLocaleDateString(),
-      type: exam.code_session.includes("PARTIEL") ? "Partiel" : "Rattrapage",
+      type: exam.code_session.includes('PARTIEL') ? 'Partiel' : 'Rattrapage',
     }));
   } catch (error) {
-    console.error("Erreur lors de la récupération des sessions :", error);
+    console.error('Erreur lors de la récupération des sessions :', error);
   } finally {
     loading.value = false;
   }
@@ -109,26 +111,26 @@ const fetchSessions = async () => {
 
 // Filtrage dynamique
 const filteredExams = computed(() => {
-  const bySemestre = props.semestre === 0
-    ? exams.value
-    : exams.value.filter(exam => exam.semestre === `S${props.semestre}`);
-  return bySemestre.filter(exam => exam.type.includes(selectedType.value));
+  const bySemestre =
+    props.semestre === 0
+      ? exams.value
+      : exams.value.filter((exam) => exam.semestre === `S${props.semestre}`);
+  return bySemestre.filter((exam) => exam.type.includes(selectedType.value));
 });
 
 // Action pour changer de type
 const setType = (type) => {
   selectedType.value = type;
 };
-  const formatDate = (dateString) => {
-    if (!dateString) return 'Non défini';
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('fr-FR', options);
-  };
+const formatDate = (dateString) => {
+  if (!dateString) return 'Non défini';
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString('fr-FR', options);
+};
 
 // Appel lors du montage
 onMounted(fetchSessions);
 </script>
-
 
 <style scoped>
 .status-badge {

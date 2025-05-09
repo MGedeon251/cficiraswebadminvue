@@ -1,11 +1,10 @@
 <script setup>
-import { onMounted, ref, defineExpose, 
-  watch , computed } from 'vue';
+import { onMounted, ref, defineExpose, watch, computed } from 'vue';
 import {
   getAnneesAcademiques,
   getFilieres,
   getClasses,
-  getClassesByFiliere 
+  getClassesByFiliere,
 } from '@/api/academique/academiqueApi';
 import Pagination from '@/components/shared/Pagination.vue';
 import ItemActions from '../details/ItemDetails.vue';
@@ -58,9 +57,7 @@ watch(selectedFiliere, async (newFiliere) => {
   if (newFiliere) {
     loading.value = true;
     try {
-      const [classesResponse] = await Promise.all([
-        getClassesByFiliere(newFiliere)
-      ]);
+      const [classesResponse] = await Promise.all([getClassesByFiliere(newFiliere)]);
       classes.value = classesResponse;
       // Réinitialiser les sélections
       selectedClasse.value = null;
@@ -103,7 +100,7 @@ const getTableData = () => {
 
 // Exposer la méthode au parent
 defineExpose({
-  getTableData
+  getTableData,
 });
 </script>
 
@@ -120,11 +117,7 @@ defineExpose({
               <label class="form-label">Année académique</label>
               <select class="form-select" v-model="selectedAnnee">
                 <option value="" disabled>Choisir une année</option>
-                <option
-                  v-for="annee in anneesAcademiques"
-                  :key="annee.id"
-                  :value="annee.id"
-                >
+                <option v-for="annee in anneesAcademiques" :key="annee.id" :value="annee.id">
                   {{ annee.code }}
                 </option>
               </select>
@@ -135,11 +128,7 @@ defineExpose({
               <label class="form-label">Filière</label>
               <select class="form-select" v-model="selectedFiliere">
                 <option value="" disabled>Choisir une filière</option>
-                <option
-                  v-for="filiere in filieres"
-                  :key="filiere.id"
-                  :value="filiere.id"
-                >
+                <option v-for="filiere in filieres" :key="filiere.id" :value="filiere.id">
                   {{ filiere.code }}
                 </option>
               </select>
@@ -148,14 +137,9 @@ defineExpose({
             <!-- Filtre par classe -->
             <div class="col-md-6">
               <label class="form-label">Classe</label>
-              <select class="form-select" v-model="selectedClasse" 
-              :disabled="!selectedFiliere">
+              <select class="form-select" v-model="selectedClasse" :disabled="!selectedFiliere">
                 <option value="" disabled>Choisir une classe</option>
-                <option
-                  v-for="classe in classes"
-                  :key="classe.id"
-                  :value="classe.id"
-                >
+                <option v-for="classe in classes" :key="classe.id" :value="classe.id">
                   {{ classe.code }}
                 </option>
               </select>
@@ -205,13 +189,13 @@ defineExpose({
           </td>
         </tr>
         <tr v-if="!loading && Array.isArray(etudiants) && etudiants.length === 0">
-            <td colspan="8" class="text-center py-4">
-                <div class="d-flex flex-column align-items-center">
-                    <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="auto" />
-                </div>
-                <div class="text-pr">Aucune donnée</div>
-            </td>
-         </tr>
+          <td colspan="8" class="text-center py-4">
+            <div class="d-flex flex-column align-items-center">
+              <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="auto" />
+            </div>
+            <div class="text-pr">Aucune donnée</div>
+          </td>
+        </tr>
       </tbody>
     </table>
 

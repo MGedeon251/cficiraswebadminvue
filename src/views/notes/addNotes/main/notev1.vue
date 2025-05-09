@@ -176,7 +176,10 @@
       </main>
     </div>
   </div>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
 </template>
 
 <script>
@@ -212,10 +215,9 @@ export default {
 </script>
 
 <style scoped>
-
 body {
-    font-family: 'Inter', sans-serif;
-  }
+  font-family: 'Inter', sans-serif;
+}
 .sidebar {
   position: fixed;
   top: 56px;
@@ -284,14 +286,15 @@ main {
 
 .btn-outline-secondary {
   border-radius: 0.375rem;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .btn-outline-secondary:hover {
   background-color: #e2e6ea;
   color: #000;
 }
-
 
 .table-responsive {
   max-height: 500px;
@@ -305,6 +308,4 @@ main {
 .card-header {
   background-color: #f8f9fa;
 }
-
-
 </style>

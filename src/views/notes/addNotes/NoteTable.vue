@@ -18,10 +18,33 @@
           <td>{{ index + 1 }}</td>
           <td>{{ etudiant.matricule }}</td>
           <td>{{ etudiant.nom }}</td>
-          <td><input type="number" class="form-control" v-model.number="etudiant.note1" @input="calculerMoyenne(etudiant)" /></td>
-          <td><input type="number" class="form-control" v-model.number="etudiant.note2" @input="calculerMoyenne(etudiant)" /></td>
-          <td><input type="number" class="form-control" v-model.number="etudiant.note3" @input="calculerMoyenne(etudiant)" /></td>
-          <td><strong>{{ etudiant.moyenne?.toFixed(2) || '0.00' }}</strong></td>
+          <td>
+            <input
+              type="number"
+              class="form-control"
+              v-model.number="etudiant.note1"
+              @input="calculerMoyenne(etudiant)"
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              class="form-control"
+              v-model.number="etudiant.note2"
+              @input="calculerMoyenne(etudiant)"
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              class="form-control"
+              v-model.number="etudiant.note3"
+              @input="calculerMoyenne(etudiant)"
+            />
+          </td>
+          <td>
+            <strong>{{ etudiant.moyenne?.toFixed(2) || '0.00' }}</strong>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -30,7 +53,7 @@
 
 <script setup>
 const props = defineProps({
-  etudiants: Array
+  etudiants: Array,
 });
 
 const calculerMoyenne = (etudiant) => {

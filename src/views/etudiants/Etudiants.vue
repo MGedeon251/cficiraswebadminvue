@@ -76,7 +76,7 @@ const exportToExcel = async () => {
   try {
     // Récupère les données des étudiants depuis le composant TableData
     const etudiants = await tableDataRef.value.getTableData();
-    
+
     if (!etudiants || !etudiants.length) {
       return alert('Aucune donnée à exporter.');
     }
@@ -89,7 +89,7 @@ const exportToExcel = async () => {
       Prénom: etudiant.prenom,
       Sexe: etudiant.sexe,
       Classe: etudiant.classe,
-      Filière: etudiant.filiere
+      Filière: etudiant.filiere,
     }));
 
     // Crée le fichier Excel
@@ -97,11 +97,9 @@ const exportToExcel = async () => {
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Étudiants');
     XLSX.writeFile(workbook, 'etudiants.xlsx');
-    
   } catch (error) {
     console.error("Erreur lors de l'export:", error);
     alert("Une erreur est survenue lors de l'export");
   }
 };
-
 </script>

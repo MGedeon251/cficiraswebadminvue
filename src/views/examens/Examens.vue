@@ -1,6 +1,6 @@
 <script setup>
 import Planification from './planification/Planification.vue';
-import Salles from './salles/SalleExamen.vue'
+import Salles from './salles/SalleExamen.vue';
 import Calendrier from './calendrier/Calendrier.vue';
 </script>
 
@@ -23,15 +23,13 @@ import Calendrier from './calendrier/Calendrier.vue';
         </div>
       </div>
     </div>
-    <Planification/>
-    <Calendrier/>
+    <Planification />
+    <Calendrier />
     <Salles />
   </div>
 </template>
 
-<script>
-
-</script>
+<script></script>
 
 <style scoped>
 .drag-drop-area {

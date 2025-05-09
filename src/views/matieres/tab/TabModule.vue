@@ -71,7 +71,7 @@ onMounted(fetchModules);
         <span v-else>Chargement...</span>
       </button>
     </div>
-   
+
     <p>Listes de toutes les modules.</p>
     <table class="table table-hover align-middle">
       <thead class="table-light">
