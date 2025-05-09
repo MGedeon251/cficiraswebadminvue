@@ -26,12 +26,16 @@
                         </td>
                         <td>
                             <div class="d-flex gap-2">
-                                <button class="btn btn-sm btn-outline-primary" @click="editExam(plan)">
-                                    <i class="mdi mdi-pencil"></i>
-                                </button>
+                              
+                              <RouterLink :to="{ name: 'Calendrier', params: { id: plan.id } }" class="btn btn-sm btn-outline-primary">
+                                    <i class="mdi mdi-pencil"></i> 
+                              </RouterLink> 
+
+                              <RouterLink :to="`/examens/planning/${plan.id}/calendrier`">
                                 <button class="btn btn-sm btn-outline-danger" @click="confirmDelete(plan)">
-                                    <i class="mdi mdi-delete"></i>
+                                  <i class="mdi mdi-delete"></i>
                                 </button>
+                              </RouterLink>
                             </div>
                         </td>
                     </tr>

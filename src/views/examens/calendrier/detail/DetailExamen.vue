@@ -5,8 +5,12 @@
                 <div class="d-flex justify-content-between flex-wrap">
                     <div class="d-flex align-items-end flex-wrap">
                         <div class="me-md-3 me-xl-5">
-                            <h2>Planification calendrier</h2>
-                            <p class="mb-md-0">Gestion des finances</p>
+                          
+                          <h2 class="page-title">
+                            <i class="mdi mdi-calendar text-primary me-2"></i>
+                            Planification des Examens
+                          </h2>
+                            <p class="mb-md-0">Gestion des sessions d'examen et répartition des salles/matières</p>
                         </div>
                     
                     </div>
@@ -36,7 +40,7 @@
                 data-bs-backdrop="static"
                 data-bs-keyboard="false"
               >
-                + Ajouter
+                + Publier
               </button>
               <button
                 type="button"
@@ -48,8 +52,18 @@
               </button>
               <ul class="dropdown-menu">
                 <li>
-                  <a class="dropdown-item" href="#drop_table">Importer fichier</a>
+                  <a class="dropdown-item" href="#drop_table"> Publier PDF</a>
                 </li>
+                <li>
+                  <a class="dropdown-item" href="#drop_table"> Publier Excel</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#drop_table"> Publier Word</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#drop_table"> Publier CSV</a>    
+                </li>
+                
               </ul>
             </div>
                 </div>
@@ -104,7 +118,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-  
                                 <button class="btn btn-outline-primary mt-3" @click="addEpreuve">+ Ajouter une épreuve</button>
                             </div>
                         </div>
