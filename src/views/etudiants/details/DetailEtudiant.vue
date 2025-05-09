@@ -13,7 +13,6 @@
               <p class="text-muted mb-0 hover-cursor">&nbsp;/&nbsp;Portail&nbsp;/&nbsp;</p>
               <p class="text-muted mb-0 hover-cursor">Etudiants/&nbsp;</p>
               <p class="text-primary mb-0 hover-cursor">Details</p>
-              
             </div>
           </div>
         </div>

@@ -17,7 +17,7 @@
 
             <button class="btn btn-outline-dark me-2" @click="exportToExcel">
               Exporter</button>
-          <div class="btn-group">
+            <div class="btn-group">
             <button
               type="button"
               class="btn btn-primary mt-2 mt-xl-0"

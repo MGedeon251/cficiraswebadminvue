@@ -5,13 +5,12 @@
             <table class="table table-hover align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th>Session</th>
-                        <th>Planifiéé le</th>
-                        <th>Filiere</th>
-                        <th>Classes</th>
-                        <th>Étudiants</th>
-                        <th>Statut</th>
-                        <th>Actions</th>
+                        <th>session</th>
+                        <th>planifiéé le</th>
+                        <th>filiere</th>
+                        <th>classes</th>
+                        <th>statut</th>
+                        <th>actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -20,7 +19,6 @@
                         <td>{{ formatDate(plan.examen_date_planification) }}</td>
                         <td>{{ plan.designation_filiere }}</td>
                         <td>{{ plan.classe_nom}}</td>
-                        <td>{{  45 }}</td>
                         <td>
                           <span class="badge" :class="getStatusClass(plan.examen_statut)">
                                 {{ getStatusLabel(plan.examen_statut) }}
@@ -60,7 +58,7 @@
                     </li>
                     <li class="page-item active">
                         <a class="page-link" href="#">1</a>
-                    </li> 
+                    </li>
                     <li class="page-item">
                         <a class="page-link" href="#">2</a>
                     </li>

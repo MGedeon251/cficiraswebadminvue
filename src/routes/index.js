@@ -21,6 +21,7 @@ import Admins from '../views/admin/Administration.vue';
 import Finance from '../views/finances/Finance.vue';
 import NotFound from '../views/errors/NotFound.vue';
 import Planning from '../views/examens/calendrier/sample.vue';
+import DetailExamen from '../views/examens/calendrier/detail/DetailExamen.vue';
 
 const routes = [
   // Route de login (pas besoin de layout global ici)
@@ -59,6 +60,10 @@ const routes = [
         name: 'Planning', 
         component: Planning,
         props: true, },
+        { path: '/examens/planning/:id/calendrier',
+          name: 'Calendrier', 
+          component: DetailExamen,
+          props: true, },
       { path: '/notes', name: 'Notes', component: Notes },
       { path: '/parcours', name: 'Parcours', component: Parcours },
       { path: '/supcours', name: 'Support', component: Support },
