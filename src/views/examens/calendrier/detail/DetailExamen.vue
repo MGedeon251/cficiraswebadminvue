@@ -38,7 +38,7 @@
                   <span class="visually-hidden">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#drop_table">Publier PDF</a></li>
+                  <li><a class="dropdown-item" href="#drop_table" @click="downloadPDF">Publier PDF</a></li>
                   <li><a class="dropdown-item" href="#drop_table">Publier Excel</a></li>
                   <li><a class="dropdown-item" href="#drop_table">Publier Word</a></li>
                   <li><a class="dropdown-item" href="#drop_table">Publier CSV</a></li>
@@ -56,6 +56,7 @@
           <div class="card">
             <div class="card-body">
               <h5 class="mb-3">Calendrier des épreuves - {{ }}</h5>
+              <div ref="tableToPrint">
 
               <div class="table-responsive">
                 <table class="table table-bordered">
@@ -106,6 +107,7 @@
                     </template>
                   </draggable>
                 </table>
+                </div>
               </div>
 
               <button class="btn btn-outline-primary mt-3" @click="addEpreuve">
@@ -124,6 +126,8 @@ import { ref, onMounted } from 'vue';
 import { getClasseModules } from '@/api/academique/moduleApi';
 import { useRoute } from 'vue-router';
 import draggable from 'vuedraggable';
+
+import html2pdf from 'html2pdf.js';
 
 const route = useRoute();
 const moduleData = ref([]);
@@ -166,6 +170,21 @@ const onOrderChange = () => {
   console.log('Nouvel ordre des épreuves :', epreuves.value);
 };
 
+const tableToPrint = ref(null);
+
+const downloadPDF = () => {
+  const element = tableToPrint.value;
+
+  const opt = {
+    margin:       0.5,
+    filename:     'calendrier_examens.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'a3', orientation: 'portrait' }
+  };
+
+  html2pdf().set(opt).from(element).save();
+};
 onMounted(async () => {
   const id = route.params.id;
   const semestreId = route.params.semestreId;
