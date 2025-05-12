@@ -7,7 +7,7 @@
             <div class="me-md-3 me-xl-5">
               <h2 class="page-title">
                 <i class="mdi mdi-calendar text-primary me-2"></i>
-                Planification des Examens
+                Calendrier des Examens
               </h2>
               <p class="mb-md-0">
                 Gestion des sessions d'examen et répartition des salles/matières
