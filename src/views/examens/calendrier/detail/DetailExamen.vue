@@ -24,57 +24,24 @@
                   <i class="mdi mdi-dots-vertical"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                  <li>
-                    <a class="dropdown-item" href="#"
-                      ><i class="mdi mdi-file-excel me-2"></i> Exporter Excel</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#"
-                      ><i class="mdi mdi-printer me-2"></i> Imprimer</a
-                    >
-                  </li>
+                  <li><a class="dropdown-item" href="#"><i class="mdi mdi-file-excel me-2"></i>Exporter Excel</a></li>
+                  <li><a class="dropdown-item" href="#"><i class="mdi mdi-printer me-2"></i>Imprimer</a></li>
                   <li><hr class="dropdown-divider" /></li>
-                  <li>
-                    <a class="dropdown-item" href="#"
-                      ><i class="mdi mdi-cog me-2"></i> Paramètres</a
-                    >
-                  </li>
+                  <li><a class="dropdown-item" href="#"><i class="mdi mdi-cog me-2"></i>Paramètres</a></li>
                 </ul>
               </div>
               <div class="btn-group">
-                <button
-                  type="button"
-                  class="btn btn-primary mt-2 mt-xl-0"
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
-                  aria-hidden="true"
-                  data-bs-backdrop="static"
-                  data-bs-keyboard="false"
-                >
+                <button type="button" class="btn btn-primary mt-2 mt-xl-0" data-bs-toggle="modal" data-bs-target="#exampleModal" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                   + Publier
                 </button>
-                <button
-                  type="button"
-                  class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
+                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                   <span class="visually-hidden">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu">
-                  <li>
-                    <a class="dropdown-item" href="#drop_table"> Publier PDF</a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#drop_table"> Publier Excel</a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#drop_table"> Publier Word</a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#drop_table"> Publier CSV</a>
-                  </li>
+                  <li><a class="dropdown-item" href="#drop_table">Publier PDF</a></li>
+                  <li><a class="dropdown-item" href="#drop_table">Publier Excel</a></li>
+                  <li><a class="dropdown-item" href="#drop_table">Publier Word</a></li>
+                  <li><a class="dropdown-item" href="#drop_table">Publier CSV</a></li>
                 </ul>
               </div>
             </div>
@@ -82,30 +49,35 @@
         </div>
       </div>
     </div>
+
     <div class="row">
       <div class="container my-2">
         <div class="col-md-12 grid margin stretch-card">
           <div class="card">
             <div class="card-body">
-              <div>
-                <h5 class="mb-3">Calendrier des épreuves - {{ }}</h5>
+              <h5 class="mb-3">Calendrier des épreuves - {{ }}</h5>
 
-                <div class="table-responsive">
-                  <table class="table table-bordered">
-                    <thead class="table-light">
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Module</th>
+                      <th>Date</th>
+                      <th>Heure début</th>
+                      <th>Heure fin</th>
+                      <th>Type</th>
+                      <th>Statut</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+
+                  <!-- draggable tbody -->
+                  <draggable v-model="epreuves" tag="tbody" item-key="module_id" handle=".handle" @end="onOrderChange">
+                    <template #item="{ element: epreuve, index }">
                       <tr>
-                        <th>Module</th>
-                        <th>Date</th>
-                        <th>Heure début</th>
-                        <th>Heure fin</th>
-                        <th>Type</th>
-                        <th>Statut</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(epreuve, index) in epreuves" :key="epreuve.id || index">
-                        <td><input v-model="epreuve.module" class="form-control" /></td>
+                        <td class="handle" style="cursor: move;">
+                          ☰ <input v-model="epreuve.module" class="form-control" />
+                        </td>
                         <td>
                           <input type="date" v-model="epreuve.date_epreuve" class="form-control" />
                         </td>
@@ -131,13 +103,14 @@
                           </button>
                         </td>
                       </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <button class="btn btn-outline-primary mt-3" @click="addEpreuve">
-                  + Ajouter une épreuve
-                </button>
+                    </template>
+                  </draggable>
+                </table>
               </div>
+
+              <button class="btn btn-outline-primary mt-3" @click="addEpreuve">
+                + Ajouter une épreuve
+              </button>
             </div>
           </div>
         </div>
@@ -145,21 +118,23 @@
     </div>
   </div>
 </template>
+
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { getClasseModules  } from '@/api/academique/moduleApi';
+import { ref, onMounted } from 'vue';
+import { getClasseModules } from '@/api/academique/moduleApi';
 import { useRoute } from 'vue-router';
+import draggable from 'vuedraggable';
 
 const route = useRoute();
 const moduleData = ref([]);
+
 const props = defineProps({
-  examenId: Number, // id de examens_planifies
-  classe: Object, // info sur la classe (optionnel)
+  examenId: Number,
+  classe: Object,
 });
 
 const epreuves = ref([]);
 
-// Simule un ajout d’épreuve
 const addEpreuve = () => {
   epreuves.value.push({
     module: '',
@@ -173,14 +148,11 @@ const addEpreuve = () => {
   });
 };
 
-// Simule une sauvegarde (à remplacer par un appel API)
 const saveEpreuve = async (epreuve) => {
   try {
     if (epreuve.id) {
-      // Mettre à jour
       console.log('Update epreuve :', epreuve);
     } else {
-      // Créer
       console.log('Create epreuve :', epreuve);
     }
     alert('Epreuve sauvegardée avec succès');
@@ -190,6 +162,10 @@ const saveEpreuve = async (epreuve) => {
   }
 };
 
+const onOrderChange = () => {
+  console.log('Nouvel ordre des épreuves :', epreuves.value);
+};
+
 onMounted(async () => {
   const id = route.params.id;
   const semestreId = route.params.semestreId;
@@ -197,12 +173,11 @@ onMounted(async () => {
     const response = await getClasseModules(id, semestreId);
     moduleData.value = response;
 
-    // Initialisation des épreuves avec les modules récupérés
     epreuves.value = response.map((mod) => ({
-      module: mod.designation, // affiché dans la colonne Module
-      module_id: mod.id,       // utile si besoin d'un id
+      module: mod.designation,
+      module_id: mod.id,
       date_epreuve: '',
-      heure_debut: '05-12-2025',
+      heure_debut: '',
       heure_fin: '',
       type_epreuve: 'écrit',
       statut: 'prévu',
@@ -211,11 +186,13 @@ onMounted(async () => {
     console.error('Erreur lors du chargement du module :', error);
   }
 });
-
 </script>
 
 <style scoped>
 .badge {
   font-size: 0.8rem;
+}
+.handle {
+  cursor: move;
 }
 </style>
