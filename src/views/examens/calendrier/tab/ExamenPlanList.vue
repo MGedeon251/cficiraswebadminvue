@@ -27,13 +27,13 @@
             <td>
               <div class="d-flex gap-2">
                 <RouterLink
-                  :to="{ name: 'Calendrier', params: { id: plan.id } }"
+                  :to="{ name: 'Calendrier', params: { id : plan.classe_id, semestreId : plan.semestre_id } }"
                   class="btn btn-sm btn-outline-primary"
                 >
                   <i class="mdi mdi-pencil"></i>
                 </RouterLink>
 
-                <RouterLink :to="`/examens/planning/${plan.id}/calendrier`">
+                <RouterLink :to="`/examens/planning/${plan.id}`">
                   <button class="btn btn-sm btn-outline-danger" @click="confirmDelete(plan)">
                     <i class="mdi mdi-delete"></i>
                   </button>
@@ -201,8 +201,9 @@ const getStatusLabel = (status) => {
 
 onMounted(async () => {
   const id = route.params.id;
+  const semestreId = route.params.semestreId;
   try {
-    const response = await getExamenByPlanning(id);
+    const response = await getExamenByPlanning(id,semestreId);
     planningData.value = response;
   } catch (error) {
     console.error('Erreur lors du chargement du module :', error);

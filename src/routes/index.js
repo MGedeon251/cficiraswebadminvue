@@ -58,7 +58,7 @@ const routes = [
       { path: '/examens', name: 'Examens', component: Examens },
       { path: '/examens/planning/:id', name: 'Planning', component: Planning, props: true },
       {
-        path: '/examens/planning/:id/calendrier',
+        path: '/examens/planning/:id/calendrier/:semestreId',
         name: 'Calendrier',
         component: DetailExamen,
         props: true,

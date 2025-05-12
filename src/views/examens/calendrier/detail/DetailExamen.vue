@@ -88,7 +88,7 @@
           <div class="card">
             <div class="card-body">
               <div>
-                <h5 class="mb-3">Calendrier des épreuves - {{ 'LIC-INFO-A' }}</h5>
+                <h5 class="mb-3">Calendrier des épreuves - {{ }}</h5>
 
                 <div class="table-responsive">
                   <table class="table table-bordered">
@@ -146,17 +146,18 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { getClasseModules  } from '@/api/academique/moduleApi';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
+const moduleData = ref([]);
 const props = defineProps({
   examenId: Number, // id de examens_planifies
   classe: Object, // info sur la classe (optionnel)
 });
 
-const epreuves = ref([
-  // à remplacer par un fetch si besoin
-  // Exemple vide initial
-]);
+const epreuves = ref([]);
 
 // Simule un ajout d’épreuve
 const addEpreuve = () => {
@@ -188,6 +189,29 @@ const saveEpreuve = async (epreuve) => {
     alert('Erreur lors de la sauvegarde');
   }
 };
+
+onMounted(async () => {
+  const id = route.params.id;
+  const semestreId = route.params.semestreId;
+  try {
+    const response = await getClasseModules(id, semestreId);
+    moduleData.value = response;
+
+    // Initialisation des épreuves avec les modules récupérés
+    epreuves.value = response.map((mod) => ({
+      module: mod.designation, // affiché dans la colonne Module
+      module_id: mod.id,       // utile si besoin d'un id
+      date_epreuve: '',
+      heure_debut: '05-12-2025',
+      heure_fin: '',
+      type_epreuve: 'écrit',
+      statut: 'prévu',
+    }));
+  } catch (error) {
+    console.error('Erreur lors du chargement du module :', error);
+  }
+});
+
 </script>
 
 <style scoped>
