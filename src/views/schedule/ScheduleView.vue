@@ -27,35 +27,6 @@
           <div v-else>
             <!-- Filtres -->
             <div class="d-flex mt-4">
-                <div class="d-flex align-items-end flex-wrap">
-                  <div class="me-md-4 me-xl-5">
-                    <div class="filters d-flex gap-2 mb-2">
-                      <div class="col-md-4">
-                        <select class="form-select">
-                          <option value="year">2022-2023</option>
-                          <option value="year">2023-2024</option>
-                          <option value="year">2024-2025</option>
-                        </select>
-                      </div>
-                      <div class="col-md-4">
-                        <select class="form-select">
-                          <option key="classItem" value="classItem">LAP 1</option>
-                          <option key="classItem" value="classItem">LAP 2</option>
-                          <option key="classItem" value="classItem">LAP 3</option>
-                        </select>
-                      </div>
-                      <div class="col-md-6">
-                        <select class="form-select">
-                          <option value="all" selected>Tout semestres</option>
-                          <option value="paid">Semestre 1</option>
-                          <option value="unpaid">Semestre 2</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <div class="d-flex mt-4">
               <div class="d-flex align-items-end flex-wrap">
                 <div class="me-md-4 me-xl-5">
                   <div class="filters d-flex gap-2 mb-2">
@@ -64,7 +35,6 @@
                 </div>
               </div>
             </div>
-
             <!-- Onglets et contenu -->
             <PlanningTabs :activeTab="activeTab" @changeTab="changeTab" />
             <PlanningContent :activeTab="activeTab" />

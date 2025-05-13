@@ -8,9 +8,10 @@
               <tr>
                 <th>Horaire</th>
                 <th>Classe</th>
-                <th>Semestre</th>
+                <th>Type</th>
                 <th>Matière</th>
                 <th>Formateur</th>
+                <th>Semestre</th>
                 <th>Salle</th>
                 <th></th>
               </tr>
