@@ -20,12 +20,6 @@
 
         <div class="modal-body">
           <form @submit.prevent="submitPlanning">
-                                  <!-- Description -->
-          <div class="mb-3">
-            <label class="form-label">Description</label>
-            <input type="text" class="form-control" placeholder="PLANNIFICATION-INFO-S1"
-            v-model="planification.description" required />
-          </div>
             <!-- Sélection de l'examen -->
             <div class="mb-3">
               <label class="form-label">Nom de l'examen</label>
@@ -43,54 +37,20 @@
               <input type="text" class="form-control" v-model="examen.type_session" readonly />
             </div>
 
+            <div class="mb-3">
+              <label class="form-label">Semestre</label>
+              <input type="text" class="form-control" v-model="examen.semestre" readonly />
+            </div>
 
-    <!-- Date de début -->
-    <div class="mb-3">
-      <label class="form-label">Date de début</label>
-      <input type="date" class="form-control" v-model="planification.date_debut" required />
-    </div>
+            <div class="mb-3">
+              <label class="form-label">Date prévue</label>
+              <input type="text" class="form-control" v-model="examen.date_debut" readonly />
+            </div>
 
-    <!-- Date de fin -->
-    <div class="mb-3">
-      <label class="form-label">Date de fin</label>
-      <input type="date" class="form-control" v-model="planification.date_fin" required />
-    </div>
-
-    <!-- Statut -->
-    <div class="mb-3">
-      <label class="form-label">Statut</label>
-      <select class="form-select" v-model="planification.statut" required>
-        <option value="">Choisir un statut</option>
-        <option value="Prévu">Prévu</option>
-        <option value="Terminé">Terminé</option>
-        <option value="Annulé">Annulé</option>
-      </select>
-    </div>
-
-    <!-- Filière -->
-    <div class="mb-3">
-      <label class="form-label">Filière</label>
-      <select class="form-select" v-model="planification.filiere_id" required>
-        <option value="" disabled>Choisir une filière</option>
-        <!-- Remplace les options par tes données -->
-        <option v-for="filiere in filieres" :key="filiere.id" :value="filiere.id">
-          {{ filiere.nom }}
-        </option>
-      </select>
-    </div>
-
-    <!-- Année académique -->
-    <div class="mb-3">
-      <label class="form-label">Année académique</label>
-      <select class="form-select" v-model="planification.annee_id" required>
-        <option value="" disabled>Choisir une année</option>
-        <!-- Remplace les options par tes données -->
-        <option v-for="annee in annees" :key="annee.id" :value="annee.id">
-          {{ annee.nom }}
-        </option>
-      </select>
-    </div>
-
+            <div class="mb-3">
+              <label class="form-label">État</label>
+              <input type="text" class="form-control" v-model="examen.etat" readonly />
+            </div>
 
             <button type="submit" class="btn btn-success">Ajouter</button>
           </form>
@@ -120,19 +80,6 @@ const examen = ref({
   etat: '',
 });
 
-const planification = ref({
-  description: '',
-  date_debut: '',
-  date_fin: '',
-  statut: '',
-  session_id: '',
-  filiere_id: '',
-  annee_id: '',
-});
-
-const filieres = ref([]); // charge les filières depuis l'API
-const annees = ref([]); // charge les années depuis l'API
-
 onMounted(async () => {
   try {
     const response = await getSessions();
@@ -155,8 +102,6 @@ function onSelectExam() {
     };
   }
 }
-
-
 function submitPlanning() {
   const newExamen = { ...examen.value };
   emit('examen-ajoute', newExamen); // <-- émettre l'examen ajouté
