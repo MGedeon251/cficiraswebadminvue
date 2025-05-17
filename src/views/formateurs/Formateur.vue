@@ -1,7 +1,3 @@
-<script setup>
-import sidebar from '@/components/Header.vue';
-</script>
-
 <template>
   <div>
     <div class="row">
@@ -18,74 +14,56 @@ import sidebar from '@/components/Header.vue';
               <p class="text-primary mb-0 hover-cursor">Analytics</p>
             </div>
           </div>
-          <div class="d-flex justify-content-between align-items-end flex-wrap"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-12 grid-margin stretch-card">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title">Liste des Formateurs</h4>
-            <p class="card-description">Liste de formateurs actifs</p>
-            <div class="table-responsive">
-              <div v-if="loading" class="skeleton-loader">
-                <div class="skeleton-item" v-for="i in 5" :key="i"></div>
-              </div>
-              <div v-else class="mt-3">
-                <table class="table table-hover align-middle">
-                  <thead>
-                    <tr>
-                      <th>Matricule</th>
-                      <th>Nom</th>
-                      <th>Prenom</th>
-                      <th>Email</th>
-                      <th>Telephone</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td colspan="9" class="text-center py-4">
-                        <div class="d-flex flex-column align-items-center">
-                          <img
-                            src="/img/empty-box.svg"
-                            alt="Aucune donnée"
-                            class="mb-2"
-                            width="auto"
-                          />
-                        </div>
-                        <div class="text-pr">Aucune donnée</div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+                    <div class="d-flex justify-content-between align-items-end flex-wrap">
+            <button class="btn btn-outline-dark me-2">Exporter</button>
+            <div class="btn-group">
+              <button
+                type="button"
+                class="btn btn-primary mt-2 mt-xl-0"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+                aria-hidden="true"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+              >
+                + Ajouter
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span class="visually-hidden">Toggle Dropdown</span>
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="#drag-drop-area">Importer fichier</a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <FormateurList/>
   </div>
 </template>
-<script>
-export default {
-  name: 'Setting',
-  data() {
-    return {
-      email: 'gedeon.lekounda@gmail.com',
-      selectedTheme: 'light',
-      loading: true,
-    };
-  },
-  mounted() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 2000);
-  },
-};
+<script setup>
+import { ref, onMounted } from 'vue'
+import FormateurList from './FormateurList.vue'
+
+const email = ref('gedeon.lekounda@gmail.com')
+const selectedTheme = ref('light')
+const loading = ref(true)
+
+onMounted(() => {
+  setTimeout(() => {
+    loading.value = false
+  }, 2000)
+})
 </script>
+
 <style scoped>
 .container {
   max-width: 800px;
