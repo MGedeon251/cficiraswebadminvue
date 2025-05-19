@@ -56,6 +56,7 @@
                       <div class="d-flex flex-column align-items-center">
                         <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="auto" />
                         <div class="text-pr">Aucune donnée</div>
+                        <button class="btn btn-primary mt-2" @click="resetFilters">Réinitialiser les filtres</button>
                       </div>
                     </td>
                   </tr>
@@ -98,7 +99,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -108,7 +108,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { getEnseignants } from '@/api/pedagogies/pedagogieApi';
-import ItemActions from '@/components/ItemActions.vue';
+import ItemActions from './DetailItemv2.vue';
 
 const loading = ref(false);
 const enseignants = ref([]);
@@ -142,6 +142,11 @@ const uniqueNiveaux = computed(() =>
   [...new Set(enseignants.value.map(e => e.niveau).filter(Boolean))]
 );
 
+function resetFilters() {
+  searchQuery.value = '';
+  filters.value = { cycle: '', niveau: '' };
+  currentPage.value = 1;
+}
 // Recherche + filtre
 const filteredEnseignants = computed(() => {
   return enseignants.value.filter(e => {
@@ -157,6 +162,11 @@ const filteredEnseignants = computed(() => {
 
     return matchQuery && matchCycle && matchNiveau;
   });
+});
+
+// Hide pagination when no results
+const showPagination = computed(() => {
+  return filteredEnseignants.value.length > 0 && totalPages.value > 1;
 });
 
 // Pagination
@@ -184,6 +194,11 @@ function nextPage() {
     currentPage.value++;
   }
 }
+/**
+ * import { debounce } from 'lodash';
+const debouncedSearch = debounce((value) => {
+  searchQuery.value = value;
+}, 300); */
 </script>
 
 <style scoped>

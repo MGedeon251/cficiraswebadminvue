@@ -47,11 +47,15 @@
       </div>
     </div>
     <FormateurList/>
+
+    
+    <ImportFormateur/>
   </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
-import FormateurList from './FormateurList.vue'
+import FormateurList from './FormateurList.vue';
+import ImportFormateur from './ImportFormateur.vue';
 
 const email = ref('gedeon.lekounda@gmail.com')
 const selectedTheme = ref('light')
