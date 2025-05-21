@@ -1,45 +1,48 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { getModules } from '@/api/academique/moduleApi';
+import { useModuleStore } from '@/stores/academiqueStore/moduleStore';
 import Pagination from '@/components/shared/Pagination.vue';
 import ItemActions from '@/components/shared/ItemDetails.vue';
 
-// Données principales
-const modules = ref([]);
-const isLoading = ref(false);
-const error = ref(null);
-// Pagination
+// Store
+const moduleStore = useModuleStore();
+
+// Bindings
+const modules = computed(() => moduleStore.modules);
+const isLoading = computed(() => moduleStore.loading);
+
+// Search & Pagination
+const searchQuery = ref('');
 const currentPage = ref(1);
 const itemsPerPage = ref(5);
-const totalItems = computed(() => modules.value.length);
+
+const filteredModules = computed(() => {
+  if (!searchQuery.value) return modules.value;
+  return modules.value.filter(mod =>
+    mod.designation.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    mod.code.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
+
+const totalItems = computed(() => filteredModules.value.length);
 const paginatedModules = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
   const end = start + itemsPerPage.value;
-  return modules.value.slice(start, end);
+  return filteredModules.value.slice(start, end);
 });
 
-// Récupération des modules
+// Fetch
 const fetchModules = async () => {
-  isLoading.value = true;
-  error.value = null;
-
-  try {
-    const response = await getModules();
-    modules.value = response;
-    console.log('Modules:', response);
-  } catch (err) {
-    error.value = 'Erreur lors du chargement des modules';
-    console.error(err);
-  } finally {
-    isLoading.value = false;
-  }
+  await moduleStore.fetchModules();
 };
 
 const refreshModules = () => {
   fetchModules();
 };
+
 onMounted(fetchModules);
 </script>
+
 
 <template>
   <div v-if="error" class="alert alert-danger">{{ error }}</div>
