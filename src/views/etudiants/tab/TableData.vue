@@ -1,27 +1,34 @@
 <script setup>
-import { onMounted, ref, defineExpose, watch, computed } from 'vue';
-import {
-  getAnneesAcademiques,
-  getFilieres,
-  getClasses,
-  getClassesByFiliere,
-} from '@/api/academique/academiqueApi';
+import { onMounted, ref, watch, computed } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useAnneeStore } from '@/stores/academiqueStore/anneStore';
+import { useFiliereStore } from '@/stores/academiqueStore/filiereStore';
+import { useClasseStore } from '@/stores/academiqueStore/classeStore';
+import { getEtudiantsByClasseFiliereAnnee } from '@/api/academique/etudiantApi';
 import Pagination from '@/components/shared/Pagination.vue';
 import ItemActions from '../details/ItemDetails.vue';
-import { getEtudiantsByClasseFiliereAnnee } from '@/api/academique/etudiantApi';
 import SkeletonLoader from '@/components/SkeletonLoader.vue';
 
-// Références pour les données
-const etudiants = ref([]);
-const anneesAcademiques = ref([]);
-const filieres = ref([]);
-const classes = ref([]);
+// Stores
+const anneeStore = useAnneeStore();
+const filiereStore = useFiliereStore();
+const classeStore = useClasseStore();
 
+// Références depuis les stores
+const { anneesAcademiques, loading: loadingAnnees } = storeToRefs(anneeStore);
+const { filieres, loading: loadingFilieres } = storeToRefs(filiereStore);
+const { classes, loading: loadingClasses } = storeToRefs(classeStore);
+
+// Filtres
 const selectedAnnee = ref('');
 const selectedFiliere = ref('');
 const selectedClasse = ref('');
-const loading = ref(true);
 
+// Étudiants
+const etudiants = ref([]);
+const loading = ref(false);
+
+// Pagination
 const currentPage = ref(1);
 const itemsPerPage = ref(5);
 const totalItems = computed(() => etudiants.value.length);
@@ -31,47 +38,26 @@ const paginatedEtudiant = computed(() => {
   return etudiants.value.slice(start, end);
 });
 
-// Charger les données au montage du composant
+// Initialiser les données
 onMounted(async () => {
-  loading.value = true;
-  try {
-    // Récupérer les données directement depuis les API
-    const [anneesResponse, filieresResponse, classesResponse] = await Promise.all([
-      getAnneesAcademiques(),
-      getFilieres(),
-      getClasses(),
-    ]);
-
-    anneesAcademiques.value = anneesResponse;
-    filieres.value = filieresResponse;
-    classes.value = classesResponse;
-  } catch (error) {
-    console.error('Erreur lors du chargement des données:', error);
-  } finally {
-    loading.value = false;
-  }
+  await Promise.all([
+    anneeStore.fetchAnneesAcademiques(),
+    filiereStore.fetchFilieres(),
+    classeStore.fetchClasses(),
+  ]);
 });
 
-// Charger les classes lorsque la filiere change
+// Mettre à jour les classes selon la filière sélectionnée
 watch(selectedFiliere, async (newFiliere) => {
   if (newFiliere) {
-    loading.value = true;
-    try {
-      const [classesResponse] = await Promise.all([getClassesByFiliere(newFiliere)]);
-      classes.value = classesResponse;
-      // Réinitialiser les sélections
-      selectedClasse.value = null;
-    } catch (error) {
-      console.error('Erreur lors du chargement des filières/classes:', error);
-    } finally {
-      loading.value = false;
-    }
+    await classeStore.fetchClassesByFiliere(newFiliere);
+    selectedClasse.value = '';
   } else {
-    classes.value = [];
+    classeStore.classes = [];
   }
 });
 
-// Fonction pour filtrer les étudiants
+// Filtrer les étudiants selon les critères
 const fetchFilteredEtudiants = async () => {
   if (selectedAnnee.value && selectedFiliere.value && selectedClasse.value) {
     loading.value = true;
@@ -91,18 +77,14 @@ const fetchFilteredEtudiants = async () => {
   }
 };
 
-// Surveiller les changements des filtres et mettre à jour les étudiants
+// Observer les changements de filtres
 watch([selectedAnnee, selectedFiliere, selectedClasse], fetchFilteredEtudiants);
 
-const getTableData = () => {
-  return etudiants.value;
-};
-
-// Exposer la méthode au parent
-defineExpose({
-  getTableData,
-});
+// Méthode exposée
+const getTableData = () => etudiants.value;
+defineExpose({ getTableData });
 </script>
+
 
 <template>
   <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1" />

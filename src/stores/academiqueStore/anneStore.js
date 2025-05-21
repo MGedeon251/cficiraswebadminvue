@@ -20,7 +20,7 @@ export const useAnneeStore = defineStore('anneeStore', {
       this.loading = true;
       try {
         const response = await getAnneesAcademiques();
-        this.anneesAcademiques = response.data;
+        this.anneesAcademiques = response;
       } catch (error) {
         useMessageStore().addError('Erreur lors de la récupération des années académiques.');
       } finally {

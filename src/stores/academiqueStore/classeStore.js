@@ -4,6 +4,7 @@ import {
   createClasse,
   updateClasse,
   deleteClasse,
+  getClassesByFiliere,
 } from '@/api/academique/academiqueApi';
 import { useMessageStore } from '@/stores/messages/messageStore';
 
@@ -26,6 +27,18 @@ export const useClasseStore = defineStore('classeStore', {
         this.loading = false;
       }
     },
+    // Récupérer les classes par filière
+    async fetchClassesByFiliere(id) {
+      this.loading = true;
+      try {
+        const response = await getClassesByFiliere(id);
+        this.classes = response;
+      } catch (error) {
+        useMessageStore().addError('Erreur lors de la récupération des classes par filière.');
+      } finally {
+        this.loading = false;
+      }
+    },  
 
     // Ajouter une nouvelle classe
     async addClasse(data) {
