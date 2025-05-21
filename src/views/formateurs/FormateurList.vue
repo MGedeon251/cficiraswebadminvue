@@ -107,11 +107,12 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { getEnseignants } from '@/api/pedagogies/pedagogieApi';
 import ItemActions from './DetailItemv2.vue';
+import { useEnseignantStore } from '@/stores/pedagogieStore/enseignantStore';
 
-const loading = ref(false);
-const enseignants = ref([]);
+const enseignantStore = useEnseignantStore();
+const enseignants = computed(() => enseignantStore.enseignants);
+const loading = computed(() => enseignantStore.loading);
 
 const searchQuery = ref('');
 const filters = ref({
@@ -122,16 +123,8 @@ const filters = ref({
 const currentPage = ref(1);
 const itemsPerPage = 5;
 
-onMounted(async () => {
-  loading.value = true;
-  try {
-    const response = await getEnseignants();
-    enseignants.value = response.data;
-  } catch (e) {
-    console.error("Erreur lors du chargement des formateurs :", e);
-  } finally {
-    loading.value = false;
-  }
+onMounted(() => {
+  enseignantStore.fetchEnseignants();
 });
 
 // Filtres uniques
@@ -147,7 +140,7 @@ function resetFilters() {
   filters.value = { cycle: '', niveau: '' };
   currentPage.value = 1;
 }
-// Recherche + filtre
+
 const filteredEnseignants = computed(() => {
   return enseignants.value.filter(e => {
     const query = searchQuery.value.toLowerCase();
@@ -164,14 +157,7 @@ const filteredEnseignants = computed(() => {
   });
 });
 
-// Hide pagination when no results
-const showPagination = computed(() => {
-  return filteredEnseignants.value.length > 0 && totalPages.value > 1;
-});
-
-// Pagination
 const totalPages = computed(() => Math.ceil(filteredEnseignants.value.length / itemsPerPage));
-
 const paginatedEnseignants = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   return filteredEnseignants.value.slice(start, start + itemsPerPage);
@@ -182,26 +168,21 @@ function changePage(page) {
     currentPage.value = page;
   }
 }
-
 function prevPage() {
-  if (currentPage.value > 1) {
-    currentPage.value--;
-  }
+  if (currentPage.value > 1) currentPage.value--;
 }
-
 function nextPage() {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++;
-  }
+  if (currentPage.value < totalPages.value) currentPage.value++;
 }
+</script>
+
+
+<style scoped>
 /**
  * import { debounce } from 'lodash';
 const debouncedSearch = debounce((value) => {
   searchQuery.value = value;
 }, 300); */
-</script>
-
-<style scoped>
 .skeleton-loader {
   display: flex;
   flex-direction: column;
