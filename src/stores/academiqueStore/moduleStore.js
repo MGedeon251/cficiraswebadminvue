@@ -34,7 +34,7 @@ export const useModuleStore = defineStore('moduleStore', {
       this.loading = true;
       try {
         const response = await getModuleById(id);
-        this.module = response.data;
+        this.module = response;
       } catch (error) {
         useMessageStore().addError('Erreur lors de la récupération du module.');
       } finally {

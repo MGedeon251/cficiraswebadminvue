@@ -48,14 +48,15 @@
 </template>
 
 <script setup>
-import ModuleHeader from '../ModuleHeader.vue';
-import { onMounted, ref } from 'vue';
+import { onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { getModuleById } from '@/api/academique/moduleApi';
+import { useModuleStore } from '@/stores/academiqueStore/moduleStore';
 
 const route = useRoute();
 const router = useRouter();
-const module = ref(null);
+
+const moduleStore = useModuleStore();
+const module = computed(() => moduleStore.module);
 
 const editModule = () => {
   router.push(`/modules/${route.params.id}/edit`);
@@ -71,14 +72,10 @@ const archiveModule = () => {
 
 onMounted(async () => {
   const id = route.params.id;
-  try {
-    const response = await getModuleById(id);
-    module.value = response;
-  } catch (error) {
-    console.error('Erreur lors du chargement du module :', error);
-  }
+  await moduleStore.fetchModuleById(id);
 });
 </script>
+
 
 <style scoped>
 .card {
