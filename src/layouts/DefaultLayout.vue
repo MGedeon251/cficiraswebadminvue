@@ -20,7 +20,7 @@
 
 <script setup>
 import Header from '@/components/partials/header.vue';
-import Sidebar from '@/components/partials/sibebar.vue';
+import Sidebar from '@/components/partials/sidebar.vue';
 import Footer from '@/components/partials/footer.vue';
 import MessageList from '@/components/messageList.vue';
 </script>

@@ -38,7 +38,7 @@ export const useClasseStore = defineStore('classeStore', {
       } finally {
         this.loading = false;
       }
-    },  
+    },
 
     // Ajouter une nouvelle classe
     async addClasse(data) {

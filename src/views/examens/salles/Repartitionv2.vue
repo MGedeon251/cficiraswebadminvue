@@ -26,7 +26,7 @@
     <div v-if="uploadedFiles.length" class="mt-3">
       <h5 class="text-dark">Fichiers chargés :</h5>
       <div class="list-group mb-3">
-        <div 
+        <div
           class="list-group-item d-flex justify-content-between align-items-center"
           v-for="(file, index) in uploadedFiles"
           :key="index"
@@ -37,11 +37,7 @@
           </button>
         </div>
       </div>
-      <button 
-        class="btn btn-primary" 
-        @click="distributeStudents"
-        :disabled="!canDistribute"
-      >
+      <button class="btn btn-primary" @click="distributeStudents" :disabled="!canDistribute">
         Répartir les étudiants
       </button>
     </div>
@@ -50,15 +46,9 @@
     <div v-if="distributionResult.length" class="mt-4">
       <h5 class="text-success">Résultats de la répartition :</h5>
       <div v-for="(salle, index) in distributionResult" :key="index" class="card my-2">
-        <div class="card-header bg-primary text-white">
-          Salle {{ index + 1 }}
-        </div>
+        <div class="card-header bg-primary text-white">Salle {{ index + 1 }}</div>
         <ul class="list-group list-group-flush">
-          <li
-            v-for="(etudiant, idx) in salle"
-            :key="idx"
-            class="list-group-item"
-          >
+          <li v-for="(etudiant, idx) in salle" :key="idx" class="list-group-item">
             {{ etudiant.lastName }} {{ etudiant.firstName }} ({{ etudiant.class }})
           </li>
         </ul>
@@ -114,10 +104,10 @@ const parseStudentFile = async (file, append = false) => {
     const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
     const jsonData = XLSX.utils.sheet_to_json(firstSheet);
 
-    const parsed = jsonData.map(row => ({
+    const parsed = jsonData.map((row) => ({
       lastName: row['Nom'] || row['nom'] || row['LASTNAME'] || '',
       firstName: row['Prénom'] || row['prenom'] || row['FIRSTNAME'] || '',
-      class: row['Classe'] || row['classe'] || row['CLASS'] || ''
+      class: row['Classe'] || row['classe'] || row['CLASS'] || '',
     }));
 
     if (append) {
@@ -126,8 +116,8 @@ const parseStudentFile = async (file, append = false) => {
       studentsList.value = [...parsed];
     }
   } catch (error) {
-    console.error("Erreur lors de la lecture du fichier :", error);
-    alert("Erreur lors de la lecture du fichier. Assurez-vous que le format est correct.");
+    console.error('Erreur lors de la lecture du fichier :', error);
+    alert('Erreur lors de la lecture du fichier. Assurez-vous que le format est correct.');
   }
 };
 

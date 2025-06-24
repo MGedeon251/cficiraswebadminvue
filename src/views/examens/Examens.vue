@@ -20,7 +20,7 @@ import Calendrier from './calendrier/Calendrier.vue';
               <p class="text-primary mb-0 hover-cursor">Examens</p>
             </div>
           </div>
-           <div class="d-flex justify-content-between align-items-end flex-wrap">
+          <div class="d-flex justify-content-between align-items-end flex-wrap">
             <button class="btn btn-outline-dark me-2">Imprimer</button>
             <div class="btn-group">
               <button

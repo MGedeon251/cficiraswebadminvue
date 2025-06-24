@@ -27,7 +27,10 @@
             <td>
               <div class="d-flex gap-2">
                 <RouterLink
-                  :to="{ name: 'Calendrier', params: { id : plan.classe_id, semestreId : plan.semestre_id } }"
+                  :to="{
+                    name: 'Calendrier',
+                    params: { id: plan.classe_id, semestreId: plan.semestre_id },
+                  }"
                   class="btn btn-sm btn-outline-primary"
                 >
                   <i class="mdi mdi-pencil"></i>
@@ -203,7 +206,7 @@ onMounted(async () => {
   const id = route.params.id;
   const semestreId = route.params.semestreId;
   try {
-    const response = await getExamenByPlanning(id,semestreId);
+    const response = await getExamenByPlanning(id, semestreId);
     planningData.value = response;
   } catch (error) {
     console.error('Erreur lors du chargement du module :', error);

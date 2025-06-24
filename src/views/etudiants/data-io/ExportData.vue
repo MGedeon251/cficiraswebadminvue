@@ -2,52 +2,51 @@
   <h5 class="card-title">EXPORT</h5>
   <hr />
   <div class="d-flex align-items-end flex-wrap">
-        <div class="me-md-4 me-xl-5">
-          <div class="filters d-flex gap-2 mb-2">
-             <!-- Filtre par filière -->
-            <div class="col-md-6">
-              <label class="form-label">Filière</label>
-              <select class="form-select" v-model="selectedFiliere">
-                <option value="" disabled>Choisir une filière</option>
-                <option v-for="filiere in filieres" :key="filiere.id" :value="filiere.id">
-                  {{ filiere.code }}
-                </option>
-              </select>
-            </div>
+    <div class="me-md-4 me-xl-5">
+      <div class="filters d-flex gap-2 mb-2">
+        <!-- Filtre par filière -->
+        <div class="col-md-6">
+          <label class="form-label">Filière</label>
+          <select class="form-select" v-model="selectedFiliere">
+            <option value="" disabled>Choisir une filière</option>
+            <option v-for="filiere in filieres" :key="filiere.id" :value="filiere.id">
+              {{ filiere.code }}
+            </option>
+          </select>
+        </div>
 
-            <!-- Filtre par classe -->
-            <div class="col-md-6">
-              <label class="form-label">Classe</label>
-              <select class="form-select" v-model="selectedClasse">
-                <option value="" disabled>Choisir une classe</option>
-                <option v-for="classe in classes" :key="classe.id" :value="classe.id">
-                  {{ classe.code }}
-                </option>
-              </select>
-            </div>
-            <!-- Filtre par année académique -->
-            <div class="col-md-6">
-              <label class="form-label">Année académique</label>
-              <select class="form-select" v-model="selectedAnnee">
-                <option value="" disabled>Choisir une année</option>
-                <option v-for="annee in anneesAcademiques" :key="annee.id" :value="annee.id">
-                  {{ annee.code }}
-                </option>
-              </select>
-            </div>
-          </div>
-          <label for="exportType" class="form-label">Export type</label>
-    <div class="col-md-6 grid-margin stretch-card">
-      <select v-model="selectedFormat" class="form-select" id="exportType">
-        <option value="excel">EXCEL</option>
-        <option value="csv">CSV</option>
-        <option value="pdf">PDF</option>
-      </select>
-    </div>
+        <!-- Filtre par classe -->
+        <div class="col-md-6">
+          <label class="form-label">Classe</label>
+          <select class="form-select" v-model="selectedClasse">
+            <option value="" disabled>Choisir une classe</option>
+            <option v-for="classe in classes" :key="classe.id" :value="classe.id">
+              {{ classe.code }}
+            </option>
+          </select>
+        </div>
+        <!-- Filtre par année académique -->
+        <div class="col-md-6">
+          <label class="form-label">Année académique</label>
+          <select class="form-select" v-model="selectedAnnee">
+            <option value="" disabled>Choisir une année</option>
+            <option v-for="annee in anneesAcademiques" :key="annee.id" :value="annee.id">
+              {{ annee.code }}
+            </option>
+          </select>
         </div>
       </div>
+      <label for="exportType" class="form-label">Export type</label>
+      <div class="col-md-6 grid-margin stretch-card">
+        <select v-model="selectedFormat" class="form-select" id="exportType">
+          <option value="excel">EXCEL</option>
+          <option value="csv">CSV</option>
+          <option value="pdf">PDF</option>
+        </select>
+      </div>
+    </div>
+  </div>
   <div class="mb-3">
-    
     <div class="col-md-6 grid-margin stretch-card">
       <button @click="exportToExcel" class="btn btn-primary">Export</button>
     </div>
@@ -109,7 +108,7 @@ const fetchFilteredEtudiants = async () => {
     } catch (error) {
       console.error('Erreur lors du chargement des étudiants:', error);
       etudiants.value = [];
-    } 
+    }
   }
 };
 
@@ -148,7 +147,7 @@ const exportToExcel = async () => {
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Étudiants');
     // Enregistre le fichier
-    XLSX.writeFile(workbook,fileName);
+    XLSX.writeFile(workbook, fileName);
   } catch (error) {
     console.error("Erreur lors de l'export:", error);
     alert("Une erreur est survenue lors de l'export");

@@ -156,7 +156,9 @@
                     </div>
                     <div class="info-item">
                       <span class="info-label">Modules enseignés:</span>
-                      <span class="info-value">{{ item.modules_enseignes?.join(', ') || 'Aucun module' }}</span>
+                      <span class="info-value">{{
+                        item.modules_enseignes?.join(', ') || 'Aucun module'
+                      }}</span>
                     </div>
                     <div class="info-item">
                       <span class="info-label">Années d'expérience:</span>
@@ -207,7 +209,7 @@ const closeDetails = () => {
 
 const getStatusClass = (status) => {
   if (!status) return 'bg-light text-dark';
-  
+
   status = status.toLowerCase();
   return (
     {

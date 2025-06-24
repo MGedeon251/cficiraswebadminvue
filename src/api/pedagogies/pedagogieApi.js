@@ -7,7 +7,8 @@ const pedagogieService = buildService(pedagogieApi);
 export const getEnseignants = () => pedagogieService.get('/enseignant/enseignants');
 export const getEnseignantById = (id) => pedagogieService.get(`/enseignant/enseignants/${id}`);
 export const createEnseignant = (data) => pedagogieService.post('/enseignant/enseignants', data);
-export const updateEnseignant = (id, data) => pedagogieService.put(`/enseignant/enseignants/${id}`, data);
+export const updateEnseignant = (id, data) =>
+  pedagogieService.put(`/enseignant/enseignants/${id}`, data);
 export const deleteEnseignant = (id) => pedagogieService.delete(`/enseignant/enseignants/${id}`);
 
 // API pour gérer les contrats

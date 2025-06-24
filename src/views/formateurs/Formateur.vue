@@ -14,7 +14,7 @@
               <p class="text-primary mb-0 hover-cursor">Analytics</p>
             </div>
           </div>
-                    <div class="d-flex justify-content-between align-items-end flex-wrap">
+          <div class="d-flex justify-content-between align-items-end flex-wrap">
             <button class="btn btn-outline-dark me-2">Exporter</button>
             <div class="btn-group">
               <button
@@ -46,26 +46,25 @@
         </div>
       </div>
     </div>
-    <FormateurList/>
+    <FormateurList />
 
-    
-    <ImportFormateur/>
+    <ImportFormateur />
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
 import FormateurList from './FormateurList.vue';
 import ImportFormateur from './ImportFormateur.vue';
 
-const email = ref('gedeon.lekounda@gmail.com')
-const selectedTheme = ref('light')
-const loading = ref(true)
+const email = ref('gedeon.lekounda@gmail.com');
+const selectedTheme = ref('light');
+const loading = ref(true);
 
 onMounted(() => {
   setTimeout(() => {
-    loading.value = false
-  }, 2000)
-})
+    loading.value = false;
+  }, 2000);
+});
 </script>
 
 <style scoped>
