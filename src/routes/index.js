@@ -22,12 +22,39 @@ import Finance from '../views/finances/Finance.vue';
 import NotFound from '../views/errors/NotFound.vue';
 import Planning from '../views/examens/calendrier/sample.vue';
 import DetailExamen from '../views/examens/calendrier/detail/DetailExamen.vue';
+import Concours from '../views/concours/concours.vue';
+import ScolariteLayout from '@/layouts/ScolariteLayout.vue';
+import Scolarite from '@/views/scolarite/scolarite.vue'; 
 
 const routes = [
   // Route de login (pas besoin de layout global ici)
   { path: '/login', name: 'Login', component: Login },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound, meta: { public: true } },
   { path: '/addNotes', name: 'appNotes', component: appNotes },
+
+
+
+  {
+    path: '/scolarite',
+    component: ScolariteLayout, // layout spécifique à la scolarité s'il y en a un
+    children: [
+      {
+        path: '',
+        name: 'ScolariteAccueil',
+        component: () => import('@/views/scolarite/scolarite.vue')
+      },
+      {
+        path: '/scolarite/global',
+        name: 'ScolariteGlobal',
+        component: () => import('@/views/scolarite/Global.vue'),
+      }
+    ]
+  },
+
+
+
+
+
 
   // Routes qui utilisent le layout global DefaultLayout
   {
@@ -71,6 +98,8 @@ const routes = [
       { path: '/administration', name: 'Administration', component: Admins },
       { path: '/finance', name: 'Finance', component: Finance },
       { path: '/notification', name: 'Notification', component: NotificationView },
+      { path: '/concours', name: 'Concours', component: Concours },
+      { path: '/scolarite', name: 'Scolarite', component: Concours },
     ],
   },
 ];

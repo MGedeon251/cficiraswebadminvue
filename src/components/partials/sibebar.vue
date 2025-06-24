@@ -61,6 +61,12 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="/concours">
+          <i class="mdi mdi-currency-eur menu-icon"></i>
+          <span class="menu-title">concours</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="/formateur">
           <i class="mdi mdi-account-multiple menu-icon"></i>
           <span class="menu-title">Formateurs</span>
