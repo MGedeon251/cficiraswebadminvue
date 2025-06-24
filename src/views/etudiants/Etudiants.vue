@@ -91,7 +91,6 @@ const exportToExcel = async () => {
       Classe: etudiant.classe,
       Filière: etudiant.filiere,
     }));
-
     // Crée le fichier Excel
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
