@@ -75,7 +75,7 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue';
 import { getSessions } from '@/api/evaluations/evaluationApi';
-import ItemActions from '../components/DetailsItem.vue';
+import ItemActions from '../details/DetailsItem.vue';
 
 // Props (avec defineProps pour <script setup>)
 const props = defineProps({
