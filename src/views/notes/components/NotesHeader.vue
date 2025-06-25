@@ -2,7 +2,7 @@
   <div class="d-flex justify-content-between flex-wrap">
     <div class="d-flex align-items-end flex-wrap">
       <div class="me-md-3 me-xl-5">
-        <h2>Notes et resultats </h2>
+        <h2>Notes et resultats</h2>
         <p class="mb-md-0">Attributions des notes de devoir et examens</p>
       </div>
       <div class="d-flex">
@@ -13,5 +13,3 @@
     </div>
   </div>
 </template>
-
-

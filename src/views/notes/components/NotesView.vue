@@ -1,31 +1,31 @@
 <template>
-    <div>
-        <NotesHeader/>
-        <div class="row">
-            <div class="col-md-12 grid-margin stretch-card">
-                <div class="card">
-                    <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1"/>
-                    <div v-else class="card-body dashboard-tabs p-0">
-                        <NotesTabs/>
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="overview" role="tabpanel">
-                                <StudentsList :students="formateurs"/>
-                            </div>
-                            <div class="tab-pane fade" id="devoirf" role="tabpanel">
-                                <ExamTable :rows="examDevoirData"/>
-                            </div>
-                            <div class="tab-pane fade" id="sales" role="tabpanel">
-                                <ExamTable :rows="sessionOrdinaireData"/>
-                            </div>
-                            <div class="tab-pane fade" id="purchases" role="tabpanel">
-                                <ExamTable :rows="sessionRappelData"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <div>
+    <NotesHeader />
+    <div class="row">
+      <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+          <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1" />
+          <div v-else class="card-body dashboard-tabs p-0">
+            <NotesTabs />
+            <div class="tab-content">
+              <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                <StudentsList :students="formateurs" />
+              </div>
+              <div class="tab-pane fade" id="devoirf" role="tabpanel">
+                <ExamTable :rows="examDevoirData" />
+              </div>
+              <div class="tab-pane fade" id="sales" role="tabpanel">
+                <ExamTable :rows="sessionOrdinaireData" />
+              </div>
+              <div class="tab-pane fade" id="purchases" role="tabpanel">
+                <ExamTable :rows="sessionRappelData" />
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script setup>
@@ -45,8 +45,22 @@ const sessionRappelData = ref([]);
 onMounted(() => {
   setTimeout(() => {
     formateurs.value = [
-      { id: 1, matricule: 'F001', nom: 'Doe', prenom: 'John', email: 'john@example.com', telephone: '0123456789' },
-      { id: 2, matricule: 'F002', nom: 'Smith', prenom: 'Anna', email: 'anna@example.com', telephone: '0987654321' },
+      {
+        id: 1,
+        matricule: 'F001',
+        nom: 'Doe',
+        prenom: 'John',
+        email: 'john@example.com',
+        telephone: '0123456789',
+      },
+      {
+        id: 2,
+        matricule: 'F002',
+        nom: 'Smith',
+        prenom: 'Anna',
+        email: 'anna@example.com',
+        telephone: '0987654321',
+      },
     ];
     loading.value = false;
   }, 3000);

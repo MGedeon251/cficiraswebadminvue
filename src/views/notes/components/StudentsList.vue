@@ -30,5 +30,3 @@
 <script setup>
 defineProps(['students']);
 </script>
-
-
