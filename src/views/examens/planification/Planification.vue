@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import ExamenList from './ExamenList.vue';
+import ExamenList from './components/ExamenList.vue';
 
 export default {
   components: {
