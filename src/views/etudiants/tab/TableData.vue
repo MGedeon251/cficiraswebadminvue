@@ -131,7 +131,7 @@ defineExpose({ getTableData });
     </div>
 
     <!-- Table des étudiants -->
-    <table class="table table-hover align-middle">
+    <table id="recent-purchases-listing" class="table">
       <thead>
         <tr>
           <th>#</th>

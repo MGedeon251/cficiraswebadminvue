@@ -11,7 +11,7 @@ import Schedule from '../views/schedule/Schedule.vue';
 import Etudiants from '../views/etudiants/Etudiants.vue';
 import Modules from '../views/matieres/Modules.vue';
 import Examens from '../views/examens/Examens.vue';
-import Notes from '../views/notes/Notes.vue';
+import Notes from '../views/notes/Notes.vue'; // Page des notes
 import appNotes from '../views/notes/addNotes/main/notev1.vue';
 import Parcours from '../views/parcours/Parcours.vue';
 import Support from '../views/support/Support.vue';

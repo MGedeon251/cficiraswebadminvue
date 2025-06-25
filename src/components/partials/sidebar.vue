@@ -19,7 +19,7 @@
         <div class="collapse" id="scolarite">
           <ul class="nav flex-column sub-menu">
             <li class="nav-item"><a class="nav-link" href="/etudiants">Étudiants</a></li>
-            <li class="nav-item"><a class="nav-link" href="/modules">Matieres / Classes</a></li>
+            <li class="nav-item"><a class="nav-link" href="/modules">Modules / UV</a></li>
             <li class="nav-item"><a class="nav-link" href="/parcours">Parcours académique</a></li>
             <li class="nav-item"><a class="nav-link" href="/notes">Notes et Résultats</a></li>
             <li class="nav-item"><a class="nav-link" href="/supcours">Support & cours</a></li>
