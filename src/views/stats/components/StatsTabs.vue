@@ -22,7 +22,7 @@
           role="tab"
           aria-controls="devoirf"
           aria-selected="false"
-          >Finances</a
+          >Academiques</a
         >
       </li>
       <li class="nav-item">
@@ -34,7 +34,7 @@
           role="tab"
           aria-controls="sales"
           aria-selected="false"
-          >Academiques</a
+          >Finances</a
         >
       </li>
       <li class="nav-item">
@@ -58,7 +58,7 @@
           role="tab"
           aria-controls="purchases"
           aria-selected="false"
-          >Impression & Rapports</a
+          >Rapports</a
         >
       </li>
     </ul>
