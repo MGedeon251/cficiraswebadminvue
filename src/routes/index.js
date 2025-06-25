@@ -67,7 +67,7 @@ const routes = [
       { path: '/parcours', name: 'Parcours', component: Parcours },
       { path: '/supcours', name: 'Support', component: Support },
       { path: '/settings', name: 'Settings', component: Settings },
-      { path: '/formateur', name: 'Formateur', component: Formateur },
+      { path: '/enseignants', name: 'Formateur', component: Formateur },
       { path: '/administration', name: 'Administration', component: Admins },
       { path: '/finance', name: 'Finance', component: Finance },
       { path: '/notification', name: 'Notification', component: NotificationView },
