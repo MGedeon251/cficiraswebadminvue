@@ -18,12 +18,12 @@ const routes = [
         path: '',
         name: 'ScolariteAccueil',
         component: () => import('@/views/scolarite/scolarite.vue'),
-      },  
+      },
       {
         path: '/home',
         name: 'ScolariteHome',
         component: () => import('@/views/scolarite/scolarite.vue'),
-      },  
+      },
       {
         path: '/scolarite', // Résultat final : /scolarite
         redirect: '/home', // Redirection vers la page d'accueil de la scolarité
@@ -34,9 +34,9 @@ const routes = [
         component: () => import('@/views/scolarite/candidats/Candidats.vue'),
       },
       {
-      path: '/candidats', // ✅ mis à jour ici
-      name: 'Candidats',
-      component: () => import('@/views/scolarite/candidats/Candidats.vue'),
+        path: '/candidats', // ✅ mis à jour ici
+        name: 'Candidats',
+        component: () => import('@/views/scolarite/candidats/Candidats.vue'),
       },
       {
         path: '/classes', // Résultat final : /scolarite/classes

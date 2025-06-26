@@ -51,7 +51,7 @@
           <span class="menu-title">Support Cours</span>
         </router-link>
       </li>
-            <li class="nav-item">
+      <li class="nav-item">
         <router-link class="nav-link" to="/filieres">
           <i class="mdi mdi-folder-text menu-icon"></i>
           <span class="menu-title">Filières</span>
@@ -80,7 +80,7 @@
         </router-link>
       </li>
 
-            <!-- Candidats -->
+      <!-- Candidats -->
       <li class="nav-item">
         <a class="nav-link" href="/candidats">
           <i class="mdi mdi-account-multiple menu-icon"></i>
