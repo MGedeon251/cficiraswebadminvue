@@ -39,10 +39,10 @@
               </button>
               <ul class="dropdown-menu">
                 <li>
-                  <a class="dropdown-item" href="#drag-drop-area">Notes pour une classe</a>
+                  <a class="dropdown-item" href="#drag-drop-area">classe</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#drag-drop-area">Notes pour une filiere</a>
+                  <a class="dropdown-item" href="#drag-drop-area">filiere</a>
                 </li>
                 <li>
                   <a class="dropdown-item" href="#drag-drop-area">Importer fichier</a>

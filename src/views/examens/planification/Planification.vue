@@ -1,6 +1,7 @@
 <script setup>
 import HeaderView from './components/HeaderView.vue';
 import ExamenList from './components/tables/ExamenList.vue';
+import Planning from './Planning.vue';
 </script>
 <template>
   <HeaderView />
@@ -74,6 +75,7 @@ import ExamenList from './components/tables/ExamenList.vue';
           </div>
         </div>
       </div>
+      <Planning />
     </div>
   </div>
 </template>
@@ -94,7 +96,7 @@ body {
 .card {
   background-color: #ffffff;
   border: 1px solid #dee2e6;
-  border-radius: 12px;
+  border-radius: 10px;
 }
 .btn-primary {
   background-color: #007bff;
