@@ -42,7 +42,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/salles-horaires">Salles & horaires</a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="/resultats-examens">Rapports</a></li>
+            <li class="nav-item"><a class="nav-link" href="/rapport-examens">Rapports</a></li>
           </ul>
         </div>
       </li>

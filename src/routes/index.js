@@ -30,6 +30,7 @@ import DetailExamen from '../views/examens/calendrier/detail/DetailExamen.vue'; 
 import Calendrier from '../views/examens/calendrier/Calendrier.vue'; // Calendrier des examens
 import Plannification from '../views/examens/planification/Planification.vue'; // Planification des examens
 import Salles from '../views/examens/salles/Salles.vue'; // Salles d'examen
+import RapportExamens from '../views/examens/rapports/RapportExamens.vue'; // Rapport des examens
 //Notes et résultats
 import Notes from '../views/notes/Notes.vue'; // Page des notes
 import appNotes from '../views/notes/addNotes/main/notev1.vue';
@@ -98,7 +99,9 @@ const routes = [
       },
       { path: '/planification-examens', name: 'Planification', component: Plannification },
       { path: '/calendrier-examens', name: 'CalendrierExamens', component: Calendrier },
-      { path: '/salles-horaires', name: 'CalendrierExamens', component: Salles },
+      { path: '/salles-horaires', name: 'SallesExamens', component: Salles },
+      { path: '/rapport-examens', name: 'RapportExamens', component: RapportExamens },
+
     ],
   },
 ];

@@ -2,7 +2,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { useModuleStore } from '@/stores/academiqueStore/moduleStore';
 import Pagination from '@/components/shared/Pagination.vue';
-import ItemActions from '@/components/shared/ItemDetails.vue';
+import ItemActions from '../details/ItemDetails.vue';
 
 // Store
 const moduleStore = useModuleStore();
