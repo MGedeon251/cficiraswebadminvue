@@ -45,30 +45,30 @@
                 </button>
               </div>
               <div class="table-responsive">
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Matricule</th>
-                    <th>Nom(s)</th>
-                    <th>Prenom(s)</th>
-                    <th>Promotion</th>
-                    <th>Telephone</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                <td colspan="9" class="text-center py-4">
-                  <div class="d-flex flex-column align-items-center">
-                    <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
-                  </div>
-                  <div class="text-pr">Aucune donnée </div>
-                </td>
-              </tr>
-                </tbody>
-              </table>
-            </div>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Matricule</th>
+                      <th>Nom(s)</th>
+                      <th>Prenom(s)</th>
+                      <th>Promotion</th>
+                      <th>Telephone</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colspan="9" class="text-center py-4">
+                        <div class="d-flex flex-column align-items-center">
+                          <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
+                        </div>
+                        <div class="text-pr">Aucune donnée</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
