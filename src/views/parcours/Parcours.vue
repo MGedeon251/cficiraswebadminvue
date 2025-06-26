@@ -27,13 +27,13 @@
               <h4 class="card-title">Historiques des parcours</h4>
               <p class="card-description"></p>
               <div class="d-flex gap-2 mb-3">
-                  <button type="button" class="btn btn-outline-dark btn-icon me-3 d-none d-md-block">
-                    <i class="mdi mdi-view-grid"></i>
-                  </button>
-                  <button type="button" class="btn btn-outline-dark btn-icon me-3 d-none d-md-block">
-                    <i class="mdi mdi-view-list"></i>
-                  </button>
-                
+                <button type="button" class="btn btn-outline-dark btn-icon me-3 d-none d-md-block">
+                  <i class="mdi mdi-view-grid"></i>
+                </button>
+                <button type="button" class="btn btn-outline-dark btn-icon me-3 d-none d-md-block">
+                  <i class="mdi mdi-view-list"></i>
+                </button>
+
                 <button type="button" class="btn btn-outline-dark btn-icon me-3 d-none d-md-block">
                   <i class="mdi mdi-filter"></i>
                 </button>
