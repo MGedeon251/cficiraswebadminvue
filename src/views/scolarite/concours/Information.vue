@@ -7,9 +7,7 @@
       <label>Filtrer par année académique :</label>
       <select v-model="anneeSelectionnee">
         <option value="">-- Toutes les années --</option>
-        <option v-for="(a, i) in anneesDisponibles" :key="i" :value="a">
-          {{ a }}
-        </option>
+        <option v-for="(a, i) in anneesDisponibles" :key="i" :value="a">{{ a }}</option>
       </select>
     </div>
 
@@ -28,12 +26,12 @@
         <tr v-for="(concours, index) in concoursFiltres" :key="index">
           <td>{{ index + 1 }}</td>
           <td>{{ concours.annee }}</td>
-          <td>{{ concours.date }}</td>
-          <td :class="{ admis: concours.etat === 'En cours' }">
-            {{ concours.etat }}
-          </td>
+          <td>{{ formatDate(concours.date) }}</td>
+          <td :class="{ admis: concours.etat === 'En cours' }">{{ concours.etat }}</td>
           <td>
-            <button class="btn-valider" @click="voirDetails(concours)">Détails</button>
+            <button class="btn-valider" @click="voirDetails(concours)">
+              Détails
+            </button>
           </td>
         </tr>
         <tr v-if="concoursFiltres.length === 0">
@@ -45,26 +43,44 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
-// Données fictives à remplacer par tes données réelles
-const concours = ref([
-  { annee: '2024-2025', date: '15 juillet 2025', etat: 'En cours' },
-  { annee: '2023-2024', date: '12 juillet 2024', etat: 'Terminé' },
-  { annee: '2022-2023', date: '10 juillet 2023', etat: 'Terminé' },
-]);
-
+const concours = ref([]);
 const anneeSelectionnee = ref('');
 
-const anneesDisponibles = computed(() => [...new Set(concours.value.map((c) => c.annee))]);
+// Charger les concours depuis localStorage
+onMounted(() => {
+  const saved = localStorage.getItem('concours');
+  if (saved) concours.value = JSON.parse(saved);
+});
 
+// Liste unique des années académiques disponibles
+const anneesDisponibles = computed(() => {
+  return [...new Set(concours.value.map((c) => c.annee))];
+});
+
+// Appliquer le filtre
 const concoursFiltres = computed(() => {
   if (!anneeSelectionnee.value) return concours.value;
   return concours.value.filter((c) => c.annee === anneeSelectionnee.value);
 });
 
+// Format date : 15 juillet 2025
+function formatDate(dateStr) {
+  const mois = [
+    'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+    'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'
+  ];
+  const d = new Date(dateStr);
+  const jour = d.getDate();
+  const moisNom = mois[d.getMonth()];
+  const annee = d.getFullYear();
+  return `${jour} ${moisNom} ${annee}`;
+}
+
+// Détails fictifs (à améliorer plus tard)
 function voirDetails(concours) {
-  alert(`Détails du concours ${concours.annee} à la date ${concours.date}`);
+  alert(`Concours ${concours.annee} le ${formatDate(concours.date)} — État : ${concours.etat}`);
 }
 </script>
 
@@ -137,10 +153,4 @@ select {
   cursor: pointer;
   font-weight: 600;
 }
-
-.btn-valider:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
 </style>
