@@ -1,5 +1,5 @@
 <template>
-  <div class="liste-candidats">
+  
     <h2>Liste des candidats inscrits</h2>
 
     <table class="table">
@@ -33,7 +33,6 @@
         </tr>
       </tbody>
     </table>
-  </div>
 </template>
 
 <script setup>
