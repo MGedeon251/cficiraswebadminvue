@@ -36,7 +36,7 @@
 <script>
 export default {
   props: {
-    activeTab: String
+    activeTab: String,
   },
   data() {
     return {
@@ -46,10 +46,9 @@ export default {
         { id: 'mercredi', label: 'Mercredi' },
         { id: 'jeudi', label: 'Jeudi' },
         { id: 'vendredi', label: 'Vendredi' },
-        { id: 'samedi', label: 'Samedi' }
-      ]
-    }
-  }
-}
+        { id: 'samedi', label: 'Samedi' },
+      ],
+    };
+  },
+};
 </script>
-

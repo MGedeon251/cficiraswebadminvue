@@ -18,9 +18,10 @@ const itemsPerPage = ref(5);
 
 const filteredModules = computed(() => {
   if (!searchQuery.value) return modules.value;
-  return modules.value.filter(mod =>
-    mod.designation.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    mod.code.toLowerCase().includes(searchQuery.value.toLowerCase())
+  return modules.value.filter(
+    (mod) =>
+      mod.designation.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      mod.code.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 });
 
@@ -42,7 +43,6 @@ const refreshModules = () => {
 
 onMounted(fetchModules);
 </script>
-
 
 <template>
   <div v-if="error" class="alert alert-danger">{{ error }}</div>

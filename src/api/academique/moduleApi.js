@@ -11,8 +11,8 @@ export const updateModule = (id, data) => moduleService.put(`/modules/${id}`, da
 export const deleteModule = (id) => moduleService.delete(`/modules/${id}`);
 
 // Fonction pour récupérer les modules d'une classe et d'un semestre
-export const getClasseModules = (classeId, semestreId) => 
-    moduleService.get(`/modules/classe/${classeId}/semestre/${semestreId}`);
+export const getClasseModules = (classeId, semestreId) =>
+  moduleService.get(`/modules/classe/${classeId}/semestre/${semestreId}`);
 
 // API pour gérer les cours
 export const getCours = () => moduleService.get('/cours');

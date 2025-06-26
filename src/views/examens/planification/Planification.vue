@@ -1,11 +1,12 @@
+<script setup>
+import HeaderView from './components/HeaderView.vue';
+import ExamenList from './components/tables/ExamenList.vue';
+import Planning from './Planning.vue';
+</script>
 <template>
+  <HeaderView />
   <div class="row">
-    <div class="container my-2">
-      <!-- Header Section -->
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>Planifications</h4>
-      </div>
-
+    <div class="container">
       <div class="row">
         <div class="col-md-12 grid-margin stretch-card">
           <div class="card">
@@ -74,13 +75,12 @@
           </div>
         </div>
       </div>
+      <Planning />
     </div>
   </div>
 </template>
 
 <script>
-import ExamenList from './ExamenList.vue';
-
 export default {
   components: {
     ExamenList,
@@ -96,7 +96,7 @@ body {
 .card {
   background-color: #ffffff;
   border: 1px solid #dee2e6;
-  border-radius: 12px;
+  border-radius: 10px;
 }
 .btn-primary {
   background-color: #007bff;

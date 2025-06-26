@@ -85,7 +85,6 @@ const getTableData = () => etudiants.value;
 defineExpose({ getTableData });
 </script>
 
-
 <template>
   <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1" />
   <div v-else class="table-responsive">
@@ -132,7 +131,7 @@ defineExpose({ getTableData });
     </div>
 
     <!-- Table des étudiants -->
-    <table class="table table-hover align-middle">
+    <table id="recent-purchases-listing" class="table">
       <thead>
         <tr>
           <th>#</th>

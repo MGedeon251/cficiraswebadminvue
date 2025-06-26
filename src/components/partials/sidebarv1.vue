@@ -15,8 +15,8 @@
           aria-expanded="false"
           aria-controls="ui-basic"
         >
-          <i class="mdi mdi-circle-outline menu-icon"></i>
-          <span class="menu-title">Portail Etudiant</span>
+          <i class="mdi mdi-domain menu-icon"></i>
+          <span class="menu-title">SCOLARITES</span>
           <i class="menu-arrow"></i>
         </a>
         <div class="collapse" id="ui-basic">

@@ -5,17 +5,51 @@
         <div class="d-flex justify-content-between flex-wrap">
           <div class="d-flex align-items-end flex-wrap">
             <div class="me-md-3 me-xl-5">
-              <h2>Gestions des Notes</h2>
+              <h2>Notes & Resultats</h2>
               <p class="mb-md-0">Attributions des notes de devoir et examens</p>
               <p class="mb-md-0"></p>
             </div>
             <div class="d-flex">
               <i class="mdi mdi-home text-muted hover-cursor"></i>
-              <p class="text-muted mb-0 hover-cursor">&nbsp;/&nbsp;Portail&nbsp;/&nbsp;</p>
+              <p class="text-muted mb-0 hover-cursor">&nbsp;/&nbsp;Scolarilé&nbsp;/&nbsp;</p>
               <p class="text-primary mb-0 hover-cursor">Notes</p>
             </div>
           </div>
-          <div class="d-flex justify-content-between align-items-end flex-wrap"></div>
+          <div class="d-flex justify-content-between align-items-end flex-wrap">
+            <button class="btn btn-outline-dark me-2">Exporter</button>
+            <div class="btn-group">
+              <button
+                type="button"
+                class="btn btn-primary mt-2 mt-xl-0"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+                aria-hidden="true"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+              >
+                + Attribuer des notes
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span class="visually-hidden">Toggle Dropdown</span>
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="#drag-drop-area">classe</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#drag-drop-area">filiere</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#drag-drop-area">Importer fichier</a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -71,6 +105,18 @@
                   aria-controls="purchases"
                   aria-selected="false"
                   >Sessions de rappels</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  id="purchases-tab"
+                  data-bs-toggle="tab"
+                  href="#purchases"
+                  role="tab"
+                  aria-controls="purchases"
+                  aria-selected="false"
+                  >Publications</a
                 >
               </li>
             </ul>

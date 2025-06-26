@@ -76,7 +76,6 @@ onMounted(async () => {
 });
 </script>
 
-
 <style scoped>
 .card {
   border: none;

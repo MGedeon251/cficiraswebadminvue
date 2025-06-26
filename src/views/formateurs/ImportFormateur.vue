@@ -1,37 +1,45 @@
 <template>
-<div class="row">
+  <div class="row">
     <div class="col-md-12 grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
-        <div
+          <div
             class="drop-zone border border-dashed border-2 rounded p-4 text-center"
             @dragover.prevent
             @drop.prevent="handleDrop"
           >
             <p class="text-muted mb-2">Glissez un fichier Excel (.xlsx/.csv) ici ou</p>
-            <input type="file" ref="fileInput" class="d-none" @change="handleFileUpload" accept=".xlsx,.csv" />
-            <button class="btn btn-primary btn-sm" @click="fileInput.click()">Choisir un fichier</button>
-        </div>
-        <!-- Prévisualisation des données -->
-        <div v-if="previewData.length" class="table-responsive mt-4">
-          <table class="table table-bordered table-sm">
-            <thead>
-              <tr>
-                <th v-for="(header, index) in previewData[0]" :key="index">{{ header }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(row, i) in previewData.slice(1)" :key="i">
-                <td v-for="(cell, j) in row" :key="j">{{ cell }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <button class="btn btn-success btn-sm mt-2" @click="importData">Importer</button>
-        </div>
+            <input
+              type="file"
+              ref="fileInput"
+              class="d-none"
+              @change="handleFileUpload"
+              accept=".xlsx,.csv"
+            />
+            <button class="btn btn-primary btn-sm" @click="fileInput.click()">
+              Choisir un fichier
+            </button>
+          </div>
+          <!-- Prévisualisation des données -->
+          <div v-if="previewData.length" class="table-responsive mt-4">
+            <table class="table table-bordered table-sm">
+              <thead>
+                <tr>
+                  <th v-for="(header, index) in previewData[0]" :key="index">{{ header }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(row, i) in previewData.slice(1)" :key="i">
+                  <td v-for="(cell, j) in row" :key="j">{{ cell }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="btn btn-success btn-sm mt-2" @click="importData">Importer</button>
+          </div>
         </div>
       </div>
     </div>
- </div>
+  </div>
 </template>
 
 <script setup>
