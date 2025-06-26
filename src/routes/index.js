@@ -49,7 +49,7 @@ const routes = [
         component: () => import('@/views/scolarite/inscriptions/Inscriptions.vue'),
       },
       {
-        path: 'global',
+        path: '/global',
         name: 'ScolariteGlobal',
         component: () => import('@/views/scolarite/Global.vue'),
         meta: { title: 'Vue Global' },
@@ -70,7 +70,7 @@ const routes = [
         component: () => import('@/views/scolarite/candidats/ListeCandidats.vue'),
       },
       {
-        path: '/candidats/:id',
+        path: '/scolarite/candidats/:id',
         name: 'DetailsCandidat',
         component: () => import('@/views/scolarite/candidats/DetailsCandidat.vue'),
       },

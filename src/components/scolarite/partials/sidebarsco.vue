@@ -51,6 +51,12 @@
           <span class="menu-title">Support Cours</span>
         </router-link>
       </li>
+            <li class="nav-item">
+        <router-link class="nav-link" to="/filieres">
+          <i class="mdi mdi-folder-text menu-icon"></i>
+          <span class="menu-title">Filières</span>
+        </router-link>
+      </li>
 
       <!-- Autres menus -->
       <li class="nav-item">
