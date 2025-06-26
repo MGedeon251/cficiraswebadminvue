@@ -3,7 +3,7 @@
     <ul class="nav">
       <!-- Tableau de bord -->
       <li class="nav-item">
-        <router-link class="nav-link" to="/scolarite">
+        <router-link class="nav-link" to="/home">
           <i class="mdi mdi-home menu-icon"></i>
           <span class="menu-title">Tableau de Bord</span>
         </router-link>
@@ -72,6 +72,14 @@
           <i class="mdi mdi-school menu-icon"></i>
           <span class="menu-title">Concours</span>
         </router-link>
+      </li>
+
+            <!-- Candidats -->
+      <li class="nav-item">
+        <a class="nav-link" href="/candidats">
+          <i class="mdi mdi-account-multiple menu-icon"></i>
+          <span class="menu-title">Candidats</span>
+        </a>
       </li>
 
       <!-- Déconnexion (en bas) -->
