@@ -1,26 +1,32 @@
 <template>
   <div>
     <HeaderCandidats />
-    <div class="container">
-      <!-- Formulaire d’ajout -->
-      <CreateCandidat @candidatAjoute="ajouterCandidat" />
-
-      <!-- Barre de recherche et filtre -->
-      <FiltreRecherche
-        :filieresDisponibles="filieresDisponibles"
-        @filtreChange="mettreAJourFiltres"
-      />
-
-      <!-- Liste filtrée -->
-      <ListeCandidats :candidats="candidatsFiltres" />
+    <div class="row">
+      <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Liste des Formateurs</h4>
+            <p class="card-description">Liste de formateurs actifs</p>
+            <p class="text-muted mb-4">Vous pouvez ajouter, modifier ou supprimer des candidats.</p>
+            <!-- Barre de recherche et filtre -->
+            <FiltreRecherche
+              :filieresDisponibles="filieresDisponibles"
+              @filtreChange="mettreAJourFiltres"
+            />
+            <!-- Liste filtrée -->
+            <ListeCandidats :candidats="candidatsFiltres" />
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="container"></div>
   </div>
 </template>
 
 <script setup>
 import { ref, watch, onMounted, computed } from 'vue';
 import HeaderCandidats from './HeaderCandidat.vue';
-import CreateCandidat from './CreateCandidat.vue';
+
 import FiltreRecherche from './FiltreRecherche.vue';
 import ListeCandidats from './ListeCandidats.vue';
 

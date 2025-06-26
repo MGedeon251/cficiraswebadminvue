@@ -1,48 +1,44 @@
 <template>
-  <div class="liste-candidats">
-    <h2>Liste des candidats inscrits</h2>
+  <h2>Liste des candidats inscrits</h2>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Nom</th>
-          <th>Prénom</th>
-          <th>Sexe</th>
-          <th>Filière</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(c, index) in candidats" :key="index">
-          <td>{{ index + 1 }}</td>
-          <td>{{ c.nom }}</td>
-          <td>{{ c.prenom }}</td>
-          <td>{{ c.sexe?.substring(0, 1).toUpperCase() }}</td>
-          <td>{{ c.filiere }}</td>
-          <td>
-            <router-link :to="`/scolarite/candidats/${index}`">
-              <button class="btn-edit">Modifier</button>
-            </router-link>
-          </td>
-        </tr>
-        <tr v-if="candidats.length === 0">
-          <td colspan="6" style="text-align: center; color: #999;">
-            Aucun candidat trouvé.
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Sexe</th>
+        <th>Filière</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(c, index) in candidats" :key="index">
+        <td>{{ index + 1 }}</td>
+        <td>{{ c.nom }}</td>
+        <td>{{ c.prenom }}</td>
+        <td>{{ c.sexe?.substring(0, 1).toUpperCase() }}</td>
+        <td>{{ c.filiere }}</td>
+        <td>
+          <router-link :to="`/scolarite/candidats/${index}`">
+            <button class="btn-edit">Modifier</button>
+          </router-link>
+        </td>
+      </tr>
+      <tr v-if="candidats.length === 0">
+        <td colspan="6" style="text-align: center; color: #999">Aucun candidat trouvé.</td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script setup>
 defineProps({
   candidats: {
     type: Array,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 </script>
 
 <style scoped>
@@ -66,7 +62,8 @@ h2 {
 .table thead {
   background-color: #f0f0f0;
 }
-.table th, .table td {
+.table th,
+.table td {
   padding: 0.6rem 0.8rem;
   border: 1px solid #ddd;
   text-align: left;
