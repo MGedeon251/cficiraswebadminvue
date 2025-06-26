@@ -49,6 +49,16 @@ const routes = [
         component: () => import('@/views/scolarite/inscriptions/Inscriptions.vue'),
       },
       {
+        path: '/examens', // Résultat final : /scolarite/examens
+        name: 'ExamensScolarite',
+        component: () => import('@/views/examens/Examens.vue'),
+      },
+       {
+        path: '/examens/planning/:id', // Résultat final : /scolarite/examens
+        name: 'ExamensPlanning',
+        component: () => import('@/views/examens/calendrier/sample.vue'),
+      },
+      {
         path: '/global',
         name: 'ScolariteGlobal',
         component: () => import('@/views/scolarite/Global.vue'),
