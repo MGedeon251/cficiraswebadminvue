@@ -101,7 +101,6 @@ const routes = [
       { path: '/calendrier-examens', name: 'CalendrierExamens', component: Calendrier },
       { path: '/salles-horaires', name: 'SallesExamens', component: Salles },
       { path: '/rapport-examens', name: 'RapportExamens', component: RapportExamens },
-
     ],
   },
 ];

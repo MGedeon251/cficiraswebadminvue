@@ -6,7 +6,7 @@
           <div class="d-flex align-items-end flex-wrap">
             <div class="me-md-3 me-xl-5">
               <h2>Informations Personnelles</h2>
-              <p class="mb-md-0">Informations de l'étudiant</p>
+              <p class="mb-md-0">Details information personnelles des etudiants</p>
             </div>
             <div class="d-flex">
               <i class="mdi mdi-home text-muted hover-cursor"></i>

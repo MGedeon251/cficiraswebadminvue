@@ -1,12 +1,15 @@
 <template>
-    <div class="dropdown">
+  <div class="dropdown">
     <button class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
       ...
     </button>
     <ul class="dropdown-menu dropdown-menu-light">
       <li>
-        <RouterLink class="dropdown-item" :to="`/modules/${item.id}`"
-          @click="isDetailsVisible = true">
+        <RouterLink
+          class="dropdown-item"
+          :to="`/modules/${item.id}`"
+          @click="isDetailsVisible = true"
+        >
           <i class="mdi mdi-information-outline me-2"></i> Détails
         </RouterLink>
       </li>
@@ -34,7 +37,6 @@
     </ul>
   </div>
 </template>
-
 
 <script setup>
 defineProps({

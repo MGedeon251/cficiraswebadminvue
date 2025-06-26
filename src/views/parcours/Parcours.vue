@@ -5,13 +5,13 @@
         <div class="d-flex justify-content-between flex-wrap">
           <div class="d-flex align-items-end flex-wrap">
             <div class="me-md-3 me-xl-5">
-              <h2>Historiques & Parcours</h2>
-              <p class="mb-md-0">Gestion des etudiants</p>
+              <h2>Progression académique</h2>
+              <p class="mb-md-0">Progression</p>
             </div>
             <div class="d-flex">
               <i class="mdi mdi-home text-muted hover-cursor"></i>
-              <p class="text-muted mb-0 hover-cursor">&nbsp;/&nbsp;Portail&nbsp;/&nbsp;</p>
-              <p class="text-primary mb-0 hover-cursor">Parcours</p>
+              <p class="text-muted mb-0 hover-cursor">&nbsp;/&nbsp;Scolarité&nbsp;/&nbsp;</p>
+              <p class="text-primary mb-0 hover-cursor">parcours</p>
             </div>
           </div>
           <div class="d-flex justify-content-between align-items-end flex-wrap"></div>
@@ -27,10 +27,16 @@
               <h4 class="card-title">Historiques des parcours</h4>
               <p class="card-description"></p>
               <div class="d-flex gap-2 mb-3">
+                  <button type="button" class="btn btn-outline-dark btn-icon me-3 d-none d-md-block">
+                    <i class="mdi mdi-view-grid"></i>
+                  </button>
+                  <button type="button" class="btn btn-outline-dark btn-icon me-3 d-none d-md-block">
+                    <i class="mdi mdi-view-list"></i>
+                  </button>
+                
                 <button type="button" class="btn btn-outline-dark btn-icon me-3 d-none d-md-block">
                   <i class="mdi mdi-filter"></i>
                 </button>
-
                 <button type="button" class="btn btn-outline-dark btn-icon me-3 mt-2 mt-xl-0">
                   <i class="mdi mdi-alert-circle"></i>
                 </button>
