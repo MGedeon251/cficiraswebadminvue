@@ -17,23 +17,18 @@
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label">Nombre de salles disponibles</label>
-                <input 
-                  type="number" 
-                  class="form-control" 
-                  v-model.number="roomCount"
-                  min="1"
-                >
+                <input type="number" class="form-control" v-model.number="roomCount" min="1" />
               </div>
             </div>
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label">Capacité par salle</label>
-                <input 
-                  type="number" 
-                  class="form-control" 
+                <input
+                  type="number"
+                  class="form-control"
                   v-model.number="capacityPerRoom"
                   min="1"
-                >
+                />
               </div>
             </div>
           </div>
@@ -76,53 +71,48 @@
 
         <!-- Fichier Importé -->
         <div v-if="uploadedFile.length" class="mt-3">
-            <h5 class="text-dark">Fichiers chargés :</h5>
-            <div class="list-group mb-3">
-              <div 
-                class="list-group-item d-flex justify-content-between align-items-center"
-                v-for="(file, index) in uploadedFile"
-                :key="index"
-              >
-                {{ file.name }}
-                <button class="btn btn-sm btn-danger" @click="removeFile(index)">
-                  <i class="mdi mdi-close-circle-outline"></i>
-                </button>
-              </div>
-            </div>
-            <button 
-              class="btn btn-primary" 
-              @click="distributeStudents"
-              :disabled="!canDistribute"
+          <h5 class="text-dark">Fichiers chargés :</h5>
+          <div class="list-group mb-3">
+            <div
+              class="list-group-item d-flex justify-content-between align-items-center"
+              v-for="(file, index) in uploadedFile"
+              :key="index"
             >
-              Répartir les étudiants
-            </button>
+              {{ file.name }}
+              <button class="btn btn-sm btn-danger" @click="removeFile(index)">
+                <i class="mdi mdi-close-circle-outline"></i>
+              </button>
+            </div>
           </div>
-
+          <button class="btn btn-primary" @click="distributeStudents" :disabled="!canDistribute">
+            Répartir les étudiants
+          </button>
+        </div>
 
         <!-- Résultats de la répartition -->
         <div v-if="distributionResults.length > 0" class="mt-4">
           <h5 class="text-dark mb-3">Résultats de la répartition</h5>
-          
+
           <div class="alert alert-info">
-            <strong>Répartition terminée :</strong> 
+            <strong>Répartition terminée :</strong>
             {{ totalStudents }} étudiants répartis dans {{ distributionResults.length }} salles
           </div>
-          
+
           <div class="accordion" id="distributionAccordion">
             <div class="accordion-item" v-for="(room, index) in distributionResults" :key="index">
               <h2 class="accordion-header">
-                <button 
-                  class="accordion-button" 
-                  type="button" 
-                  data-bs-toggle="collapse" 
+                <button
+                  class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
                   :data-bs-target="'#roomCollapse' + index"
                 >
                   Salle {{ index + 1 }} ({{ room.students.length }} étudiants)
                 </button>
               </h2>
-              <div 
-                :id="'roomCollapse' + index" 
-                class="accordion-collapse collapse" 
+              <div
+                :id="'roomCollapse' + index"
+                class="accordion-collapse collapse"
                 :class="{ show: index === 0 }"
                 data-bs-parent="#distributionAccordion"
               >
@@ -147,7 +137,7 @@
               </div>
             </div>
           </div>
-          
+
           <button class="btn btn-outline-success mt-3" @click="exportResults">
             <i class="bi bi-download"></i> Exporter les résultats
           </button>
@@ -206,17 +196,16 @@ const recalculateStudentList = async () => {
   }
 };
 
-
 const parseStudentFile = async (file, append = false) => {
   try {
     const data = await file.arrayBuffer();
     const workbook = XLSX.read(data);
     const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
     const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-    const parsed = jsonData.map(row => ({
+    const parsed = jsonData.map((row) => ({
       lastName: row['Nom'] || row['nom'] || row['LASTNAME'] || '',
       firstName: row['Prénom'] || row['prenom'] || row['FIRSTNAME'] || '',
-      class: row['Classe'] || row['classe'] || row['CLASS'] || ''
+      class: row['Classe'] || row['classe'] || row['CLASS'] || '',
     }));
     if (append) {
       studentsList.value.push(...parsed);
@@ -224,11 +213,10 @@ const parseStudentFile = async (file, append = false) => {
       studentsList.value = [...studentsList.value, ...parsed];
     }
   } catch (error) {
-    console.error("Erreur de lecture du fichier :", error);
-    alert("Erreur lors de la lecture du fichier. Vérifiez le format.");
+    console.error('Erreur de lecture du fichier :', error);
+    alert('Erreur lors de la lecture du fichier. Vérifiez le format.');
   }
 };
-
 
 const distributeStudents = () => {
   if (studentsList.value.length === 0) return;
@@ -240,7 +228,7 @@ const distributeStudents = () => {
     studentsToDistribute = shuffleArray(studentsToDistribute);
   } else {
     const classes = {};
-    studentsList.value.forEach(s => {
+    studentsList.value.forEach((s) => {
       if (!classes[s.class]) classes[s.class] = [];
       classes[s.class].push(s);
     });
@@ -252,7 +240,7 @@ const distributeStudents = () => {
     }
 
     studentsToDistribute = [];
-    const maxLength = Math.max(...Object.values(classes).map(c => c.length));
+    const maxLength = Math.max(...Object.values(classes).map((c) => c.length));
     for (let i = 0; i < maxLength; i++) {
       for (let cls in classes) {
         if (classes[cls][i]) studentsToDistribute.push(classes[cls][i]);
@@ -285,19 +273,19 @@ const shuffleArray = (array) => {
 const exportResults = () => {
   const exportData = [];
   distributionResults.value.forEach((room, roomIndex) => {
-    room.students.forEach(student => {
+    room.students.forEach((student) => {
       exportData.push({
-        'Salle': `Salle ${roomIndex + 1}`,
-        'Nom': student.lastName,
-        'Prénom': student.firstName,
-        'Classe': student.class
+        Salle: `Salle ${roomIndex + 1}`,
+        Nom: student.lastName,
+        Prénom: student.firstName,
+        Classe: student.class,
       });
     });
   });
   const worksheet = XLSX.utils.json_to_sheet(exportData);
   const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Répartition");
-  XLSX.writeFile(workbook, "repartition_salles.xlsx");
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Répartition');
+  XLSX.writeFile(workbook, 'repartition_salles.xlsx');
 };
 
 const canDistribute = computed(() => {
@@ -306,6 +294,4 @@ const canDistribute = computed(() => {
 
 const totalStudents = computed(() => studentsList.value.length);
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

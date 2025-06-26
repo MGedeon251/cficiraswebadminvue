@@ -54,90 +54,92 @@
           </div>
           <div class="modal-body">
             <div class="row mb-4">
-  <!-- Photo + identité -->
-  <div class="col-md-3 text-center">
-    <img
-      :src="item.photo || '/img/default-avatar.png'"
-      alt="Photo du formateur"
-      class="teacher-photo img-thumbnail"
-    />
-    <div class="mt-2">
-      <span class="badge bg-primary">{{ item.enseignant_id || 'ID inconnu' }}</span>
-    </div>
-  </div>
+              <!-- Photo + identité -->
+              <div class="col-md-3 text-center">
+                <img
+                  :src="item.photo || '/img/default-avatar.png'"
+                  alt="Photo du formateur"
+                  class="teacher-photo img-thumbnail"
+                />
+                <div class="mt-2">
+                  <span class="badge bg-primary">{{ item.enseignant_id || 'ID inconnu' }}</span>
+                </div>
+              </div>
 
-  <div class="col-md-9">
-    <div class="info-content">
-    </div>
-    
-  </div>
-</div>
+              <div class="col-md-9">
+                <div class="info-content"></div>
+              </div>
+            </div>
 
-<!-- Informations personnelles -->
-<div class="row">
-  <div class="col-md-6">
-    <div class="info-card">
-      <h6 class="info-title">
-        <i class="mdi mdi-account-details me-2"></i> Informations personnelles
-      </h6>
-      <div class="info-content">
-        <div class="info-item">
-          <span class="info-label">Date de naissance:</span>
-          <span class="info-value">{{ formatDate(item.datenais) }}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Lieu de naissance:</span>
-          <span class="info-value">{{ item.lieunais || 'Non spécifié' }}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Sexe:</span>
-          <span class="info-value">{{ item.sexe === 'M' ? 'Masculin' : item.sexe === 'F' ? 'Féminin' : 'Non spécifié' }}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Statut matrimonial:</span>
-          <span class="info-value">{{ item.matrimonial || 'Non spécifié' }}</span>
+            <!-- Informations personnelles -->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="info-card">
+                  <h6 class="info-title">
+                    <i class="mdi mdi-account-details me-2"></i> Informations personnelles
+                  </h6>
+                  <div class="info-content">
+                    <div class="info-item">
+                      <span class="info-label">Date de naissance:</span>
+                      <span class="info-value">{{ formatDate(item.datenais) }}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Lieu de naissance:</span>
+                      <span class="info-value">{{ item.lieunais || 'Non spécifié' }}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Sexe:</span>
+                      <span class="info-value">{{
+                        item.sexe === 'M'
+                          ? 'Masculin'
+                          : item.sexe === 'F'
+                            ? 'Féminin'
+                            : 'Non spécifié'
+                      }}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Statut matrimonial:</span>
+                      <span class="info-value">{{ item.matrimonial || 'Non spécifié' }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Informations académiques -->
+              <div class="col-md-6">
+                <div class="info-card">
+                  <h6 class="info-title">
+                    <i class="mdi mdi-school me-2"></i> Diplôme & Spécialité
+                  </h6>
+                  <div class="info-content">
+                    <div class="info-item">
+                      <span class="info-label">Diplôme:</span>
+                      <span class="info-value">{{ item.diplome || 'Non spécifié' }}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Spécialité:</span>
+                      <span class="info-value">{{ item.specialite || 'Non spécifié' }}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Établissement:</span>
+                      <span class="info-value">{{ item.etablissement || 'Non spécifié' }}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Année d'obtention:</span>
+                      <span class="info-value">{{ item.annee_obtention || 'Non spécifiée' }}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Niveau:</span>
+                      <span class="info-value">{{ item.niveau || 'Non spécifié' }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Informations académiques -->
-  <div class="col-md-6">
-    <div class="info-card">
-      <h6 class="info-title">
-        <i class="mdi mdi-school me-2"></i> Diplôme & Spécialité
-      </h6>
-      <div class="info-content">
-        <div class="info-item">
-          <span class="info-label">Diplôme:</span>
-          <span class="info-value">{{ item.diplome || 'Non spécifié' }}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Spécialité:</span>
-          <span class="info-value">{{ item.specialite || 'Non spécifié' }}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Établissement:</span>
-          <span class="info-value">{{ item.etablissement || 'Non spécifié' }}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Année d'obtention:</span>
-          <span class="info-value">{{ item.annee_obtention || 'Non spécifiée' }}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Niveau:</span>
-          <span class="info-value">{{ item.niveau || 'Non spécifié' }}</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-        </div>
-       </div>
-       </div>
-            <!-- Informations de la session -->
-            
+      <!-- Informations de la session -->
     </div>
   </teleport>
 </template>
@@ -169,12 +171,14 @@ const calculateCompletionRate = () => {
 };
 
 const getStatusClass = (status) => {
-  return {
-    active: 'bg-success',
-    inactive: 'bg-secondary',
-    draft: 'bg-warning text-dark',
-    completed: 'bg-info',
-  }[status] || 'bg-light text-dark';
+  return (
+    {
+      active: 'bg-success',
+      inactive: 'bg-secondary',
+      draft: 'bg-warning text-dark',
+      completed: 'bg-info',
+    }[status] || 'bg-light text-dark'
+  );
 };
 
 dayjs.extend(localizedFormat);
@@ -188,7 +192,6 @@ function formatDate(dateString) {
   if (!dateString) return 'Non spécifié';
   return dayjs(dateString).format('DD MMMM YYYY');
 }
-
 
 onMounted(async () => {
   const res = await getEnseignants();
@@ -253,4 +256,3 @@ onMounted(async () => {
   border-top: 1px solid #dee2e6;
 }
 </style>
-

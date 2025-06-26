@@ -24,21 +24,46 @@
                   <i class="mdi mdi-dots-vertical"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                  <li><a class="dropdown-item" href="#"><i class="mdi mdi-file-excel me-2"></i>Exporter Excel</a></li>
-                  <li><a class="dropdown-item" href="#"><i class="mdi mdi-printer me-2"></i>Imprimer</a></li>
+                  <li>
+                    <a class="dropdown-item" href="#"
+                      ><i class="mdi mdi-file-excel me-2"></i>Exporter Excel</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#"
+                      ><i class="mdi mdi-printer me-2"></i>Imprimer</a
+                    >
+                  </li>
                   <li><hr class="dropdown-divider" /></li>
-                  <li><a class="dropdown-item" href="#"><i class="mdi mdi-cog me-2"></i>Paramètres</a></li>
+                  <li>
+                    <a class="dropdown-item" href="#"><i class="mdi mdi-cog me-2"></i>Paramètres</a>
+                  </li>
                 </ul>
               </div>
               <div class="btn-group">
-                <button type="button" class="btn btn-primary mt-2 mt-xl-0" data-bs-toggle="modal" data-bs-target="#exampleModal" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                <button
+                  type="button"
+                  class="btn btn-primary mt-2 mt-xl-0"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  aria-hidden="true"
+                  data-bs-backdrop="static"
+                  data-bs-keyboard="false"
+                >
                   + Publier
                 </button>
-                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                <button
+                  type="button"
+                  class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   <span class="visually-hidden">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#drop_table" @click="downloadPDF">Publier PDF</a></li>
+                  <li>
+                    <a class="dropdown-item" href="#drop_table" @click="downloadPDF">Publier PDF</a>
+                  </li>
                   <li><a class="dropdown-item" href="#drop_table">Publier Excel</a></li>
                   <li><a class="dropdown-item" href="#drop_table">Publier Word</a></li>
                   <li><a class="dropdown-item" href="#drop_table">Publier CSV</a></li>
@@ -55,58 +80,67 @@
         <div class="col-md-12 grid margin stretch-card">
           <div class="card">
             <div class="card-body">
-              <h5 class="mb-3">Calendrier des épreuves - {{ }}</h5>
+              <h5 class="mb-3">Calendrier des épreuves - {{}}</h5>
               <div ref="tableToPrint">
-
-              <div class="table-responsive">
-                <table class="table table-bordered">
-                  <thead class="table-light">
-                    <tr>
-                      <th>Module</th>
-                      <th>Date</th>
-                      <th>Heure début</th>
-                      <th>Heure fin</th>
-                      <th>Type</th>
-                      <th>Statut</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-
-                  <!-- draggable tbody -->
-                  <draggable v-model="epreuves" tag="tbody" item-key="module_id" handle=".handle" @end="onOrderChange">
-                    <template #item="{ element: epreuve, index }">
+                <div class="table-responsive">
+                  <table class="table table-bordered">
+                    <thead class="table-light">
                       <tr>
-                        <td class="handle" style="cursor: move;">
-                          ☰ <input v-model="epreuve.module" class="form-control" />
-                        </td>
-                        <td>
-                          <input type="date" v-model="epreuve.date_epreuve" class="form-control" />
-                        </td>
-                        <td>
-                          <input type="time" v-model="epreuve.heure_debut" class="form-control" />
-                        </td>
-                        <td>
-                          <input type="time" v-model="epreuve.heure_fin" class="form-control" />
-                        </td>
-                        <td>
-                          <select v-model="epreuve.type_epreuve" class="form-select">
-                            <option value="écrit">Écrit</option>
-                            <option value="oral">Oral</option>
-                            <option value="pratique">Pratique</option>
-                          </select>
-                        </td>
-                        <td>
-                          <span class="badge bg-info">{{ epreuve.statut }}</span>
-                        </td>
-                        <td>
-                          <button class="btn btn-success btn-sm" @click="saveEpreuve(epreuve)">
-                            <i class="mdi mdi-content-save"></i>
-                          </button>
-                        </td>
+                        <th>Module</th>
+                        <th>Date</th>
+                        <th>Heure début</th>
+                        <th>Heure fin</th>
+                        <th>Type</th>
+                        <th>Statut</th>
+                        <th>Action</th>
                       </tr>
-                    </template>
-                  </draggable>
-                </table>
+                    </thead>
+
+                    <!-- draggable tbody -->
+                    <draggable
+                      v-model="epreuves"
+                      tag="tbody"
+                      item-key="module_id"
+                      handle=".handle"
+                      @end="onOrderChange"
+                    >
+                      <template #item="{ element: epreuve, index }">
+                        <tr>
+                          <td class="handle" style="cursor: move">
+                            ☰ <input v-model="epreuve.module" class="form-control" />
+                          </td>
+                          <td>
+                            <input
+                              type="date"
+                              v-model="epreuve.date_epreuve"
+                              class="form-control"
+                            />
+                          </td>
+                          <td>
+                            <input type="time" v-model="epreuve.heure_debut" class="form-control" />
+                          </td>
+                          <td>
+                            <input type="time" v-model="epreuve.heure_fin" class="form-control" />
+                          </td>
+                          <td>
+                            <select v-model="epreuve.type_epreuve" class="form-select">
+                              <option value="écrit">Écrit</option>
+                              <option value="oral">Oral</option>
+                              <option value="pratique">Pratique</option>
+                            </select>
+                          </td>
+                          <td>
+                            <span class="badge bg-info">{{ epreuve.statut }}</span>
+                          </td>
+                          <td>
+                            <button class="btn btn-success btn-sm" @click="saveEpreuve(epreuve)">
+                              <i class="mdi mdi-content-save"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </template>
+                    </draggable>
+                  </table>
                 </div>
               </div>
 
@@ -176,11 +210,11 @@ const downloadPDF = () => {
   const element = tableToPrint.value;
 
   const opt = {
-    margin:       0.5,
-    filename:     'calendrier_examens.pdf',
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2 },
-    jsPDF:        { unit: 'in', format: 'a3', orientation: 'portrait' }
+    margin: 0.5,
+    filename: 'calendrier_examens.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'a3', orientation: 'portrait' },
   };
 
   html2pdf().set(opt).from(element).save();

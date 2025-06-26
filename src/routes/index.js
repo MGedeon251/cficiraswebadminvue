@@ -24,7 +24,7 @@ import Planning from '../views/examens/calendrier/sample.vue';
 import DetailExamen from '../views/examens/calendrier/detail/DetailExamen.vue';
 import Concours from '../views/concours/concours.vue';
 import ScolariteLayout from '@/layouts/ScolariteLayout.vue';
-import Scolarite from '@/views/scolarite/scolarite.vue'; 
+import Scolarite from '@/views/scolarite/scolarite.vue';
 
 const routes = [
   // Route de login (pas besoin de layout global ici)
@@ -32,29 +32,80 @@ const routes = [
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound, meta: { public: true } },
   { path: '/addNotes', name: 'appNotes', component: appNotes },
 
-
-
   {
     path: '/scolarite',
     component: ScolariteLayout, // layout spécifique à la scolarité s'il y en a un
     children: [
       {
-        path: '',
-        name: 'ScolariteAccueil',
-        component: () => import('@/views/scolarite/scolarite.vue')
+        path: 'candidats', // ✅ mis à jour ici
+        name: 'Candidats',
+        component: () => import('@/views/scolarite/candidats/Candidats.vue'),
+      },
+
+      {
+        path: 'classes', // Résultat final : /scolarite/classes
+        name: 'ClasseGestion',
+        component: () => import('@/views/scolarite/classes/Classe.vue'),
+      },
+
+      {
+        path: 'inscriptions', // Résultat final : /scolarite/inscriptions
+        name: 'InscriptionsScolarite',
+        component: () => import('@/views/scolarite/inscriptions/Inscriptions.vue'),
       },
       {
-        path: '/scolarite/global',
+        path: '',
+        name: 'ScolariteAccueil',
+        component: () => import('@/views/scolarite/scolarite.vue'),
+      },
+      {
+        path: 'global',
         name: 'ScolariteGlobal',
         component: () => import('@/views/scolarite/Global.vue'),
-      }
-    ]
+        meta: { title: 'Vue Global' },
+      },
+      {
+        path: '/scolarite/filieres',
+        name: 'FiliereIndex',
+        component: () => import('@/views/scolarite/filieres/Filiere.vue'),
+      },
+      {
+        path: '/scolarite/filieres/create',
+        name: 'FiliereCreate',
+        component: () => import('@/views/scolarite/filieres/CreateFi.vue'),
+      },
+      {
+        path: '/scolarite/candidats',
+        name: 'ListeCandidats',
+        component: () => import('@/views/scolarite/candidats/ListeCandidats.vue'),
+      },
+      {
+        path: '/scolarite/candidats/:id',
+        name: 'DetailsCandidat',
+        component: () => import('@/views/scolarite/candidats/DetailsCandidat.vue'),
+      },
+      {
+        path: '/scolarite/candidats/validation',
+        name: 'ValidationCandidats',
+        component: () => import('@/views/scolarite/candidats/ValidationCandidats.vue'),
+      },
+      {
+        path: '/scolarite/concours',
+        name: 'Deconcours',
+        component: () => import('@/views/scolarite/concours/Deconcours.vue'),
+      },
+      {
+        path: '/scolarite/concours/information',
+        name: 'InformationConcours',
+        component: () => import('@/views/scolarite/concours/Information.vue'),
+      },
+      {
+        path: '/scolarite/concours/organiser',
+        name: 'OrganiserConcours',
+        component: () => import('@/views/scolarite/concours/OrganiserConcours.vue'),
+      },
+    ],
   },
-
-
-
-
-
 
   // Routes qui utilisent le layout global DefaultLayout
   {

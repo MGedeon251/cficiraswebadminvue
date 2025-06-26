@@ -27,5 +27,5 @@
 </template>
 
 <script setup>
-// Pas de script spécifique ici
+// Aucun script pour le moment
 </script>

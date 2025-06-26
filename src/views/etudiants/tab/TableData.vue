@@ -85,7 +85,6 @@ const getTableData = () => etudiants.value;
 defineExpose({ getTableData });
 </script>
 
-
 <template>
   <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1" />
   <div v-else class="table-responsive">

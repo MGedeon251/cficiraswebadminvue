@@ -9,23 +9,23 @@
           <!-- Recherche et Filtres -->
           <div class="d-flex flex-wrap gap-3 mb-3 align-items-center">
             <div class="input-group" style="width: 300px">
-                    <span class="input-group-text bg-transparent">
-                      <i class="mdi mdi-magnify"></i>
-                    </span>
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Rechercher..."
-                      v-model="searchQuery"
-                    />
-              </div>
-            <select v-model="filters.cycle" class="form-select" style="max-width: 180px;">
+              <span class="input-group-text bg-transparent">
+                <i class="mdi mdi-magnify"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Rechercher..."
+                v-model="searchQuery"
+              />
+            </div>
+            <select v-model="filters.cycle" class="form-select" style="max-width: 180px">
               <option value="">Tous les cycles</option>
               <option v-for="cycle in uniqueCycles" :key="cycle" :value="cycle">
                 {{ cycle }}
               </option>
             </select>
-            <select v-model="filters.niveau" class="form-select" style="max-width: 180px;">
+            <select v-model="filters.niveau" class="form-select" style="max-width: 180px">
               <option value="">Tous les niveaux</option>
               <option v-for="niveau in uniqueNiveaux" :key="niveau" :value="niveau">
                 {{ niveau }}
@@ -54,9 +54,16 @@
                   <tr v-if="paginatedEnseignants.length === 0">
                     <td colspan="6" class="text-center py-4">
                       <div class="d-flex flex-column align-items-center">
-                        <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="auto" />
+                        <img
+                          src="/img/empty-box.svg"
+                          alt="Aucune donnée"
+                          class="mb-2"
+                          width="auto"
+                        />
                         <div class="text-pr">Aucune donnée</div>
-                        <button class="btn btn-primary mt-2" @click="resetFilters">Réinitialiser les filtres</button>
+                        <button class="btn btn-primary mt-2" @click="resetFilters">
+                          Réinitialiser les filtres
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -76,7 +83,8 @@
               <!-- Pagination -->
               <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
                 <div class="text-muted">
-                  Affichage de {{ paginatedEnseignants.length }} sur {{ filteredEnseignants.length }} formateurs
+                  Affichage de {{ paginatedEnseignants.length }} sur
+                  {{ filteredEnseignants.length }} formateurs
                 </div>
                 <nav aria-label="Page navigation">
                   <ul class="pagination pagination-sm mb-0">
@@ -128,12 +136,12 @@ onMounted(() => {
 });
 
 // Filtres uniques
-const uniqueCycles = computed(() =>
-  [...new Set(enseignants.value.map(e => e.cycle).filter(Boolean))]
-);
-const uniqueNiveaux = computed(() =>
-  [...new Set(enseignants.value.map(e => e.niveau).filter(Boolean))]
-);
+const uniqueCycles = computed(() => [
+  ...new Set(enseignants.value.map((e) => e.cycle).filter(Boolean)),
+]);
+const uniqueNiveaux = computed(() => [
+  ...new Set(enseignants.value.map((e) => e.niveau).filter(Boolean)),
+]);
 
 function resetFilters() {
   searchQuery.value = '';
@@ -142,7 +150,7 @@ function resetFilters() {
 }
 
 const filteredEnseignants = computed(() => {
-  return enseignants.value.filter(e => {
+  return enseignants.value.filter((e) => {
     const query = searchQuery.value.toLowerCase();
     const matchQuery =
       e.nom?.toLowerCase().includes(query) ||
@@ -175,7 +183,6 @@ function nextPage() {
   if (currentPage.value < totalPages.value) currentPage.value++;
 }
 </script>
-
 
 <style scoped>
 /**
