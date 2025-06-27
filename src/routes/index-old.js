@@ -25,6 +25,8 @@ import DetailExamen from '../views/examens/calendrier/detail/DetailExamen.vue';
 import Concours from '../views/concours/concours.vue';
 import ScolariteLayout from '@/layouts/ScolariteLayout.vue';
 import Scolarite from '@/views/scolarite/scolarite.vue';
+import Inscrip from '@/views/scolarite/inscriptions/Inscript.vue';
+import ValiderInscrip from '@/views/scolarite/inscriptions/inscription.vue';
 
 const routes = [
   // Route de login (pas besoin de layout global ici)
@@ -51,7 +53,7 @@ const routes = [
       {
         path: 'inscriptions', // Résultat final : /scolarite/inscriptions
         name: 'InscriptionsScolarite',
-        component: () => import('@/views/scolarite/inscriptions/Inscriptions.vue'),
+        component: () => import('@/views/scolarite/inscriptions/inscription.vue'),
       },
       {
         path: '',
@@ -104,6 +106,7 @@ const routes = [
         name: 'OrganiserConcours',
         component: () => import('@/views/scolarite/concours/OrganiserConcours.vue'),
       },
+      
     ],
   },
 

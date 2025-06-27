@@ -1,4 +1,3 @@
-<!-- Deconcours.vue -->
 <template>
   <div class="">
     <HeaderConcours />
@@ -56,9 +55,9 @@
                 <td>{{ index + 1 + (pageConcours - 1) * perPage }}</td>
                 <td>{{ c.annee }}</td>
                 <td>{{ formatDate(c.date) }}</td>
-                <td :class="{ admis: c.etat === 'En cours' }">{{ c.etat }}</td>
+                <td :class="{ admis: c.etat === 'En cours', termine: c.etat === 'Terminé' }">{{ c.etat }}</td>
                 <td>
-                  <button class="btn-ter" @click="terminerConcours(index)" :disabled="c.etat === 'Terminé'">
+                  <button class="btn-ter" @click="terminerConcours(c)" :disabled="c.etat === 'Terminé'">
                     Terminer
                   </button>
                 </td>
@@ -100,7 +99,7 @@
               <td>{{ index + 1 + (pageFiltres - 1) * perPage }}</td>
               <td>{{ c.annee }}</td>
               <td>{{ formatDate(c.date) }}</td>
-              <td :class="{ admis: c.etat === 'En cours' }">{{ c.etat }}</td>
+              <td :class="{ admis: c.etat === 'En cours', termine: c.etat === 'Terminé' }">{{ c.etat }}</td>
               <td>
                 <button class="btn-valider" @click="voirDetails(c)">Détails</button>
               </td>
@@ -117,12 +116,37 @@
         </div>
       </div>
     </div>
+
+    <!-- SECTION : Gestion des candidats -->
+    <div class="bloc bloc-candidats mt-4">
+      <h3>Candidats au concours</h3>
+      <button class="btn-valider" @click="modalVisible = true" :disabled="concoursEnCours.length === 0">
+        Ajouter un candidat
+      </button>
+
+      <p v-if="concoursEnCours.length === 0" style="color: red; margin-top: 1rem;">
+        Aucun concours en cours. Veuillez d'abord organiser un concours.
+      </p>
+
+      <Teleport to="body">
+        <div v-if="modalVisible" class="modal-overlay" @click.self="modalVisible = false">
+          <div class="modal-content">
+            <CreateCandidats
+              :concours-en-cours="concoursEnCours"
+              @candidatAjoute="candidatAjoute"
+            />
+            <button class="btn-valider mt-3" @click="modalVisible = false">Fermer</button>
+          </div>
+        </div>
+      </Teleport>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
 import HeaderConcours from './HeaderConcours.vue';
+import CreateCandidats from '@/views/scolarite/candidats/CreateCandidat.vue';
 
 const afficherFormulaire = ref(false);
 const concours = ref([]);
@@ -133,6 +157,7 @@ const anneeSelectionnee = ref('');
 const pageConcours = ref(1);
 const pageFiltres = ref(1);
 const perPage = 3;
+const modalVisible = ref(false);
 
 const moisList = [
   'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
@@ -198,8 +223,10 @@ function enregistrerConcours() {
   afficherFormulaire.value = false;
 }
 
-function terminerConcours(index) {
-  concours.value[index].etat = 'Terminé';
+function terminerConcours(concoursObj) {
+  concoursObj.etat = 'Terminé';
+  localStorage.setItem('concours', JSON.stringify(concours.value));
+  alert(`Le concours ${concoursObj.annee} est maintenant terminé.`);
 }
 
 function voirDetails(c) {
@@ -212,9 +239,20 @@ function formatDate(dateStr) {
   return `${d.getDate()} ${m} ${d.getFullYear()}`;
 }
 
-const anneesDisponibles = computed(() => {
-  return [...new Set(concours.value.map((c) => c.annee))];
-});
+function candidatAjoute(candidat) {
+  const candidats = JSON.parse(localStorage.getItem('candidats') || '[]');
+  candidats.push(candidat);
+  localStorage.setItem('candidats', JSON.stringify(candidats));
+  alert('Candidat ajouté avec succès.');
+}
+
+const anneesDisponibles = computed(() =>
+  [...new Set(concours.value.map((c) => c.annee))]
+);
+
+const concoursEnCours = computed(() =>
+  concours.value.filter(c => c.etat === 'En cours')
+);
 
 const concoursFiltres = computed(() => {
   if (!anneeSelectionnee.value) return concours.value;
@@ -232,9 +270,9 @@ const totalPagesConcours = computed(() =>
 );
 
 const concoursFiltresPagines = computed(() => {
-  const concoursFiltresSorted = [...concoursFiltres.value].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const sorted = [...concoursFiltres.value].sort((a, b) => new Date(b.date) - new Date(a.date));
   const start = (pageFiltres.value - 1) * perPage;
-  return concoursFiltresSorted.slice(start, start + perPage);
+  return sorted.slice(start, start + perPage);
 });
 const totalPagesFiltres = computed(() =>
   Math.ceil(concoursFiltres.value.length / perPage)
@@ -246,7 +284,14 @@ watch(concours, (nv) => {
 }, { deep: true });
 </script>
 
+
+
 <style scoped>
+
+.termine {
+  color: red;
+  font-weight: 600;
+}
 .deconcours-section {
   background: #f9f9f9;
   padding: 2rem;

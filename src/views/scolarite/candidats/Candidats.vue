@@ -1,45 +1,49 @@
 <template>
   <div>
     <HeaderCandidats />
+
     <div class="row">
       <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
           <div class="card-body">
-            <h4 class="card-title">Liste des Formateurs</h4>
-            <p class="card-description">Liste de formateurs actifs</p>
+            <h4 class="card-title">Liste des Candidats</h4>
+            <p class="card-description">Liste des candidats actifs</p>
             <p class="text-muted mb-4">Vous pouvez ajouter, modifier ou supprimer des candidats.</p>
-            <!-- Barre de recherche et filtre -->
-            <FiltreRecherche
-              :filieresDisponibles="filieresDisponibles"
-              @filtreChange="mettreAJourFiltres"
-            />
+
             <!-- Liste filtrée -->
             <ListeCandidats :candidats="candidatsFiltres" />
+             <!-- Bouton pour accéder à la page de validation -->
+             <div class="mb-4 d-flex justify-content-end">
+              <router-link to="/candidats/validation">
+                <button class="btn btn-success">
+                  Valider les candidats
+                </button>
+              </router-link>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    
+
     <div class="container"></div>
   </div>
+  
 </template>
 
 <script setup>
 import { ref, watch, onMounted, computed } from 'vue';
 import HeaderCandidats from './HeaderCandidat.vue';
-
-import FiltreRecherche from './FiltreRecherche.vue';
 import ListeCandidats from './ListeCandidats.vue';
 
 const candidats = ref([]);
 const filtres = ref({ recherche: '', filiere: '' });
 
-// Charger depuis localStorage
 onMounted(() => {
   const saved = localStorage.getItem('candidats');
   if (saved) candidats.value = JSON.parse(saved);
 });
 
-// Sauvegarder à chaque changement
 watch(
   candidats,
   (nv) => {
@@ -48,22 +52,18 @@ watch(
   { deep: true }
 );
 
-// Ajouter un candidat
 function ajouterCandidat(candidat) {
   candidats.value.push({ ...candidat });
 }
 
-// Mettre à jour les filtres depuis FiltreRecherche.vue
 function mettreAJourFiltres(nouveauxFiltres) {
   filtres.value = nouveauxFiltres;
 }
 
-// Liste des filières existantes dans les candidats
 const filieresDisponibles = computed(() =>
   [...new Set(candidats.value.map((c) => c.filiere))].filter(Boolean)
 );
 
-// Liste filtrée selon recherche et filière
 const candidatsFiltres = computed(() => {
   return candidats.value.filter((c) => {
     const r = filtres.value.recherche.toLowerCase();
@@ -78,5 +78,16 @@ const candidatsFiltres = computed(() => {
 <style scoped>
 .container {
   padding: 1rem;
+}
+.btn-success {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+.btn-success:hover {
+  background-color: #218838;
 }
 </style>
