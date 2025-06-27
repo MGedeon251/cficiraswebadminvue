@@ -46,7 +46,7 @@ const routes = [
       {
         path: '/inscriptions', // Résultat final : /scolarite/inscriptions
         name: 'InscriptionsScolarite',
-        component: () => import('@/views/scolarite/inscriptions/Inscriptions.vue'),
+        component: () => import('@/views/inscriptions/Inscription.vue'),
       },
       //j'ai ajouté cette route pour la page d'examens
       {
@@ -66,6 +66,7 @@ const routes = [
         name: 'Etudiants',
         component: () => import('@/views/etudiants/Etudiants.vue'),
       },
+      
 
       {
         path: '/global',
