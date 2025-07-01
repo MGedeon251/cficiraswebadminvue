@@ -205,7 +205,6 @@
 
 <script setup>
 import SkeletonLoader from '@/components/SkeletonLoader.vue';
-import sidebar from '@/components/Header.vue';
 import { ref, computed, onMounted } from 'vue';
 
 const loading = ref(true);
