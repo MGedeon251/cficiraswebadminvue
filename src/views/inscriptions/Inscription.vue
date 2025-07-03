@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Titre -->
     <div class="row">
       <div class="col-md-12 grid-margin">
         <div class="d-flex justify-content-between flex-wrap">
@@ -40,9 +41,10 @@
       </div>
     </div>
 
+    <!-- Export -->
     <div class="row mb-3">
       <div class="col-md-12 text-end">
-        <button class="btn btn-outline-primary" @click="exportCSV">Exporter en CSV</button>
+        <button class="btn btn-outline-primary" @click="exportCSV(inscriptionsFiltrees)">Exporter Candidats (CSV)</button>
       </div>
     </div>
 
@@ -73,7 +75,7 @@
                       <td>{{ (pageCourante - 1) * pageSize + index + 1 }}</td>
                       <td>{{ c.nom }}</td>
                       <td>{{ c.prenom }}</td>
-                      <td>{{ c.sexe?.charAt(0).toUpperCase() }}</td>
+                      <td>{{ c.sexe }}</td>
                       <td>{{ c.age }}</td>
                       <td>{{ c.filiere }}</td>
                       <td>{{ c.concours }}</td>
@@ -83,9 +85,7 @@
                         </span>
                       </td>
                       <td>
-                        <button v-if="!c.inscrit" class="btn btn-sm btn-success" @click="validerInscription(c)">Valider</button>
-                        <button class="btn btn-sm btn-danger" @click="supprimerCandidat(c)">Supprimer</button>
-                        <button class="btn btn-sm btn-primary">Modifier</button>
+                        <button class="btn btn-sm btn-success" @click="validerInscription(c)">Valider</button>
                       </td>
                     </tr>
                     <tr v-if="inscriptionsFiltrees.length === 0">
@@ -109,26 +109,60 @@
     <div class="row mt-5">
       <div class="col-md-12">
         <h4>Liste des étudiants inscrits</h4>
+
+        <!-- Filtres inscrits -->
+        <div class="row mb-3">
+          <div class="col-md-3">
+            <input v-model="filtreInscritsNom" type="text" class="form-control" placeholder="Rechercher nom...">
+          </div>
+          <div class="col-md-3">
+            <input v-model="filtreInscritsPrenom" type="text" class="form-control" placeholder="Rechercher prénom...">
+          </div>
+          <div class="col-md-3">
+            <select v-model="filtreInscritsYear" class="form-select">
+              <option value="">-- Toutes les années --</option>
+              <option v-for="year in academicYears" :key="year" :value="year">{{ year }}</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select v-model="filtreInscritsFiliere" class="form-select">
+              <option value="">-- Toutes les filières --</option>
+              <option v-for="f in filieresDisponibles" :key="f" :value="f">{{ f }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="text-end mb-2">
+          <button class="btn btn-outline-success" @click="exportCSV(inscritsFiltrees)">Exporter Inscrits (CSV)</button>
+        </div>
+
         <table class="table table-bordered">
           <thead>
             <tr>
               <th>Nom</th>
               <th>Prénom</th>
+              <th>Sexe</th>
+              <th>Âge</th>
               <th>Filière</th>
               <th>Année</th>
-              <th>Paiement</th>
+              <th>Photo</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(etudiant, i) in inscrits" :key="i">
+            <tr v-for="(etudiant, i) in inscritsFiltrees" :key="i">
               <td>{{ etudiant.nom }}</td>
               <td>{{ etudiant.prenom }}</td>
+              <td>{{ etudiant.sexe }}</td>
+              <td>{{ etudiant.age }}</td>
               <td>{{ etudiant.filiere }}</td>
               <td>{{ etudiant.annee }}</td>
-              <td>{{ etudiant.paiement }}</td>
+              <td>
+                <img v-if="etudiant.photo" :src="etudiant.photo" alt="Photo" style="width: 50px; height: 50px; object-fit: cover;" />
+                <span v-else>Aucune</span>
+              </td>
             </tr>
-            <tr v-if="inscrits.length === 0">
-              <td colspan="5" class="text-center fst-italic">Aucun étudiant inscrit.</td>
+            <tr v-if="inscritsFiltrees.length === 0">
+              <td colspan="7" class="text-center fst-italic">Aucun étudiant inscrit.</td>
             </tr>
           </tbody>
         </table>
@@ -138,91 +172,93 @@
 </template>
 
 <script setup>
-import SkeletonLoader from '@/components/SkeletonLoader.vue';
-import { ref, computed, onMounted } from 'vue';
+import SkeletonLoader from '@/components/SkeletonLoader.vue'
+import { ref, computed, onMounted } from 'vue'
 
-const loading = ref(true);
-const academicYears = ref([]);
-const selectedYear = ref('');
-const selectedFiliere = ref('');
-const rechercheNom = ref('');
-const recherchePrenom = ref('');
-const inscriptions = ref([]);
-const inscrits = ref([]);
-const pageCourante = ref(1);
-const pageSize = 5;
+const loading = ref(true)
+const academicYears = ref([])
+const selectedYear = ref('')
+const selectedFiliere = ref('')
+const rechercheNom = ref('')
+const recherchePrenom = ref('')
+const inscriptions = ref([])
+const inscrits = ref([])
+const pageCourante = ref(1)
+const pageSize = 5
+
+const filtreInscritsNom = ref('')
+const filtreInscritsPrenom = ref('')
+const filtreInscritsYear = ref('')
+const filtreInscritsFiliere = ref('')
 
 const filieresDisponibles = computed(() => {
-  const set = new Set(inscriptions.value.map(c => c.filiere).filter(Boolean));
-  return Array.from(set);
-});
+  const all = [...inscriptions.value, ...inscrits.value]
+  const set = new Set(all.map(c => c.filiere).filter(Boolean))
+  return Array.from(set)
+})
 
 onMounted(() => {
-  const savedAdmis = localStorage.getItem('admis');
+  const savedAdmis = localStorage.getItem('admis')
+  const savedFinal = localStorage.getItem('inscriptionsFinales')
+  inscriptions.value = []
   if (savedAdmis) {
-    const admis = JSON.parse(savedAdmis);
-    inscriptions.value = admis.map(c => ({ ...c, inscrit: false }));
-    const annees = new Set(admis.map(c => c.concours).filter(Boolean));
-    academicYears.value = Array.from(annees).sort();
+    const admis = JSON.parse(savedAdmis)
+    inscriptions.value = admis.map(c => ({ ...c, inscrit: false }))
   }
-
-  const savedFinal = localStorage.getItem('inscriptionsFinales');
   if (savedFinal) {
-    inscrits.value = JSON.parse(savedFinal);
+    inscrits.value = JSON.parse(savedFinal)
   }
+  const annees = new Set([...inscriptions.value, ...inscrits.value].map(c => c.concours || c.annee))
+  academicYears.value = Array.from(annees).sort()
+  loading.value = false
+})
 
-  loading.value = false;
-});
-
-function validerInscription(candidat) {
-  candidat.inscrit = true;
-  const inscription = {
-    ...candidat,
-    annee: candidat.concours,
-    paiement: 'non'
-  };
-  inscrits.value.push(inscription);
-  localStorage.setItem('inscriptionsFinales', JSON.stringify(inscrits.value));
-  inscriptions.value = inscriptions.value.filter(c => !(c.nom === candidat.nom && c.prenom === candidat.prenom));
-  let admis = JSON.parse(localStorage.getItem('admis') || '[]');
-  admis = admis.filter(a => !(a.nom === candidat.nom && a.prenom === candidat.prenom));
-  localStorage.setItem('admis', JSON.stringify(admis));
+function validerInscription(c) {
+  c.inscrit = true
+  const newInscrit = { ...c, annee: c.concours, paiement: 'non' }
+  inscrits.value.push(newInscrit)
+  inscriptions.value = inscriptions.value.filter(i => i !== c)
+  localStorage.setItem('inscriptionsFinales', JSON.stringify(inscrits.value))
+  const admis = JSON.parse(localStorage.getItem('admis') || '[]')
+  const newAdmis = admis.filter(a => !(a.nom === c.nom && a.prenom === c.prenom))
+  localStorage.setItem('admis', JSON.stringify(newAdmis))
 }
 
-function supprimerCandidat(candidat) {
-  inscriptions.value = inscriptions.value.filter(c => !(c.nom === candidat.nom && c.prenom === candidat.prenom));
-  let admis = JSON.parse(localStorage.getItem('admis') || '[]');
-  admis = admis.filter(a => !(a.nom === candidat.nom && a.prenom === candidat.prenom));
-  localStorage.setItem('admis', JSON.stringify(admis));
-}
+const inscriptionsFiltrees = computed(() =>
+  inscriptions.value.filter(c =>
+    c.nom.toLowerCase().includes(rechercheNom.value.toLowerCase()) &&
+    c.prenom.toLowerCase().includes(recherchePrenom.value.toLowerCase()) &&
+    (!selectedFiliere.value || c.filiere === selectedFiliere.value) &&
+    (!selectedYear.value || c.concours === selectedYear.value)
+  )
+)
 
-const inscriptionsFiltrees = computed(() => {
-  return inscriptions.value.filter(c => {
-    const matchNom = c.nom.toLowerCase().includes(rechercheNom.value.toLowerCase());
-    const matchPrenom = c.prenom.toLowerCase().includes(recherchePrenom.value.toLowerCase());
-    const matchFiliere = !selectedFiliere.value || c.filiere === selectedFiliere.value;
-    const matchAnnee = !selectedYear.value || c.concours === selectedYear.value;
-    return matchNom && matchPrenom && matchFiliere && matchAnnee;
-  });
-});
+const inscritsFiltrees = computed(() =>
+  inscrits.value.filter(c =>
+    c.nom.toLowerCase().includes(filtreInscritsNom.value.toLowerCase()) &&
+    c.prenom.toLowerCase().includes(filtreInscritsPrenom.value.toLowerCase()) &&
+    (!filtreInscritsFiliere.value || c.filiere === filtreInscritsFiliere.value) &&
+    (!filtreInscritsYear.value || c.annee === filtreInscritsYear.value)
+  )
+)
 
-const totalPages = computed(() => Math.ceil(inscriptionsFiltrees.value.length / pageSize));
+const totalPages = computed(() => Math.ceil(inscriptionsFiltrees.value.length / pageSize))
 const inscriptionsPage = computed(() => {
-  const start = (pageCourante.value - 1) * pageSize;
-  return inscriptionsFiltrees.value.slice(start, start + pageSize);
-});
+  const start = (pageCourante.value - 1) * pageSize
+  return inscriptionsFiltrees.value.slice(start, start + pageSize)
+})
 
-function exportCSV() {
+function exportCSV(data) {
   const rows = [
-    ['Nom', 'Prénom', 'Sexe', 'Âge', 'Filière', 'Année'],
-    ...inscriptionsFiltrees.value.map(c => [c.nom, c.prenom, c.sexe, c.age, c.filiere, c.concours])
-  ];
-  const csvContent = rows.map(e => e.join(",")).join("\n");
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.setAttribute('download', 'candidats_non_inscrits.csv');
-  link.click();
+    ['Nom', 'Prénom', 'Sexe', 'Âge', 'Filière', 'Année', 'Photo'],
+    ...data.map(c => [c.nom, c.prenom, c.sexe, c.age, c.filiere, c.concours || c.annee, c.photo || ''])
+  ]
+  const csvContent = rows.map(e => e.join(",")).join("\n")
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+  const link = document.createElement('a')
+  link.href = URL.createObjectURL(blob)
+  link.setAttribute('download', 'export.csv')
+  link.click()
 }
 </script>
 
