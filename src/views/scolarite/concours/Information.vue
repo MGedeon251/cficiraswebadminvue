@@ -29,9 +29,7 @@
           <td>{{ formatDate(concours.date) }}</td>
           <td :class="{ admis: concours.etat === 'En cours' }">{{ concours.etat }}</td>
           <td>
-            <button class="btn-valider" @click="voirDetails(concours)">
-              Détails
-            </button>
+            <button class="btn-valider" @click="voirDetails(concours)">Détails</button>
           </td>
         </tr>
         <tr v-if="concoursFiltres.length === 0">
@@ -68,8 +66,18 @@ const concoursFiltres = computed(() => {
 // Format date : 15 juillet 2025
 function formatDate(dateStr) {
   const mois = [
-    'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-    'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'
+    'janvier',
+    'février',
+    'mars',
+    'avril',
+    'mai',
+    'juin',
+    'juillet',
+    'août',
+    'septembre',
+    'octobre',
+    'novembre',
+    'décembre',
   ];
   const d = new Date(dateStr);
   const jour = d.getDate();

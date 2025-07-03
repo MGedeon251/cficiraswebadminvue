@@ -21,10 +21,20 @@
     <!-- Filtres -->
     <div class="row mb-3">
       <div class="col-md-3">
-        <input v-model="rechercheNom" type="text" class="form-control" placeholder="Rechercher par nom...">
+        <input
+          v-model="rechercheNom"
+          type="text"
+          class="form-control"
+          placeholder="Rechercher par nom..."
+        />
       </div>
       <div class="col-md-3">
-        <input v-model="recherchePrenom" type="text" class="form-control" placeholder="Rechercher par prénom...">
+        <input
+          v-model="recherchePrenom"
+          type="text"
+          class="form-control"
+          placeholder="Rechercher par prénom..."
+        />
       </div>
       <div class="col-md-3">
         <select v-model="selectedYear" class="form-select">
@@ -83,8 +93,16 @@
                         </span>
                       </td>
                       <td>
-                        <button v-if="!c.inscrit" class="btn btn-sm btn-success" @click="validerInscription(c)">Valider</button>
-                        <button class="btn btn-sm btn-danger" @click="supprimerCandidat(c)">Supprimer</button>
+                        <button
+                          v-if="!c.inscrit"
+                          class="btn btn-sm btn-success"
+                          @click="validerInscription(c)"
+                        >
+                          Valider
+                        </button>
+                        <button class="btn btn-sm btn-danger" @click="supprimerCandidat(c)">
+                          Supprimer
+                        </button>
                         <button class="btn btn-sm btn-primary">Modifier</button>
                       </td>
                     </tr>
@@ -94,9 +112,21 @@
                   </tbody>
                 </table>
                 <div class="d-flex justify-content-center mt-3">
-                  <button class="btn btn-secondary me-2" :disabled="pageCourante === 1" @click="pageCourante--">Précédent</button>
+                  <button
+                    class="btn btn-secondary me-2"
+                    :disabled="pageCourante === 1"
+                    @click="pageCourante--"
+                  >
+                    Précédent
+                  </button>
                   <span>Page {{ pageCourante }} / {{ totalPages }}</span>
-                  <button class="btn btn-secondary ms-2" :disabled="pageCourante === totalPages" @click="pageCourante++">Suivant</button>
+                  <button
+                    class="btn btn-secondary ms-2"
+                    :disabled="pageCourante === totalPages"
+                    @click="pageCourante++"
+                  >
+                    Suivant
+                  </button>
                 </div>
               </div>
             </div>
@@ -153,7 +183,7 @@ const pageCourante = ref(1);
 const pageSize = 5;
 
 const filieresDisponibles = computed(() => {
-  const set = new Set(inscriptions.value.map(c => c.filiere).filter(Boolean));
+  const set = new Set(inscriptions.value.map((c) => c.filiere).filter(Boolean));
   return Array.from(set);
 });
 
@@ -161,8 +191,8 @@ onMounted(() => {
   const savedAdmis = localStorage.getItem('admis');
   if (savedAdmis) {
     const admis = JSON.parse(savedAdmis);
-    inscriptions.value = admis.map(c => ({ ...c, inscrit: false }));
-    const annees = new Set(admis.map(c => c.concours).filter(Boolean));
+    inscriptions.value = admis.map((c) => ({ ...c, inscrit: false }));
+    const annees = new Set(admis.map((c) => c.concours).filter(Boolean));
     academicYears.value = Array.from(annees).sort();
   }
 
@@ -179,25 +209,29 @@ function validerInscription(candidat) {
   const inscription = {
     ...candidat,
     annee: candidat.concours,
-    paiement: 'non'
+    paiement: 'non',
   };
   inscrits.value.push(inscription);
   localStorage.setItem('inscriptionsFinales', JSON.stringify(inscrits.value));
-  inscriptions.value = inscriptions.value.filter(c => !(c.nom === candidat.nom && c.prenom === candidat.prenom));
+  inscriptions.value = inscriptions.value.filter(
+    (c) => !(c.nom === candidat.nom && c.prenom === candidat.prenom)
+  );
   let admis = JSON.parse(localStorage.getItem('admis') || '[]');
-  admis = admis.filter(a => !(a.nom === candidat.nom && a.prenom === candidat.prenom));
+  admis = admis.filter((a) => !(a.nom === candidat.nom && a.prenom === candidat.prenom));
   localStorage.setItem('admis', JSON.stringify(admis));
 }
 
 function supprimerCandidat(candidat) {
-  inscriptions.value = inscriptions.value.filter(c => !(c.nom === candidat.nom && c.prenom === candidat.prenom));
+  inscriptions.value = inscriptions.value.filter(
+    (c) => !(c.nom === candidat.nom && c.prenom === candidat.prenom)
+  );
   let admis = JSON.parse(localStorage.getItem('admis') || '[]');
-  admis = admis.filter(a => !(a.nom === candidat.nom && a.prenom === candidat.prenom));
+  admis = admis.filter((a) => !(a.nom === candidat.nom && a.prenom === candidat.prenom));
   localStorage.setItem('admis', JSON.stringify(admis));
 }
 
 const inscriptionsFiltrees = computed(() => {
-  return inscriptions.value.filter(c => {
+  return inscriptions.value.filter((c) => {
     const matchNom = c.nom.toLowerCase().includes(rechercheNom.value.toLowerCase());
     const matchPrenom = c.prenom.toLowerCase().includes(recherchePrenom.value.toLowerCase());
     const matchFiliere = !selectedFiliere.value || c.filiere === selectedFiliere.value;
@@ -215,9 +249,16 @@ const inscriptionsPage = computed(() => {
 function exportCSV() {
   const rows = [
     ['Nom', 'Prénom', 'Sexe', 'Âge', 'Filière', 'Année'],
-    ...inscriptionsFiltrees.value.map(c => [c.nom, c.prenom, c.sexe, c.age, c.filiere, c.concours])
+    ...inscriptionsFiltrees.value.map((c) => [
+      c.nom,
+      c.prenom,
+      c.sexe,
+      c.age,
+      c.filiere,
+      c.concours,
+    ]),
   ];
-  const csvContent = rows.map(e => e.join(",")).join("\n");
+  const csvContent = rows.map((e) => e.join(',')).join('\n');
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);

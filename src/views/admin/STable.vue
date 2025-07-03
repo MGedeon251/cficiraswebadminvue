@@ -15,7 +15,7 @@
           :placeholder="`Search ${column.dataIndex}`"
           :value="selectedKeys[0]"
           style="width: 188px; margin-bottom: 8px; display: block"
-          @change="e => setSelectedKeys(e.target.value ? [e.target.value] : [])"
+          @change="(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])"
           @pressEnter="handleSearch(selectedKeys, confirm, column.dataIndex)"
         />
         <a-button
@@ -61,8 +61,6 @@
 <script>
 import { SearchOutlined } from '@ant-design/icons-vue';
 import { defineComponent, reactive, ref, toRefs } from 'vue';
-
-
 
 export default defineComponent({
   components: {
@@ -110,7 +108,7 @@ export default defineComponent({
         customFilterDropdown: true,
         onFilter: (value, record) =>
           record.name.toString().toLowerCase().includes(value.toLowerCase()),
-        onFilterDropdownOpenChange: open => {
+        onFilterDropdownOpenChange: (open) => {
           if (open) {
             setTimeout(() => {
               searchInput.value.focus();
@@ -130,7 +128,7 @@ export default defineComponent({
         customFilterDropdown: true,
         onFilter: (value, record) =>
           record.address.toString().toLowerCase().includes(value.toLowerCase()),
-        onFilterDropdownOpenChange: open => {
+        onFilterDropdownOpenChange: (open) => {
           if (open) {
             setTimeout(() => {
               searchInput.value.focus();
@@ -146,7 +144,7 @@ export default defineComponent({
       state.searchedColumn = dataIndex;
     };
 
-    const handleReset = clearFilters => {
+    const handleReset = (clearFilters) => {
       clearFilters();
       state.searchText = '';
     };

@@ -87,7 +87,7 @@ defineExpose({ getTableData });
 
 <template>
   <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1" />
-  
+
   <div v-else class="table-responsive">
     <p class="card-description">Liste des étudiants inscrits</p>
     <div class="d-flex justify-content-between flex-wrap">
@@ -171,7 +171,7 @@ defineExpose({ getTableData });
         </tr>
       </tbody>
     </table>
-    
+
     <Pagination
       v-model="currentPage"
       :items-per-page="itemsPerPage"

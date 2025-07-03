@@ -1,16 +1,16 @@
 <template>
-    <a-table
+  <a-table
     :columns="columns"
-    :row-key="record => record.login.uuid"
+    :row-key="(record) => record.login.uuid"
     :data-source="dataSource"
     :pagination="pagination"
     :loading="loading"
     @change="handleTableChange"
-    >
+  >
     <template #bodyCell="{ column, text }">
-        <template v-if="column.dataIndex === 'name'">{{ text.first }} {{ text.last }}</template>
+      <template v-if="column.dataIndex === 'name'">{{ text.first }} {{ text.last }}</template>
     </template>
-    </a-table>
+  </a-table>
 </template>
 <script lang="ts" setup>
 import { computed } from 'vue';
@@ -18,7 +18,7 @@ import type { TableProps } from 'ant-design-vue';
 import { usePagination } from 'vue-request';
 import axios from 'axios';
 const columns = [
-    {
+  {
     title: '#',
     dataIndex: 'id',
     width: '2%',
@@ -70,7 +70,7 @@ const {
   current,
   pageSize,
 } = usePagination(queryData, {
-  formatResult: res => res.data.results,
+  formatResult: (res) => res.data.results,
   pagination: {
     currentKey: 'page',
     pageSizeKey: 'results',
@@ -86,7 +86,7 @@ const pagination = computed(() => ({
 const handleTableChange: TableProps['onChange'] = (
   pag: { pageSize: number; current: number },
   filters: any,
-  sorter: any,
+  sorter: any
 ) => {
   run({
     results: pag.pageSize,
@@ -98,5 +98,4 @@ const handleTableChange: TableProps['onChange'] = (
 };
 </script>
 
-<script lang="ts">
-</script>
+<script lang="ts"></script>
