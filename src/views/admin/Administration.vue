@@ -1,9 +1,5 @@
-<script setup>
-import sidebar from '@/components/Header.vue';
-</script>
-
 <template>
-  <div>
+  <div class="admin-font">
     <div class="row">
       <div class="col-md-12 grid-margin">
         <div class="d-flex justify-content-between flex-wrap">
@@ -26,7 +22,19 @@ import sidebar from '@/components/Header.vue';
       <div class="container my-2">
         <div class="col-md-12 grid margin stretch-card">
           <div class="card">
-            <div class="card-body"></div>
+            <div class="card-body">
+                <a-tabs v-model:activeKey="activeKey">
+                    <a-tab-pane key="1" tab="Vue d'ensemble">
+                    Contenu du premier onglet
+                    </a-tab-pane>
+                    <a-tab-pane key="2" tab="Étudiants">
+                    Contenu du deuxième onglet
+                    </a-tab-pane>
+                    <a-tab-pane key="3" tab="Statistiques">
+                    Contenu du troisième onglet
+                    </a-tab-pane>
+                </a-tabs>
+            </div>
           </div>
         </div>
       </div>
@@ -38,26 +46,27 @@ import sidebar from '@/components/Header.vue';
           <div class="card-body">
             <h4 class="card-title">Liste des Formateurs</h4>
             <p class="card-description">Liste de formateurs actifs</p>
-            <div class="table-responsive">
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Matricule</th>
-                    <th>Nom</th>
-                    <th>Prenom</th>
-                    <th>Email</th>
-                    <th>Telephone</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr></tr>
-                </tbody>
-              </table>
-            </div>
+            <ATable/>  
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+<script lang="ts" setup>
+
+import ATable from './ATable.vue';  
+
+import { ref } from 'vue';
+
+const activeKey = ref('1');
+
+</script>
+<style scoped>
+.admin-font {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+}
+</style>
+
+
+

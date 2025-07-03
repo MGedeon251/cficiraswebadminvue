@@ -87,6 +87,7 @@ defineExpose({ getTableData });
 
 <template>
   <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1" />
+  
   <div v-else class="table-responsive">
     <p class="card-description">Liste des étudiants inscrits</p>
     <div class="d-flex justify-content-between flex-wrap">
@@ -103,7 +104,6 @@ defineExpose({ getTableData });
                 </option>
               </select>
             </div>
-
             <!-- Filtre par filière -->
             <div class="col-md-6">
               <label class="form-label">Filière</label>
@@ -114,7 +114,6 @@ defineExpose({ getTableData });
                 </option>
               </select>
             </div>
-
             <!-- Filtre par classe -->
             <div class="col-md-6">
               <label class="form-label">Classe</label>
@@ -155,13 +154,6 @@ defineExpose({ getTableData });
           <td>
             <ItemActions
               :item="etudiant"
-              :fields="{
-                code: 'Code',
-                designation: 'Désignation',
-                credit: 'Crédit',
-                coefficient: 'Coefficient',
-                volume_horaire: 'Volume horaire',
-              }"
               :showAdd="false"
               editModalTarget="#editModuleModal"
               @edit="editModule"
@@ -179,7 +171,7 @@ defineExpose({ getTableData });
         </tr>
       </tbody>
     </table>
-
+    
     <Pagination
       v-model="currentPage"
       :items-per-page="itemsPerPage"
