@@ -6,11 +6,16 @@ import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue(), Components({
-    resolvers: [AntDesignVueResolver({
-       importStyle: false, // css in js
-    })],
-  })],
+  plugins: [
+    vue(),
+    Components({
+      resolvers: [
+        AntDesignVueResolver({
+          importStyle: false, // css in js
+        }),
+      ],
+    }),
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)), // Alias @ vers src

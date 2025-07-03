@@ -56,18 +56,50 @@
             <div class="row mb-4">
               <!-- Photo + identité -->
               <div class="col-md-3 text-center">
-                <img
-                  :src="item.photo || '/img/default-avatar.png'"
-                  alt="Photo du formateur"
-                  class="teacher-photo img-thumbnail"
-                />
+                <div
+                  class="avatar bg-warning text-white d-flex align-items-center justify-content-center"
+                >
+                  <!-- Si la photo existe, on l'affiche, sinon on montre les initiales -->
+                  <img
+                    v-if="item.photourl"
+                    :src="getImageUrl(item.photourl)"
+                    alt="Photo du etudiant"
+                    class="avatar-img"
+                  />
+                  <span v-else class="fs-1">{{ 'N/A' }}</span>
+                </div>
                 <div class="mt-2">
                   <span class="badge bg-primary">{{ item.enseignant_id || 'ID inconnu' }}</span>
                 </div>
               </div>
-
               <div class="col-md-9">
-                <div class="info-content"></div>
+                <div class="info-content">
+                  <div class="info-item">
+                    <span class="info-label">Nom :</span>
+                    <span class="info-value">{{ item.nom || 'Non spécifié' }}</span>
+                  </div>
+                  <div class="info-item">
+                    <span class="info-label">Prenom:</span>
+                    <span class="info-value">{{ item.prenom || 'Non spécifié' }}</span>
+                  </div>
+                  <div class="info-item">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">{{ item.email || 'Non spécifié' }}</span>
+                  </div>
+
+                  <div class="info-item">
+                    <span class="info-label">Telephone:</span>
+                    <span class="info-value"
+                      >{{ displayTel(item.tel1) }} / {{ displayTel(item.tel2) }}</span
+                    >
+                  </div>
+                  <div class="info-item">
+                    <span class="info-label">Statut :</span>
+                    <span class="info-value badge bg-primary">{{
+                      item.designation_type_enseignant || 'Non spécifié'
+                    }}</span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -149,6 +181,7 @@ import { ref, onMounted } from 'vue';
 import { getEnseignants } from '@/api/pedagogies/pedagogieApi';
 import dayjs from 'dayjs';
 import 'dayjs/locale/fr';
+const etudiant = ref();
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 
 const props = defineProps({
@@ -201,6 +234,14 @@ onMounted(async () => {
     );
   }
 });
+
+function displayTel(tel) {
+  return tel && tel !== '' ? tel : 'Non spécifié';
+}
+
+const getImageUrl = (photoPath) => {
+  return `http://localhost:3500${photoPath}`; // Remplace cette URL par celle de ton backend
+};
 </script>
 
 <style scoped>
@@ -254,5 +295,22 @@ onMounted(async () => {
 }
 .modal-footer {
   border-top: 1px solid #dee2e6;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 8px;
+  border-color: antiquewhite;
+  border-style: solid;
+  font-weight: bold;
+  font-size: 2rem;
+  overflow: hidden; /* Masque l'excédent d'image */
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Permet à l'image de couvrir l'espace sans déformation */
 }
 </style>

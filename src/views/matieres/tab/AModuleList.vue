@@ -1,33 +1,26 @@
 <template>
   <a-card title="Liste des Modules" bordered>
     <!-- Top actions -->
-    <div class="d-flex justify-content-between flex-wrap mb-4">
-      <!-- Groupe à gauche -->
-      <div class="flex flex-wrap items-center gap-2">
-        <a-button-group>
-          <a-button @click="exportPDF"><i class="mdi mdi-file-pdf-box" /> PDF</a-button>
-          <a-button @click="exportExcel"><i class="mdi mdi-file-excel-box" /> Excel</a-button>
-          <a-button @click="exportCSV"><i class="mdi mdi-file-delimited" /> CSV</a-button>
-          <a-button @click="print"><i class="mdi mdi-printer" /> Imprimer</a-button>
-        </a-button-group>
-      </div>
-
-      <!-- Groupe à droite -->
-      <div class="d-flex justify-content-between align-items-end flex-wrap">
-        <a-button type="default" @click="refreshModules" :loading="isLoading">
-          🔄 Rafraîchir
-        </a-button>
-        <a-input
-          v-model:value="searchQuery"
-          placeholder="Rechercher..."
-          allow-clear
-          style="width: 250px"
-        >
-          <template #prefix>
-            <i class="mdi mdi-magnify" />
-          </template>
-        </a-input>
-      </div>
+    <div class="flex flex-wrap justify-between mb-4">
+      <a-button-group>
+        <a-button @click="exportPDF"><i class="mdi mdi-file-pdf-box" /> PDF</a-button>
+        <a-button @click="exportExcel"><i class="mdi mdi-file-excel-box" /> Excel</a-button>
+        <a-button @click="exportCSV"><i class="mdi mdi-file-delimited" /> CSV</a-button>
+        <a-button @click="print"><i class="mdi mdi-printer" /> Imprimer</a-button>
+      </a-button-group>
+      <a-button type="default" @click="refreshModules" :loading="isLoading">
+        🔄 Rafraîchir
+      </a-button>
+      <a-input
+        v-model:value="searchQuery"
+        placeholder="Rechercher..."
+        allow-clear
+        style="width: 250px"
+      >
+        <template #prefix>
+          <i class="mdi mdi-magnify" />
+        </template>
+      </a-input>
     </div>
 
     <!-- Table -->

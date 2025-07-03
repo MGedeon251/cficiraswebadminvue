@@ -51,7 +51,7 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">Informations & Details</h4>
-          <TableData ref="tableDataRef"></TableData>
+          <ATableData ref="tableDataRef"></ATableData>
         </div>
       </div>
     </div>
@@ -68,6 +68,7 @@
 import { ref } from 'vue';
 import * as XLSX from 'xlsx';
 import TableData from './tab/TableData.vue';
+import ATableData from './tab/ATableData.vue';
 import TabContent from './tab/TabContent.vue';
 
 const tableDataRef = ref(null);
