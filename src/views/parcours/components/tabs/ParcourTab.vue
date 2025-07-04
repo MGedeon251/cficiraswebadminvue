@@ -22,7 +22,7 @@
           role="tab"
           aria-controls="devoirf"
           aria-selected="false"
-          >Activités académiques & devoirs</a
+          >Exportations</a
         >
       </li>
       <li class="nav-item">
@@ -34,21 +34,10 @@
           role="tab"
           aria-controls="sales"
           aria-selected="false"
-          >Exportation</a
+          >Rapports</a
         >
       </li>
-      <li class="nav-item">
-        <a
-          class="nav-link"
-          id="purchases-tab"
-          data-bs-toggle="tab"
-          href="#purchases"
-          role="tab"
-          aria-controls="purchases"
-          aria-selected="false"
-          >Rapport</a
-        >
-      </li>
+
       
     </ul>
     <div class="tab-content p-4">
