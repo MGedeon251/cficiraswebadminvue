@@ -19,11 +19,71 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-12 grid-margin stretch-card">
-        <div class="card">
-          <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1" />
-          <div v-else class="card-body dashboard-tabs p-0">
-            <ParcourTab />
+      <div class="container my-2">
+        <div class="col-md-12 grid margin stretch-card">
+          <div class="card">
+            <SkeletonLoader v-if="loading" type="card" :rows="3" :columns="1" />
+            <div v-else class="card-body">
+              <h4 class="card-title">Historiques des parcours</h4>
+              <p class="card-description"></p>
+              <div class="d-flex gap-2 mb-3">
+                <input type="text" v-model="searchQuery" class="form-control w-auto me-2" placeholder="Recherche nom, matricule, promotion..." />
+                <button type="button" class="btn btn-outline-dark btn-icon me-3 d-none d-md-block">
+                  <i class="mdi mdi-view-grid"></i>
+                </button>
+                <button type="button" class="btn btn-outline-dark btn-icon me-3 d-none d-md-block">
+                  <i class="mdi mdi-view-list"></i>
+                </button>
+
+                <button type="button" class="btn btn-outline-dark btn-icon me-3 d-none d-md-block">
+                  <i class="mdi mdi-filter"></i>
+                </button>
+                <button type="button" class="btn btn-outline-dark btn-icon me-3 mt-2 mt-xl-0">
+                  <i class="mdi mdi-alert-circle"></i>
+                </button>
+                <button class="btn btn-primary mt-2 mt-xl-0">
+                  <span class="">Ajouter</span>
+                </button>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Matricule</th>
+                      <th>Nom(s)</th>
+                      <th>Prenom(s)</th>
+                      <th>Promotion</th>
+                      <th>Téléphone</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(formateur, idx) in filteredFormateurs" :key="formateur.id">
+                      <td>{{ idx + 1 }}</td>
+                      <td>{{ formateur.matricule }}</td>
+                      <td>{{ formateur.nom }}</td>
+                      <td>{{ formateur.prenom }}</td>
+                      <td>{{ formateur.promotion || '-' }}</td>
+                      <td>{{ formateur.telephone }}</td>
+                      <td>
+                        <button class="btn btn-sm btn-outline-primary" @click="openDetails(formateur)">
+                          <i class="mdi mdi-eye"></i> Détails
+                        </button>
+                      </td>
+                    </tr>
+                    <tr v-if="!loading && filteredFormateurs.length === 0">
+                      <td colspan="7" class="text-center py-4">
+                        <div class="d-flex flex-column align-items-center">
+                          <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
+                        </div>
+                        <div class="text-pr">Aucune donnée</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -61,7 +121,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import SkeletonLoader from '@/components/SkeletonLoader.vue';
-import ParcourTab from './components/tabs/ParcourTab.vue';
+
 const loading = ref(true);
 const formateurs = ref([]);
 const searchQuery = ref("");
