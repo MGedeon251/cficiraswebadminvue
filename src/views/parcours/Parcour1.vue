@@ -27,7 +27,12 @@
               <h4 class="card-title">Historiques des parcours</h4>
               <p class="card-description"></p>
               <div class="d-flex gap-2 mb-3">
-                <input type="text" v-model="searchQuery" class="form-control w-auto me-2" placeholder="Recherche nom, matricule, promotion..." />
+                <input
+                  type="text"
+                  v-model="searchQuery"
+                  class="form-control w-auto me-2"
+                  placeholder="Recherche nom, matricule, promotion..."
+                />
                 <button type="button" class="btn btn-outline-dark btn-icon me-3 d-none d-md-block">
                   <i class="mdi mdi-view-grid"></i>
                 </button>
@@ -67,7 +72,10 @@
                       <td>{{ formateur.promotion || '-' }}</td>
                       <td>{{ formateur.telephone }}</td>
                       <td>
-                        <button class="btn btn-sm btn-outline-primary" @click="openDetails(formateur)">
+                        <button
+                          class="btn btn-sm btn-outline-primary"
+                          @click="openDetails(formateur)"
+                        >
                           <i class="mdi mdi-eye"></i> Détails
                         </button>
                       </td>
@@ -90,11 +98,18 @@
     </div>
     <!-- Modal détails étudiant -->
     <teleport to="body">
-      <div v-if="showDetails" class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.3)">
+      <div
+        v-if="showDetails"
+        class="modal fade show d-block"
+        tabindex="-1"
+        style="background: rgba(0, 0, 0, 0.3)"
+      >
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Fiche académique de {{ selectedEtudiant.nom }} {{ selectedEtudiant.prenom }}</h5>
+              <h5 class="modal-title">
+                Fiche académique de {{ selectedEtudiant.nom }} {{ selectedEtudiant.prenom }}
+              </h5>
               <button type="button" class="btn-close" @click="showDetails = false"></button>
             </div>
             <div class="modal-body">
@@ -124,16 +139,17 @@ import SkeletonLoader from '@/components/SkeletonLoader.vue';
 
 const loading = ref(true);
 const formateurs = ref([]);
-const searchQuery = ref("");
+const searchQuery = ref('');
 const showDetails = ref(false);
 const selectedEtudiant = ref({});
 
 const filteredFormateurs = computed(() => {
   if (!searchQuery.value) return formateurs.value;
-  return formateurs.value.filter(f =>
-    (f.nom && f.nom.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
-    (f.matricule && f.matricule.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
-    (f.promotion && f.promotion.toLowerCase().includes(searchQuery.value.toLowerCase()))
+  return formateurs.value.filter(
+    (f) =>
+      (f.nom && f.nom.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
+      (f.matricule && f.matricule.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
+      (f.promotion && f.promotion.toLowerCase().includes(searchQuery.value.toLowerCase()))
   );
 });
 

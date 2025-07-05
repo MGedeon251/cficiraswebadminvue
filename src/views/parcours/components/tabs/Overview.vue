@@ -1,53 +1,53 @@
 <template>
   <div class="flex flex-wrap justify-between mb-4">
     <a-input
-        class="me-1 mt-1 mt-xl-0"
-        v-model:value="searchQuery"
-        placeholder="Rechercher..."
-        allow-clear
-        style="width: 250px"
-       >
-        <template #prefix>
-          <i class="mdi mdi-magnify" />
-        </template>
-      </a-input>
-      <a-select
-        class="me-1 mt-1 mt-xl-0"
-        v-model:value="selectedAnnee"
-        placeholder="Année académique"
-        style="width: 180px"
-        :loading="loadingAnnees"
-        allow-clear
-      >
-        <a-select-option value="lucy">lucy</a-select-option>
-      </a-select>
-      <a-select
-        v-model:value="selectedFiliere"
-        placeholder="Filiere"
-        style="width: 180px"
-        :loading="loadingFilieres"
-        allow-clear
-      >
-        <a-select-option value="lucy">lucy</a-select-option>
-      </a-select>
-    </div>
+      class="me-1 mt-1 mt-xl-0"
+      v-model:value="searchQuery"
+      placeholder="Rechercher..."
+      allow-clear
+      style="width: 250px"
+    >
+      <template #prefix>
+        <i class="mdi mdi-magnify" />
+      </template>
+    </a-input>
+    <a-select
+      class="me-1 mt-1 mt-xl-0"
+      v-model:value="selectedAnnee"
+      placeholder="Année académique"
+      style="width: 180px"
+      :loading="loadingAnnees"
+      allow-clear
+    >
+      <a-select-option value="lucy">lucy</a-select-option>
+    </a-select>
+    <a-select
+      v-model:value="selectedFiliere"
+      placeholder="Filiere"
+      style="width: 180px"
+      :loading="loadingFilieres"
+      allow-clear
+    >
+      <a-select-option value="lucy">lucy</a-select-option>
+    </a-select>
+  </div>
   <div class="table-responsive">
     <a-table
-        :columns="columns"
-        :data-source="paginatedEnseignants"
-        :loading="loading"
-        :pagination="false"
-        :row-key="(record) => record.id"
-      >
-        <template #bodyCell="{ column, record, index }">
-          <template v-if="column.key === 'index'">
-            {{ index + 1 + (currentPage - 1) * itemsPerPage }}
-          </template>
-          <template v-else-if="column.key === 'actions'">
-            <ItemActions :item="record" moduleRoute="/enseignant" />
-          </template>
+      :columns="columns"
+      :data-source="paginatedEnseignants"
+      :loading="loading"
+      :pagination="false"
+      :row-key="(record) => record.id"
+    >
+      <template #bodyCell="{ column, record, index }">
+        <template v-if="column.key === 'index'">
+          {{ index + 1 + (currentPage - 1) * itemsPerPage }}
         </template>
-      </a-table>
+        <template v-else-if="column.key === 'actions'">
+          <ItemActions :item="record" moduleRoute="/enseignant" />
+        </template>
+      </template>
+    </a-table>
   </div>
 </template>
 

@@ -30,11 +30,18 @@
     </div>
     <!-- Modal détails étudiant -->
     <teleport to="body">
-      <div v-if="showDetails" class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.3)">
+      <div
+        v-if="showDetails"
+        class="modal fade show d-block"
+        tabindex="-1"
+        style="background: rgba(0, 0, 0, 0.3)"
+      >
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Fiche académique de {{ selectedEtudiant.nom }} {{ selectedEtudiant.prenom }}</h5>
+              <h5 class="modal-title">
+                Fiche académique de {{ selectedEtudiant.nom }} {{ selectedEtudiant.prenom }}
+              </h5>
               <button type="button" class="btn-close" @click="showDetails = false"></button>
             </div>
             <div class="modal-body">
@@ -64,16 +71,17 @@ import SkeletonLoader from '@/components/SkeletonLoader.vue';
 import ParcourTab from './components/tabs/ParcourTab.vue';
 const loading = ref(true);
 const formateurs = ref([]);
-const searchQuery = ref("");
+const searchQuery = ref('');
 const showDetails = ref(false);
 const selectedEtudiant = ref({});
 
 const filteredFormateurs = computed(() => {
   if (!searchQuery.value) return formateurs.value;
-  return formateurs.value.filter(f =>
-    (f.nom && f.nom.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
-    (f.matricule && f.matricule.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
-    (f.promotion && f.promotion.toLowerCase().includes(searchQuery.value.toLowerCase()))
+  return formateurs.value.filter(
+    (f) =>
+      (f.nom && f.nom.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
+      (f.matricule && f.matricule.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
+      (f.promotion && f.promotion.toLowerCase().includes(searchQuery.value.toLowerCase()))
   );
 });
 

@@ -37,18 +37,18 @@
           >Etudiants</a
         >
       </li>
-        <li class="nav-item">
-            <a
-            class="nav-link"
-            id="purchases-tab"
-            data-bs-toggle="tab"
-            href="#purchases"
-            role="tab"
-            aria-controls="purchases"
-            aria-selected="false"
-            >Exportations</a
-            >
-        </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          id="purchases-tab"
+          data-bs-toggle="tab"
+          href="#purchases"
+          role="tab"
+          aria-controls="purchases"
+          aria-selected="false"
+          >Exportations</a
+        >
+      </li>
     </ul>
     <div class="tab-content p-4">
       <div
@@ -60,10 +60,10 @@
         <concours />
       </div>
       <div class="tab-pane fade" id="devoirf" role="tabpanel" aria-labelledby="devoirf-tab">
-        <candidats/>
+        <candidats />
       </div>
       <div class="tab-pane fade" id="sales" role="tabpanel" aria-labelledby="sales-tab">
-        <annee/>
+        <annee />
       </div>
       <div class="tab-pane fade" id="purchases" role="tabpanel" aria-labelledby="purchases-tab">
         <StatsRapport />
@@ -77,8 +77,6 @@ import concours from './concours.vue';
 import candidats from './candidats.vue';
 import annee from './Etudiants.vue';
 import StatsRapport from './StatsRapport.vue';
-
-
 </script>
 
 <style scoped>

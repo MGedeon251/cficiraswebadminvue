@@ -37,8 +37,6 @@
           >Rapports</a
         >
       </li>
-
-      
     </ul>
     <div class="tab-content p-4">
       <div
@@ -53,7 +51,7 @@
         <Historiques />
       </div>
       <div class="tab-pane fade" id="sales" role="tabpanel" aria-labelledby="sales-tab">
-        <Activity/>
+        <Activity />
       </div>
       <div class="tab-pane fade" id="purchases" role="tabpanel" aria-labelledby="purchases-tab">
         <StatsRapport />
@@ -66,8 +64,7 @@
 import Overview from './Overview.vue';
 import Historiques from './Historique.vue';
 import Exportation from './Exportation.vue';
-import Activity  from './Activity.vue';
-
+import Activity from './Activity.vue';
 </script>
 
 <style scoped>
