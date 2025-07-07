@@ -69,13 +69,7 @@
         <template v-else-if="column.key === 'actions'">
           <ItemActions
             :item="record"
-            :fields="{
-              code: 'Code',
-              designation: 'Désignation',
-              credit: 'Crédit',
-              coefficient: 'Coefficient',
-              volume_horaire: 'Volume horaire',
-            }"
+            etudiantRoute="/etudiants"
             :showAdd="false"
             editModalTarget="#editModuleModal"
             @edit="editModule"

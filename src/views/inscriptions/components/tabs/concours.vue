@@ -11,8 +11,15 @@
           </div>
           <div class="d-flex justify-content-between align-items-end flex-wrap">
             <button class="btn btn-outline-dark me-2">Exporter</button>
-            <button class="btn btn-primary mt-2 mt-xl-0">+ Ajouter</button>
+            <button
+              class="btn btn-primary mt-2 mt-xl-0"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >
+              + Ajouter
+            </button>
           </div>
+          <AddConcour />
         </div>
         <div class="table-responsive mt-3">
           <table class="table table-hover align-middle">
@@ -45,6 +52,7 @@
 
 <script setup="setup">
 import { ref, onMounted } from 'vue';
+import AddConcour from '../modal/AddConcour.vue';
 const concours = ref([]);
 
 onMounted(() => {
