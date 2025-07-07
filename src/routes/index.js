@@ -54,19 +54,23 @@ const routes = [
         name: 'ExamensScolarite',
         component: () => import('@/views/examens/Examens.vue'),
       },
+      {
+        path: '/notes', // Résultat final : /scolarite/notes
+        name: 'NotesScolarite',
+        component: () => import('@/views/admin/Administration.vue'),
+      },
       //j'ai ajouté cette route pour la sous pages planning des examens
-       {
+      {
         path: '/examens/planning/:id', // Résultat final : /scolarite/examens
         name: 'ExamensPlanning',
         component: () => import('@/views/examens/calendrier/sample.vue'),
       },
-       //j'ai ajouté cette route pour la sous pages planning des examens
-       {
+      //j'ai ajouté cette route pour la sous pages planning des examens
+      {
         path: '/etudiants', // Résultat final : /scolarite/examens
         name: 'Etudiants',
         component: () => import('@/views/etudiants/Etudiants.vue'),
       },
-      
 
       {
         path: '/global',

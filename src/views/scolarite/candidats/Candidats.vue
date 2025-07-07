@@ -12,23 +12,19 @@
 
             <!-- Liste filtrée -->
             <ListeCandidats :candidats="candidatsFiltres" />
-             <!-- Bouton pour accéder à la page de validation -->
-             <div class="mb-4 d-flex justify-content-end">
+            <!-- Bouton pour accéder à la page de validation -->
+            <div class="mb-4 d-flex justify-content-end">
               <router-link to="/candidats/validation">
-                <button class="btn btn-success">
-                  Valider les candidats
-                </button>
+                <button class="btn btn-success">Valider les candidats</button>
               </router-link>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
 
     <div class="container"></div>
   </div>
-  
 </template>
 
 <script setup>

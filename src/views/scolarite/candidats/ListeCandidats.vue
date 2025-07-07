@@ -23,7 +23,9 @@
         <label>Année :</label>
         <select v-model="anneeSelectionnee">
           <option value="">-- Toutes --</option>
-          <option v-for="(annee, i) in anneesDisponibles" :key="i" :value="annee">{{ annee }}</option>
+          <option v-for="(annee, i) in anneesDisponibles" :key="i" :value="annee">
+            {{ annee }}
+          </option>
         </select>
       </div>
     </div>
@@ -50,7 +52,9 @@
           <td>{{ c.concours }}</td>
           <td class="actions">
             <button class="btn-details" @click="voirDetails(c)">Détails</button>
-            <button class="btn-edit" @click="supprimerCandidat(index + (page - 1) * parPage)">Supprimer</button>
+            <button class="btn-edit" @click="supprimerCandidat(index + (page - 1) * parPage)">
+              Supprimer
+            </button>
           </td>
         </tr>
         <tr v-if="candidatsFiltres.length === 0">
@@ -91,7 +95,11 @@
           <p><strong>Année du concours :</strong> {{ candidatActuel.concours }}</p>
           <div v-if="candidatActuel.photo">
             <p><strong>Photo :</strong></p>
-            <img :src="candidatActuel.photo" alt="Photo" style="width: 130px; height: 160px; object-fit: cover;" />
+            <img
+              :src="candidatActuel.photo"
+              alt="Photo"
+              style="width: 130px; height: 160px; object-fit: cover"
+            />
           </div>
         </div>
       </div>
@@ -125,15 +133,13 @@ onMounted(() => {
 });
 
 const filieresDisponibles = computed(() =>
-  [...new Set(candidats.value.map(c => c.filiere))].filter(Boolean).sort()
+  [...new Set(candidats.value.map((c) => c.filiere))].filter(Boolean).sort()
 );
 
-const anneesDisponibles = computed(() =>
-  concours.value.map(c => c.annee).sort()
-);
+const anneesDisponibles = computed(() => concours.value.map((c) => c.annee).sort());
 
 const candidatsFiltres = computed(() => {
-  return candidats.value.filter(c => {
+  return candidats.value.filter((c) => {
     const matchFiliere = !filiereSelectionnee.value || c.filiere === filiereSelectionnee.value;
     const matchNom = c.nom?.toLowerCase().includes(rechercheNom.value.toLowerCase());
     const matchPrenom = c.prenom?.toLowerCase().includes(recherchePrenom.value.toLowerCase());
@@ -150,7 +156,7 @@ const candidatsPaginés = computed(() => {
 });
 
 function supprimerCandidat(index) {
-  if (confirm("Voulez-vous vraiment supprimer ce candidat ?")) {
+  if (confirm('Voulez-vous vraiment supprimer ce candidat ?')) {
     const tous = [...candidats.value];
     tous.splice(index, 1);
     candidats.value = tous;

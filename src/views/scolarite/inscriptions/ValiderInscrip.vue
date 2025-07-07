@@ -10,10 +10,7 @@
             <p class="card-description">Validez les candidatures des étudiants</p>
 
             <!-- Liste des inscriptions à valider -->
-            <ListeInscriptions
-              :inscriptions="inscriptionsAValider"
-              @valider="validerInscription"
-            />
+            <ListeInscriptions :inscriptions="inscriptionsAValider" @valider="validerInscription" />
 
             <!-- Bouton pour valider toutes -->
             <button class="btn btn-primary mt-3" @click="validerToutes">
@@ -38,17 +35,17 @@ onMounted(() => {
   if (saved) inscriptions.value = JSON.parse(saved);
 });
 
-const inscriptionsAValider = computed(() => inscriptions.value.filter(i => !i.valide));
+const inscriptionsAValider = computed(() => inscriptions.value.filter((i) => !i.valide));
 
 function validerInscription(inscriptionId) {
-  const idx = inscriptions.value.findIndex(i => i.id === inscriptionId);
+  const idx = inscriptions.value.findIndex((i) => i.id === inscriptionId);
   if (idx !== -1) {
     inscriptions.value[idx].valide = true;
   }
 }
 
 function validerToutes() {
-  inscriptions.value.forEach(i => {
+  inscriptions.value.forEach((i) => {
     i.valide = true;
   });
 }

@@ -14,7 +14,12 @@
         <form v-if="afficherFormulaire" @submit.prevent="enregistrerConcours" class="mt-3">
           <div class="form-group">
             <label for="annee">Année académique :</label>
-            <select id="annee" v-model="nouveauConcours.annee" @change="genererDateParDefaut" required>
+            <select
+              id="annee"
+              v-model="nouveauConcours.annee"
+              @change="genererDateParDefaut"
+              required
+            >
               <option disabled value="">-- Sélectionner --</option>
               <option v-for="a in anneesAcademiques" :key="a" :value="a">{{ a }}</option>
             </select>
@@ -55,9 +60,15 @@
                 <td>{{ index + 1 + (pageConcours - 1) * perPage }}</td>
                 <td>{{ c.annee }}</td>
                 <td>{{ formatDate(c.date) }}</td>
-                <td :class="{ admis: c.etat === 'En cours', termine: c.etat === 'Terminé' }">{{ c.etat }}</td>
+                <td :class="{ admis: c.etat === 'En cours', termine: c.etat === 'Terminé' }">
+                  {{ c.etat }}
+                </td>
                 <td>
-                  <button class="btn-ter" @click="terminerConcours(c)" :disabled="c.etat === 'Terminé'">
+                  <button
+                    class="btn-ter"
+                    @click="terminerConcours(c)"
+                    :disabled="c.etat === 'Terminé'"
+                  >
                     Terminer
                   </button>
                 </td>
@@ -67,7 +78,9 @@
           <div class="pagination">
             <button @click="pageConcours--" :disabled="pageConcours === 1">Précédent</button>
             <span>Page {{ pageConcours }} / {{ totalPagesConcours }}</span>
-            <button @click="pageConcours++" :disabled="pageConcours === totalPagesConcours">Suivant</button>
+            <button @click="pageConcours++" :disabled="pageConcours === totalPagesConcours">
+              Suivant
+            </button>
           </div>
         </div>
       </div>
@@ -99,7 +112,9 @@
               <td>{{ index + 1 + (pageFiltres - 1) * perPage }}</td>
               <td>{{ c.annee }}</td>
               <td>{{ formatDate(c.date) }}</td>
-              <td :class="{ admis: c.etat === 'En cours', termine: c.etat === 'Terminé' }">{{ c.etat }}</td>
+              <td :class="{ admis: c.etat === 'En cours', termine: c.etat === 'Terminé' }">
+                {{ c.etat }}
+              </td>
               <td>
                 <button class="btn-valider" @click="voirDetails(c)">Détails</button>
               </td>
@@ -112,7 +127,9 @@
         <div class="pagination">
           <button @click="pageFiltres--" :disabled="pageFiltres === 1">Précédent</button>
           <span>Page {{ pageFiltres }} / {{ totalPagesFiltres }}</span>
-          <button @click="pageFiltres++" :disabled="pageFiltres === totalPagesFiltres">Suivant</button>
+          <button @click="pageFiltres++" :disabled="pageFiltres === totalPagesFiltres">
+            Suivant
+          </button>
         </div>
       </div>
     </div>
@@ -120,11 +137,15 @@
     <!-- SECTION : Gestion des candidats -->
     <div class="bloc bloc-candidats mt-4">
       <h3>Candidats au concours</h3>
-      <button class="btn-valider" @click="modalVisible = true" :disabled="concoursEnCours.length === 0">
+      <button
+        class="btn-valider"
+        @click="modalVisible = true"
+        :disabled="concoursEnCours.length === 0"
+      >
         Ajouter un candidat
       </button>
 
-      <p v-if="concoursEnCours.length === 0" style="color: red; margin-top: 1rem;">
+      <p v-if="concoursEnCours.length === 0" style="color: red; margin-top: 1rem">
         Aucun concours en cours. Veuillez d'abord organiser un concours.
       </p>
 
@@ -160,8 +181,18 @@ const perPage = 3;
 const modalVisible = ref(false);
 
 const moisList = [
-  'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-  'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'
+  'janvier',
+  'février',
+  'mars',
+  'avril',
+  'mai',
+  'juin',
+  'juillet',
+  'août',
+  'septembre',
+  'octobre',
+  'novembre',
+  'décembre',
 ];
 
 const nouveauConcours = ref({
@@ -177,7 +208,7 @@ onMounted(() => {
 });
 
 function genererAnneesAcademiques() {
-  const existantes = concours.value.map(c => c.annee);
+  const existantes = concours.value.map((c) => c.annee);
   if (existantes.length === 0) {
     anneesAcademiques.value = ['2024-2025'];
     return;
@@ -198,11 +229,11 @@ function enregistrerConcours() {
     return alert('Veuillez remplir tous les champs.');
   }
 
-  if (concours.value.some(c => c.annee === nouveauConcours.value.annee)) {
+  if (concours.value.some((c) => c.annee === nouveauConcours.value.annee)) {
     return alert(`Un concours existe déjà pour l’année ${nouveauConcours.value.annee}`);
   }
 
-  if (concours.value.some(c => c.etat === 'En cours')) {
+  if (concours.value.some((c) => c.etat === 'En cours')) {
     return alert('Un concours est déjà en cours.');
   }
 
@@ -246,17 +277,13 @@ function candidatAjoute(candidat) {
   alert('Candidat ajouté avec succès.');
 }
 
-const anneesDisponibles = computed(() =>
-  [...new Set(concours.value.map((c) => c.annee))]
-);
+const anneesDisponibles = computed(() => [...new Set(concours.value.map((c) => c.annee))]);
 
-const concoursEnCours = computed(() =>
-  concours.value.filter(c => c.etat === 'En cours')
-);
+const concoursEnCours = computed(() => concours.value.filter((c) => c.etat === 'En cours'));
 
 const concoursFiltres = computed(() => {
   if (!anneeSelectionnee.value) return concours.value;
-  return concours.value.filter(c => c.annee === anneeSelectionnee.value);
+  return concours.value.filter((c) => c.annee === anneeSelectionnee.value);
 });
 
 const concoursPagines = computed(() => {
@@ -265,29 +292,26 @@ const concoursPagines = computed(() => {
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(start, start + perPage);
 });
-const totalPagesConcours = computed(() =>
-  Math.ceil(concours.value.length / perPage)
-);
+const totalPagesConcours = computed(() => Math.ceil(concours.value.length / perPage));
 
 const concoursFiltresPagines = computed(() => {
   const sorted = [...concoursFiltres.value].sort((a, b) => new Date(b.date) - new Date(a.date));
   const start = (pageFiltres.value - 1) * perPage;
   return sorted.slice(start, start + perPage);
 });
-const totalPagesFiltres = computed(() =>
-  Math.ceil(concoursFiltres.value.length / perPage)
-);
+const totalPagesFiltres = computed(() => Math.ceil(concoursFiltres.value.length / perPage));
 
-watch(concours, (nv) => {
-  localStorage.setItem('concours', JSON.stringify(nv));
-  genererAnneesAcademiques();
-}, { deep: true });
+watch(
+  concours,
+  (nv) => {
+    localStorage.setItem('concours', JSON.stringify(nv));
+    genererAnneesAcademiques();
+  },
+  { deep: true }
+);
 </script>
 
-
-
 <style scoped>
-
 .termine {
   color: red;
   font-weight: 600;
@@ -296,7 +320,7 @@ watch(concours, (nv) => {
   background: #f9f9f9;
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.04);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.04);
   margin: 2rem auto;
   max-width: 1300px;
 }
@@ -322,7 +346,8 @@ watch(concours, (nv) => {
   }
 }
 
-h3, h4 {
+h3,
+h4 {
   font-weight: 600;
   margin-bottom: 1rem;
   color: #333;

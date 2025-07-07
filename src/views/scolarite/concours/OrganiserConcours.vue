@@ -56,7 +56,11 @@
             <td>{{ formatDate(c.date) }}</td>
             <td :class="{ admis: c.etat === 'En cours' }">{{ c.etat }}</td>
             <td>
-              <button class="btn-ter" @click="terminerConcours(index)" :disabled="c.etat === 'Terminé'">
+              <button
+                class="btn-ter"
+                @click="terminerConcours(index)"
+                :disabled="c.etat === 'Terminé'"
+              >
                 Concours terminé
               </button>
             </td>
@@ -74,8 +78,18 @@ const afficherFormulaire = ref(false);
 const concours = ref([]);
 const anneesAcademiques = ref([]);
 const moisList = [
-  'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-  'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'
+  'janvier',
+  'février',
+  'mars',
+  'avril',
+  'mai',
+  'juin',
+  'juillet',
+  'août',
+  'septembre',
+  'octobre',
+  'novembre',
+  'décembre',
 ];
 
 const jour = ref('');
@@ -97,7 +111,7 @@ onMounted(() => {
 
 // Générer les années disponibles
 function genererAnneesAcademiques() {
-  const existantes = concours.value.map(c => c.annee);
+  const existantes = concours.value.map((c) => c.annee);
   if (existantes.length === 0) {
     anneesAcademiques.value = ['2024-2025'];
     return;
@@ -117,12 +131,12 @@ function genererDateParDefaut() {
 
 // Empêche doublons et état En cours multiples
 function enregistrerConcours() {
-  if (concours.value.some(c => c.annee === nouveauConcours.value.annee)) {
+  if (concours.value.some((c) => c.annee === nouveauConcours.value.annee)) {
     alert(`Un concours existe déjà pour l’année ${nouveauConcours.value.annee}`);
     return;
   }
 
-  if (concours.value.some(c => c.etat === 'En cours')) {
+  if (concours.value.some((c) => c.etat === 'En cours')) {
     alert('Un concours est déjà en cours. Terminez-le avant d’en créer un nouveau.');
     return;
   }
@@ -140,7 +154,7 @@ function enregistrerConcours() {
   concours.value.push({
     annee: nouveauConcours.value.annee,
     date: dateFinale,
-    etat: 'En cours'
+    etat: 'En cours',
   });
 
   nouveauConcours.value.annee = '';
@@ -157,18 +171,32 @@ function terminerConcours(index) {
 // Format de la date
 function formatDate(dateStr) {
   const mois = [
-    'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-    'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'
+    'janvier',
+    'février',
+    'mars',
+    'avril',
+    'mai',
+    'juin',
+    'juillet',
+    'août',
+    'septembre',
+    'octobre',
+    'novembre',
+    'décembre',
   ];
   const d = new Date(dateStr);
   return `${d.getDate()} ${mois[d.getMonth()]} ${d.getFullYear()}`;
 }
 
 // Sauvegarde dans localStorage
-watch(concours, (nv) => {
-  localStorage.setItem('concours', JSON.stringify(nv));
-  genererAnneesAcademiques();
-}, { deep: true });
+watch(
+  concours,
+  (nv) => {
+    localStorage.setItem('concours', JSON.stringify(nv));
+    genererAnneesAcademiques();
+  },
+  { deep: true }
+);
 </script>
 
 <style scoped>
@@ -181,7 +209,8 @@ watch(concours, (nv) => {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
-h2, h3 {
+h2,
+h3 {
   font-weight: 600;
   margin-bottom: 1rem;
   color: #333;

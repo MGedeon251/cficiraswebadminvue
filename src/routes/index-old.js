@@ -106,7 +106,6 @@ const routes = [
         name: 'OrganiserConcours',
         component: () => import('@/views/scolarite/concours/OrganiserConcours.vue'),
       },
-      
     ],
   },
 

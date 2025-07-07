@@ -73,7 +73,11 @@
       </tbody>
     </table>
 
-    <button class="btn-valider" :disabled="selectionCandidats.length === 0" @click="validerSelection">
+    <button
+      class="btn-valider"
+      :disabled="selectionCandidats.length === 0"
+      @click="validerSelection"
+    >
       Valider la sélection
     </button>
 
@@ -179,7 +183,11 @@
           <p><strong>Année du concours :</strong> {{ candidatActuel.concours }}</p>
           <div v-if="candidatActuel.photo">
             <p><strong>Photo :</strong></p>
-            <img :src="candidatActuel.photo" alt="Photo" style="width: 130px; height: 160px; object-fit: cover;" />
+            <img
+              :src="candidatActuel.photo"
+              alt="Photo"
+              style="width: 130px; height: 160px; object-fit: cover"
+            />
           </div>
         </div>
       </div>
@@ -188,91 +196,96 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue';
 
-const candidats = ref([])
-const admis = ref([])
-const selectionCandidats = ref([])
-const candidatActuel = ref(null)
+const candidats = ref([]);
+const admis = ref([]);
+const selectionCandidats = ref([]);
+const candidatActuel = ref(null);
 
-const filiereFiltre = ref('')
-const filiereAffichage = ref('')
-const anneeSelectionnee = ref('')
-const anneeAdmis = ref('')
-const rechercheNom = ref('')
-const recherchePrenom = ref('')
-const rechercheNomAdmis = ref('')
-const recherchePrenomAdmis = ref('')
+const filiereFiltre = ref('');
+const filiereAffichage = ref('');
+const anneeSelectionnee = ref('');
+const anneeAdmis = ref('');
+const rechercheNom = ref('');
+const recherchePrenom = ref('');
+const rechercheNomAdmis = ref('');
+const recherchePrenomAdmis = ref('');
 
-const pageCourante = ref(1)
-const pageSize = 15
+const pageCourante = ref(1);
+const pageSize = 15;
 
 onMounted(() => {
-  const savedCandidats = localStorage.getItem('candidats')
-  if (savedCandidats) candidats.value = JSON.parse(savedCandidats)
+  const savedCandidats = localStorage.getItem('candidats');
+  if (savedCandidats) candidats.value = JSON.parse(savedCandidats);
 
-  const savedAdmis = localStorage.getItem('admis')
-  if (savedAdmis) admis.value = JSON.parse(savedAdmis)
-})
+  const savedAdmis = localStorage.getItem('admis');
+  if (savedAdmis) admis.value = JSON.parse(savedAdmis);
+});
 
-watch(admis, (nv) => {
-  localStorage.setItem('admis', JSON.stringify(nv))
-}, { deep: true })
+watch(
+  admis,
+  (nv) => {
+    localStorage.setItem('admis', JSON.stringify(nv));
+  },
+  { deep: true }
+);
 
 const filieresDisponibles = computed(() =>
   [...new Set(candidats.value.map((c) => c.filiere))].filter(Boolean)
-)
+);
 
 const anneesDisponibles = computed(() =>
   [...new Set(candidats.value.map((c) => c.concours))].filter(Boolean).sort()
-)
+);
 
 function estAdmis(c) {
-  return admis.value.some((a) => a.nom === c.nom && a.prenom === c.prenom)
+  return admis.value.some((a) => a.nom === c.nom && a.prenom === c.prenom);
 }
 
 function validerSelection() {
   selectionCandidats.value.forEach((c) => {
-    if (!estAdmis(c)) admis.value.push(c)
-  })
-  selectionCandidats.value = []
+    if (!estAdmis(c)) admis.value.push(c);
+  });
+  selectionCandidats.value = [];
 }
 
 function supprimerCandidat(candidat) {
-  admis.value = admis.value.filter(a => !(a.nom === candidat.nom && a.prenom === candidat.prenom))
+  admis.value = admis.value.filter(
+    (a) => !(a.nom === candidat.nom && a.prenom === candidat.prenom)
+  );
 }
 
 const candidatsFiltres = computed(() =>
   candidats.value.filter((c) => {
-    const matchFiliere = !filiereFiltre.value || c.filiere === filiereFiltre.value
-    const matchNom = c.nom?.toLowerCase().includes(rechercheNom.value.toLowerCase())
-    const matchPrenom = c.prenom?.toLowerCase().includes(recherchePrenom.value.toLowerCase())
-    const matchAnnee = !anneeSelectionnee.value || c.concours === anneeSelectionnee.value
-    return matchFiliere && matchNom && matchPrenom && matchAnnee && !estAdmis(c)
+    const matchFiliere = !filiereFiltre.value || c.filiere === filiereFiltre.value;
+    const matchNom = c.nom?.toLowerCase().includes(rechercheNom.value.toLowerCase());
+    const matchPrenom = c.prenom?.toLowerCase().includes(recherchePrenom.value.toLowerCase());
+    const matchAnnee = !anneeSelectionnee.value || c.concours === anneeSelectionnee.value;
+    return matchFiliere && matchNom && matchPrenom && matchAnnee && !estAdmis(c);
   })
-)
+);
 
 const admisFiltres = computed(() =>
   admis.value.filter((c) => {
-    const matchFiliere = !filiereAffichage.value || c.filiere === filiereAffichage.value
-    const matchNom = c.nom?.toLowerCase().includes(rechercheNomAdmis.value.toLowerCase())
-    const matchPrenom = c.prenom?.toLowerCase().includes(recherchePrenomAdmis.value.toLowerCase())
-    const matchAnnee = !anneeAdmis.value || c.concours === anneeAdmis.value
-    return matchFiliere && matchNom && matchPrenom && matchAnnee
+    const matchFiliere = !filiereAffichage.value || c.filiere === filiereAffichage.value;
+    const matchNom = c.nom?.toLowerCase().includes(rechercheNomAdmis.value.toLowerCase());
+    const matchPrenom = c.prenom?.toLowerCase().includes(recherchePrenomAdmis.value.toLowerCase());
+    const matchAnnee = !anneeAdmis.value || c.concours === anneeAdmis.value;
+    return matchFiliere && matchNom && matchPrenom && matchAnnee;
   })
-)
+);
 
-const totalPages = computed(() => Math.ceil(admisFiltres.value.length / pageSize))
+const totalPages = computed(() => Math.ceil(admisFiltres.value.length / pageSize));
 const admisPage = computed(() => {
-  const start = (pageCourante.value - 1) * pageSize
-  return admisFiltres.value.slice(start, start + pageSize)
-})
+  const start = (pageCourante.value - 1) * pageSize;
+  return admisFiltres.value.slice(start, start + pageSize);
+});
 
 watch([filiereAffichage, admisFiltres], () => {
-  pageCourante.value = 1
-})
+  pageCourante.value = 1;
+});
 </script>
-
 
 <style scoped>
 .validation-candidats {
@@ -283,7 +296,8 @@ watch([filiereAffichage, admisFiltres], () => {
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
-h2, h3 {
+h2,
+h3 {
   font-weight: 600;
   margin-bottom: 1rem;
   color: #333;
@@ -386,5 +400,4 @@ h2, h3 {
 .details p {
   margin-bottom: 0.4rem;
 }
-
 </style>
