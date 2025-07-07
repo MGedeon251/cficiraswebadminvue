@@ -37,11 +37,14 @@
             </button>
             <ul class="dropdown-menu">
               <li>
-                <a class="dropdown-item" href="#drop_table">Importer fichier</a>
+                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#importListModal"
+                  >Importer fichier</a
+                >
               </li>
             </ul>
           </div>
         </div>
+        <ImportList />
         <div
           class="modal fade"
           id="exampleModal"
@@ -83,7 +86,7 @@ import TableData from './tab/TableData.vue';
 import ATableData from './tab/ATableData.vue';
 import TabContent from './tab/TabContent.vue';
 import addEtudiant from './addEtudiant.vue';
-
+import ImportList from './ImportList.vue';
 const tableDataRef = ref(null);
 
 const exportToExcel = async () => {
