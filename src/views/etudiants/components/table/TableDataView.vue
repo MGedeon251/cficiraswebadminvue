@@ -1,182 +1,170 @@
 <script setup>
-import { onMounted, ref, watch, computed } from 'vue';
-import { storeToRefs } from 'pinia';
-import { useAnneeStore } from '@/stores/academiqueStore/anneStore';
-import { useFiliereStore } from '@/stores/academiqueStore/filiereStore';
-import { useClasseStore } from '@/stores/academiqueStore/classeStore';
-import { getEtudiantsByClasseFiliereAnnee } from '@/api/academique/etudiantApi';
-import Pagination from '@/components/shared/Pagination.vue';
-import ItemActions from '../details/ItemDetails.vue';
-import SkeletonLoader from '@/components/SkeletonLoader.vue';
-
-// Stores
-const anneeStore = useAnneeStore();
-const filiereStore = useFiliereStore();
-const classeStore = useClasseStore();
-
-// Références depuis les stores
-const { anneesAcademiques, loading: loadingAnnees } = storeToRefs(anneeStore);
-const { filieres, loading: loadingFilieres } = storeToRefs(filiereStore);
-const { classes, loading: loadingClasses } = storeToRefs(classeStore);
+import { ref, computed, onMounted, watch } from 'vue'
 
 // Filtres
-const selectedAnnee = ref('');
-const selectedFiliere = ref('');
-const selectedClasse = ref('');
+const filterNom = ref('')
+const filterPrenom = ref('')
+const selectedFiliere = ref('')
+const selectedClasse = ref('')
+const selectedNiveau = ref('')
 
-// Étudiants
-const etudiants = ref([]);
-const loading = ref(false);
+// Données LocalStorage
+const etudiants = ref([])
+const classes = ref([])
+const filieres = ref([])
 
 // Pagination
-const currentPage = ref(1);
-const itemsPerPage = ref(5);
-const totalItems = computed(() => etudiants.value.length);
-const paginatedEtudiant = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage.value;
-  const end = start + itemsPerPage.value;
-  return etudiants.value.slice(start, end);
-});
+const currentPage = ref(1)
+const itemsPerPage = ref(5)
+const totalItems = computed(() => filteredEtudiants.value.length)
 
-// Initialiser les données
-onMounted(async () => {
-  await Promise.all([
-    anneeStore.fetchAnneesAcademiques(),
-    filiereStore.fetchFilieres(),
-    classeStore.fetchClasses(),
-  ]);
-});
+const paginatedEtudiants = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  const end = start + itemsPerPage.value
+  return filteredEtudiants.value.slice(start, end)
+})
 
-// Mettre à jour les classes selon la filière sélectionnée
-watch(selectedFiliere, async (newFiliere) => {
-  if (newFiliere) {
-    await classeStore.fetchClassesByFiliere(newFiliere);
-    selectedClasse.value = '';
-  } else {
-    classeStore.classes = [];
+// Filtrer étudiants
+const filteredEtudiants = computed(() => {
+  return etudiants.value.filter(e => {
+    return (
+      (!selectedFiliere.value || e.filiere === selectedFiliere.value) &&
+      (!selectedClasse.value || e.classe === selectedClasse.value) &&
+      (!selectedNiveau.value || e.niveau === selectedNiveau.value) &&
+      (!filterNom.value || e.nom.toLowerCase().includes(filterNom.value.toLowerCase())) &&
+      (!filterPrenom.value || e.prenom.toLowerCase().includes(filterPrenom.value.toLowerCase()))
+    )
+  })
+})
+
+// Charger données locales
+const chargerDonnees = () => {
+  const candidats = JSON.parse(localStorage.getItem('candidats') || '[]')
+  const classesLS = JSON.parse(localStorage.getItem('classes') || '[]')
+  const filieresLS = JSON.parse(localStorage.getItem('filieres') || '[]')
+
+  // Générer matricule pour chaque candidat
+  etudiants.value = candidats.map((c, i) => ({
+    ...c,
+    matricule: `${(c.nom || '').substring(0, 3).toUpperCase()}${(c.prenom || '').substring(0, 3).toUpperCase()}-${(c.filiere || '').substring(0, 3).toUpperCase()}-${c.niveau || ''}-${i + 1}`,
+    photo: c.photo || '/img/default-profile.png'
+  }))
+
+  classes.value = classesLS
+  filieres.value = filieresLS
+}
+
+onMounted(() => {
+  chargerDonnees()
+})
+
+// Classes filtrées par filière sélectionnée
+const classesFiltrees = computed(() => {
+  return classes.value.filter(c => c.filiere === selectedFiliere.value)
+})
+
+// Attribution aléatoire
+const assignerClasseAleatoire = () => {
+  if (!selectedFiliere.value || !selectedClasse.value) {
+    alert('Sélectionne une filière et une classe cible.')
+    return
   }
-});
 
-// Filtrer les étudiants selon les critères
-const fetchFilteredEtudiants = async () => {
-  if (selectedAnnee.value && selectedFiliere.value && selectedClasse.value) {
-    loading.value = true;
-    try {
-      const response = await getEtudiantsByClasseFiliereAnnee(
-        selectedClasse.value,
-        selectedFiliere.value,
-        selectedAnnee.value
-      );
-      etudiants.value = response.data;
-    } catch (error) {
-      console.error('Erreur lors du chargement des étudiants:', error);
-      etudiants.value = [];
-    } finally {
-      loading.value = false;
-    }
-  }
-};
+  const candidatsFiliere = etudiants.value.filter(e => e.filiere === selectedFiliere.value)
+  const nouveaux = candidatsFiliere.map(e => ({ ...e, classe: selectedClasse.value }))
+  etudiants.value = etudiants.value.map(e => {
+    const match = nouveaux.find(n => n.nom === e.nom && n.prenom === e.prenom)
+    return match || e
+  })
 
-// Observer les changements de filtres
-watch([selectedAnnee, selectedFiliere, selectedClasse], fetchFilteredEtudiants);
-
-// Méthode exposée
-const getTableData = () => etudiants.value;
-defineExpose({ getTableData });
+  // Sauvegarder le changement
+  localStorage.setItem('candidats', JSON.stringify(etudiants.value))
+  alert('Étudiants assignés !')
+}
 </script>
 
 <template>
-  <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1" />
+  <div class="p-3">
+    <h4>🎓 Étudiants Inscrits</h4>
 
-  <div v-else class="table-responsive">
-    <p class="card-description">Liste des étudiants inscrits</p>
-    <div class="d-flex justify-content-between flex-wrap">
-      <div class="d-flex align-items-end flex-wrap">
-        <div class="me-md-4 me-xl-5">
-          <div class="filters d-flex gap-2 mb-2">
-            <!-- Filtre par année académique -->
-            <div class="col-md-6">
-              <label class="form-label">Année académique</label>
-              <select class="form-select" v-model="selectedAnnee">
-                <option value="" disabled>Choisir une année</option>
-                <option v-for="annee in anneesAcademiques" :key="annee.id" :value="annee.id">
-                  {{ annee.code }}
-                </option>
-              </select>
-            </div>
-            <!-- Filtre par filière -->
-            <div class="col-md-6">
-              <label class="form-label">Filière</label>
-              <select class="form-select" v-model="selectedFiliere">
-                <option value="" disabled>Choisir une filière</option>
-                <option v-for="filiere in filieres" :key="filiere.id" :value="filiere.id">
-                  {{ filiere.code }}
-                </option>
-              </select>
-            </div>
-            <!-- Filtre par classe -->
-            <div class="col-md-6">
-              <label class="form-label">Classe</label>
-              <select class="form-select" v-model="selectedClasse" :disabled="!selectedFiliere">
-                <option value="" disabled>Choisir une classe</option>
-                <option v-for="classe in classes" :key="classe.id" :value="classe.id">
-                  {{ classe.code }}
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
+    <!-- Filtres -->
+    <div class="row g-2 mb-3">
+      <div class="col-md-2">
+        <label class="form-label">Filière</label>
+        <select class="form-select" v-model="selectedFiliere">
+          <option value="">Toutes</option>
+          <option v-for="fil in filieres" :key="fil.id" :value="fil.nom">{{ fil.nom }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label">Classe</label>
+        <select class="form-select" v-model="selectedClasse">
+          <option value="">Toutes</option>
+          <option v-for="cls in classesFiltrees" :key="cls.id" :value="cls.nom">{{ cls.nom }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label">Niveau</label>
+        <input type="text" class="form-control" v-model="selectedNiveau" placeholder="Ex: L1" />
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label">Nom</label>
+        <input type="text" class="form-control" v-model="filterNom" placeholder="Nom" />
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label">Prénom</label>
+        <input type="text" class="form-control" v-model="filterPrenom" placeholder="Prénom" />
       </div>
     </div>
 
     <!-- Table des étudiants -->
     <table class="table table-hover align-middle">
-      <thead class="table-light">
+      <thead>
         <tr>
           <th>#</th>
+          <th>Photo</th>
           <th>Matricule</th>
-          <th>Noms</th>
-          <th>Prénoms</th>
-          <th>Sexe</th>
+          <th>Nom</th>
+          <th>Prénom</th>
           <th>Filière</th>
+          <th>Niveau</th>
           <th>Classe</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(etudiant, index) in paginatedEtudiant" :key="etudiant.id">
-          <td>{{ index + 1 }}</td>
-          <td>{{ etudiant.matricule }}</td>
-          <td>{{ etudiant.nom }}</td>
-          <td>{{ etudiant.prenom }}</td>
-          <td>{{ etudiant.sexe }}</td>
-          <td>{{ etudiant.filiere }}</td>
-          <td>{{ etudiant.classe }}</td>
-          <td>
-            <ItemActions
-              :item="etudiant"
-              :showAdd="false"
-              editModalTarget="#editModuleModal"
-              @edit="editModule"
-              @delete="confirmDelete"
-            />
-          </td>
+        <tr v-for="(e, i) in paginatedEtudiants" :key="i">
+          <td>{{ i + 1 }}</td>
+          <td><img :src="e.photo" alt="Photo" style="width:40px; height:40px; border-radius:50%;" /></td>
+          <td>{{ e.matricule }}</td>
+          <td>{{ e.nom }}</td>
+          <td>{{ e.prenom }}</td>
+          <td>{{ e.filiere }}</td>
+          <td>{{ e.niveau }}</td>
+          <td>{{ e.classe }}</td>
         </tr>
-        <tr v-if="!loading && Array.isArray(etudiants) && etudiants.length === 0">
-          <td colspan="8" class="text-center py-4">
-            <div class="d-flex flex-column align-items-center">
-              <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="auto" />
-            </div>
-            <div class="text-pr">Aucune donnée</div>
-          </td>
+        <tr v-if="paginatedEtudiants.length === 0">
+          <td colspan="8" class="text-center text-muted">Aucun étudiant trouvé.</td>
         </tr>
       </tbody>
     </table>
 
-    <Pagination
-      v-model="currentPage"
-      :items-per-page="itemsPerPage"
-      :total-items="totalItems"
-      @update:itemsPerPage="itemsPerPage = $event"
-    />
+    <!-- Pagination simple -->
+    <div class="d-flex justify-content-between align-items-center">
+      <span>Page {{ currentPage }}</span>
+      <div class="btn-group">
+        <button class="btn btn-sm btn-outline-secondary" :disabled="currentPage === 1" @click="currentPage--">Précédent</button>
+        <button class="btn btn-sm btn-outline-secondary" :disabled="currentPage >= Math.ceil(totalItems / itemsPerPage)" @click="currentPage++">Suivant</button>
+      </div>
+    </div>
   </div>
 </template>
+
+<style scoped>
+table img {
+  object-fit: cover;
+}
+</style>
