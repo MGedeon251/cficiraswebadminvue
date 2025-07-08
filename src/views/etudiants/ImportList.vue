@@ -1,82 +1,56 @@
 <template>
-  <div
-    class="modal fade"
-    id="importListModal"
-    tabindex="-1"
-    aria-labelledby="importListModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="importListModalLabel">Importer une liste d'étudiants</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <div
-            class="drag-drop-area"
-            @dragover.prevent="dragActive = true"
-            @dragleave.prevent="dragActive = false"
-            @drop.prevent="handleDrop"
-            :class="{ active: dragActive }"
-          >
-            <div v-if="!file">
-              <p>
-                Glissez-déposez un fichier Excel ou CSV ici, ou cliquez pour sélectionner un
-                fichier.
-              </p>
-              <input
-                type="file"
-                ref="fileInput"
-                @change="handleFileChange"
-                accept=".xlsx,.xls,.csv"
-                style="display: none"
-              />
-              <button class="btn btn-outline-primary mt-2" @click="triggerFileInput">
-                Choisir un fichier
-              </button>
-            </div>
-            <div v-else>
-              <p>
-                Fichier sélectionné : <strong>{{ file.name }}</strong>
-              </p>
-              <button class="btn btn-danger btn-sm" @click="removeFile">Retirer</button>
-            </div>
-          </div>
-          <div v-if="previewData.length" class="mt-4">
-            <h6>Prévisualisation du fichier :</h6>
-            <div style="max-height: 300px; overflow: auto">
-              <table class="table table-bordered table-sm">
-                <thead>
-                  <tr>
-                    <th v-for="(col, idx) in previewData[0]" :key="'col' + idx">{{ col }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(row, i) in previewData.slice(1, 11)" :key="'row' + i">
-                    <td v-for="(cell, j) in row" :key="'cell' + j">{{ cell }}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <div v-if="previewData.length > 11" class="text-muted small">
-                ... ({{ previewData.length - 1 }} lignes au total)
-              </div>
-            </div>
-            <button class="btn btn-primary mt-2" @click="validerImport">Valider l'import</button>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-success" :disabled="!file" @click="importFile">
-            Importer
-          </button>
-          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
-        </div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Importer la liste des étudiants</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+
+    <div class="modal-body">
+      <div
+        class="drop-zone"
+        @dragover.prevent
+        @drop.prevent="handleDrop"
+        @click="fileInput.click()"
+      >
+        <p class="text-center text-muted">
+          Glissez-déposez un fichier ici ou cliquez pour sélectionner un fichier .xlsx ou .csv
+        </p>
+        <input
+          type="file"
+          ref="fileInput"
+          accept=".xlsx,.csv"
+          @change="handleFileChange"
+          class="d-none"
+        />
       </div>
+
+      <div v-if="fileName" class="mt-3"><strong>Fichier sélectionné :</strong> {{ fileName }}</div>
+
+      <!-- Tableau de prévisualisation -->
+      <div v-if="previewData.length" class="table-responsive mt-4">
+        <table class="table table-bordered table-sm">
+          <thead class="table-light">
+            <tr>
+              <th v-for="(col, index) in columns" :key="index">{{ col }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(row, rowIndex) in previewData.slice(0, 10)" :key="rowIndex">
+              <td v-for="(col, colIndex) in columns" :key="colIndex">
+                {{ row[col] }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <small class="text-muted">Affichage des 10 premières lignes</small>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+      <button class="btn btn-primary" :disabled="!previewData.length" @click="validerImport">
+        Valider l'import
+      </button>
     </div>
   </div>
 </template>
@@ -85,64 +59,74 @@
 import { ref } from 'vue';
 import * as XLSX from 'xlsx';
 
+const emit = defineEmits(['import-complete']);
 const file = ref(null);
-const dragActive = ref(false);
+const fileName = ref('');
 const fileInput = ref(null);
 const previewData = ref([]);
+const columns = ref([]);
 
-function triggerFileInput() {
-  fileInput.value.click();
-}
+const handleDrop = (e) => {
+  const droppedFile = e.dataTransfer.files[0];
+  processFile(droppedFile);
+};
 
-function handleFileChange(e) {
-  const files = e.target.files;
-  if (files && files[0]) file.value = files[0];
-}
+const handleFileChange = (e) => {
+  const selectedFile = e.target.files[0];
+  processFile(selectedFile);
+};
 
-function handleDrop(e) {
-  dragActive.value = false;
-  const files = e.dataTransfer.files;
-  if (files && files[0]) file.value = files[0];
-}
+const processFile = (selectedFile) => {
+  if (!validateFile(selectedFile)) return;
+  file.value = selectedFile;
+  fileName.value = selectedFile.name;
 
-function removeFile() {
-  file.value = null;
-  previewData.value = [];
-  if (fileInput.value) fileInput.value.value = '';
-}
-
-function importFile() {
-  if (!file.value) return;
   const reader = new FileReader();
-  reader.onload = (evt) => {
-    const data = new Uint8Array(evt.target.result);
+  reader.onload = (e) => {
+    const data = new Uint8Array(e.target.result);
     const workbook = XLSX.read(data, { type: 'array' });
     const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-    const json = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-    previewData.value = json;
-  };
-  reader.readAsArrayBuffer(file.value);
-}
+    const jsonData = XLSX.utils.sheet_to_json(firstSheet);
 
-function validerImport() {
-  // Traitez ici previewData.value (envoi API, etc.)
-  alert('Import validé ! Nombre de lignes : ' + (previewData.value.length - 1));
-  removeFile();
-}
+    previewData.value = jsonData;
+    columns.value = jsonData.length > 0 ? Object.keys(jsonData[0]) : [];
+  };
+  reader.readAsArrayBuffer(selectedFile);
+};
+
+const validateFile = (f) => {
+  const validTypes = [
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'text/csv',
+    'application/vnd.ms-excel',
+  ];
+  if (!validTypes.includes(f.type)) {
+    alert('Fichier non supporté. Veuillez sélectionner un fichier .xlsx ou .csv');
+    return false;
+  }
+  return true;
+};
+
+const validerImport = () => {
+  emit('import-complete', previewData.value);
+  alert('Importation confirmée !');
+  // Réinitialiser après import si souhaité
+  file.value = null;
+  fileName.value = '';
+  previewData.value = [];
+};
 </script>
 
 <style scoped>
-.drag-drop-area {
-  border: 2px dashed #007bff;
-  border-radius: 8px;
-  padding: 40px 20px;
+.drop-zone {
+  border: 2px dashed #aaa;
+  border-radius: 10px;
+  padding: 40px;
   text-align: center;
   cursor: pointer;
-  background: #f8f9fa;
-  transition: border-color 0.2s;
+  transition: 0.3s ease;
 }
-.drag-drop-area.active {
-  border-color: #0056b3;
-  background: #e9ecef;
+.drop-zone:hover {
+  background-color: #f8f9fa;
 }
 </style>

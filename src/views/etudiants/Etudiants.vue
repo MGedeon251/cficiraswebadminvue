@@ -37,14 +37,25 @@
             </button>
             <ul class="dropdown-menu">
               <li>
-                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#importListModal"
+                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#importModal"
                   >Importer fichier</a
                 >
               </li>
             </ul>
+            <div
+              class="modal fade"
+              id="importModal"
+              tabindex="-1"
+              role="dialog"
+              aria-labelledby="importModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-xl" role="document">
+                <ImportList @import-complete="handleImport" />
+              </div>
+            </div>
           </div>
         </div>
-        <ImportList />
         <div
           class="modal fade"
           id="exampleModal"
@@ -117,5 +128,10 @@ const exportToExcel = async () => {
     console.error("Erreur lors de l'export:", error);
     alert("Une erreur est survenue lors de l'export");
   }
+};
+
+const handleImport = (data) => {
+  console.log('Données validées:', data);
+  // Tu peux maintenant les envoyer à une API, ou insérer dans ton store/table
 };
 </script>
