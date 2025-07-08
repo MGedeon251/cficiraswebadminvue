@@ -1,36 +1,39 @@
-import serviceApi from '../config/serviceApi';
+import buildService from '../config/serviceApi';
+import { gestionApi } from '../config/apiClients';
+
+const gestionService = buildService(gestionApi);
 
 // API pour gérer les concours
-export const getConcours = () => serviceApi.get('/concours');
-export const getConcoursById = (id) => serviceApi.get(`/concours/${id}`);
-export const createConcours = (data) => serviceApi.post('/concours', data);
-export const updateConcours = (id, data) => serviceApi.put(`/concours/${id}`, data);
-export const deleteConcours = (id) => serviceApi.delete(`/concours/${id}`);
+export const getConcours = () => gestionService.get('/concours');
+export const getConcoursById = (id) => gestionService.get(`/concours/${id}`);
+export const createConcours = (data) => gestionService.post('/concours', data);
+export const updateConcours = (id, data) => gestionService.put(`/concours/${id}`, data);
+export const deleteConcours = (id) => gestionService.delete(`/concours/${id}`);
 
 // API pour gérer les candidatures
-export const getCandidatures = () => serviceApi.get('/candidatures');
-export const getCandidatureById = (id) => serviceApi.get(`/candidatures/${id}`);
-export const createCandidature = (data) => serviceApi.post('/candidatures', data);
-export const updateCandidature = (id, data) => serviceApi.put(`/candidatures/${id}`, data);
-export const deleteCandidature = (id) => serviceApi.delete(`/candidatures/${id}`);
+export const getCandidatures = () => gestionService.get('/candidatures');
+export const getCandidatureById = (id) => gestionService.get(`/candidatures/${id}`);
+export const createCandidature = (data) => gestionService.post('/candidatures', data);
+export const updateCandidature = (id, data) => gestionService.put(`/candidatures/${id}`, data);
+export const deleteCandidature = (id) => gestionService.delete(`/candidatures/${id}`);
 
 // API pour gérer les créneaux (emploi du temps)
-export const getCreneaux = () => serviceApi.get('/creneaux');
-export const getCreneauById = (id) => serviceApi.get(`/creneaux/${id}`);
-export const createCreneau = (data) => serviceApi.post('/creneaux', data);
-export const updateCreneau = (id, data) => serviceApi.put(`/creneaux/${id}`, data);
-export const deleteCreneau = (id) => serviceApi.delete(`/creneaux/${id}`);
+export const getCreneaux = () => gestionService.get('/creneaux');
+export const getCreneauById = (id) => gestionService.get(`/creneaux/${id}`);
+export const createCreneau = (data) => gestionService.post('/creneaux', data);
+export const updateCreneau = (id, data) => gestionService.put(`/creneaux/${id}`, data);
+export const deleteCreneau = (id) => gestionService.delete(`/creneaux/${id}`);
 
 // API pour gérer les inscriptions
-export const getInscriptions = () => serviceApi.get('/inscriptions');
-export const getInscriptionById = (id) => serviceApi.get(`/inscriptions/${id}`);
-export const createInscription = (data) => serviceApi.post('/inscriptions', data);
-export const updateInscription = (id, data) => serviceApi.put(`/inscriptions/${id}`, data);
-export const deleteInscription = (id) => serviceApi.delete(`/inscriptions/${id}`);
+export const getInscriptions = () => gestionService.get('/inscriptions');
+export const getInscriptionById = (id) => gestionService.get(`/inscriptions/${id}`);
+export const createInscription = (data) => gestionService.post('/inscriptions', data);
+export const updateInscription = (id, data) => gestionService.put(`/inscriptions/${id}`, data);
+export const deleteInscription = (id) => gestionService.delete(`/inscriptions/${id}`);
 
 // API pour gérer les salles
-export const getSalles = () => serviceApi.get('/salles');
-export const getSalleById = (id) => serviceApi.get(`/salles/${id}`);
-export const createSalle = (data) => serviceApi.post('/salles', data);
-export const updateSalle = (id, data) => serviceApi.put(`/salles/${id}`, data);
-export const deleteSalle = (id) => serviceApi.delete(`/salles/${id}`);
+export const getSalles = () => gestionService.get('/salles');
+export const getSalleById = (id) => gestionService.get(`/salles/${id}`);
+export const createSalle = (data) => gestionService.post('/salles', data);
+export const updateSalle = (id, data) => gestionService.put(`/salles/${id}`, data);
+export const deleteSalle = (id) => gestionService.delete(`/salles/${id}`);

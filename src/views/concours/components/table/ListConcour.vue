@@ -16,12 +16,19 @@
           <td>{{ concour.id }}</td>
           <td>{{ concour.designation }}</td>
           <td>{{ concour.type_concours }}</td>
-          <td>{{ concour.date_debut }}</td>
-          <td>{{ concour.date_fin }}</td>
-          <td>{{ concour.statut }}</td>
+          <td>{{ formatDate(concour.date_debut) }}</td>
+          <td>{{ formatDate(concour.date_fin) }}</td>
+          <td>
+            <span
+              class="status-badge"
+              :class="concour.statut === 'active' ? 'status-active' : 'status-draft'"
+            >
+              {{ concour.statut }}
+            </span>
+          </td>
           <td>
             <ItemActions
-              :item="concours"
+              :item="concour"
               concourRoute="/edition-concours/"
               :showAdd="true"
               editModalTarget="#editModuleModal"
@@ -37,51 +44,40 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import ItemActions from '../details/ItemActions.vue';
-const concours = ref([]);
+import dayjs from 'dayjs'; // ici c'est pour gerer les formats des dates 
+import { getConcours } from '@/api/gestions/gestionApi'; 
+//Ici j'appelle la fonction getconcours qui se trouve dans /api/gestion/gestionApi.js 
+//pour recuper tout les concours 
 
-onMounted(() => {
-  concours.value = [
-    {
-      id: 1,
-      designation: 'Concours Médecine',
-      type_concours: 'National',
-      date_debut: '2025-07-10',
-      date_fin: '2025-07-12',
-      statut: 'Ouvert',
-    },
-    {
-      id: 2,
-      designation: 'Concours Informatique',
-      type_concours: 'Régional',
-      date_debut: '2025-08-01',
-      date_fin: '2025-08-03',
-      statut: 'Fermé',
-    },
-    {
-      id: 3,
-      designation: 'Concours Droit',
-      type_concours: 'National',
-      date_debut: '2025-09-15',
-      date_fin: '2025-09-17',
-      statut: 'En attente',
-    },
-    {
-      id: 4,
-      designation: 'Concours Gestion',
-      type_concours: 'International',
-      date_debut: '2025-10-05',
-      date_fin: '2025-10-07',
-      statut: 'Ouvert',
-    },
-    {
-      id: 5,
-      designation: 'Concours Sciences',
-      type_concours: 'Régional',
-      date_debut: '2025-11-20',
-      date_fin: '2025-11-22',
-      statut: 'Fermé',
-    },
-  ];
+import ItemActions from '../details/ItemActions.vue';
+const concours = ref([]); //une variable, un table pour recevoir tout les concours
+
+//Une fois les données recuper l'afficher sur la page, on fait ce script et partout ce sera comme ca. 
+onMounted(async () => {
+  try {
+    const response = await getConcours();
+    concours.value = response.data;
+  } catch (e) {
+    concours.value = [];
+  }
 });
+
+const formatDate = (date) => {
+  return dayjs(date).format('DD-MM-YYYY');
+};
 </script>
+
+<style scoped>
+.status-badge {
+  padding: 0.5em 1em;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #fff;
+}
+.status-draft {
+  background-color: #c34f49;
+}
+.status-active {
+  background-color: #0d6efd;
+}
+</style>
