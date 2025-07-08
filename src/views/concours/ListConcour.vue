@@ -58,6 +58,7 @@ onMounted(async () => {
     const response = await getConcours();
     concours.value = response.data;
   } catch (e) {
+    //message d'erreur ici pour savoir !
     concours.value = [];
   }
 });
