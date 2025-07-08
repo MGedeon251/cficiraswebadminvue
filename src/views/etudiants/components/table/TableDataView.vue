@@ -131,7 +131,7 @@ defineExpose({ getTableData });
 
     <!-- Table des étudiants -->
     <table class="table table-hover align-middle">
-      <thead>
+      <thead class="table-light">
         <tr>
           <th>#</th>
           <th>Matricule</th>
