@@ -5,7 +5,7 @@
         <div class="d-flex justify-content-between flex-wrap">
           <div class="d-flex align-items-end flex-wrap">
             <div class="me-md-3 me-xl-5">
-              <h3>Candidatures</h3>
+              <h3>Liste des candidats</h3>
               <p>Détails sur les candidatures</p>
             </div>
           </div>

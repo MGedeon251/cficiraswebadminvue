@@ -1,154 +1,109 @@
 <template>
-  <div>
-    <div class="row">
-      <div class="col-md-12 grid-margin">
-        <div class="d-flex justify-content-between flex-wrap">
-          <div class="d-flex align-items-end flex-wrap">
-            <div class="me-md-3 me-xl-5">
-              <h3>Candidatures</h3>
-              <p>Détails sur les candidatures</p>
-            </div>
+  <div class="row">
+    <div class="col-md-12 grid-margin">
+      <div class="d-flex justify-content-between flex-wrap">
+        <div class="d-flex align-items-end flex-wrap">
+          <div class="me-md-3 me-xl-5">
+            <h3>Epreuves - {{'Concours Informatique 2024'}}</h3>
+            <p>Détails sur les épreuves</p>
           </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-end flex-wrap">
+          <div class="dropdown me-2">
+            <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
+              <i class="mdi mdi-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#"><i class="mdi mdi-file-excel me-2"></i>Exporter Excel</a></li>
+              <li><a class="dropdown-item" href="#"><i class="mdi mdi-printer me-2"></i>Imprimer</a></li>
+              <li><hr class="dropdown-divider" /></li>
+              <li><a class="dropdown-item" href="#"><i class="mdi mdi-cog me-2"></i>Paramètres</a></li>
+            </ul>
+          </div>
+          <button class="btn btn-outline-dark me-2">PDF</button>
+        </div>
+      </div>
 
-          <div class="d-flex justify-content-between align-items-end flex-wrap">
-            <button class="btn btn-outline-dark me-2">Exporter</button>
-            <div class="btn-group">
-              <button
-                class="btn btn-primary mt-2 mt-xl-0"
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModal2"
-              >
-                + Ajouter
-              </button>
-              <button
-                class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                data-bs-toggle="dropdown"
-              >
-                <span class="visually-hidden">Toggle Dropdown</span>
-              </button>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="#drag-drop-area">Importer fichier</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="table-responsive mt-3">
-          <table class="table table-hover align-middle">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>matricule</th>
-                <th>nom</th>
-                <th>prenom</th>
-                <th>telephone</th>
-                <th>Statut</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="candidat in candidats" :key="candidat.id">
-                <td>{{ candidat.id }}</td>
-                <td>{{ candidat.matricule }}</td>
-                <td>{{ candidat.nom }}</td>
-                <td>{{ candidat.prenom }}</td>
-                <td>{{ candidat.telephone }}</td>
-                <td>{{ candidat.statut }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="table-responsive mt-3">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Code</th>
+              <th>Intitulé</th>
+              <th>Coefficient</th>
+              <th>Heure début</th>
+              <th>Heure fin</th>
+              <th>Type</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(epreuve, index) in epreuves" :key="index">
+              <td><input v-model="epreuve.code" type="text" class="form-control" placeholder="EX01" /></td>
+              <td><input v-model="epreuve.designation" type="text" class="form-control" placeholder="Mathématiques" /></td>
+              <td><input v-model.number="epreuve.coefficient" type="number" class="form-control" min="1" /></td>
+              <td><input v-model="epreuve.heure_debut" type="time" class="form-control" /></td>
+              <td><input v-model="epreuve.heure_fin" type="time" class="form-control" /></td>
+              <td>
+                <select v-model="epreuve.type_epreuve" class="form-select">
+                  <option value="écrit">Écrit</option>
+                  <option value="oral">Oral</option>
+                  <option value="pratique">Pratique</option>
+                </select>
+              </td>
+              <td>
+                <button class="btn btn-sm b me-1" @click="saveEpreuve(epreuve)">
+                  <i class="mdi mdi-content-save"></i>
+                </button>
+                <button class="btn btn-sm " @click="removeEpreuve(index)">
+                  <i class="mdi mdi-delete"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="btn btn-outline-primary mt-3" @click="addEpreuve">
+          + Ajouter une épreuve
+        </button>
       </div>
     </div>
   </div>
 </template>
 
-<script setup="setup">
-import { ref, onMounted } from 'vue';
-const candidats = ref([]);
+<script setup>
+import { ref } from 'vue'
 
-onMounted(() => {
-  candidats.value = [
-    {
-      id: 1,
-      matricule: 'MAT2025101',
-      nom: 'Kouadio',
-      prenom: 'Eric',
-      telephone: '0102030405',
-      statut: 'En attente',
-    },
-    {
-      id: 2,
-      matricule: 'MAT2025102',
-      nom: 'Yao',
-      prenom: 'Marie',
-      telephone: '0605040302',
-      statut: 'Admis',
-    },
-    {
-      id: 3,
-      matricule: 'MAT2025103',
-      nom: 'Koffi',
-      prenom: 'Serge',
-      telephone: '0708091011',
-      statut: 'Refusé',
-    },
-    {
-      id: 4,
-      matricule: 'MAT2025104',
-      nom: 'N’Guessan',
-      prenom: 'Aline',
-      telephone: '0203040506',
-      statut: 'En attente',
-    },
-    {
-      id: 5,
-      matricule: 'MAT2025105',
-      nom: 'Bamba',
-      prenom: 'Moussa',
-      telephone: '0807060504',
-      statut: 'Admis',
-    },
-    {
-      id: 6,
-      matricule: 'MAT2025106',
-      nom: 'Coulibaly',
-      prenom: 'Fatou',
-      telephone: '0908070605',
-      statut: 'Refusé',
-    },
-    {
-      id: 7,
-      matricule: 'MAT2025107',
-      nom: 'Fofana',
-      prenom: 'Salif',
-      telephone: '0302010405',
-      statut: 'En attente',
-    },
-    {
-      id: 8,
-      matricule: 'MAT2025108',
-      nom: 'Cissé',
-      prenom: 'Awa',
-      telephone: '0504030201',
-      statut: 'Admis',
-    },
-    {
-      id: 9,
-      matricule: 'MAT2025109',
-      nom: 'Sangaré',
-      prenom: 'Kader',
-      telephone: '0607080910',
-      statut: 'Refusé',
-    },
-    {
-      id: 10,
-      matricule: 'MAT2025110',
-      nom: 'Diabaté',
-      prenom: 'Aminata',
-      telephone: '0105060708',
-      statut: 'En attente',
-    },
-  ];
-});
+const epreuves = ref([])
+
+const addEpreuve = () => {
+  epreuves.value.push({
+    code: '',
+    designation: '',
+    coefficient: 1,
+    heure_debut: '',
+    heure_fin: '',
+    type_epreuve: 'écrit',
+    ordre: 1,
+    description: 'N/A'
+  })
+}
+
+const removeEpreuve = (index) => {
+  epreuves.value.splice(index, 1)
+}
+
+const saveEpreuve = async (epreuve) => {
+  try {
+    // Ajouter ici l’appel à l’API backend ou la logique de persistance
+    if (epreuve.id) {
+      console.log('Mise à jour de :', epreuve)
+    } else {
+      console.log('Création de :', epreuve)
+    }
+    alert('Épreuve sauvegardée avec succès !')
+  } catch (err) {
+    console.error(err)
+    alert('Erreur lors de la sauvegarde')
+  }
+}
 </script>
