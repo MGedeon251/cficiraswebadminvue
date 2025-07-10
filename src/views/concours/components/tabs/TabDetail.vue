@@ -4,23 +4,35 @@
       <li class="nav-item">
         <a
           class="nav-link active"
-          id="concours-tab"
+          id="details-tab"
           data-bs-toggle="tab"
-          href="#concours"
+          href="#details"
           role="tab"
-          aria-controls="concours"
+          aria-controls="details"
           aria-selected="true"
-          >Concours</a
+          >Details</a
         >
       </li>
       <li class="nav-item">
         <a
           class="nav-link"
-          id="devoirf-tab"
+          id="setting-tab"
           data-bs-toggle="tab"
-          href="#devoirf"
+          href="#setting"
           role="tab"
-          aria-controls="devoirf"
+          aria-controls="setting"
+          aria-selected="false"
+          >Epreuves</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          id="candidat-tab"
+          data-bs-toggle="tab"
+          href="#candidat"
+          role="tab"
+          aria-controls="candidat"
           aria-selected="false"
           >Candidats</a
         >
@@ -28,40 +40,44 @@
       <li class="nav-item">
         <a
           class="nav-link"
-          id="purchases-tab"
+          id="resultat-tab"
           data-bs-toggle="tab"
-          href="#purchases"
+          href="#resultat"
           role="tab"
-          aria-controls="purchases"
+          aria-controls="resultat"
           aria-selected="false"
-          >Exportations</a
+          >Resultats</a
         >
       </li>
     </ul>
     <div class="tab-content p-4">
       <div
         class="tab-pane fade show active"
-        id="concours"
+        id="details"
         role="tabpanel"
-        aria-labelledby="concours-tab"
+        aria-labelledby="details-tab"
       >
-        <concours />
+        <DetailsConcours />
       </div>
-      <div class="tab-pane fade" id="devoirf" role="tabpanel" aria-labelledby="devoirf-tab">
-        <candidats />
+      <div class="tab-pane fade" id="setting" role="tabpanel" aria-labelledby="setting-tab">
+        <Parametrage />
       </div>
-      <div class="tab-pane fade" id="sales" role="tabpanel" aria-labelledby="sales-tab">
-        <annee />
+      <div class="tab-pane fade" id="candidat" role="tabpanel" aria-labelledby="candidat-tab">
+        <Candidats />
+      </div>
+      <div class="tab-pane fade" id="resultat" role="tabpanel" aria-labelledby="resultat-tab">
+        <Resultat />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import concours from './concours.vue';
-import candidats from './candidats.vue';
-import annee from './Etudiants.vue';
+import DetailsConcours from './detail-content.vue';
+import candidats from './candidat-content.vue';
+import annee from './resultat-content.vue';
 import StatsRapport from './StatsRapport.vue';
+import Candidats from './candidat-content.vue';
 </script>
 
 <style scoped>

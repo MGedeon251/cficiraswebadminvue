@@ -44,15 +44,15 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import dayjs from 'dayjs'; // ici c'est pour gerer les formats des dates 
-import { getConcours } from '@/api/gestions/gestionApi'; 
-//Ici j'appelle la fonction getconcours qui se trouve dans /api/gestion/gestionApi.js 
-//pour recuper tout les concours 
+import dayjs from 'dayjs'; // ici c'est pour gerer les formats des dates
+import { getConcours } from '@/api/gestions/gestionApi';
+//Ici j'appelle la fonction getconcours qui se trouve dans /api/gestion/gestionApi.js
+//pour recuper tout les concours
 
 import ItemActions from '../details/ItemActions.vue';
 const concours = ref([]); //une variable, un table pour recevoir tout les concours
 
-//Une fois les données recuper l'afficher sur la page, on fait ce script et partout ce sera comme ca. 
+//Une fois les données recuper l'afficher sur la page, on fait ce script et partout ce sera comme ca.
 onMounted(async () => {
   try {
     const response = await getConcours();

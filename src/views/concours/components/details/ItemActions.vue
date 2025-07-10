@@ -10,7 +10,7 @@
           :to="`/edition-concours/details/${item.concour_id}`"
           @click="isDetailsVisible = true"
         >
-          <i class="mdi mdi-information-outline me-2"></i> Détails
+          <i class="mdi mdi-information-outline me-2"></i> Consulter
         </RouterLink>
       </li>
       <li v-if="showAdd">
