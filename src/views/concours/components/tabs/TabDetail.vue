@@ -16,11 +16,11 @@
       <li class="nav-item">
         <a
           class="nav-link"
-          id="setting-tab"
+          id="epreuve-tab"
           data-bs-toggle="tab"
-          href="#setting"
+          href="#epreuve"
           role="tab"
-          aria-controls="setting"
+          aria-controls="epreuve"
           aria-selected="false"
           >Epreuves</a
         >
@@ -59,8 +59,8 @@
       >
         <DetailsConcours />
       </div>
-      <div class="tab-pane fade" id="setting" role="tabpanel" aria-labelledby="setting-tab">
-        <Parametrage />
+      <div class="tab-pane fade" id="epreuve" role="tabpanel" aria-labelledby="epreuve-tab">
+        <Epreuve/>
       </div>
       <div class="tab-pane fade" id="candidat" role="tabpanel" aria-labelledby="candidat-tab">
         <Candidats />
@@ -74,7 +74,7 @@
 
 <script setup>
 import DetailsConcours from './detail-content.vue';
-import candidats from './candidat-content.vue';
+import Epreuve from './epreuve-content.vue';
 import annee from './resultat-content.vue';
 import StatsRapport from './StatsRapport.vue';
 import Candidats from './candidat-content.vue';
