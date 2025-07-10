@@ -72,6 +72,10 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const concoursId = ref(route.params.id)
+
 
 const epreuves = ref([])
 
@@ -92,13 +96,48 @@ const removeEpreuve = (index) => {
   epreuves.value.splice(index, 1)
 }
 
+const validateEpreuve = (epreuve) => {
+  if (!epreuve.code || !epreuve.designation) {
+    return 'Code et intitulé sont obligatoires.'
+  }
+
+  if (!epreuve.heure_debut || !epreuve.heure_fin) {
+    return 'Les heures de début et de fin sont obligatoires.'
+  }
+
+  if (epreuve.heure_debut >= epreuve.heure_fin) {
+    return 'L’heure de fin doit être après l’heure de début.'
+  }
+
+  if (!epreuve.coefficient || epreuve.coefficient <= 0) {
+    return 'Le coefficient doit être supérieur à 0.'
+  }
+
+  if (!concoursId.value) {
+    return 'Aucun concours sélectionné.'
+  }
+
+  return null // aucune erreur
+}
+
 const saveEpreuve = async (epreuve) => {
+  const error = validateEpreuve(epreuve)
+  if (error) {
+    alert(error)
+    return
+  }
+
+  const payload = {
+    ...epreuve,
+    concours_id: concoursId.value
+  }
+
   try {
-    // Ajouter ici l’appel à l’API backend ou la logique de persistance
+    // Appel API ou simulation
     if (epreuve.id) {
-      console.log('Mise à jour de :', epreuve)
+      console.log('Mise à jour :', payload)
     } else {
-      console.log('Création de :', epreuve)
+      console.log('Création :', payload)
     }
     alert('Épreuve sauvegardée avec succès !')
   } catch (err) {
@@ -106,4 +145,5 @@ const saveEpreuve = async (epreuve) => {
     alert('Erreur lors de la sauvegarde')
   }
 }
+
 </script>
