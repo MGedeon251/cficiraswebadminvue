@@ -115,7 +115,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import ItemActions from './DetailItemv2.vue';
+import ItemActions from './components/DetailItemv2.vue';
 import { useEnseignantStore } from '@/stores/pedagogieStore/enseignantStore';
 
 const enseignantStore = useEnseignantStore();

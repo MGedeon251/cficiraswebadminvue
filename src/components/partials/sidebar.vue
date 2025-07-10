@@ -42,7 +42,27 @@
             <li class="nav-item">
               <a class="nav-link" href="/salles-horaires">Salles & horaires</a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="/resultats-examens">Rapports</a></li>
+            <li class="nav-item"><a class="nav-link" href="/rapport-examens">Rapports</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#concours" aria-expanded="false">
+          <i class="mdi mdi-trophy menu-icon"></i>
+          <span class="menu-title">Concours</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="concours">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item">
+              <a class="nav-link" href="/edition-concours">Editions</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/resultats-concours">Resultats</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/rapport-concours">Rapports</a>
+            </li>
           </ul>
         </div>
       </li>
@@ -102,6 +122,7 @@
           </ul>
         </div>
       </li>
+
       <!-- Bibliothèque -->
       <li class="nav-item">
         <a class="nav-link" href="/bibliotheque">

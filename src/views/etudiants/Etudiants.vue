@@ -37,9 +37,35 @@
             </button>
             <ul class="dropdown-menu">
               <li>
-                <a class="dropdown-item" href="#drop_table">Importer fichier</a>
+                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#importModal"
+                  >Importer fichier</a
+                >
               </li>
             </ul>
+            <div
+              class="modal fade"
+              id="importModal"
+              tabindex="-1"
+              role="dialog"
+              aria-labelledby="importModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-xl" role="document">
+                <ImportList @import-complete="handleImport" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="exampleModal"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-lg" role="document">
+            <addEtudiant />
           </div>
         </div>
       </div>
@@ -51,7 +77,7 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">Informations & Details</h4>
-          <TableData ref="tableDataRef"></TableData>
+          <ATableData ref="tableDataRef"></ATableData>
         </div>
       </div>
     </div>
@@ -68,8 +94,10 @@
 import { ref } from 'vue';
 import * as XLSX from 'xlsx';
 import TableData from './tab/TableData.vue';
+import ATableData from './tab/ATableData.vue';
 import TabContent from './tab/TabContent.vue';
-
+import addEtudiant from './addEtudiant.vue';
+import ImportList from './ImportList.vue';
 const tableDataRef = ref(null);
 
 const exportToExcel = async () => {
@@ -100,5 +128,10 @@ const exportToExcel = async () => {
     console.error("Erreur lors de l'export:", error);
     alert("Une erreur est survenue lors de l'export");
   }
+};
+
+const handleImport = (data) => {
+  console.log('Données validées:', data);
+  // Tu peux maintenant les envoyer à une API, ou insérer dans ton store/table
 };
 </script>

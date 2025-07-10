@@ -379,7 +379,6 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import sidebar from '@/components/Header.vue';
 import SkeletonLoader from '@/components/SkeletonLoader.vue';
 
 const loading = ref(true);

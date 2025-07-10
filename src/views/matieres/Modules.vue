@@ -53,10 +53,6 @@ import TabModule from './tab/ModuleList.vue';
     </div>
     <div class="row">
       <div class="container my-2">
-        <!-- Header Section -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h4>Liste modules | matieres</h4>
-        </div>
         <!-- Product Table -->
         <TabModule></TabModule>
       </div>

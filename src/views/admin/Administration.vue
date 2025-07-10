@@ -1,7 +1,3 @@
-<script setup>
-import sidebar from '@/components/Header.vue';
-</script>
-
 <template>
   <div>
     <div class="row">
@@ -38,26 +34,15 @@ import sidebar from '@/components/Header.vue';
           <div class="card-body">
             <h4 class="card-title">Liste des Formateurs</h4>
             <p class="card-description">Liste de formateurs actifs</p>
-            <div class="table-responsive">
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Matricule</th>
-                    <th>Nom</th>
-                    <th>Prenom</th>
-                    <th>Email</th>
-                    <th>Telephone</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr></tr>
-                </tbody>
-              </table>
-            </div>
+            <ATable />
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import ATable from './ATable.vue';
+import { ref } from 'vue';
+</script>

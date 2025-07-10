@@ -14,18 +14,15 @@
               <p class="text-primary mb-0 hover-cursor">Analytics</p>
             </div>
           </div>
-          c
         </div>
       </div>
     </div>
     <FormateurList />
-
-    <ImportFormateur />
   </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import FormateurList from './FormateurList.vue';
+import FormateurList from './ListFormateur.vue';
 import ImportFormateur from './ImportFormateur.vue';
 
 const email = ref('gedeon.lekounda@gmail.com');

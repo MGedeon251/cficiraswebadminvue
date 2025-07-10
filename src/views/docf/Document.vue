@@ -1,5 +1,4 @@
 <script setup>
-import sidebar from '@/components/Header.vue';
 import { ref, onMounted } from 'vue';
 
 // Liste des factures (vide au départ)
