@@ -7,14 +7,14 @@
       <li>
         <RouterLink
           class="dropdown-item"
-          :to="`/edition-concours/details/${item.concour_id}`"
+          :to="`/edition-concours/details/${item.concours_id}`"
           @click="isDetailsVisible = true"
         >
-          <i class="mdi mdi-information-outline me-2"></i> Consulter
+          <i class="mdi mdi-information-outline me-2"></i> Details
         </RouterLink>
       </li>
       <li v-if="showAdd">
-        <RouterLink class="dropdown-item" @click="$emit('add', item)">
+        <RouterLink class="dropdown-item" :to="`/edition-concours/edit/${item.concours_id}`" @click="$emit('add', item)">
           <i class="mdi mdi mdi-launch me-2"></i> Editer
         </RouterLink>
       </li>

@@ -34,7 +34,7 @@ export const useConcourStore = defineStore('concourStore', {
       this.loading = true;
       try {
         const response = await getConcoursById(id);
-        this.concoursDetail = response.data;
+        this.concoursDetail = response;
       } catch (error) {
         useMessageStore().addError('Erreur lors de la récupération du concours.');
       } finally {

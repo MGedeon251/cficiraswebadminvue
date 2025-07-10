@@ -56,7 +56,7 @@
         <div class="card">
           <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1" />
           <div v-else class="card-body dashboard-tabs p-0">
-            <TabDetail />
+            <TabDetail/>
           </div>
         </div>
       </div>
@@ -69,7 +69,6 @@ import { ref, computed, onMounted } from 'vue';
 import TabDetail from '../tabs/TabDetail.vue';
 import SkeletonLoader from '@/components/SkeletonLoader.vue';
 
-// Computed
 </script>
 
 <style scoped>

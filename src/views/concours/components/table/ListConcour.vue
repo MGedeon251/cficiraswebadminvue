@@ -12,10 +12,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="concour in concours" :key="concour.id">
-          <td>{{ concour.id }}</td>
+        <tr v-for="(concour, index) in concours" :key="concour.id">
+          <td>{{ index + 1 }}</td>
           <td>{{ concour.designation }}</td>
-          <td>{{ concour.type_concours }}</td>
+          <td>{{ concour.type_code }}</td>
           <td>{{ formatDate(concour.date_debut) }}</td>
           <td>{{ formatDate(concour.date_fin) }}</td>
           <td>
@@ -29,7 +29,7 @@
           <td>
             <ItemActions
               :item="concour"
-              concourRoute="/edition-concours/"
+               concourRoute="/edition-concours/"
               :showAdd="true"
               editModalTarget="#editModuleModal"
               @edit="editModule"
