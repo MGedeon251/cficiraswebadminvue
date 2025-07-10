@@ -6,7 +6,7 @@
           <div class="me-md-3 me-xl-5">
             <h2>Gestions des concours</h2>
             <p class="mb-md-0">
-              Ouverture d'un concours et inscription des candidats année academique
+              Ouverture d'un concours et inscription des candidats année académique
             </p>
           </div>
           <div class="d-flex">
@@ -15,9 +15,12 @@
             <p class="text-primary mb-0 hover-cursor">Editions</p>
           </div>
         </div>
+
         <div class="d-flex justify-content-between align-items-end flex-wrap">
           <button class="btn btn-outline-dark me-2">Imprimer</button>
-          <div class="btn-group">
+
+          <!-- Groupe Nouveau -->
+          <div class="btn-group me-2">
             <button
               class="btn btn-primary mt-2 mt-xl-0"
               data-bs-toggle="modal"
@@ -26,7 +29,7 @@
               + Nouveau
             </button>
             <button
-              class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+              class="btn btn-primary dropdown-toggle dropdown-toggle-split mt-2 mt-xl-0"
               data-bs-toggle="dropdown"
             >
               <span class="visually-hidden">Toggle Dropdown</span>
@@ -35,12 +38,36 @@
               <li><a class="dropdown-item" href="#drag-drop-area">Importer fichier</a></li>
             </ul>
           </div>
+
+        <!-- Groupe Rapport : même style que Nouveau, mais en vert -->
+<div class="btn-group">
+  <button
+    class="btn btn-success mt-2 mt-xl-0"
+  >
+    Rapport
+  </button>
+  <button
+    class="btn btn-success dropdown-toggle dropdown-toggle-split mt-2 mt-xl-0"
+    data-bs-toggle="dropdown"
+  >
+    <span class="visually-hidden">Toggle Dropdown</span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="#">Concours</a></li>
+    <li><a class="dropdown-item" href="#">Test</a></li>
+  </ul>
+</div>
+
+
+          <!-- Modal composant -->
           <AddConcour />
         </div>
       </div>
     </div>
   </div>
 </template>
+
 <script setup>
+// On importe le composant modal
 import AddConcour from './modal/AddConcour.vue';
 </script>
