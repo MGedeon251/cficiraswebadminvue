@@ -33,7 +33,7 @@
             </div>
           </div>
         </div>
-        <div class="table-responsive mt-3">
+        <div v-if="candidats" class="table-responsive mt-3">
           <table class="table table-hover align-middle">
             <thead>
               <tr>
@@ -74,6 +74,9 @@
             @update:itemsPerPage="itemsPerPage = $event"
           />
         </div>
+        <div v-else class="text-center p-4">
+              <span class="text-muted">Chargement des détails du concours...</span>
+        </div>
       </div>
     </div>
   </div>
@@ -86,15 +89,15 @@ import ItemActions from '../details/ItemActions.vue';
 import Pagination from '@/components/shared/Pagination.vue';
 import dayjs from 'dayjs';
 
-import { useRoute } from 'vue-router'
-const route = useRoute()
-const concoursId = ref(route.params.id)
+import { useRouter } from 'vue-router'
+const router = useRouter();
+const concoursId = router.currentRoute.value.params.id;
 
 const candidats = ref([]);
 
 onMounted(async () => {
     try {
-    const response = await getCandidatures(1);
+    const response = await getCandidatures(concoursId);
     candidats.value = response.data;
   } catch (e) {
     concours.value = [];
