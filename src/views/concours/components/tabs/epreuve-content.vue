@@ -4,7 +4,8 @@
       <div class="d-flex justify-content-between flex-wrap">
         <div class="d-flex align-items-end flex-wrap">
           <div class="me-md-3 me-xl-5">
-            <h3>Epreuves - {{'Concours Informatique 2024'}}</h3>
+            <h3 v-if="concours && concours.designation">Épreuves - {{ concours.designation }}</h3>
+          <h3 v-else>Chargement du concours...</h3>
             <p>Détails sur les épreuves</p>
           </div>
         </div>
@@ -69,81 +70,85 @@
     </div>
   </div>
 </template>
-
 <script setup>
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
-const route = useRoute()
-const concoursId = ref(route.params.id)
+import { ref, onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useConcourStore } from '@/stores/gestionStores/concourStore';
 
+const router = useRouter();
+const concourStore = useConcourStore();
+const concoursId = router.currentRoute.value.params.id;
 
-const epreuves = ref([])
+const concours = computed(() => concourStore.concoursDetail);
+// Utilisez ref pour les épreuves avec une valeur par défaut
+const epreuves = ref([]);
+
+onMounted(async () => {
+  if (concoursId) {
+    await concourStore.fetchConcoursById(concoursId);
+    await concourStore.fetchEpreuvesConcours(concoursId);
+    // Mettez à jour la ref avec les données du store
+    epreuves.value = concourStore.epreuves || [];
+  }
+});
 
 const addEpreuve = () => {
-  epreuves.value.push({
+  // Double sécurité pour s'assurer que epreuves.value est un tableau
+  if (!Array.isArray(epreuves.value)) {
+    epreuves.value = [];
+  }
+  
+  epreuves.value = [...epreuves.value, {
     code: '',
     designation: '',
     coefficient: 1,
     heure_debut: '',
     heure_fin: '',
     type_epreuve: 'écrit',
-    ordre: 1,
+    ordre: (epreuves.value.length || 0) + 1,
     description: 'N/A'
-  })
-}
+  }];
+  
+  console.log('Nouvelle épreuve ajoutée:', epreuves.value);
+};
 
 const removeEpreuve = (index) => {
-  epreuves.value.splice(index, 1)
-}
+  epreuves.value.splice(index, 1);
+};
 
 const validateEpreuve = (epreuve) => {
   if (!epreuve.code || !epreuve.designation) {
-    return 'Code et intitulé sont obligatoires.'
+    return 'Code et intitulé sont obligatoires.';
   }
-
   if (!epreuve.heure_debut || !epreuve.heure_fin) {
-    return 'Les heures de début et de fin sont obligatoires.'
+    return 'Les heures de début et de fin sont obligatoires.';
   }
-
   if (epreuve.heure_debut >= epreuve.heure_fin) {
-    return 'L’heure de fin doit être après l’heure de début.'
+    return 'L’heure de fin doit être après l’heure de début.';
   }
-
   if (!epreuve.coefficient || epreuve.coefficient <= 0) {
-    return 'Le coefficient doit être supérieur à 0.'
+    return 'Le coefficient doit être supérieur à 0.';
   }
-
-  if (!concoursId.value) {
-    return 'Aucun concours sélectionné.'
-  }
-
-  return null // aucune erreur
-}
+  return null;
+};
 
 const saveEpreuve = async (epreuve) => {
-  const error = validateEpreuve(epreuve)
+  const error = validateEpreuve(epreuve);
   if (error) {
-    alert(error)
-    return
+    alert(error);
+    return;
   }
 
   const payload = {
     ...epreuve,
-    concours_id: concoursId.value
-  }
+    concours_id: concoursId
+  };
 
   try {
-    // Appel API ou simulation
-    if (epreuve.id) {
-      console.log('Mise à jour :', payload)
-    } else {
-      console.log('Création :', payload)
-    }
-    alert('Épreuve sauvegardée avec succès !')
+    await concourStore.addEpreuvesConcours(concoursId, payload);
+    alert('Épreuve sauvegardée avec succès !');
   } catch (err) {
-    console.error(err)
-    alert('Erreur lors de la sauvegarde')
+    alert('Erreur lors de la sauvegarde');
   }
-}
-
+};
 </script>

@@ -7,7 +7,7 @@
           <div>
             <h2 class="page-title">Details concours</h2>
             <p class="page-subtitle text-muted">
-              Gestion des sessions d'examen et répartition des salles/matières
+              Details des concours et editions candidatss, epreuves et resultats
             </p>
           </div>
           <div class="d-flex gap-2">

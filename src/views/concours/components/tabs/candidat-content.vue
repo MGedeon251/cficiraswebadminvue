@@ -27,7 +27,7 @@
               </button>
               <ul class="dropdown-menu">
                 <li>
-                  <a class="dropdown-item" href="#drag-drop-area">Importer fichier</a>
+                  <a class="dropdown-item">Importer fichier</a>
                 </li>
               </ul>
             </div>
