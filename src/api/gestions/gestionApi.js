@@ -20,7 +20,7 @@ export const calculResultatConcour=(id,data)=> gestionService.get(`/concours/${i
 // API pour gérer les candidatures
 export const getCandidatures = (id) => gestionService.get(`/candidat/concours/${id}`);
 export const getCandidatureById = (id) => gestionService.get(`/candidat/${id}`);
-export const createCandidature = (data) => gestionService.post('/candidatures', data);
+export const createCandidature = (data) => gestionService.post('/candidat/', data);
 export const updateCandidature = (id, data) => gestionService.put(`/candidatures/${id}`, data);
 export const deleteCandidature = (id) => gestionService.delete(`/candidatures/${id}`);
 

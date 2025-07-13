@@ -114,7 +114,7 @@
                     class="form-control"
                     id="tel"
                     v-model="candidat.tel"
-                    placeholder="+242 066034357"
+                    placeholder="+242066034357"
                     required
                   />
                 </div>
@@ -162,8 +162,8 @@
                   <label for="filiere">Filière</label>
                   <select class="form-select" id="filiere" v-model="candidat.filiere" required>
                     <option value="">Sélectionner une filière</option>
-                    <option value="LAP">LAP</option>
-                    <option value="INF">INF</option>
+                    <option value="LAP">ADMINISTRATION PUBLIQUE</option>
+                    <option value="INF">INFORMATIQUE</option>
                     <option value="DUT">DUT</option>
                     <option value="AM">AM</option>
                     <option value="MT">MT</option>
@@ -175,7 +175,10 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Enregistrer</button>
+          <button type="submit" class="btn btn-success" :disabled="isSubmitting">
+            <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+            Enregistrer
+          </button>
           <button type="button" class="btn btn-light" @click="closeDetails">Annuler</button>
         </div>
       </form>
@@ -217,13 +220,16 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router'
+const router = useRouter();
+const concoursId = router.currentRoute.value.params.id;
 
 const activeKey = ref('1');
 
 const emit = defineEmits(['close', 'submit']);
 
 const candidat = ref({
-  concours_id: '',
+  concours_id: concoursId,
   filiere: '',
   nom: '',
   prenom: '',
@@ -234,9 +240,6 @@ const candidat = ref({
   adresse: '',
   ville: '',
   pays: 'CG-BZV',
-  sexe: '',
-  photo: null,
-  photourl: ''
 });
 
 const fileInput = ref(null);

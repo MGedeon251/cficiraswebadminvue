@@ -32,7 +32,7 @@
               </ul>
             </div>
           </div>
-          <AddCandidat/>
+          <AddCandidat @submit="handleSubmit" @close="handleClose"/>
         </div>
         <div v-if="candidats" class="table-responsive mt-3">
           <table class="table table-hover align-middle">
@@ -48,8 +48,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="candidat in paginatedCandidats" :key="candidat.id">
-                <td>{{ candidat.id }}</td>
+              <tr v-for="(candidat, index) in paginatedCandidats" :key="candidat.id">
+                <td>{{ index + 1 }}</td>
                 <td>{{ candidat.matricule }}</td>
                 <td>{{ candidat.nom }}</td>
                 <td>{{ candidat.prenom }}</td>
@@ -85,15 +85,18 @@
 
 <script setup="setup">
 import { ref, onMounted, computed } from 'vue';
-import { getCandidatures } from '@/api/gestions/gestionApi';
+import { getCandidatures, createCandidature } from '@/api/gestions/gestionApi';
 import ItemActions from '../details/ItemActions.vue';
 import Pagination from '@/components/shared/Pagination.vue';
+import { message } from 'ant-design-vue';
 import dayjs from 'dayjs';
 
 import { useRouter } from 'vue-router'
 import AddCandidat from '../modal/addCandidat.vue';
 const router = useRouter();
 const concoursId = router.currentRoute.value.params.id;
+
+
 
 const candidats = ref([]);
 
@@ -105,9 +108,6 @@ onMounted(async () => {
     concours.value = [];
   }
 });
-
-const current = ref(6);
-
 const formatDate = (date) => {
   return dayjs(date).format('DD-MM-YYYY');
 };
@@ -121,4 +121,25 @@ const paginatedCandidats = computed(() => {
   const end = start + itemsPerPage.value;
   return candidats.value.slice(start, end);
 });
+
+const handleSubmit = async (formData) => {
+  try {
+    await createCandidature(formData);
+    message.success('Candidat ajouté avec succès');
+    // TODO: Rafraîchir la liste ou fermer modal
+    const modalEl = document.getElementById('exampleModal');
+    const modal = bootstrap.Modal.getInstance(modalEl);
+    modal?.hide();
+  } catch (error) {
+    console.error(error);
+    message.error("Erreur lors de l'ajout du candidat");
+    
+  }
+};
+const handleClose = () => {
+  const modalEl = document.getElementById('exampleModal');
+  const modal = bootstrap.Modal.getInstance(modalEl);
+  modal?.hide();
+};
+
 </script>

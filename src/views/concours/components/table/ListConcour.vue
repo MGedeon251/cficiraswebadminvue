@@ -21,7 +21,7 @@
           <td>
             <span
               class="status-badge"
-              :class="concour.statut === 'active' ? 'status-active' : 'status-draft'"
+              :class="concour.statut === 'ouvert' ? 'status-active' : 'status-draft'"
             >
               {{ concour.statut }}
             </span>
