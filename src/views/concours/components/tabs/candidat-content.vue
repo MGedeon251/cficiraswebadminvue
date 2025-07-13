@@ -15,7 +15,7 @@
               <button
                 class="btn btn-primary mt-2 mt-xl-0"
                 data-bs-toggle="modal"
-                data-bs-target="#exampleModal2"
+                data-bs-target="#exampleModal"
               >
                 + Ajouter
               </button>
@@ -32,6 +32,7 @@
               </ul>
             </div>
           </div>
+          <AddCandidat/>
         </div>
         <div v-if="candidats" class="table-responsive mt-3">
           <table class="table table-hover align-middle">
@@ -90,6 +91,7 @@ import Pagination from '@/components/shared/Pagination.vue';
 import dayjs from 'dayjs';
 
 import { useRouter } from 'vue-router'
+import AddCandidat from '../modal/addCandidat.vue';
 const router = useRouter();
 const concoursId = router.currentRoute.value.params.id;
 

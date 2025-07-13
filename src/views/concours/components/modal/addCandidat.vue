@@ -1,0 +1,313 @@
+<template>
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+    <div class="modal-header bg-primary text-white">
+      <h5 class="modal-title" id="exampleModalLabel">Ajouter candidat</h5>
+      <button type="button" class="btn-close btn-close-white" @click="closeDetails"></button>
+    </div>
+    <div class="modal-body">
+        <a-tabs v-model:activeKey="activeKey">
+        <a-tab-pane key="1" tab="Donnees personnelles">
+        <form @submit.prevent="submitForm">
+        <div class="row">
+          <p class="text-muted">Photo format profil</p>
+          <div class="col-md-3 text-center">
+            <div class="avatar bg-warning text-white d-flex align-items-center justify-content-center">
+              <!-- Si la photo existe, on l'affiche, sinon on montre les initiales -->
+              <img
+                v-if="previewImage"
+                :src="previewImage"
+                alt="Photo du candidat"
+                class="avatar-img"
+              />
+              <span v-else class="fs-1">{{ getInitials(candidat.nom, candidat.prenom) }}</span>
+              <input
+                type="file"
+                ref="fileInput"
+                @change="handleFileUpload"
+                accept="image/*"
+                class="d-none"
+              />
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-primary mt-2" @click="triggerFileInput">
+              {{ candidat.photourl ? 'Changer' : 'Ajouter' }} photo
+            </button>
+          </div>
+          <div class="col-md-9">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="nom">Noms</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="nom"
+                    v-model="candidat.nom"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="prenom">Prénoms</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="prenom"
+                    v-model="candidat.prenom"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="datenais">Date de naissance</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="datenais"
+                    v-model="candidat.datenais"
+                    required
+                    :max="maxBirthDate"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="lieunais">Lieu de naissance</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="lieunais"
+                    v-model="candidat.lieunais"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="sexe">Sexe</label>
+                  <select class="form-select" id="sexe" v-model="candidat.sexe" required>
+                    <option value="">Sélectionner</option>
+                    <option value="M">Masculin</option>
+                    <option value="F">Féminin</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="tel">Téléphone</label>
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="tel"
+                    v-model="candidat.tel"
+                    placeholder="+242 066034357"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    v-model="candidat.email"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="ville">Ville</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="ville"
+                    v-model="candidat.ville"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="adresse">Adresse</label>
+                  <input
+                    class="form-control"
+                    id="adresse"
+                    v-model="candidat.adresse"
+                    rows="2"
+                  >
+                </div>
+              </div>
+                <div class="col-md-6">
+                <div class="form-group">
+                  <label for="filiere">Filière</label>
+                  <select class="form-select" id="filiere" v-model="candidat.filiere" required>
+                    <option value="">Sélectionner une filière</option>
+                    <option value="LAP">LAP</option>
+                    <option value="INF">INF</option>
+                    <option value="DUT">DUT</option>
+                    <option value="AM">AM</option>
+                    <option value="MT">MT</option>
+                    <option value="ING">ING</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Enregistrer</button>
+          <button type="button" class="btn btn-light" @click="closeDetails">Annuler</button>
+        </div>
+      </form>
+        </a-tab-pane>
+        <a-tab-pane key="2" tab="Dossier" force-render>
+              <div>
+    <a-upload
+      v-model:file-list="fileList"
+      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+      list-type="picture"
+    >
+      <a-button>
+        <upload-outlined></upload-outlined>
+        upload
+      </a-button>
+    </a-upload>
+    <br />
+    <br />
+    <a-upload
+      v-model:file-list="fileList1"
+      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+      list-type="picture"
+      class="upload-list-inline"
+    >
+      <a-button>
+        <upload-outlined></upload-outlined>
+        upload
+      </a-button>
+    </a-upload>
+  </div>
+        </a-tab-pane>
+    </a-tabs>
+      
+    </div>
+  </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+
+const activeKey = ref('1');
+
+const emit = defineEmits(['close', 'submit']);
+
+const candidat = ref({
+  concours_id: '',
+  filiere: '',
+  nom: '',
+  prenom: '',
+  datenais: '',
+  lieunais: '',
+  tel: '',
+  email: '',
+  adresse: '',
+  ville: '',
+  pays: 'CG-BZV',
+  sexe: '',
+  photo: null,
+  photourl: ''
+});
+
+const fileInput = ref(null);
+const previewImage = ref('');
+
+const maxBirthDate = computed(() => {
+  const today = new Date();
+  return today.toISOString().split('T')[0];
+});
+
+const getInitials = (nom, prenom) => {
+  if (!nom && !prenom) return 'N/A';
+  return `${nom?.charAt(0) || ''}${prenom?.charAt(0) || ''}`.toUpperCase();
+};
+
+const triggerFileInput = () => {
+  fileInput.value.click();
+};
+
+const handleFileUpload = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    candidat.value.photo = file;
+    candidat.value.photourl = URL.createObjectURL(file);
+    previewImage.value = URL.createObjectURL(file);
+  }
+};
+
+const submitForm = () => {
+  // Créer un FormData pour envoyer les données (surtout pour la photo)
+  const formData = new FormData();
+  
+  // Ajouter toutes les propriétés du candidat
+  Object.keys(candidat.value).forEach(key => {
+    if (key !== 'photourl') { // On exclut photourl qui est juste pour la prévisualisation
+      formData.append(key, candidat.value[key]);
+    }
+  });
+
+  emit('submit', formData);
+};
+
+const closeDetails = () => {
+  emit('close');
+};
+</script>
+
+<style scoped>
+/* Vos styles existants restent inchangés */
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 8px;
+  border-color: antiquewhite;
+  border-style: solid;
+  font-weight: bold;
+  font-size: 2rem;
+  overflow: hidden;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal-content {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* ... autres styles ... */
+</style>
