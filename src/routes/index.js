@@ -102,12 +102,7 @@ const routes = [
         props: true,
       },
       { path: '/edition-concours', name: 'InscriptionConcours', component: EditionConcours },
-      {
-        path: '/edition-concours/details/:id',
-        name: 'DetailsConcours',
-        component: DetailsConcours,
-      },
-      { path: '/edition-concours/editer/:id', name: 'EditionConcours', component: DetailsConcours },
+      { path: '/edition-concours/edit/:id', name: 'EditionConcours', component: DetailsConcours },
 
       { path: '/planification-examens', name: 'Planification', component: Plannification },
       { path: '/calendrier-examens', name: 'CalendrierExamens', component: Calendrier },
