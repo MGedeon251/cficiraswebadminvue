@@ -4,16 +4,23 @@ import { gestionApi } from '../config/apiClients';
 const gestionService = buildService(gestionApi);
 
 // API pour gérer les concours
-export const getConcours = () => gestionService.get('/concours');
+export const getConcours = () => gestionService.get('/concours/');
 export const getConcoursById = (id) => gestionService.get(`/concours/${id}`);
 export const createConcours = (data) => gestionService.post('/concours', data);
 export const updateConcours = (id, data) => gestionService.put(`/concours/${id}`, data);
 export const deleteConcours = (id) => gestionService.delete(`/concours/${id}`);
 
+export const getEpreuvesConcours = (id) => gestionService.get(`/concours/${id}/epreuves`);
+export const createEpreuves=(id,data)=> gestionService.get(`/concours/${id}/epreuves` ,data)
+
+export const getResultatsConcours = (id) => gestionService.get(`/concours/${id}/resultats`);
+export const getPublicationConcours = (id) => gestionService.get(`/concours/${id}/publication`);
+export const calculResultatConcour=(id,data)=> gestionService.get(`/concours/${id}/calculate`,data)
+
 // API pour gérer les candidatures
-export const getCandidatures = () => gestionService.get('/candidatures');
-export const getCandidatureById = (id) => gestionService.get(`/candidatures/${id}`);
-export const createCandidature = (data) => gestionService.post('/candidatures', data);
+export const getCandidatures = (id) => gestionService.get(`/candidat/concours/${id}`);
+export const getCandidatureById = (id) => gestionService.get(`/candidat/${id}`);
+export const createCandidature = (data) => gestionService.post('/candidat/', data);
 export const updateCandidature = (id, data) => gestionService.put(`/candidatures/${id}`, data);
 export const deleteCandidature = (id) => gestionService.delete(`/candidatures/${id}`);
 

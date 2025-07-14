@@ -108,10 +108,20 @@ const routes = [
         name: 'Deconcours',
         component: () => import('@/views/scolarite/concours/Deconcours.vue'),
       },
-      {
+      /*{
         path: '/organiser-concours',
         name: 'Concours',
         component: () => import('@/views/concours/concours.vue'),
+      },*/
+      {
+        path: '/organiser-concours',
+        name: 'Concours',
+        component: () => import('@/views/concours-v2/Edition.vue'),
+      },
+        {
+        path: '/edition-concours/details/:id',
+        name: 'DetailsConcours',
+        component: () => import('@/views/concours-v2/components/details/Details.vue'),
       },
       {
         path: '/concours/information',
