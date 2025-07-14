@@ -31,7 +31,7 @@ const buildService = (client) => ({
       if (showMessage) {
         try {
           const messageStore = useMessageStore();
-          messageStore.addMessage('Création réussie');
+          //messageStore.addMessage('Création réussie');
         } catch (e) {
           console.warn('Erreur dans messageStore');
         }
@@ -49,10 +49,9 @@ const buildService = (client) => ({
       if (showMessage) {
         try {
           const messageStore = useMessageStore();
-          messageStore.addMessage('Mise à jour réussie');
+          //messageStore.addMessage('Mise à jour réussie');
         } catch (e) {}
       }
-
       return response.data;
     } catch (error) {
       handleApiError(error);

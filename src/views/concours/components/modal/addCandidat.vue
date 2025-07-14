@@ -219,36 +219,43 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router'
+import { ref, computed, watch } from 'vue';
+import { useRouter } from 'vue-router';
+
 const router = useRouter();
 const concoursId = router.currentRoute.value.params.id;
 
-const activeKey = ref('1');
-
 const emit = defineEmits(['close', 'submit']);
 
-const candidat = ref({
-  concours_id: concoursId,
-  filiere: '',
-  nom: '',
-  prenom: '',
-  datenais: '',
-  lieunais: '',
-  tel: '',
-  email: '',
-  adresse: '',
-  ville: '',
-  pays: 'CG-BZV',
-});
+const activeKey = ref('1');
 
 const fileInput = ref(null);
 const previewImage = ref('');
+
+const candidat = ref(getEmptyCandidat());
 
 const maxBirthDate = computed(() => {
   const today = new Date();
   return today.toISOString().split('T')[0];
 });
+
+function getEmptyCandidat() {
+  return {
+    concours_id: concoursId,
+    filiere: '',
+    nom: '',
+    prenom: '',
+    datenais: '',
+    lieunais: '',
+    tel: '',
+    email: '',
+    adresse: '',
+    ville: '',
+    pays: 'CG-BZV',
+    photo: null,
+    photourl: '',
+  };
+}
 
 const getInitials = (nom, prenom) => {
   if (!nom && !prenom) return 'N/A';
@@ -263,29 +270,34 @@ const handleFileUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
     candidat.value.photo = file;
-    candidat.value.photourl = URL.createObjectURL(file);
     previewImage.value = URL.createObjectURL(file);
   }
 };
 
+const resetForm = () => {
+  candidat.value = getEmptyCandidat();
+  previewImage.value = '';
+};
+
 const submitForm = () => {
-  // Créer un FormData pour envoyer les données (surtout pour la photo)
   const formData = new FormData();
-  
-  // Ajouter toutes les propriétés du candidat
-  Object.keys(candidat.value).forEach(key => {
-    if (key !== 'photourl') { // On exclut photourl qui est juste pour la prévisualisation
+
+  Object.keys(candidat.value).forEach((key) => {
+    if (key !== 'photourl') {
       formData.append(key, candidat.value[key]);
     }
   });
 
   emit('submit', formData);
+  resetForm();
 };
 
 const closeDetails = () => {
   emit('close');
+  resetForm();
 };
 </script>
+
 
 <style scoped>
 /* Vos styles existants restent inchangés */

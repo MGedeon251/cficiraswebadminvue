@@ -115,12 +115,11 @@ export const useConcourStore = defineStore('concourStore', {
         notifySuccess(response?.message || 'Épreuves ajoutées avec succès.');
         await this.fetchEpreuvesConcours(concoursId);
       } catch (e) {
-        notifyError("Erreur lors de l'ajout des épreuves.");
+        notifyError(extractErrorMessage(e,"Erreur lors de l'ajout des épreuves."));
       } finally {
         this.loading = false;
       }
     },
-
     addEpreuveLocally() {
       this.epreuves.push({
         code: '',
@@ -133,7 +132,6 @@ export const useConcourStore = defineStore('concourStore', {
         ordre: 1,
       });
     },
-
     removeEpreuveLocally(index) {
       this.epreuves.splice(index, 1);
     },
