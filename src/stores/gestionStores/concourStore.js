@@ -32,7 +32,7 @@ export const useConcourStore = defineStore('concourStore', {
         const response = await getConcours();
         this.concours = response.data;
       } catch (e) {
-        useMessageStore().addError('Erreur lors de la récupération des concours.');
+        useMessageStore().addMessage('Erreur lors de la récupération des concours.', );
       } finally {
         this.loading = false;
       }
@@ -44,7 +44,7 @@ export const useConcourStore = defineStore('concourStore', {
         const response = await getConcoursById(id);
         this.concoursDetail = response;
       } catch (e) {
-        useMessageStore().addError('Erreur lors de la récupération du concours.');
+        useMessageStore().addMessage('Erreur lors de la récupération du concours.', "error");
       } finally {
         this.loading = false;
       }

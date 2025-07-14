@@ -96,8 +96,6 @@ import AddCandidat from '../modal/addCandidat.vue';
 const router = useRouter();
 const concoursId = router.currentRoute.value.params.id;
 
-
-
 const candidats = ref([]);
 
 onMounted(async () => {
