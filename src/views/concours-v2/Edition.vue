@@ -18,7 +18,7 @@
                   <button
                     class="btn btn-secondary mt-2 mt-xl-0"
                     data-bs-toggle="modal"
-                    data-bs-target="#exampleModal"
+                    data-bs-target="#exam"
                   >
                     + Filtrer
                   </button>

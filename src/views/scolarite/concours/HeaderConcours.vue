@@ -39,25 +39,20 @@
             </ul>
           </div>
 
-        <!-- Groupe Rapport : même style que Nouveau, mais en vert -->
-<div class="btn-group">
-  <button
-    class="btn btn-success mt-2 mt-xl-0"
-  >
-    Rapport
-  </button>
-  <button
-    class="btn btn-success dropdown-toggle dropdown-toggle-split mt-2 mt-xl-0"
-    data-bs-toggle="dropdown"
-  >
-    <span class="visually-hidden">Toggle Dropdown</span>
-  </button>
-  <ul class="dropdown-menu">
-    <li><a class="dropdown-item" href="#">Concours</a></li>
-    <li><a class="dropdown-item" href="#">Test</a></li>
-  </ul>
-</div>
-
+          <!-- Groupe Rapport : même style que Nouveau, mais en vert -->
+          <div class="btn-group">
+            <button class="btn btn-success mt-2 mt-xl-0">Rapport</button>
+            <button
+              class="btn btn-success dropdown-toggle dropdown-toggle-split mt-2 mt-xl-0"
+              data-bs-toggle="dropdown"
+            >
+              <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Concours</a></li>
+              <li><a class="dropdown-item" href="#">Test</a></li>
+            </ul>
+          </div>
 
           <!-- Modal composant -->
           <AddConcour />

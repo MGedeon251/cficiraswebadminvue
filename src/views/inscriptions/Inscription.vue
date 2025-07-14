@@ -22,10 +22,20 @@
     <!-- Filtres -->
     <div class="row mb-3">
       <div class="col-md-3">
-        <input v-model="rechercheNom" type="text" class="form-control" placeholder="Rechercher par nom...">
+        <input
+          v-model="rechercheNom"
+          type="text"
+          class="form-control"
+          placeholder="Rechercher par nom..."
+        />
       </div>
       <div class="col-md-3">
-        <input v-model="recherchePrenom" type="text" class="form-control" placeholder="Rechercher par prénom...">
+        <input
+          v-model="recherchePrenom"
+          type="text"
+          class="form-control"
+          placeholder="Rechercher par prénom..."
+        />
       </div>
       <div class="col-md-3">
         <select v-model="selectedYear" class="form-select">
@@ -44,7 +54,9 @@
     <!-- Export -->
     <div class="row mb-3">
       <div class="col-md-12 text-end">
-        <button class="btn btn-outline-primary" @click="exportCSV(inscriptionsFiltrees)">Exporter Candidats (CSV)</button>
+        <button class="btn btn-outline-primary" @click="exportCSV(inscriptionsFiltrees)">
+          Exporter Candidats (CSV)
+        </button>
       </div>
     </div>
 
@@ -85,7 +97,9 @@
                         </span>
                       </td>
                       <td>
-                        <button class="btn btn-sm btn-success" @click="validerInscription(c)">Valider</button>
+                        <button class="btn btn-sm btn-success" @click="validerInscription(c)">
+                          Valider
+                        </button>
                       </td>
                     </tr>
                     <tr v-if="inscriptionsFiltrees.length === 0">
@@ -94,9 +108,21 @@
                   </tbody>
                 </table>
                 <div class="d-flex justify-content-center mt-3">
-                  <button class="btn btn-secondary me-2" :disabled="pageCourante === 1" @click="pageCourante--">Précédent</button>
+                  <button
+                    class="btn btn-secondary me-2"
+                    :disabled="pageCourante === 1"
+                    @click="pageCourante--"
+                  >
+                    Précédent
+                  </button>
                   <span>Page {{ pageCourante }} / {{ totalPages }}</span>
-                  <button class="btn btn-secondary ms-2" :disabled="pageCourante === totalPages" @click="pageCourante++">Suivant</button>
+                  <button
+                    class="btn btn-secondary ms-2"
+                    :disabled="pageCourante === totalPages"
+                    @click="pageCourante++"
+                  >
+                    Suivant
+                  </button>
                 </div>
               </div>
             </div>
@@ -113,10 +139,20 @@
         <!-- Filtres inscrits -->
         <div class="row mb-3">
           <div class="col-md-3">
-            <input v-model="filtreInscritsNom" type="text" class="form-control" placeholder="Rechercher nom...">
+            <input
+              v-model="filtreInscritsNom"
+              type="text"
+              class="form-control"
+              placeholder="Rechercher nom..."
+            />
           </div>
           <div class="col-md-3">
-            <input v-model="filtreInscritsPrenom" type="text" class="form-control" placeholder="Rechercher prénom...">
+            <input
+              v-model="filtreInscritsPrenom"
+              type="text"
+              class="form-control"
+              placeholder="Rechercher prénom..."
+            />
           </div>
           <div class="col-md-3">
             <select v-model="filtreInscritsYear" class="form-select">
@@ -133,7 +169,9 @@
         </div>
 
         <div class="text-end mb-2">
-          <button class="btn btn-outline-success" @click="exportCSV(inscritsFiltrees)">Exporter Inscrits (CSV)</button>
+          <button class="btn btn-outline-success" @click="exportCSV(inscritsFiltrees)">
+            Exporter Inscrits (CSV)
+          </button>
         </div>
 
         <table class="table table-bordered">
@@ -157,7 +195,12 @@
               <td>{{ etudiant.filiere }}</td>
               <td>{{ etudiant.annee }}</td>
               <td>
-                <img v-if="etudiant.photo" :src="etudiant.photo" alt="Photo" style="width: 50px; height: 50px; object-fit: cover;" />
+                <img
+                  v-if="etudiant.photo"
+                  :src="etudiant.photo"
+                  alt="Photo"
+                  style="width: 50px; height: 50px; object-fit: cover"
+                />
                 <span v-else>Aucune</span>
               </td>
             </tr>
@@ -172,93 +215,105 @@
 </template>
 
 <script setup>
-import SkeletonLoader from '@/components/SkeletonLoader.vue'
-import { ref, computed, onMounted } from 'vue'
+import SkeletonLoader from '@/components/SkeletonLoader.vue';
+import { ref, computed, onMounted } from 'vue';
 
-const loading = ref(true)
-const academicYears = ref([])
-const selectedYear = ref('')
-const selectedFiliere = ref('')
-const rechercheNom = ref('')
-const recherchePrenom = ref('')
-const inscriptions = ref([])
-const inscrits = ref([])
-const pageCourante = ref(1)
-const pageSize = 5
+const loading = ref(true);
+const academicYears = ref([]);
+const selectedYear = ref('');
+const selectedFiliere = ref('');
+const rechercheNom = ref('');
+const recherchePrenom = ref('');
+const inscriptions = ref([]);
+const inscrits = ref([]);
+const pageCourante = ref(1);
+const pageSize = 5;
 
-const filtreInscritsNom = ref('')
-const filtreInscritsPrenom = ref('')
-const filtreInscritsYear = ref('')
-const filtreInscritsFiliere = ref('')
+const filtreInscritsNom = ref('');
+const filtreInscritsPrenom = ref('');
+const filtreInscritsYear = ref('');
+const filtreInscritsFiliere = ref('');
 
 const filieresDisponibles = computed(() => {
-  const all = [...inscriptions.value, ...inscrits.value]
-  const set = new Set(all.map(c => c.filiere).filter(Boolean))
-  return Array.from(set)
-})
+  const all = [...inscriptions.value, ...inscrits.value];
+  const set = new Set(all.map((c) => c.filiere).filter(Boolean));
+  return Array.from(set);
+});
 
 onMounted(() => {
-  const savedAdmis = localStorage.getItem('admis')
-  const savedFinal = localStorage.getItem('inscriptionsFinales')
-  inscriptions.value = []
+  const savedAdmis = localStorage.getItem('admis');
+  const savedFinal = localStorage.getItem('inscriptionsFinales');
+  inscriptions.value = [];
   if (savedAdmis) {
-    const admis = JSON.parse(savedAdmis)
-    inscriptions.value = admis.map(c => ({ ...c, inscrit: false }))
+    const admis = JSON.parse(savedAdmis);
+    inscriptions.value = admis.map((c) => ({ ...c, inscrit: false }));
   }
   if (savedFinal) {
-    inscrits.value = JSON.parse(savedFinal)
+    inscrits.value = JSON.parse(savedFinal);
   }
-  const annees = new Set([...inscriptions.value, ...inscrits.value].map(c => c.concours || c.annee))
-  academicYears.value = Array.from(annees).sort()
-  loading.value = false
-})
+  const annees = new Set(
+    [...inscriptions.value, ...inscrits.value].map((c) => c.concours || c.annee)
+  );
+  academicYears.value = Array.from(annees).sort();
+  loading.value = false;
+});
 
 function validerInscription(c) {
-  c.inscrit = true
-  const newInscrit = { ...c, annee: c.concours, paiement: 'non' }
-  inscrits.value.push(newInscrit)
-  inscriptions.value = inscriptions.value.filter(i => i !== c)
-  localStorage.setItem('inscriptionsFinales', JSON.stringify(inscrits.value))
-  const admis = JSON.parse(localStorage.getItem('admis') || '[]')
-  const newAdmis = admis.filter(a => !(a.nom === c.nom && a.prenom === c.prenom))
-  localStorage.setItem('admis', JSON.stringify(newAdmis))
+  c.inscrit = true;
+  const newInscrit = { ...c, annee: c.concours, paiement: 'non' };
+  inscrits.value.push(newInscrit);
+  inscriptions.value = inscriptions.value.filter((i) => i !== c);
+  localStorage.setItem('inscriptionsFinales', JSON.stringify(inscrits.value));
+  const admis = JSON.parse(localStorage.getItem('admis') || '[]');
+  const newAdmis = admis.filter((a) => !(a.nom === c.nom && a.prenom === c.prenom));
+  localStorage.setItem('admis', JSON.stringify(newAdmis));
 }
 
 const inscriptionsFiltrees = computed(() =>
-  inscriptions.value.filter(c =>
-    c.nom.toLowerCase().includes(rechercheNom.value.toLowerCase()) &&
-    c.prenom.toLowerCase().includes(recherchePrenom.value.toLowerCase()) &&
-    (!selectedFiliere.value || c.filiere === selectedFiliere.value) &&
-    (!selectedYear.value || c.concours === selectedYear.value)
+  inscriptions.value.filter(
+    (c) =>
+      c.nom.toLowerCase().includes(rechercheNom.value.toLowerCase()) &&
+      c.prenom.toLowerCase().includes(recherchePrenom.value.toLowerCase()) &&
+      (!selectedFiliere.value || c.filiere === selectedFiliere.value) &&
+      (!selectedYear.value || c.concours === selectedYear.value)
   )
-)
+);
 
 const inscritsFiltrees = computed(() =>
-  inscrits.value.filter(c =>
-    c.nom.toLowerCase().includes(filtreInscritsNom.value.toLowerCase()) &&
-    c.prenom.toLowerCase().includes(filtreInscritsPrenom.value.toLowerCase()) &&
-    (!filtreInscritsFiliere.value || c.filiere === filtreInscritsFiliere.value) &&
-    (!filtreInscritsYear.value || c.annee === filtreInscritsYear.value)
+  inscrits.value.filter(
+    (c) =>
+      c.nom.toLowerCase().includes(filtreInscritsNom.value.toLowerCase()) &&
+      c.prenom.toLowerCase().includes(filtreInscritsPrenom.value.toLowerCase()) &&
+      (!filtreInscritsFiliere.value || c.filiere === filtreInscritsFiliere.value) &&
+      (!filtreInscritsYear.value || c.annee === filtreInscritsYear.value)
   )
-)
+);
 
-const totalPages = computed(() => Math.ceil(inscriptionsFiltrees.value.length / pageSize))
+const totalPages = computed(() => Math.ceil(inscriptionsFiltrees.value.length / pageSize));
 const inscriptionsPage = computed(() => {
-  const start = (pageCourante.value - 1) * pageSize
-  return inscriptionsFiltrees.value.slice(start, start + pageSize)
-})
+  const start = (pageCourante.value - 1) * pageSize;
+  return inscriptionsFiltrees.value.slice(start, start + pageSize);
+});
 
 function exportCSV(data) {
   const rows = [
     ['Nom', 'Prénom', 'Sexe', 'Âge', 'Filière', 'Année', 'Photo'],
-    ...data.map(c => [c.nom, c.prenom, c.sexe, c.age, c.filiere, c.concours || c.annee, c.photo || ''])
-  ]
-  const csvContent = rows.map(e => e.join(",")).join("\n")
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
-  const link = document.createElement('a')
-  link.href = URL.createObjectURL(blob)
-  link.setAttribute('download', 'export.csv')
-  link.click()
+    ...data.map((c) => [
+      c.nom,
+      c.prenom,
+      c.sexe,
+      c.age,
+      c.filiere,
+      c.concours || c.annee,
+      c.photo || '',
+    ]),
+  ];
+  const csvContent = rows.map((e) => e.join(',')).join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.setAttribute('download', 'export.csv');
+  link.click();
 }
 </script>
 
