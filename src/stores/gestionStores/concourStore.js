@@ -12,7 +12,8 @@ import {
   calculResultatConcour,
 } from '@/api/gestions/gestionApi';
 
-import { useMessageStore } from '@/stores/messages/messageStore';
+import { useNotifier } from '@/stores/messages/useNotifier';
+import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
 
 export const useConcourStore = defineStore('concourStore', {
   state: () => ({
@@ -25,91 +26,96 @@ export const useConcourStore = defineStore('concourStore', {
   }),
 
   actions: {
-    // --- Concours ---
     async fetchConcours() {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         const response = await getConcours();
         this.concours = response.data;
       } catch (e) {
-        useMessageStore().addMessage('Erreur lors de la récupération des concours.', );
+        notifyError('Erreur lors de la récupération des concours.');
       } finally {
         this.loading = false;
       }
     },
 
     async fetchConcoursById(id) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         const response = await getConcoursById(id);
         this.concoursDetail = response;
       } catch (e) {
-        useMessageStore().addMessage('Erreur lors de la récupération du concours.', "error");
+        notifyError(e,'Erreur lors de la récupération du concours.');
       } finally {
         this.loading = false;
       }
     },
 
     async addConcours(data) {
+      const { notifySuccess, notifyError } = useNotifier();
       this.loading = true;
       try {
-        await createConcours(data);
-        useMessageStore().addSuccess('Concours créé avec succès.');
+        const response = await createConcours(data);
+        notifySuccess(response?.message || 'Concours créé avec succès.');
         await this.fetchConcours();
       } catch (e) {
-        useMessageStore().addError('Erreur lors de la création du concours.');
+        notifyError(extractErrorMessage(e, 'Erreur lors de la création du concours.'));
       } finally {
         this.loading = false;
       }
     },
 
     async editConcours(id, data) {
+      const { notifySuccess, notifyError } = useNotifier();
       this.loading = true;
       try {
-        await updateConcours(id, data);
-        useMessageStore().addSuccess('Concours mis à jour avec succès.');
+        const response = await updateConcours(id, data);
+        notifySuccess(response?.message || 'Concours mis à jour avec succès.');
         await this.fetchConcours();
       } catch (e) {
-        useMessageStore().addError('Erreur lors de la mise à jour du concours.');
+        notifyError('Erreur lors de la mise à jour du concours.');
       } finally {
         this.loading = false;
       }
     },
 
     async removeConcours(id) {
+      const { notifySuccess, notifyError } = useNotifier();
       this.loading = true;
       try {
-        await deleteConcours(id);
-        useMessageStore().addSuccess('Concours supprimé avec succès.');
+        const response = await deleteConcours(id);
+        notifySuccess(response?.message || 'Concours supprimé avec succès.');
         await this.fetchConcours();
       } catch (e) {
-        useMessageStore().addError('Erreur lors de la suppression du concours.');
+        notifyError('Erreur lors de la suppression du concours.');
       } finally {
         this.loading = false;
       }
     },
 
-    // --- Epreuves ---
     async fetchEpreuvesConcours(concoursId) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         const response = await getEpreuvesConcours(concoursId);
         this.epreuves = response.data;
       } catch (e) {
-        useMessageStore().addError('Erreur lors de la récupération des épreuves.');
+        notifyError('Erreur lors de la récupération des épreuves.');
       } finally {
         this.loading = false;
       }
     },
 
     async addEpreuvesConcours(concoursId, data) {
+      const { notifySuccess, notifyError } = useNotifier();
       this.loading = true;
       try {
-        await createEpreuves(concoursId, data);
-        useMessageStore().addSuccess('Épreuves ajoutées avec succès.');
+        const response = await createEpreuves(concoursId, data);
+        notifySuccess(response?.message || 'Épreuves ajoutées avec succès.');
         await this.fetchEpreuvesConcours(concoursId);
       } catch (e) {
-        useMessageStore().addError("Erreur lors de l'ajout des épreuves.");
+        notifyError("Erreur lors de l'ajout des épreuves.");
       } finally {
         this.loading = false;
       }
@@ -132,39 +138,41 @@ export const useConcourStore = defineStore('concourStore', {
       this.epreuves.splice(index, 1);
     },
 
-    // --- Résultats et Publication ---
     async fetchResultatsConcours(concoursId) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         const response = await getResultatsConcours(concoursId);
         this.resultats = response.data;
       } catch (e) {
-        useMessageStore().addError('Erreur lors de la récupération des résultats.');
+        notifyError('Erreur lors de la récupération des résultats.');
       } finally {
         this.loading = false;
       }
     },
 
     async fetchPublicationConcours(concoursId) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         const response = await getPublicationConcours(concoursId);
         this.publication = response.data;
       } catch (e) {
-        useMessageStore().addError('Erreur lors de la récupération de la publication.');
+        notifyError('Erreur lors de la récupération de la publication.');
       } finally {
         this.loading = false;
       }
     },
 
     async calculerResultatConcour(concoursId, data) {
+      const { notifySuccess, notifyError } = useNotifier();
       this.loading = true;
       try {
         const response = await calculResultatConcour(concoursId, data);
         this.resultats = response.data;
-        useMessageStore().addSuccess('Calcul des résultats effectué.');
+        notifySuccess(response?.message || 'Calcul des résultats effectué.');
       } catch (e) {
-        useMessageStore().addError('Erreur lors du calcul des résultats.');
+        notifyError('Erreur lors du calcul des résultats.');
       } finally {
         this.loading = false;
       }

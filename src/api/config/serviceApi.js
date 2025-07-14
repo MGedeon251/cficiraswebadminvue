@@ -13,7 +13,6 @@ function handleApiError(error) {
 
   throw error; // Re-propagation pour traitement dans le composant si nécessaire
 }
-
 const buildService = (client) => ({
   get: async (url, params = {}) => {
     try {
