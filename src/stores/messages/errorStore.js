@@ -10,18 +10,24 @@ export const useErrorStore = defineStore('errorStore', {
   actions: {
     addError(error) {
       let message = 'Une erreur est survenue.';
-
       if (error.response) {
-        message = error.response.data?.message || `Erreur ${error.response.status}`;
+        message = typeof error.response.data === 'string'
+          ? error.response.data
+          : error.response.data?.message || `Erreur ${error.response.status}`;
       } else if (error.request) {
         message = 'Impossible de se connecter au serveur.';
       }
-
       this.errors.push(message);
       toast.error(message, {
         autoClose: 5000,
-        position: toast.POSITION.TOP_RIGHT,
+        position: 'top-right',
+        theme: 'colored', // optionnel, pour plus de contraste
       });
+
+      // Optionnel : log en dev
+      if (import.meta.env.DEV) {
+        console.error('Erreur capturée :', error);
+      }
     },
 
     clearErrors() {

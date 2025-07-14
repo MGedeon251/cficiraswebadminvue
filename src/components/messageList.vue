@@ -1,52 +1,56 @@
 <template>
-  <div v-if="messages.length" class="p-3">
+  <div class="alert-container">
     <div
-      v-for="(msg, index) in messages"
-      :key="index"
-      :class="[
-        'alert',
-        'mb-2',
-        {
-          'alert-success': msg.type === 'success',
-          'alert-info': msg.type === 'info',
-          'alert-warning': msg.type === 'warning',
-          'alert-danger': msg.type === 'error',
-        },
-      ]"
+      v-for="msg in messageStore.messages"
+      :key="msg.id"
+      class="alert d-flex justify-content-between align-items-center mb-2"
+      :class="alertClass(msg.type)"
+      role="alert"
     >
-      <strong class="me-2 text-capitalize">{{ msg.type }}:</strong>
-      {{ msg.message }}
+      <span>{{ msg.message }}</span>
+      <button class="btn-close ms-2" @click="removeMessage(msg.id)"></button>
     </div>
+
+    <button
+      v-if="messageStore.messages.length"
+      class="btn btn-sm btn-outline-danger mt-2"
+      @click="messageStore.clearMessages"
+    >
+      Vider les messages
+    </button>
   </div>
 </template>
 
 <script setup>
-import { storeToRefs } from 'pinia';
 import { useMessageStore } from '@/stores/messages/messageStore';
-
 const messageStore = useMessageStore();
-const { messages } = storeToRefs(messageStore);
 
-// watch(messages, (newMessages) => {
-//   if (newMessages.length) {
-//     setTimeout(() => {
-//       messageStore.clearMessages()
-//     }, 3000)
-//   }
-// })
+const removeMessage = (id) => {
+  messageStore.messages = messageStore.messages.filter((msg) => msg.id !== id);
+};
 
-// watchEffect(() => {
-//   if (messages.value.length) {
-//     setTimeout(() => {
-//       messageStore.clearMessages()
-//     }, 3000)
-//   }
-// })
+const alertClass = (type) => {
+  switch (type) {
+    case 'success':
+      return 'alert-success';
+    case 'info':
+      return 'alert-info';
+    case 'warning':
+      return 'alert-warning';
+    case 'error':
+      return 'alert-danger';
+    default:
+      return 'alert-secondary';
+  }
+};
 </script>
 
 <style scoped>
-.alert {
-  border-radius: 8px;
-  padding: 12px 16px;
+.alert-container {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  width: 300px;
+  z-index: 9999;
 }
 </style>
