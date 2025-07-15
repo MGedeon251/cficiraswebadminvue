@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HeaderConcours />
+    <HeaderConours />
     <div class="row">
       <div class="container my-2">
         <div class="col-md-12 grid margin stretch-card">
@@ -18,7 +18,7 @@
                   <button
                     class="btn btn-secondary mt-2 mt-xl-0"
                     data-bs-toggle="modal"
-                    data-bs-target="#exampleModal"
+                    data-bs-target="#exam"
                   >
                     + Filtrer
                   </button>
@@ -34,7 +34,6 @@
   </div>
 </template>
 <script setup="setup">
-import ListConcours from './ListConcour.vue';
-
-import HeaderConcours from './HeaderConcours.vue';
+import HeaderConours from './HeaderConcours.vue';
+import ListConcours from './components/table/ListConcour.vue';
 </script>

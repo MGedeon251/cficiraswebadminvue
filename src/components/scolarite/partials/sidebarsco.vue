@@ -80,7 +80,7 @@
         </router-link>
       </li>
 
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#concours" aria-expanded="false">
           <i class="mdi mdi-trophy menu-icon"></i>
           <span class="menu-title">Concours</span>
@@ -99,7 +99,7 @@
             </li>
           </ul>
         </div>
-      </li>
+      </li> -->
 
       <!-- Candidats -->
       <li class="nav-item">
