@@ -99,7 +99,7 @@ export const useConcourStore = defineStore('concourStore', {
       this.loading = true;
       try {
         const response = await getEpreuvesConcours(concoursId);
-        this.epreuves = response.data;
+        this.epreuves = response;
       } catch (e) {
         notifyError('Erreur lors de la récupération des épreuves.');
       } finally {

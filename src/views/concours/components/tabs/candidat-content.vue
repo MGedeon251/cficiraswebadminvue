@@ -126,7 +126,7 @@ onMounted(async () => {
   }
 });
 const fetchCandidatures = async () => {
-  candidatStore.fetchCandidatures(concoursId);
+  await getCandidatures(concoursId);
 };
 const refreshCandidats = () => fetchCandidatures();
 

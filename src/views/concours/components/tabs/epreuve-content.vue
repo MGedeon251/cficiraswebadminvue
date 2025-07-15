@@ -15,18 +15,10 @@
               <i class="mdi mdi-dots-vertical"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
-              <li>
-                <a class="dropdown-item" href="#"
-                  ><i class="mdi mdi-file-excel me-2"></i>Exporter Excel</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" href="#"><i class="mdi mdi-printer me-2"></i>Imprimer</a>
-              </li>
+              <li><a class="dropdown-item" href="#"><i class="mdi mdi-file-excel me-2"></i>Exporter Excel</a></li>
+              <li><a class="dropdown-item" href="#"><i class="mdi mdi-printer me-2"></i>Imprimer</a></li>
               <li><hr class="dropdown-divider" /></li>
-              <li>
-                <a class="dropdown-item" href="#"><i class="mdi mdi-cog me-2"></i>Paramètres</a>
-              </li>
+              <li><a class="dropdown-item" href="#"><i class="mdi mdi-cog me-2"></i>Paramètres</a></li>
             </ul>
           </div>
           <button class="btn btn-outline-dark me-2">PDF</button>
@@ -48,25 +40,9 @@
           </thead>
           <tbody>
             <tr v-for="(epreuve, index) in epreuves" :key="index">
-              <td>
-                <input v-model="epreuve.code" type="text" class="form-control" placeholder="EX01" />
-              </td>
-              <td>
-                <input
-                  v-model="epreuve.designation"
-                  type="text"
-                  class="form-control"
-                  placeholder="Mathématiques"
-                />
-              </td>
-              <td>
-                <input
-                  v-model.number="epreuve.coefficient"
-                  type="number"
-                  class="form-control"
-                  min="1"
-                />
-              </td>
+              <td><input v-model="epreuve.code" type="text" class="form-control" placeholder="EX01" /></td>
+              <td><input v-model="epreuve.designation" type="text" class="form-control" placeholder="Mathématiques" /></td>
+              <td><input v-model.number="epreuve.coefficient" type="number" class="form-control" min="1" /></td>
               <td><input v-model="epreuve.heure_debut" type="time" class="form-control" /></td>
               <td><input v-model="epreuve.heure_fin" type="time" class="form-control" /></td>
               <td>
@@ -111,18 +87,18 @@ const concours = computed(() => concourStore.concoursDetail);
 const epreuves = ref([]);
 
 onMounted(async () => {
-  if (concoursId) {
-    await concourStore.fetchConcoursById(concoursId);
-    await concourStore.fetchEpreuvesConcours(concoursId);
-    epreuves.value = concourStore.epreuves || [];
+  try {
+    if (concoursId) {
+      await concourStore.fetchConcoursById(concoursId);
+      await concourStore.fetchEpreuvesConcours(concoursId);
+      epreuves.value = [...concourStore.epreuves];
+    }
+  } catch (err) {
+    notifyError(extractErrorMessage(err, 'Échec lors du chargement des données.'));
   }
 });
 
 const addEpreuve = () => {
-  if (!Array.isArray(epreuves.value)) {
-    epreuves.value = [];
-  }
-
   epreuves.value.push({
     code: '',
     designation: '',
@@ -131,7 +107,7 @@ const addEpreuve = () => {
     heure_fin: '',
     type_epreuve: 'écrit',
     ordre: epreuves.value.length + 1,
-    description: 'N/A',
+    description: 'N/A'
   });
 };
 
@@ -140,39 +116,29 @@ const removeEpreuve = (index) => {
 };
 
 const validateEpreuve = (epreuve) => {
-  if (!epreuve.code || !epreuve.designation) {
-    return 'Code et intitulé sont obligatoires.';
-  }
-  if (!epreuve.heure_debut || !epreuve.heure_fin) {
-    return 'Les heures de début et de fin sont obligatoires.';
-  }
-  if (epreuve.heure_debut >= epreuve.heure_fin) {
-    return 'L’heure de fin doit être après l’heure de début.';
-  }
-  if (!epreuve.coefficient || epreuve.coefficient <= 0) {
-    return 'Le coefficient doit être supérieur à 0.';
-  }
+  if (!epreuve.code || !epreuve.designation) return 'Code et intitulé requis';
+  if (!epreuve.heure_debut || !epreuve.heure_fin) return 'Heures requises';
+  if (epreuve.heure_debut >= epreuve.heure_fin) return 'Heure fin doit être après début';
+  if (!epreuve.coefficient || epreuve.coefficient <= 0) return 'Coefficient invalide';
   return null;
 };
 
 const saveEpreuve = async (epreuve) => {
   const error = validateEpreuve(epreuve);
-  if (error) {
-    notifyError(error);
-    return;
-  }
+  if (error) return notifyError(error);
 
-  const payload = {
-    ...epreuve,
-    concours_id: concoursId,
-  };
+  const payload = { ...epreuve, concours_id: concoursId };
 
   try {
-    await concourStore.addEpreuvesConcours(concoursId, [payload]);
-    notifySuccess('Épreuve sauvegardée avec succès.');
+    await concourStore.addEpreuvesConcours(concoursId,payload);
     await concourStore.fetchEpreuvesConcours(concoursId);
+    epreuves.value = [...concourStore.epreuves];
+    notifySuccess('Épreuve enregistrée');
   } catch (err) {
-    notifyError(extractErrorMessage(err, 'Erreur lors de la sauvegarde de l’épreuve.'));
+    notifyError(extractErrorMessage(err, 'Erreur sauvegarde épreuve'));
   }
+console.log('Payload envoyé:', payload);
+console.log('Concours ID:', concoursId);
+
 };
 </script>
