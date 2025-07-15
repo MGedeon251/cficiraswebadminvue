@@ -4,10 +4,23 @@
       <div class="col-md-12 grid-margin">
         <div class="d-flex justify-content-between flex-wrap">
           <div class="d-flex align-items-end flex-wrap">
-            <div class="me-md-3 me-xl-5">
-              <h3>Liste des candidats</h3>
-              <p>Détails sur les candidatures</p>
-            </div>
+              <div class="flex flex-wrap justify-between mb-4">
+                <a-input
+                  class="me-1 mt-1 mt-xl-0"
+                  v-model:value="searchQuery"
+                  placeholder="Rechercher..."
+                  allow-clear
+                  style="width: 250px"
+                >
+                  <template #prefix>
+                    <i class="mdi mdi-magnify" />
+                  </template>
+                </a-input>
+                <a-button type="default" @click="refreshCandidats" :loading="loading">
+                  🔄 Rafraîchir
+                </a-button>
+              </div>
+      
           </div>
           <div class="d-flex justify-content-between align-items-end flex-wrap">
             <button class="btn btn-outline-dark me-2">Exporter</button>
@@ -91,8 +104,9 @@ import ItemActions from '../details/ItemActions.vue';
 import Pagination from '@/components/shared/Pagination.vue';
 import AddCandidat from '../modal/addCandidat.vue';
 
-import { useCandidatStore } from '@/stores/gestionStores/candidatStore';
-
+//données des candidats
+import { useCandidatStore } from '@/stores/gestionStores/candidatStore'; //stores
+import { getCandidatures } from '@/api/gestions/gestionApi';
 
 const router = useRouter();
 const concoursId = router.currentRoute.value.params.id;
@@ -100,11 +114,21 @@ const concoursId = router.currentRoute.value.params.id;
 // Store
 const candidatStore = useCandidatStore();
 const { candidatures, loading } = candidatStore;
+const candidats = ref([]);
 
 // Chargement des candidats
 onMounted(async () => {
-  await candidatStore.fetchCandidatures(concoursId);
+  try {
+    const response = await getCandidatures(concoursId);
+    candidats.value = response.data;
+  } catch (e) {
+    concours.value = [];
+  }
 });
+const fetchCandidatures = async () => {
+  candidatStore.fetchCandidatures(concoursId);
+};
+const refreshCandidats = () => fetchCandidatures();
 
 const formatDate = (date) => {
   return dayjs(date).format('DD-MM-YYYY');
@@ -113,11 +137,11 @@ const formatDate = (date) => {
 // Pagination
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
-const totalItems = computed(() => candidatures.length);
+const totalItems = computed(() => candidats.value.length);
 const paginatedCandidats = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
   const end = start + itemsPerPage.value;
-  return candidatures.slice(start, end);
+  return candidats.value.slice(start, end);
 });
 
 // Ajouter un candidat via le store
