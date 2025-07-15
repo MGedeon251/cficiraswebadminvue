@@ -32,9 +32,9 @@
               </ul>
             </div>
           </div>
-          <AddCandidat @submit="handleSubmit" @close="handleClose"/>
+          <AddCandidat @submit="handleSubmit" @close="handleClose" />
         </div>
-      <div v-if="!loading" class="table-responsive mt-3">
+        <div v-if="!loading" class="table-responsive mt-3">
           <table class="table table-hover align-middle">
             <thead>
               <tr>
@@ -56,7 +56,7 @@
                 <td>{{ candidat.tel }}</td>
                 <td>{{ formatDate(candidat.date_inscription) }}</td>
                 <td>
-                    <ItemActions
+                  <ItemActions
                     :item="candidat"
                     concourRoute="/details-candidat/"
                     :showAdd="false"
@@ -99,7 +99,7 @@ const concoursId = router.currentRoute.value.params.id;
 // Store
 const candidatStore = useCandidatStore();
 const { candidatures, loading } = candidatStore;
-console.log('Listes des candidatures',candidatures);
+
 // Chargement des candidats
 onMounted(async () => {
   await candidatStore.fetchCandidatures(concoursId);
@@ -132,4 +132,3 @@ const handleClose = () => {
   modal?.hide();
 };
 </script>
-

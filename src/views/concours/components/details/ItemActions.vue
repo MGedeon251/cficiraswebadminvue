@@ -10,7 +10,11 @@
         </button>
       </li>
       <li v-if="showAdd">
-        <RouterLink class="dropdown-item" :to="`/edition-concours/edit/${item.concours_id}`" @click="$emit('add', item)">
+        <RouterLink
+          class="dropdown-item"
+          :to="`/edition-concours/edit/${item.concours_id}`"
+          @click="$emit('add', item)"
+        >
           <i class="mdi mdi mdi-launch me-2"></i> Editer
         </RouterLink>
       </li>
@@ -75,7 +79,10 @@
                     <div class="info-item">
                       <span class="info-label">Dossier requis:</span>
                       <span class="info-value">
-                        <span class="badge" :class="item.dossier_requis ? 'bg-success' : 'bg-secondary'">
+                        <span
+                          class="badge"
+                          :class="item.dossier_requis ? 'bg-success' : 'bg-secondary'"
+                        >
                           {{ item.dossier_requis ? 'Oui' : 'Non' }}
                         </span>
                       </span>
@@ -131,7 +138,10 @@
                     <div class="info-item">
                       <span class="info-label">Année active:</span>
                       <span class="info-value">
-                        <span class="badge" :class="item.annee_active ? 'bg-success' : 'bg-secondary'">
+                        <span
+                          class="badge"
+                          :class="item.annee_active ? 'bg-success' : 'bg-secondary'"
+                        >
                           {{ item.annee_active ? 'Oui' : 'Non' }}
                         </span>
                       </span>
@@ -178,7 +188,7 @@ import { ref } from 'vue';
 const props = defineProps({
   item: {
     type: Object,
-    required: true
+    required: true,
   },
   showAdd: {
     type: Boolean,
@@ -206,7 +216,7 @@ const formatDate = (dateString) => {
   return date.toLocaleDateString('fr-FR', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   });
 };
 
@@ -225,7 +235,6 @@ const getStatusClass = (status) => {
 
 defineExpose({ openDetails, closeDetails });
 </script>
-
 
 <style scoped>
 .info-card {

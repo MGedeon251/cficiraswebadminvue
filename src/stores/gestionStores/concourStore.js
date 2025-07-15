@@ -46,7 +46,7 @@ export const useConcourStore = defineStore('concourStore', {
         const response = await getConcoursById(id);
         this.concoursDetail = response;
       } catch (e) {
-        notifyError(e,'Erreur lors de la récupération du concours.');
+        notifyError(e, 'Erreur lors de la récupération du concours.');
       } finally {
         this.loading = false;
       }
@@ -115,7 +115,7 @@ export const useConcourStore = defineStore('concourStore', {
         notifySuccess(response?.message || 'Épreuves ajoutées avec succès.');
         await this.fetchEpreuvesConcours(concoursId);
       } catch (e) {
-        notifyError(extractErrorMessage(e,"Erreur lors de l'ajout des épreuves."));
+        notifyError(extractErrorMessage(e, "Erreur lors de l'ajout des épreuves."));
       } finally {
         this.loading = false;
       }

@@ -29,7 +29,7 @@
           <td>
             <ItemActions
               :item="concour"
-               concourRoute="/edition-concours/"
+              concourRoute="/edition-concours/"
               :showAdd="true"
               editModalTarget="#editModuleModal"
               @edit="editModule"

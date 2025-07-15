@@ -49,14 +49,16 @@
                   <polyline points="7 10 12 15 17 10"></polyline>
                   <line x1="12" y1="15" x2="12" y2="3"></line></svg></span
             ></a>
-            <router-link class="btn btn-outline-secondary" to="/edition-concours">⬅ Retour</router-link>
+            <router-link class="btn btn-outline-secondary" to="/edition-concours"
+              >⬅ Retour</router-link
+            >
           </div>
         </div>
         <!-- Carte Principale -->
         <div class="card">
           <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1" />
           <div v-else class="card-body dashboard-tabs p-0">
-            <TabDetail/>
+            <TabDetail />
           </div>
         </div>
       </div>
@@ -68,7 +70,6 @@
 import { ref, computed, onMounted } from 'vue';
 import TabDetail from '../tabs/TabDetail.vue';
 import SkeletonLoader from '@/components/SkeletonLoader.vue';
-
 </script>
 
 <style scoped>

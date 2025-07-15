@@ -40,7 +40,12 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Date limite dossier</label>
-              <input v-model="form.date_limite_inscription" type="date" class="form-control" required />
+              <input
+                v-model="form.date_limite_inscription"
+                type="date"
+                class="form-control"
+                required
+              />
             </div>
             <div class="mb-3">
               <label class="form-label">Année académique</label>
@@ -66,7 +71,12 @@
             </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-success" :disabled="loading">
-                <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span
+                  v-if="loading"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
                 {{ loading ? 'En cours...' : 'Submit' }}
               </button>
               <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
@@ -106,7 +116,7 @@ onMounted(async () => {
     await anneeStore.fetchAnneesAcademiques();
     anneesAcademiques.value = anneeStore.anneesAcademiques;
   } catch (error) {
-    console.error("Erreur lors du chargement des années académiques", error);
+    console.error('Erreur lors du chargement des années académiques', error);
   }
 });
 
@@ -125,11 +135,10 @@ async function submitConcour() {
       statut: '',
       description: '',
     };
-    
+
     // Fermer le modal
     const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
     modal.hide();
-    
   } catch (error) {
     console.error("Erreur lors de l'ajout du concours", error);
   } finally {

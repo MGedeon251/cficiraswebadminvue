@@ -11,11 +11,12 @@ export const updateConcours = (id, data) => gestionService.put(`/concours/${id}`
 export const deleteConcours = (id) => gestionService.delete(`/concours/${id}`);
 
 export const getEpreuvesConcours = (id) => gestionService.get(`/concours/${id}/epreuves`);
-export const createEpreuves=(id,data)=> gestionService.get(`/concours/${id}/epreuves` ,data)
+export const createEpreuves = (id, data) => gestionService.get(`/concours/${id}/epreuves`, data);
 
 export const getResultatsConcours = (id) => gestionService.get(`/concours/${id}/resultats`);
 export const getPublicationConcours = (id) => gestionService.get(`/concours/${id}/publication`);
-export const calculResultatConcour=(id,data)=> gestionService.get(`/concours/${id}/calculate`,data)
+export const calculResultatConcour = (id, data) =>
+  gestionService.get(`/concours/${id}/calculate`, data);
 
 // API pour gérer les candidatures
 export const getCandidatures = (id) => gestionService.get(`/candidat/concours/${id}`);
