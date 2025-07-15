@@ -5,7 +5,7 @@
         <div class="d-flex align-items-end flex-wrap">
           <div class="me-md-3 me-xl-5">
             <h3 v-if="concours && concours.designation">Épreuves - {{ concours.designation }}</h3>
-          <h3 v-else>Chargement du concours...</h3>
+            <h3 v-else>Chargement du concours...</h3>
             <p>Détails sur les épreuves</p>
           </div>
         </div>
@@ -15,10 +15,18 @@
               <i class="mdi mdi-dots-vertical"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#"><i class="mdi mdi-file-excel me-2"></i>Exporter Excel</a></li>
-              <li><a class="dropdown-item" href="#"><i class="mdi mdi-printer me-2"></i>Imprimer</a></li>
+              <li>
+                <a class="dropdown-item" href="#"
+                  ><i class="mdi mdi-file-excel me-2"></i>Exporter Excel</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="#"><i class="mdi mdi-printer me-2"></i>Imprimer</a>
+              </li>
               <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item" href="#"><i class="mdi mdi-cog me-2"></i>Paramètres</a></li>
+              <li>
+                <a class="dropdown-item" href="#"><i class="mdi mdi-cog me-2"></i>Paramètres</a>
+              </li>
             </ul>
           </div>
           <button class="btn btn-outline-dark me-2">PDF</button>
@@ -40,9 +48,25 @@
           </thead>
           <tbody>
             <tr v-for="(epreuve, index) in epreuves" :key="index">
-              <td><input v-model="epreuve.code" type="text" class="form-control" placeholder="EX01" /></td>
-              <td><input v-model="epreuve.designation" type="text" class="form-control" placeholder="Mathématiques" /></td>
-              <td><input v-model.number="epreuve.coefficient" type="number" class="form-control" min="1" /></td>
+              <td>
+                <input v-model="epreuve.code" type="text" class="form-control" placeholder="EX01" />
+              </td>
+              <td>
+                <input
+                  v-model="epreuve.designation"
+                  type="text"
+                  class="form-control"
+                  placeholder="Mathématiques"
+                />
+              </td>
+              <td>
+                <input
+                  v-model.number="epreuve.coefficient"
+                  type="number"
+                  class="form-control"
+                  min="1"
+                />
+              </td>
               <td><input v-model="epreuve.heure_debut" type="time" class="form-control" /></td>
               <td><input v-model="epreuve.heure_fin" type="time" class="form-control" /></td>
               <td>
@@ -56,7 +80,7 @@
                 <button class="btn btn-sm b me-1" @click="saveEpreuve(epreuve)">
                   <i class="mdi mdi-content-save"></i>
                 </button>
-                <button class="btn btn-sm " @click="removeEpreuve(index)">
+                <button class="btn btn-sm" @click="removeEpreuve(index)">
                   <i class="mdi mdi-delete"></i>
                 </button>
               </td>
@@ -74,42 +98,41 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useConcourStore } from '@/stores/gestionStores/concourStore';
+import { useNotifier } from '@/stores/messages/useNotifier';
+import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
 
 const router = useRouter();
 const concourStore = useConcourStore();
 const concoursId = router.currentRoute.value.params.id;
 
+const { notifySuccess, notifyError } = useNotifier();
+
 const concours = computed(() => concourStore.concoursDetail);
-// Utilisez ref pour les épreuves avec une valeur par défaut
 const epreuves = ref([]);
 
 onMounted(async () => {
   if (concoursId) {
     await concourStore.fetchConcoursById(concoursId);
     await concourStore.fetchEpreuvesConcours(concoursId);
-    // Mettez à jour la ref avec les données du store
     epreuves.value = concourStore.epreuves || [];
   }
 });
 
 const addEpreuve = () => {
-  // Double sécurité pour s'assurer que epreuves.value est un tableau
   if (!Array.isArray(epreuves.value)) {
     epreuves.value = [];
   }
-  
-  epreuves.value = [...epreuves.value, {
+
+  epreuves.value.push({
     code: '',
     designation: '',
     coefficient: 1,
     heure_debut: '',
     heure_fin: '',
     type_epreuve: 'écrit',
-    ordre: (epreuves.value.length || 0) + 1,
-    description: 'N/A'
-  }];
-  
-  console.log('Nouvelle épreuve ajoutée:', epreuves.value);
+    ordre: epreuves.value.length + 1,
+    description: 'N/A',
+  });
 };
 
 const removeEpreuve = (index) => {
@@ -135,20 +158,21 @@ const validateEpreuve = (epreuve) => {
 const saveEpreuve = async (epreuve) => {
   const error = validateEpreuve(epreuve);
   if (error) {
-    alert(error);
+    notifyError(error);
     return;
   }
 
   const payload = {
     ...epreuve,
-    concours_id: concoursId
+    concours_id: concoursId,
   };
 
   try {
-    await concourStore.addEpreuvesConcours(concoursId, payload);
-    alert('Épreuve sauvegardée avec succès !');
+    await concourStore.addEpreuvesConcours(concoursId, [payload]);
+    notifySuccess('Épreuve sauvegardée avec succès.');
+    await concourStore.fetchEpreuvesConcours(concoursId);
   } catch (err) {
-    alert('Erreur lors de la sauvegarde');
+    notifyError(extractErrorMessage(err, 'Erreur lors de la sauvegarde de l’épreuve.'));
   }
 };
 </script>

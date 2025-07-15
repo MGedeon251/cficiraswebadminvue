@@ -11,8 +11,8 @@
                   <td class="w-30 text-uppercase" scope="row">{{ concours.designation }}</td>
                 </tr>
                 <tr>
-                  <th class="w-70" >Type de concours</th>
-                  <td class="w-30">{{ concours.type_code}}</td>
+                  <th class="w-70">Type de concours</th>
+                  <td class="w-30">{{ concours.type_code }}</td>
                 </tr>
                 <tr>
                   <td class="w-70" scope="row">Année académique</td>
@@ -83,8 +83,10 @@ onMounted(async () => {
 const statusClass = computed(() => {
   if (!concours.value || !concours.value.statut) return '';
   if (concours.value.statut.toLowerCase() === 'ouvert') return 'text-success font-18';
-  if (['clôturé', 'fermé'].includes(concours.value.statut.toLowerCase())) return 'text-danger font-18';
-  if (['planifié', 'en attente'].includes(concours.value.statut.toLowerCase())) return 'text-warning font-18';
+  if (['clôturé', 'fermé'].includes(concours.value.statut.toLowerCase()))
+    return 'text-danger font-18';
+  if (['planifié', 'en attente'].includes(concours.value.statut.toLowerCase()))
+    return 'text-warning font-18';
   return 'text-dark font-18';
 });
 </script>

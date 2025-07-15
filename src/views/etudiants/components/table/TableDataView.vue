@@ -1,86 +1,86 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue';
 
 // Filtres
-const filterNom = ref('')
-const filterPrenom = ref('')
-const selectedFiliere = ref('')
-const selectedClasse = ref('')
-const selectedNiveau = ref('')
+const filterNom = ref('');
+const filterPrenom = ref('');
+const selectedFiliere = ref('');
+const selectedClasse = ref('');
+const selectedNiveau = ref('');
 
 // Données LocalStorage
-const etudiants = ref([])
-const classes = ref([])
-const filieres = ref([])
+const etudiants = ref([]);
+const classes = ref([]);
+const filieres = ref([]);
 
 // Pagination
-const currentPage = ref(1)
-const itemsPerPage = ref(5)
-const totalItems = computed(() => filteredEtudiants.value.length)
+const currentPage = ref(1);
+const itemsPerPage = ref(5);
+const totalItems = computed(() => filteredEtudiants.value.length);
 
 const paginatedEtudiants = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage.value
-  const end = start + itemsPerPage.value
-  return filteredEtudiants.value.slice(start, end)
-})
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return filteredEtudiants.value.slice(start, end);
+});
 
 // Filtrer étudiants
 const filteredEtudiants = computed(() => {
-  return etudiants.value.filter(e => {
+  return etudiants.value.filter((e) => {
     return (
       (!selectedFiliere.value || e.filiere === selectedFiliere.value) &&
       (!selectedClasse.value || e.classe === selectedClasse.value) &&
       (!selectedNiveau.value || e.niveau === selectedNiveau.value) &&
       (!filterNom.value || e.nom.toLowerCase().includes(filterNom.value.toLowerCase())) &&
       (!filterPrenom.value || e.prenom.toLowerCase().includes(filterPrenom.value.toLowerCase()))
-    )
-  })
-})
+    );
+  });
+});
 
 // Charger données locales
 const chargerDonnees = () => {
-  const candidats = JSON.parse(localStorage.getItem('candidats') || '[]')
-  const classesLS = JSON.parse(localStorage.getItem('classes') || '[]')
-  const filieresLS = JSON.parse(localStorage.getItem('filieres') || '[]')
+  const candidats = JSON.parse(localStorage.getItem('candidats') || '[]');
+  const classesLS = JSON.parse(localStorage.getItem('classes') || '[]');
+  const filieresLS = JSON.parse(localStorage.getItem('filieres') || '[]');
 
   // Générer matricule pour chaque candidat
   etudiants.value = candidats.map((c, i) => ({
     ...c,
     matricule: `${(c.nom || '').substring(0, 3).toUpperCase()}${(c.prenom || '').substring(0, 3).toUpperCase()}-${(c.filiere || '').substring(0, 3).toUpperCase()}-${c.niveau || ''}-${i + 1}`,
-    photo: c.photo || '/img/default-profile.png'
-  }))
+    photo: c.photo || '/img/default-profile.png',
+  }));
 
-  classes.value = classesLS
-  filieres.value = filieresLS
-}
+  classes.value = classesLS;
+  filieres.value = filieresLS;
+};
 
 onMounted(() => {
-  chargerDonnees()
-})
+  chargerDonnees();
+});
 
 // Classes filtrées par filière sélectionnée
 const classesFiltrees = computed(() => {
-  return classes.value.filter(c => c.filiere === selectedFiliere.value)
-})
+  return classes.value.filter((c) => c.filiere === selectedFiliere.value);
+});
 
 // Attribution aléatoire
 const assignerClasseAleatoire = () => {
   if (!selectedFiliere.value || !selectedClasse.value) {
-    alert('Sélectionne une filière et une classe cible.')
-    return
+    alert('Sélectionne une filière et une classe cible.');
+    return;
   }
 
-  const candidatsFiliere = etudiants.value.filter(e => e.filiere === selectedFiliere.value)
-  const nouveaux = candidatsFiliere.map(e => ({ ...e, classe: selectedClasse.value }))
-  etudiants.value = etudiants.value.map(e => {
-    const match = nouveaux.find(n => n.nom === e.nom && n.prenom === e.prenom)
-    return match || e
-  })
+  const candidatsFiliere = etudiants.value.filter((e) => e.filiere === selectedFiliere.value);
+  const nouveaux = candidatsFiliere.map((e) => ({ ...e, classe: selectedClasse.value }));
+  etudiants.value = etudiants.value.map((e) => {
+    const match = nouveaux.find((n) => n.nom === e.nom && n.prenom === e.prenom);
+    return match || e;
+  });
 
   // Sauvegarder le changement
-  localStorage.setItem('candidats', JSON.stringify(etudiants.value))
-  alert('Étudiants assignés !')
-}
+  localStorage.setItem('candidats', JSON.stringify(etudiants.value));
+  alert('Étudiants assignés !');
+};
 </script>
 
 <template>
@@ -101,7 +101,9 @@ const assignerClasseAleatoire = () => {
         <label class="form-label">Classe</label>
         <select class="form-select" v-model="selectedClasse">
           <option value="">Toutes</option>
-          <option v-for="cls in classesFiltrees" :key="cls.id" :value="cls.nom">{{ cls.nom }}</option>
+          <option v-for="cls in classesFiltrees" :key="cls.id" :value="cls.nom">
+            {{ cls.nom }}
+          </option>
         </select>
       </div>
 
@@ -138,7 +140,9 @@ const assignerClasseAleatoire = () => {
       <tbody>
         <tr v-for="(e, i) in paginatedEtudiants" :key="i">
           <td>{{ i + 1 }}</td>
-          <td><img :src="e.photo" alt="Photo" style="width:40px; height:40px; border-radius:50%;" /></td>
+          <td>
+            <img :src="e.photo" alt="Photo" style="width: 40px; height: 40px; border-radius: 50%" />
+          </td>
           <td>{{ e.matricule }}</td>
           <td>{{ e.nom }}</td>
           <td>{{ e.prenom }}</td>
@@ -156,8 +160,20 @@ const assignerClasseAleatoire = () => {
     <div class="d-flex justify-content-between align-items-center">
       <span>Page {{ currentPage }}</span>
       <div class="btn-group">
-        <button class="btn btn-sm btn-outline-secondary" :disabled="currentPage === 1" @click="currentPage--">Précédent</button>
-        <button class="btn btn-sm btn-outline-secondary" :disabled="currentPage >= Math.ceil(totalItems / itemsPerPage)" @click="currentPage++">Suivant</button>
+        <button
+          class="btn btn-sm btn-outline-secondary"
+          :disabled="currentPage === 1"
+          @click="currentPage--"
+        >
+          Précédent
+        </button>
+        <button
+          class="btn btn-sm btn-outline-secondary"
+          :disabled="currentPage >= Math.ceil(totalItems / itemsPerPage)"
+          @click="currentPage++"
+        >
+          Suivant
+        </button>
       </div>
     </div>
   </div>

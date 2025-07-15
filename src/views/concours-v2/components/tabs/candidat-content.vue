@@ -32,9 +32,9 @@
               </ul>
             </div>
           </div>
-          <AddCandidat @submit="handleSubmit" @close="handleClose"/>
+          <AddCandidat @submit="handleSubmit" @close="handleClose" />
         </div>
-        <div v-if="candidats" class="table-responsive mt-3">
+        <div v-if="!loading" class="table-responsive mt-3">
           <table class="table table-hover align-middle">
             <thead>
               <tr>
@@ -56,7 +56,7 @@
                 <td>{{ candidat.tel }}</td>
                 <td>{{ formatDate(candidat.date_inscription) }}</td>
                 <td>
-                    <ItemActions
+                  <ItemActions
                     :item="candidat"
                     concourRoute="/details-candidat/"
                     :showAdd="false"
@@ -76,36 +76,35 @@
           />
         </div>
         <div v-else class="text-center p-4">
-              <span class="text-muted">Chargement des détails du concours...</span>
+          <span class="text-muted">Chargement des détails du concours...</span>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup="setup">
+<script setup>
 import { ref, onMounted, computed } from 'vue';
-import { getCandidatures, createCandidature } from '@/api/gestions/gestionApi';
+import { useRouter } from 'vue-router';
+import dayjs from 'dayjs';
 import ItemActions from '../details/ItemActions.vue';
 import Pagination from '@/components/shared/Pagination.vue';
-import { message } from 'ant-design-vue';
-import dayjs from 'dayjs';
-
-import { useRouter } from 'vue-router'
 import AddCandidat from '../modal/addCandidat.vue';
+
+import { useCandidatStore } from '@/stores/gestionStores/candidatStore';
+
 const router = useRouter();
 const concoursId = router.currentRoute.value.params.id;
 
-const candidats = ref([]);
+// Store
+const candidatStore = useCandidatStore();
+const { candidatures, loading } = candidatStore;
 
+// Chargement des candidats
 onMounted(async () => {
-    try {
-    const response = await getCandidatures(concoursId);
-    candidats.value = response.data;
-  } catch (e) {
-    concours.value = [];
-  }
+  await candidatStore.fetchCandidatures(concoursId);
 });
+
 const formatDate = (date) => {
   return dayjs(date).format('DD-MM-YYYY');
 };
@@ -113,31 +112,23 @@ const formatDate = (date) => {
 // Pagination
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
-const totalItems = computed(() => candidats.value.length);
+const totalItems = computed(() => candidatures.length);
 const paginatedCandidats = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
   const end = start + itemsPerPage.value;
-  return candidats.value.slice(start, end);
+  return candidatures.slice(start, end);
 });
 
+// Ajouter un candidat via le store
 const handleSubmit = async (formData) => {
-  try {
-    await createCandidature(formData);
-    message.success('Candidat ajouté avec succès');
-    // TODO: Rafraîchir la liste ou fermer modal
-    const modalEl = document.getElementById('exampleModal');
-    const modal = bootstrap.Modal.getInstance(modalEl);
-    modal?.hide();
-  } catch (error) {
-    console.error(error);
-    message.error("Erreur lors de l'ajout du candidat");
-    
-  }
+  await candidatStore.addCandidature(formData);
+  await candidatStore.fetchCandidatures(concoursId); // rafraîchir
+  handleClose(); // fermer modal
 };
+
 const handleClose = () => {
   const modalEl = document.getElementById('exampleModal');
   const modal = bootstrap.Modal.getInstance(modalEl);
   modal?.hide();
 };
-
 </script>
