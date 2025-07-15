@@ -93,6 +93,7 @@ import AddCandidat from '../modal/addCandidat.vue';
 
 import { useCandidatStore } from '@/stores/gestionStores/candidatStore';
 
+
 const router = useRouter();
 const concoursId = router.currentRoute.value.params.id;
 

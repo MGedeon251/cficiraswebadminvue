@@ -1,5 +1,4 @@
 import { useErrorStore } from '@/stores/messages/errorStore';
-import { useMessageStore } from '@/stores/messages/messageStore';
 
 // Fonction de traitement des erreurs
 function handleApiError(error) {
@@ -13,63 +12,41 @@ function handleApiError(error) {
 
   throw error; // Re-propagation pour traitement dans le composant si nécessaire
 }
+// /api/config/serviceApi.js
 const buildService = (client) => ({
   get: async (url, params = {}) => {
     try {
       const response = await client.get(url, { params });
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      throw error; // juste throw, pas de toast ici
     }
   },
 
-  post: async (url, data, showMessage = true) => {
+  post: async (url, data) => {
     try {
       const response = await client.post(url, data);
-
-      // Message de confirmation automatique (optionnel)
-      if (showMessage) {
-        try {
-          const messageStore = useMessageStore();
-          //messageStore.addMessage('Création réussie');
-        } catch (e) {
-          console.warn('Erreur dans messageStore');
-        }
-      }
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      throw error;
     }
   },
 
-  put: async (url, data, showMessage = true) => {
+  put: async (url, data) => {
     try {
       const response = await client.put(url, data);
-
-      if (showMessage) {
-        try {
-          const messageStore = useMessageStore();
-          //messageStore.addMessage('Mise à jour réussie');
-        } catch (e) {}
-      }
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      throw error;
     }
   },
 
-  delete: async (url, showMessage = true) => {
+  delete: async (url) => {
     try {
       const response = await client.delete(url);
-      if (showMessage) {
-        try {
-          const messageStore = useMessageStore();
-          messageStore.addMessage('Suppression réussie');
-        } catch (e) {}
-      }
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      throw error;
     }
   },
 });
