@@ -35,5 +35,6 @@
 </template>
 <script setup="setup">
 import ListConcours from './ListConcour.vue';
+
 import HeaderConcours from './HeaderConcours.vue';
 </script>
