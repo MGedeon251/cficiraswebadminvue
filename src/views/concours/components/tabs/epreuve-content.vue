@@ -133,7 +133,6 @@ const saveEpreuve = async (epreuve) => {
     await concourStore.addEpreuvesConcours(concoursId,payload);
     await concourStore.fetchEpreuvesConcours(concoursId);
     epreuves.value = [...concourStore.epreuves];
-    notifySuccess('Épreuve enregistrée');
   } catch (err) {
     notifyError(extractErrorMessage(err, 'Erreur sauvegarde épreuve'));
   }
@@ -142,3 +141,10 @@ console.log('Concours ID:', concoursId);
 
 };
 </script>
+
+<style scoped>
+tr.disabled-row {
+  opacity: 0.6;
+  pointer-events: none;
+}
+</style>
