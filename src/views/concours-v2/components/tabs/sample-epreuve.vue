@@ -141,10 +141,3 @@ console.log('Concours ID:', concoursId);
 
 };
 </script>
-
-<style scoped>
-tr.disabled-row {
-  opacity: 0.6;
-  pointer-events: none;
-}
-</style>
