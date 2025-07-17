@@ -14,6 +14,8 @@ export const getEpreuvesConcours = (id) => gestionService.get(`/concours/${id}/e
 export const createEpreuves = (id, data) => gestionService.post(`/concours/${id}/epreuves`, data);
 
 export const getResultatsConcours = (id) => gestionService.get(`/concours/${id}/resultats`);
+export const getStatistiqueConcours = (id) => gestionService.get(`/concours/${id}/statistiques`);
+export const getStatistiqueConcoursGlobal = (id) => gestionService.get(`/concours/${id}/statistiques-globales/`);
 export const getPublicationConcours = (id) => gestionService.get(`/concours/${id}/publication`);
 export const calculResultatConcour = (id, data) =>
   gestionService.get(`/concours/${id}/calculate`, data);

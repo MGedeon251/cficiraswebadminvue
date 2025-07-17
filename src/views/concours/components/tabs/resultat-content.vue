@@ -33,6 +33,7 @@
       </div>
     </div>
 
+    <!-- Tableau des résultats -->
     <div class="table-responsive">
       <table class="table table-bordered">
         <thead>
@@ -45,7 +46,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(resultat, index) in resultats" :key="resultat.candidat.id">
+          <tr v-for="(resultat, index) in resultatsTransformes" :key="resultat.candidat.id">
             <td>{{ index + 1 }}</td>
             <td>{{ resultat.candidat.nom }} {{ resultat.candidat.prenom }}</td>
             <td v-for="epreuve in epreuves" :key="epreuve.id">
@@ -66,16 +67,16 @@
       </table>
     </div>
 
-    <!-- Modals import & stats -->
+    <!-- Modals -->
     <ImportModal
       v-if="showImportModal"
       @close="showImportModal = false"
       @imported="handleImportedNotes"
     />
     <StatsModal
-  v-model:open="showStatsModal"
-  :concoursId="concoursId"/>
-
+      v-model:open="showStatsModal"
+      :concoursId="concoursId"
+    />
   </div>
 </template>
 
@@ -96,7 +97,28 @@ const { notifySuccess, notifyError } = useNotifier();
 
 const concours = computed(() => concourStore.concoursDetail);
 const epreuves = computed(() => concourStore.epreuves);
-const resultats = computed(() => concourStore.resultats);
+const resultatsRaw = computed(() => concourStore.resultats); // structure JSON brute du backend
+
+// ✅ Transformer les résultats pour correspondre au format du tableau
+const resultatsTransformes = computed(() => {
+  return resultatsRaw.value.map((res) => {
+    const notes = {};
+    res.epreuves_notes.forEach((ep) => {
+      notes[ep.epreuve_id] = ep.note;
+    });
+    return {
+      candidat: {
+        id: res.candidat_id,
+        nom: res.nom,
+        prenom: res.prenom,
+        matricule: res.matricule,
+      },
+      notes,
+      moyenne: res.moyenne,
+      rang: res.rang,
+    };
+  });
+});
 
 const showImportModal = ref(false);
 const showStatsModal = ref(false);
@@ -105,12 +127,14 @@ const loadResultats = async () => {
   await concourStore.fetchConcoursById(concoursId);
   await concourStore.fetchEpreuvesConcours(concoursId);
   await concourStore.fetchResultatsConcours(concoursId);
+  await concourStore.fetchStatistiqueConcoursGlobal(concoursId);
 };
 
 onMounted(() => {
   loadResultats();
 });
 
+// ✅ Enregistrement d'une note
 const saveNote = async (candidatId, epreuveId, note) => {
   try {
     await concourStore.updateNote({ candidatId, epreuveId, note });
@@ -120,17 +144,20 @@ const saveNote = async (candidatId, epreuveId, note) => {
   }
 };
 
+// ✅ Calcul des moyennes/rangs
 const handleCalculate = async () => {
   try {
     await concourStore.calculerResultatConcour(concoursId);
     notifySuccess('Moyennes et rangs calculés');
+    await concourStore.fetchResultatsConcours(concoursId); // Refresh
   } catch (e) {
     notifyError('Erreur lors du calcul des moyennes');
   }
 };
 
+// ✅ Export Excel
 const exportToExcel = () => {
-  const data = resultats.value.map((res) => {
+  const data = resultatsTransformes.value.map((res) => {
     const row = {
       Nom: res.candidat.nom,
       Prénom: res.candidat.prenom,
@@ -146,6 +173,13 @@ const exportToExcel = () => {
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Résultats');
   XLSX.writeFile(wb, `resultats_concours_${concoursId}.xlsx`);
+};
+
+// ✅ Après importation
+const handleImportedNotes = async () => {
+  showImportModal.value = false;
+  await concourStore.fetchResultatsConcours(concoursId);
+  notifySuccess('Notes importées avec succès');
 };
 </script>
 

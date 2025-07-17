@@ -10,6 +10,7 @@ import {
   getResultatsConcours,
   getPublicationConcours,
   calculResultatConcour,
+  getStatistiqueConcoursGlobal
 } from '@/api/gestions/gestionApi';
 
 import { useNotifier } from '@/stores/messages/useNotifier';
@@ -22,6 +23,7 @@ export const useConcourStore = defineStore('concourStore', {
     epreuves: [],
     resultats: [],
     publication: null,
+    statistiques: null,
     loading: false,
   }),
 
@@ -99,7 +101,7 @@ export const useConcourStore = defineStore('concourStore', {
       this.loading = true;
       try {
         const response = await getEpreuvesConcours(concoursId);
-        this.epreuves = response;
+        this.epreuves = response.data;
       } catch (e) {
         notifyError('Erreur lors de la récupération des épreuves.');
       } finally {
@@ -141,7 +143,7 @@ export const useConcourStore = defineStore('concourStore', {
       this.loading = true;
       try {
         const response = await getResultatsConcours(concoursId);
-        this.resultats = response.data;
+        this.resultats = response;
       } catch (e) {
         notifyError('Erreur lors de la récupération des résultats.');
       } finally {
@@ -171,6 +173,19 @@ export const useConcourStore = defineStore('concourStore', {
         notifySuccess(response?.message || 'Calcul des résultats effectué.');
       } catch (e) {
         notifyError('Erreur lors du calcul des résultats.');
+      } finally {
+        this.loading = false;
+      }
+    },
+    async fetchStatistiqueConcoursGlobal(concoursId) {
+      this.loading = true;
+      try {
+        const response = await getStatistiqueConcoursGlobal(concoursId);
+        this.statistiques = response;
+        return response ; 
+      } catch (e) {
+        this.statistiques = null;
+        return [];
       } finally {
         this.loading = false;
       }
