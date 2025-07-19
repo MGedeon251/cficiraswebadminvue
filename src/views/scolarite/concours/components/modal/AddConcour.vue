@@ -77,9 +77,9 @@
                   role="status"
                   aria-hidden="true"
                 ></span>
-                {{ loading ? 'En cours...' : 'Submit' }}
+                {{ loading ? 'En cours...' : 'Enregistrer' }}
               </button>
-              <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
             </div>
           </form>
         </div>
