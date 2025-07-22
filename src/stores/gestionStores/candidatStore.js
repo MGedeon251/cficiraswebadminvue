@@ -52,7 +52,7 @@ export const useCandidatStore = defineStore('candidatStore', {
         const response = await createCandidature(data);
         notifySuccess(response?.message || 'Candidat ajouté avec succès.');
         // Optionnel : actualiser la liste si nécessaire
-        //await this.fetchCandidatures(data.concoursId);
+        await this.fetchCandidatures(response.concours_id);        
       } catch (e) {
         notifyError(extractErrorMessage(e, 'Erreur lors de l’ajout du candidat.'));
       } finally {
@@ -88,22 +88,26 @@ export const useCandidatStore = defineStore('candidatStore', {
         this.loading = false;
       }
     },
-    async importCandidats(file, concoursId) {
-      const { notifySuccess, notifyError } = useNotifier();
-      this.loading = true;
-      try {
-        const response = await importCandidats(file, concoursId);
+async importCandidats(file, concoursId) {
+  const { notifySuccess, notifyError } = useNotifier();
+  this.loading = true;
 
-        if (response.success) {
-          notifySuccess(`Importation réussie de ${response.data.imported} candidat(s).`);
-        } else {
-          notifyError(`Import partiel : ${response.data.imported} réussi(s), ${response.data.failed} échec(s).`);
-        }
-      } catch (e) {
-        notifyError(extractErrorMessage(e, 'Erreur lors de l\'importation des candidats.'));
-      } finally {
-        this.loading = false;
-      }
-    },
+  try {
+    const response = await importCandidats(file, concoursId);
+    if (response.success) {
+      notifySuccess(response.message || 'Importation réussie.');
+    } else {
+      notifyError(response.message || 'Importation partiellement échouée.');
+    }
+    if (response.success && response.data?.imported > 0) {
+      await this.fetchCandidatures(concoursId);
+    }
+  } catch (e) {
+    notifyError(extractErrorMessage(e, 'Erreur lors de l\'importation des candidats.'));
+  } finally {
+    this.loading = false;
+  }
+},
+
   },
 });

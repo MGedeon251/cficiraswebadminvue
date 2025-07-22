@@ -32,12 +32,10 @@ export const importCandidats = (file, concoursId) => {
   formData.append('file', file);
   formData.append('concours_id', concoursId);
 
-  return gestionService.post('/candidat/importv2', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+  // Ne pas définir manuellement 'Content-Type'
+  return gestionService.post('/candidat/importv2', formData);
 };
+
 
 
 // API pour gérer les créneaux (emploi du temps)
