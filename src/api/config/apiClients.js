@@ -6,3 +6,5 @@ export const gestionApi = createApiClient('/gestion');
 export const pedagogieApi = createApiClient('/pedagogie');
 export const financeApi = createApiClient('/finance');
 export const evaluationApi = createApiClient('/evaluation');
+//prise en charges des API avec imports des fichiers 
+export const gestionFormApi = createApiClient('/gestion', false);

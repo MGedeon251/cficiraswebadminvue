@@ -1,7 +1,8 @@
 import buildService from '../config/serviceApi';
-import { gestionApi } from '../config/apiClients';
+import { gestionApi, gestionFormApi } from '../config/apiClients';
 
 const gestionService = buildService(gestionApi);
+const gestionFormService = buildService(gestionFormApi);
 
 // API pour gérer les concours
 export const getConcours = () => gestionService.get('/concours/');
@@ -27,13 +28,19 @@ export const createCandidature = (data) => gestionService.post('/candidat/', dat
 export const updateCandidature = (id, data) => gestionService.put(`/candidatures/${id}`, data);
 export const deleteCandidature = (id) => gestionService.delete(`/candidatures/${id}`);
 
-export const importCandidats = (file, concoursId) => {
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('concours_id', concoursId);
+export const importCandidats = async (file, concoursId) => {
+  try {
+    if (!file) throw new Error('Fichier manquant');
+    if (!concoursId) throw new Error('ID Concours manquant');
 
-  // Ne pas définir manuellement 'Content-Type'
-  return gestionService.post('/candidat/importv2', formData);
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+    formData.append('concours_id', concoursId);  
+    return await gestionFormService.post('/candidat/importv2', formData);
+  } catch (error) {
+    console.error('Erreur import:', error);
+    throw error;
+  }
 };
 
 

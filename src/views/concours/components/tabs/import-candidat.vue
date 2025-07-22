@@ -33,7 +33,23 @@
 
             <!-- Tableau de prévisualisation -->
             <div v-if="candidatsData.length" class="table-responsive">
-              <h6>{{ candidatsData.length }} candidat(s) détecté(s)</h6>
+              <h6>
+                {{ candidatsData.length }} candidat(s) valides détectés
+                <span v-if="invalidCount > 0" class="text-danger">
+                  ({{ invalidCount }} ligne(s) invalide(s) ignorées)
+                </span>
+              </h6>
+              <!-- Added pagination -->
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <small>Affichage des 20 premières lignes</small>
+                <button 
+                  v-if="candidatsData.length > 20" 
+                  class="btn btn-sm btn-outline-secondary"
+                  @click="showAll = !showAll"
+                >
+                  {{ showAll ? 'Réduire' : 'Tout voir' }}
+                </button>
+              </div>
               <table class="table table-bordered table-sm table-hover">
                 <thead class="table-light">
                   <tr>
@@ -46,7 +62,7 @@
                 </thead>
                 <tbody>
                   <tr v-for="(cand, idx) in candidatsData" :key="idx">
-                    <td>{{ cand.nom }}</td>
+                    <td :class="{ 'text-danger': !isValidCandidate(cand) }">{{ cand.nom }}</td>
                     <td>{{ cand.prenom }}</td>
                     <td>{{ cand.sexe }}</td>
                     <td>{{ cand.datenais }}</td>
@@ -75,10 +91,20 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed} from 'vue';
 import { useRoute } from 'vue-router';
 import * as XLSX from 'xlsx';
 import { useCandidatStore } from '@/stores/gestionStores/candidatStore';
+// Ajouter le système de notification
+import { useNotifier } from '@/stores/messages/useNotifier';
+
+const { notifyError } = useNotifier();
+
+// Nouveaux états
+const errorMessage = ref('');
+const invalidCount = ref(0);
+const showAll = ref(false);
+const validationErrors = ref([]);
 
 const emit = defineEmits(['close', 'imported']);
 const candidatStore = useCandidatStore();
@@ -90,6 +116,18 @@ const isLoading = ref(false);
 const route = useRoute();
 const concoursId = route.params.id;
 
+// Calculer les candidats à afficher
+const displayedCandidates = computed(() => {
+  return showAll.value 
+    ? candidatsData.value 
+    : candidatsData.value.slice(0, 20);
+});
+
+// Fonction de validation améliorée
+const isValidCandidate = (candidate) => {
+  return candidate.nom && candidate.prenom && candidate.datenais;
+};
+
 // Fonction pour formater une date au format yyyy-mm-dd
 const formatDate = (dateStr) => {
   if (!dateStr) return '';
@@ -99,9 +137,12 @@ const formatDate = (dateStr) => {
 
 // Lecture du fichier et extraction des données
 const handleFile = (event) => {
+    // Réinitialiser les états
+  errorMessage.value = '';
+  invalidCount.value = 0;
+  validationErrors.value = [];
   const file = event.target.files[0];
   if (!file) return;
-
   rawFile.value = file;
 
   const reader = new FileReader();
@@ -146,18 +187,32 @@ const handleFile = (event) => {
 
 // Envoi du fichier brut au backend
 const submitCandidats = async () => {
-  if (!rawFile.value || !concoursId) return;
+  console.log("File avant envoi:", rawFile.value); // Vérifiez l'objet File
+  console.log("Type de fichier:", typeof rawFile.value); // Doit être "object"
+  console.log("Taille du fichier:", rawFile.value.size); // Doit être > 0
 
+  if (!(rawFile.value instanceof File)) { // Validation cruciale
+    notifyError("L'objet fichier est invalide");
+    return;
+  }
+  if (!rawFile.value || !concoursId) return;
   isLoading.value = true;
-  try {
-    await candidatStore.importCandidats(rawFile.value, concoursId); // ✅ Bon ordre ici
+
+    try {
+    await candidatStore.importCandidats(rawFile.value, concoursId);
     emit('imported');
     emit('close');
   } catch (err) {
-    console.error('Erreur lors de l\'importation:', err);
-    alert('Échec de l’import. Vérifiez le fichier et réessayez.');
-  } finally {
-    isLoading.value = false;
+    // Gestion d'erreur améliorée
+    errorMessage.value = extractErrorMessage(err);
+    notifyError(`Échec de l'import: ${errorMessage.value}`);
+    
+    // Journalisation détaillée
+    console.error('Erreur complète:', {
+      error: err,
+      concoursId,
+      fileName: rawFile.value?.name
+    });
   }
 };
 </script>
