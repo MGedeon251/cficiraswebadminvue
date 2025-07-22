@@ -5,6 +5,7 @@ import {
   createCandidature,
   updateCandidature,
   deleteCandidature,
+  importCandidats,
 } from '@/api/gestions/gestionApi';
 
 import { useNotifier } from '@/stores/messages/useNotifier';
@@ -83,6 +84,23 @@ export const useCandidatStore = defineStore('candidatStore', {
         // await this.fetchCandidatures(...);
       } catch (e) {
         notifyError(extractErrorMessage(e, 'Erreur lors de la suppression du candidat.'));
+      } finally {
+        this.loading = false;
+      }
+    },
+    async importCandidats(file, concoursId) {
+      const { notifySuccess, notifyError } = useNotifier();
+      this.loading = true;
+      try {
+        const response = await importCandidats(file, concoursId);
+
+        if (response.success) {
+          notifySuccess(`Importation réussie de ${response.data.imported} candidat(s).`);
+        } else {
+          notifyError(`Import partiel : ${response.data.imported} réussi(s), ${response.data.failed} échec(s).`);
+        }
+      } catch (e) {
+        notifyError(extractErrorMessage(e, 'Erreur lors de l\'importation des candidats.'));
       } finally {
         this.loading = false;
       }

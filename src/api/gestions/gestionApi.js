@@ -27,6 +27,19 @@ export const createCandidature = (data) => gestionService.post('/candidat/', dat
 export const updateCandidature = (id, data) => gestionService.put(`/candidatures/${id}`, data);
 export const deleteCandidature = (id) => gestionService.delete(`/candidatures/${id}`);
 
+export const importCandidats = (file, concoursId) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('concours_id', concoursId);
+
+  return gestionService.post('/candidat/importv2', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
+
 // API pour gérer les créneaux (emploi du temps)
 export const getCreneaux = () => gestionService.get('/creneaux');
 export const getCreneauById = (id) => gestionService.get(`/creneaux/${id}`);
