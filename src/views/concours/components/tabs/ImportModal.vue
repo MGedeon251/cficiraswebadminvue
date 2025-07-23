@@ -5,19 +5,25 @@
         <div class="modal-content">
           <div class="modal-header bg-primary text-white">
             <h5 class="modal-title">Importer les notes</h5>
-            <button type="button" class="btn-close btn-close-white" @click="$emit('close')"></button>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              @click="$emit('close')"
+            ></button>
           </div>
           <div class="modal-body">
             <div class="mb-4">
               <label for="fileInput" class="form-label">Sélectionnez un fichier Excel/CSV</label>
-              <input 
+              <input
                 id="fileInput"
-                type="file" 
-                class="form-control" 
-                accept=".xlsx, .xls, .csv" 
+                type="file"
+                class="form-control"
+                accept=".xlsx, .xls, .csv"
                 @change="handleFile"
-              >
-              <div class="form-text">Le fichier doit contenir les colonnes : ID Candidat, ID Epreuve, Note</div>
+              />
+              <div class="form-text">
+                Le fichier doit contenir les colonnes : ID Candidat, ID Epreuve, Note
+              </div>
             </div>
 
             <div v-if="isLoading" class="text-center py-4">
@@ -51,12 +57,16 @@
           </div>
           <div class="modal-footer">
             <button class="btn btn-outline-secondary" @click="$emit('close')">Annuler</button>
-            <button 
-              class="btn btn-primary" 
+            <button
+              class="btn btn-primary"
               :disabled="!notesData.length || isLoading"
               @click="submitNotes"
             >
-              <span v-if="isLoading" class="spinner-border spinner-border-sm me-1" role="status"></span>
+              <span
+                v-if="isLoading"
+                class="spinner-border spinner-border-sm me-1"
+                role="status"
+              ></span>
               {{ isLoading ? 'Importation...' : 'Importer' }}
             </button>
           </div>
@@ -121,7 +131,7 @@ const handleFile = (event) => {
 
 const submitNotes = async () => {
   if (!notesData.value.length) return;
-  
+
   isLoading.value = true;
   try {
     await concourStore.importNotes(concoursId, notesData.value);
@@ -129,13 +139,12 @@ const submitNotes = async () => {
     emit('close');
   } catch (e) {
     console.error('Erreur importation', e);
-    alert('Erreur lors de l\'import des notes : ' + (e.message || 'Veuillez réessayer.'));
+    alert("Erreur lors de l'import des notes : " + (e.message || 'Veuillez réessayer.'));
   } finally {
     isLoading.value = false;
   }
 };
 </script>
-
 
 <style scoped>
 .modal-backdrop {

@@ -5,12 +5,7 @@
     :footer="null"
     width="700px"
   >
-    <a-alert
-      type="success"
-      show-icon
-      message="Importation réussie"
-      class="mb-3"
-    />
+    <a-alert type="success" show-icon message="Importation réussie" class="mb-3" />
     <a-table
       :dataSource="successData"
       :columns="columns"

@@ -16,7 +16,8 @@ export const createEpreuves = (id, data) => gestionService.post(`/concours/${id}
 
 export const getResultatsConcours = (id) => gestionService.get(`/concours/${id}/resultats`);
 export const getStatistiqueConcours = (id) => gestionService.get(`/concours/${id}/statistiques`);
-export const getStatistiqueConcoursGlobal = (id) => gestionService.get(`/concours/${id}/statistiques-globales/`);
+export const getStatistiqueConcoursGlobal = (id) =>
+  gestionService.get(`/concours/${id}/statistiques-globales/`);
 export const getPublicationConcours = (id) => gestionService.get(`/concours/${id}/publication`);
 export const calculResultatConcour = (id, data) =>
   gestionService.get(`/concours/${id}/calculate`, data);
@@ -35,15 +36,13 @@ export const importCandidats = async (file, concoursId) => {
 
     const formData = new FormData();
     formData.append('file', file, file.name);
-    formData.append('concours_id', concoursId);  
+    formData.append('concours_id', concoursId);
     return await gestionFormService.post('/candidat/importv2', formData);
   } catch (error) {
     console.error('Erreur import:', error);
     throw error;
   }
 };
-
-
 
 // API pour gérer les créneaux (emploi du temps)
 export const getCreneaux = () => gestionService.get('/creneaux');

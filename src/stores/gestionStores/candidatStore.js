@@ -52,7 +52,7 @@ export const useCandidatStore = defineStore('candidatStore', {
         const response = await createCandidature(data);
         notifySuccess(response?.message || 'Candidat ajouté avec succès.');
         // Optionnel : actualiser la liste si nécessaire
-        await this.fetchCandidatures(response.concours_id);        
+        await this.fetchCandidatures(response.concours_id);
       } catch (e) {
         notifyError(extractErrorMessage(e, 'Erreur lors de l’ajout du candidat.'));
       } finally {
@@ -92,21 +92,25 @@ export const useCandidatStore = defineStore('candidatStore', {
       const { notifySuccess, notifyError } = useNotifier();
       this.loading = true;
       try {
-        const response = await importCandidats(file, concoursId);  
+        const response = await importCandidats(file, concoursId);
         if (response.success) {
           notifySuccess(`Importation réussie de ${response.data.imported} candidat(s).`);
         } else {
-          notifyError(`Import partiel : ${response.data.imported} réussi(s), ${response.data.failed} échec(s).`);
+          notifyError(
+            `Import partiel : ${response.data.imported} réussi(s), ${response.data.failed} échec(s).`
+          );
         }
         if (response.success && response.data.imported > 0) {
-            try {
-              await this.fetchCandidatures(concoursId);
-            } catch (fetchError) {
-              notifyError(extractErrorMessage(fetchError, 'Erreur lors du rechargement des candidatures'));
-            }
+          try {
+            await this.fetchCandidatures(concoursId);
+          } catch (fetchError) {
+            notifyError(
+              extractErrorMessage(fetchError, 'Erreur lors du rechargement des candidatures')
+            );
           }
+        }
       } catch (e) {
-        notifyError(extractErrorMessage(e, 'Erreur lors de l\'importation des candidats.'));
+        notifyError(extractErrorMessage(e, "Erreur lors de l'importation des candidats."));
       } finally {
         this.loading = false;
       }

@@ -10,7 +10,7 @@ import {
   getResultatsConcours,
   getPublicationConcours,
   calculResultatConcour,
-  getStatistiqueConcoursGlobal
+  getStatistiqueConcoursGlobal,
 } from '@/api/gestions/gestionApi';
 
 import { useNotifier } from '@/stores/messages/useNotifier';
@@ -182,7 +182,7 @@ export const useConcourStore = defineStore('concourStore', {
       try {
         const response = await getStatistiqueConcoursGlobal(concoursId);
         this.statistiques = response;
-        return response ; 
+        return response;
       } catch (e) {
         this.statistiques = null;
         return [];

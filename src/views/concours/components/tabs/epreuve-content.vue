@@ -15,10 +15,18 @@
               <i class="mdi mdi-dots-vertical"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#"><i class="mdi mdi-file-excel me-2"></i>Exporter Excel</a></li>
-              <li><a class="dropdown-item" href="#"><i class="mdi mdi-printer me-2"></i>Imprimer</a></li>
+              <li>
+                <a class="dropdown-item" href="#"
+                  ><i class="mdi mdi-file-excel me-2"></i>Exporter Excel</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="#"><i class="mdi mdi-printer me-2"></i>Imprimer</a>
+              </li>
               <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item" href="#"><i class="mdi mdi-cog me-2"></i>Paramètres</a></li>
+              <li>
+                <a class="dropdown-item" href="#"><i class="mdi mdi-cog me-2"></i>Paramètres</a>
+              </li>
             </ul>
           </div>
           <button class="btn btn-outline-dark me-2">PDF</button>
@@ -40,9 +48,25 @@
           </thead>
           <tbody>
             <tr v-for="(epreuve, index) in epreuves" :key="index">
-              <td><input v-model="epreuve.code" type="text" class="form-control" placeholder="EX01" /></td>
-              <td><input v-model="epreuve.designation" type="text" class="form-control" placeholder="Mathématiques" /></td>
-              <td><input v-model.number="epreuve.coefficient" type="number" class="form-control" min="1" /></td>
+              <td>
+                <input v-model="epreuve.code" type="text" class="form-control" placeholder="EX01" />
+              </td>
+              <td>
+                <input
+                  v-model="epreuve.designation"
+                  type="text"
+                  class="form-control"
+                  placeholder="Mathématiques"
+                />
+              </td>
+              <td>
+                <input
+                  v-model.number="epreuve.coefficient"
+                  type="number"
+                  class="form-control"
+                  min="1"
+                />
+              </td>
               <td><input v-model="epreuve.heure_debut" type="time" class="form-control" /></td>
               <td><input v-model="epreuve.heure_fin" type="time" class="form-control" /></td>
               <td>
@@ -107,7 +131,7 @@ const addEpreuve = () => {
     heure_fin: '',
     type_epreuve: 'écrit',
     ordre: epreuves.value.length + 1,
-    description: 'N/A'
+    description: 'N/A',
   });
 };
 
@@ -130,15 +154,14 @@ const saveEpreuve = async (epreuve) => {
   const payload = { ...epreuve, concours_id: concoursId };
 
   try {
-    await concourStore.addEpreuvesConcours(concoursId,payload);
+    await concourStore.addEpreuvesConcours(concoursId, payload);
     await concourStore.fetchEpreuvesConcours(concoursId);
     epreuves.value = [...concourStore.epreuves];
   } catch (err) {
     notifyError(extractErrorMessage(err, 'Erreur sauvegarde épreuve'));
   }
-console.log('Payload envoyé:', payload);
-console.log('Concours ID:', concoursId);
-
+  console.log('Payload envoyé:', payload);
+  console.log('Concours ID:', concoursId);
 };
 </script>
 

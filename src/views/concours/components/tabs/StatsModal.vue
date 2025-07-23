@@ -32,16 +32,16 @@
       bordered
       rowKey="epreuve"
     />
-<!-- Footer personnalisé -->
-  <template #footer>
-    <div class="d-flex justify-content-end mt-3">
-      <a-button @click="close">Fermer</a-button>
-      <a-button type="default" @click="exportToPDF">
-        <DownloadOutlined />
-        Exporter PDF
-      </a-button>
-    </div>
-  </template>
+    <!-- Footer personnalisé -->
+    <template #footer>
+      <div class="d-flex justify-content-end mt-3">
+        <a-button @click="close">Fermer</a-button>
+        <a-button type="default" @click="exportToPDF">
+          <DownloadOutlined />
+          Exporter PDF
+        </a-button>
+      </div>
+    </template>
   </a-modal>
 </template>
 
@@ -58,16 +58,19 @@ Chart.register(...registerables);
 
 const props = defineProps({
   open: Boolean,
-  concoursId : {
+  concoursId: {
     type: Number,
     required: true,
-  }
+  },
 });
 const emit = defineEmits(['update:open']);
 
 const visible = ref(props.open);
-watch(() => props.open, val => visible.value = val);
-watch(visible, val => emit('update:open', val));
+watch(
+  () => props.open,
+  (val) => (visible.value = val)
+);
+watch(visible, (val) => emit('update:open', val));
 
 const concourStore = useConcourStore();
 const { notifyError } = useNotifier();
@@ -97,7 +100,7 @@ const loadStats = async () => {
   try {
     const stats = await concourStore.fetchStatistiqueConcoursGlobal(props.concoursId);
 
-    statData.value = stats.map(s => ({
+    statData.value = stats.map((s) => ({
       epreuve: s.epreuve,
       moyenne: parseFloat(s.moyenne).toFixed(2),
       max: parseFloat(s.max_note),
@@ -105,36 +108,37 @@ const loadStats = async () => {
       ecartType: parseFloat(s.ecart_type).toFixed(2),
       tauxReussite: parseFloat(s.taux_reussite).toFixed(2) + '%',
     }));
-    console.log("statistiques : ", stats) ;
+    console.log('statistiques : ', stats);
 
     await nextTick(); // Pour s'assurer que le DOM est prêt pour les canvas
     renderCharts(stats);
   } catch (e) {
-    console.error("ID renvoyé : ", props.concoursId);
+    console.error('ID renvoyé : ', props.concoursId);
     notifyError('Impossible de charger les statistiques.');
   }
 };
-
 
 const renderCharts = (stats) => {
   if (barInstance) barInstance.destroy();
   if (radarInstance) radarInstance.destroy();
 
-  const labels = stats.map(s => s.epreuve);
-  const moyennes = stats.map(s => parseFloat(s.moyenne));
-  const taux = stats.map(s => parseFloat(s.taux_reussite));
+  const labels = stats.map((s) => s.epreuve);
+  const moyennes = stats.map((s) => parseFloat(s.moyenne));
+  const taux = stats.map((s) => parseFloat(s.taux_reussite));
 
   barInstance = new Chart(barChart.value.getContext('2d'), {
     type: 'bar',
     data: {
       labels,
-      datasets: [{
-        label: 'Moyenne',
-        data: moyennes,
-        backgroundColor: 'rgba(54, 162, 235, 0.5)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1,
-      }],
+      datasets: [
+        {
+          label: 'Moyenne',
+          data: moyennes,
+          backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1,
+        },
+      ],
     },
     options: {
       responsive: true,
@@ -148,13 +152,15 @@ const renderCharts = (stats) => {
     type: 'radar',
     data: {
       labels,
-      datasets: [{
-        label: 'Taux de réussite (%)',
-        data: taux,
-        backgroundColor: 'rgba(40, 167, 69, 0.4)',
-        borderColor: 'rgba(40, 167, 69, 1)',
-        borderWidth: 2,
-      }],
+      datasets: [
+        {
+          label: 'Taux de réussite (%)',
+          data: taux,
+          backgroundColor: 'rgba(40, 167, 69, 0.4)',
+          borderColor: 'rgba(40, 167, 69, 1)',
+          borderWidth: 2,
+        },
+      ],
     },
     options: {
       responsive: true,
@@ -162,12 +168,11 @@ const renderCharts = (stats) => {
         r: {
           beginAtZero: true,
           max: 100,
-        }
+        },
       },
     },
   });
 };
-
 
 const close = () => {
   visible.value = false;
@@ -248,8 +253,6 @@ const exportToPDF = async () => {
   // ✅ 7. Sauvegarde
   pdf.save('statistiques_concours.pdf');
 };
-
-
 </script>
 
 <style scoped>

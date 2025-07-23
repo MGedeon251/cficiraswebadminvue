@@ -167,17 +167,6 @@ const submitCandidats = async () => {
     isLoading.value = false;
   }
 };
-
-// Validation simple d’un candidat
-const validateCandidat = (cand) => {
-  const errors = [];
-  if (!cand.nom) errors.push('Nom requis');
-  if (!cand.prenom) errors.push('Prénom requis');
-  if (!cand.datenais) errors.push('Date naissance invalide');
-  if (!cand.sexe || !['M', 'F'].includes(cand.sexe.toUpperCase())) errors.push('Sexe invalide');
-  if (!cand.filiere) errors.push('Filière manquante');
-  return errors;
-};
 </script>
 
 <style scoped>

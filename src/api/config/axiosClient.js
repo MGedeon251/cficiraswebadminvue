@@ -17,4 +17,3 @@ export const createApiClient = (prefix = '', useJson = true) => {
 
   return instance;
 };
-

@@ -1,10 +1,5 @@
 <template>
-  <a-modal
-    v-model:visible="visible"
-    title="Erreurs d'importation"
-    :footer="null"
-    width="700px"
-  >
+  <a-modal v-model:visible="visible" title="Erreurs d'importation" :footer="null" width="700px">
     <a-alert
       type="error"
       show-icon

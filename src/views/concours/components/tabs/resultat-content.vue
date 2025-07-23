@@ -24,8 +24,16 @@
                 <i class="mdi mdi-dots-vertical"></i>
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#" @click="exportToExcel"><i class="mdi mdi-file-excel me-2"></i>Exporter Excel</a></li>
-                <li><a class="dropdown-item" href="#" @click="window.print()"><i class="mdi mdi-printer me-2"></i>Imprimer</a></li>
+                <li>
+                  <a class="dropdown-item" href="#" @click="exportToExcel"
+                    ><i class="mdi mdi-file-excel me-2"></i>Exporter Excel</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" @click="window.print()"
+                    ><i class="mdi mdi-printer me-2"></i>Imprimer</a
+                  >
+                </li>
               </ul>
             </div>
           </div>
@@ -73,10 +81,7 @@
       @close="showImportModal = false"
       @imported="handleImportedNotes"
     />
-    <StatsModal
-      v-model:open="showStatsModal"
-      :concoursId="concoursId"
-    />
+    <StatsModal v-model:open="showStatsModal" :concoursId="concoursId" />
   </div>
 </template>
 

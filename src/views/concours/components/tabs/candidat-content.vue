@@ -4,26 +4,43 @@
       <div class="col-md-12 grid-margin">
         <div class="d-flex justify-content-between flex-wrap">
           <div class="d-flex align-items-end flex-wrap">
-              <div class="flex flex-wrap justify-between mb-4">
-                <a-input
-                  class="me-1 mt-1 mt-xl-0"
-                  v-model:value="searchQuery"
-                  placeholder="Rechercher..."
-                  allow-clear
-                  style="width: 250px"
-                >
-                  <template #prefix>
-                    <i class="mdi mdi-magnify" />
-                  </template>
-                </a-input>
-                <a-button type="default" @click="refreshCandidats" :loading="loading">
-                  🔄 Rafraîchir
-                </a-button>
-              </div>
-      
+            <div class="flex flex-wrap justify-between mb-4">
+              <a-input
+                class="me-1 mt-1 mt-xl-0"
+                v-model:value="searchQuery"
+                placeholder="Rechercher..."
+                allow-clear
+                style="width: 250px"
+              >
+                <template #prefix>
+                  <i class="mdi mdi-magnify" />
+                </template>
+              </a-input>
+              <a-button type="default" @click="refreshCandidats" :loading="loading">
+                🔄 Rafraîchir
+              </a-button>
+            </div>
           </div>
           <div class="d-flex justify-content-between align-items-end flex-wrap">
-            <button class="btn btn-outline-dark me-2">Exporter</button>
+            <div class="dropdown me-2">
+              <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
+                <i class="mdi mdi-dots-vertical"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <a class="dropdown-item" href="#"
+                    ><i class="mdi mdi-file-excel me-2"></i>Exporter Excel</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="mdi mdi-printer me-2"></i>Imprimer</a>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="mdi mdi-cog me-2"></i>Paramètres</a>
+                </li>
+              </ul>
+            </div>
             <div class="btn-group">
               <button
                 class="btn btn-primary mt-2 mt-xl-0"
@@ -39,17 +56,17 @@
                 <span class="visually-hidden">Toggle Dropdown</span>
               </button>
               <ul class="dropdown-menu">
-                <label class="dropdown-item"
-                 for="fileUploadInput"
-                 @click="showImportModal = true">Importer fichier</label>
+                <label class="dropdown-item" for="fileUploadInput" @click="showImportModal = true"
+                  >Importer fichier</label
+                >
               </ul>
             </div>
-                <!-- Modals -->
-              <ImportModal
-                v-if="showImportModal"
-                @close="showImportModal = false"
-                @imported="handleImportedNotes"
-              />
+            <!-- Modals -->
+            <ImportModal
+              v-if="showImportModal"
+              @close="showImportModal = false"
+              @imported="handleImportedNotes"
+            />
           </div>
           <AddCandidat @submit="handleSubmit" @close="handleClose" />
         </div>
@@ -109,14 +126,8 @@ import dayjs from 'dayjs';
 import ItemActions from '../details/ItemActions.vue';
 import Pagination from '@/components/shared/Pagination.vue';
 import AddCandidat from '../modal/addCandidat.vue';
-import { message } from 'ant-design-vue';
-
-import ImportErrorsModal from '../modal/ImportErrorModal.vue';
 import ImportModal from './import-candidat.vue';
-const importErrorModalRef = ref(null);
 const showImportModal = ref(false);
-
-
 
 //données des candidats
 import { useCandidatStore } from '@/stores/gestionStores/candidatStore'; //stores
@@ -170,48 +181,4 @@ const handleClose = () => {
   const modal = bootstrap.Modal.getInstance(modalEl);
   modal?.hide();
 };
-
-const fileInput = ref(null);
-const handleFileImport = async (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('concours_id', concoursId);
-
-  try {
-    const response = await axios.post('/api/candidats/import', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
-
-    const { imported, failed, errors } = response.data.data;
-
-    message.success(`${imported} candidat(s) importé(s), ${failed} échec(s)`);
-
-    if (failed > 0 && importErrorModalRef.value) {
-      importErrorModalRef.value.show(errors);
-    }
-
-    await fetchCandidatures();
-  } catch (err) {
-    console.error('Erreur import:', err);
-    message.error(err.response?.data?.message || "Erreur pendant l'import");
-  } finally {
-    event.target.value = null;
-  }
-};
-
-const importModalRef = ref(null)
-
-const openImportModal = () => {
-  importModalRef.value?.show()
-}
-
-const handleImport = (candidats) => {
-  console.log('Candidats importés:', candidats)
-  // Ici tu peux appeler ton store ou API
-}
-
-
 </script>
