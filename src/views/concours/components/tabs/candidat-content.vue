@@ -297,5 +297,4 @@ const printTable = () => {
   printWindow.print();
 };
 
-
 </script>
