@@ -9,6 +9,7 @@
           <th>Date de Début</th>
           <th>Date de Fin</th>
           <th>Statut</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -44,27 +45,33 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import dayjs from 'dayjs'; // ici c'est pour gerer les formats des dates
-import { getConcours } from '@/api/gestions/gestionApi';
-//Ici j'appelle la fonction getconcours qui se trouve dans /api/gestion/gestionApi.js
-//pour recuper tout les concours
-
+import dayjs from 'dayjs';
 import ItemActions from '../details/ItemActions.vue';
-const concours = ref([]); //une variable, un table pour recevoir tout les concours
+import { concoursStore } from '@/stores/scolarite/concours/concoursStore.js';
 
-//Une fois les données recuper l'afficher sur la page, on fait ce script et partout ce sera comme ca.
-onMounted(async () => {
-  try {
-    const response = await getConcours();
-    concours.value = response.data;
-  } catch (e) {
-    concours.value = [];
-  }
+const concours = ref([]);
+
+// Charger les concours depuis localStorage
+onMounted(() => {
+  concours.value = concoursStore.getAll();
 });
 
+// Format des dates
 const formatDate = (date) => {
   return dayjs(date).format('DD-MM-YYYY');
 };
+
+// Placeholders pour l’édition ou suppression si besoin
+function editModule(item) {
+  console.log('Éditer concours :', item);
+}
+
+function confirmDelete(item) {
+  if (confirm(`Supprimer le concours "${item.designation}" ?`)) {
+    concoursStore.delete(item.id);
+    concours.value = concoursStore.getAll(); // Recharger après suppression
+  }
+}
 </script>
 
 <style scoped>

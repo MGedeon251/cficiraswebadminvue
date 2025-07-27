@@ -103,7 +103,6 @@ const routes = [
         name: 'ValidationCandidats',
         component: () => import('@/views/scolarite/candidats/ValidationCandidats.vue'),
       },
-     
       {
         path: '/concours',
         name: 'Deconcours',
@@ -119,6 +118,17 @@ const routes = [
         name: 'EditionConcours',
         component: () => import('@/views/scolarite/concours/components/details/Details.vue'),
       },
+      {
+        path: '/details-candidat/:id',
+        name: 'DetailsCandidat',
+        component: () => import('@/views/scolarite/concours/components/details/DetailCandidats.vue')
+      },
+      {
+        path: '/edit-candidat/:id',
+        name: 'EditCandidat',
+        component: () => import('@/views/scolarite/concours/components/details/EditCandidats.vue')
+      },
+      
       /*{
         path: '/organiser-concours',
         name: 'Concours',
@@ -148,6 +158,13 @@ const routes = [
         path: '/scolarite/concours/organiser',
         name: 'OrganiserConcours',
         component: () => import('@/views/scolarite/concours/OrganiserConcours.vue'),
+      },
+      
+      // <-- Ici la route ajoutée pour AnneeAcad.vue
+      {
+        path: '/scolarite/concours/annees-academiques',
+        name: 'AnneeAcademique',
+        component: () => import('@/views/scolarite/concours/anneeAcad/AnneeAcad.vue'),
       },
     ],
   },

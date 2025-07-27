@@ -1,6 +1,9 @@
-<script setup></script>
+<script setup>
+import frFR from 'ant-design-vue/es/locale/fr_FR';
+</script>
 
 <template>
-  <router-view />
+  <a-config-provider :locale="frFR">
+    <router-view />
+  </a-config-provider>
 </template>
-<script setup></script>

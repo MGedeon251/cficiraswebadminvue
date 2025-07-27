@@ -12,10 +12,10 @@
       <li v-if="showAdd">
         <RouterLink
           class="dropdown-item"
-          :to="`/edition-concours/edit/${item.concours_id}`"
+          :to="`/edition-concours/edit/${item.id}`"
           @click="$emit('add', item)"
         >
-          <i class="mdi mdi mdi-launch me-2"></i> Editer
+          <i class="mdi mdi-launch me-2"></i> Éditer
         </RouterLink>
       </li>
       <li>
@@ -36,6 +36,8 @@
       </li>
     </ul>
   </div>
+
+  <!-- Détail modal -->
   <teleport to="body">
     <div
       v-if="isDetailsVisible"
@@ -45,45 +47,43 @@
       style="background-color: rgba(0, 0, 0, 0.5)"
       @click.self="closeDetails"
     >
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
           <div class="modal-header bg-primary text-white">
             <h5 class="modal-title">
-              <i class="mdi mdi-information-outline me-2"></i>
-              Détails du concours
+              <i class="mdi mdi-information-outline me-2"></i> Détails du concours
             </h5>
             <button type="button" class="btn-close btn-close-white" @click="closeDetails"></button>
           </div>
+
           <div class="modal-body">
             <div class="row">
+              <!-- Infos générales -->
               <div class="col-md-6">
                 <div class="info-card mb-3">
                   <h6 class="info-title">Informations générales</h6>
                   <div class="info-content">
                     <div class="info-item">
                       <span class="info-label">ID:</span>
-                      <span class="info-value">{{ item.concours_id }}</span>
+                      <span class="info-value">{{ item.id || 'Non défini' }}</span>
                     </div>
                     <div class="info-item">
                       <span class="info-label">Désignation:</span>
-                      <span class="info-value">{{ item.designation }}</span>
+                      <span class="info-value">{{ item.designation || 'Non défini' }}</span>
                     </div>
                     <div class="info-item">
                       <span class="info-label">Type:</span>
-                      <span class="info-value">{{ item.type_libelle }} ({{ item.type_code }})</span>
+                      <span class="info-value">{{ item.type_libelle || 'N/A' }} ({{ item.type_code || 'N/A' }})</span>
                     </div>
                     <div class="info-item">
                       <span class="info-label">Description:</span>
-                      <span class="info-value">{{ item.description }}</span>
+                      <span class="info-value">{{ item.description || 'Non défini' }}</span>
                     </div>
                     <div class="info-item">
                       <span class="info-label">Dossier requis:</span>
                       <span class="info-value">
-                        <span
-                          class="badge"
-                          :class="item.dossier_requis ? 'bg-success' : 'bg-secondary'"
-                        >
-                          {{ item.dossier_requis ? 'Oui' : 'Non' }}
+                        <span class="badge" :class="item.dossier_requis === 'oui' ? 'bg-success' : 'bg-secondary'">
+                          {{ item.dossier_requis === 'oui' ? 'Oui' : 'Non' }}
                         </span>
                       </span>
                     </div>
@@ -91,6 +91,7 @@
                 </div>
               </div>
 
+              <!-- Dates -->
               <div class="col-md-6">
                 <div class="info-card mb-3">
                   <h6 class="info-title">Dates et période</h6>
@@ -105,16 +106,16 @@
                     </div>
                     <div class="info-item">
                       <span class="info-label">Limite inscription:</span>
-                      <span class="info-value">{{ formatDate(item.date_limite_inscription) }}</span>
+                      <span class="info-value">{{ formatDate(item.date_limite_dossier) }}</span>
                     </div>
                     <div class="info-item">
                       <span class="info-label">Année académique:</span>
-                      <span class="info-value">{{ item.annee_code }}</span>
+                      <span class="info-value">{{ item.annee_data?.code || 'Non défini' }}</span>
                     </div>
                     <div class="info-item">
                       <span class="info-label">Statut:</span>
                       <span class="badge" :class="getStatusClass(item.statut)">
-                        {{ item.statut }}
+                        {{ item.statut || 'Inconnu' }}
                       </span>
                     </div>
                   </div>
@@ -122,6 +123,7 @@
               </div>
             </div>
 
+            <!-- Année académique (détails) -->
             <div class="row mt-3">
               <div class="col-md-6">
                 <div class="info-card">
@@ -129,20 +131,17 @@
                   <div class="info-content">
                     <div class="info-item">
                       <span class="info-label">Début année:</span>
-                      <span class="info-value">{{ formatDate(item.annee_debut) }}</span>
+                      <span class="info-value">{{ formatDate(item.annee_data?.debut) }}</span>
                     </div>
                     <div class="info-item">
                       <span class="info-label">Fin année:</span>
-                      <span class="info-value">{{ formatDate(item.annee_fin) }}</span>
+                      <span class="info-value">{{ formatDate(item.annee_data?.fin) }}</span>
                     </div>
                     <div class="info-item">
                       <span class="info-label">Année active:</span>
                       <span class="info-value">
-                        <span
-                          class="badge"
-                          :class="item.annee_active ? 'bg-success' : 'bg-secondary'"
-                        >
-                          {{ item.annee_active ? 'Oui' : 'Non' }}
+                        <span class="badge" :class="item.annee_data?.active ? 'bg-success' : 'bg-secondary'">
+                          {{ item.annee_data?.active ? 'Oui' : 'Non' }}
                         </span>
                       </span>
                     </div>
@@ -150,6 +149,7 @@
                 </div>
               </div>
 
+              <!-- Actions -->
               <div class="col-md-6">
                 <div class="info-card">
                   <h6 class="info-title">Actions rapides</h6>
@@ -168,6 +168,7 @@
               </div>
             </div>
           </div>
+
           <div class="modal-footer">
             <button class="btn btn-secondary" @click="closeDetails">
               <i class="mdi mdi-close me-2"></i> Fermer
@@ -186,34 +187,21 @@
 import { ref } from 'vue';
 
 const props = defineProps({
-  item: {
-    type: Object,
-    required: true,
-  },
-  showAdd: {
-    type: Boolean,
-    default: false,
-  },
-  editModalTarget: {
-    type: String,
-    default: '#exampleModal-edit',
-  },
+  item: Object,
+  showAdd: Boolean,
+  editModalTarget: String,
 });
 
 const isDetailsVisible = ref(false);
-
-const openDetails = () => {
-  isDetailsVisible.value = true;
-};
 
 const closeDetails = () => {
   isDetailsVisible.value = false;
 };
 
-const formatDate = (dateString) => {
-  if (!dateString) return 'Non défini';
-  const date = new Date(dateString);
-  return date.toLocaleDateString('fr-FR', {
+const formatDate = (date) => {
+  if (!date) return 'Non défini';
+  const d = new Date(date);
+  return d.toLocaleDateString('fr-FR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -221,7 +209,7 @@ const formatDate = (dateString) => {
 };
 
 const getStatusClass = (status) => {
-  switch (status?.toLowerCase()) {
+  switch ((status || '').toLowerCase()) {
     case 'ouvert':
       return 'bg-success';
     case 'fermé':
@@ -233,7 +221,7 @@ const getStatusClass = (status) => {
   }
 };
 
-defineExpose({ openDetails, closeDetails });
+defineExpose({ closeDetails });
 </script>
 
 <style scoped>
@@ -243,7 +231,6 @@ defineExpose({ openDetails, closeDetails });
   padding: 1rem;
   height: 100%;
 }
-
 .info-title {
   font-weight: 600;
   color: #495057;
@@ -251,18 +238,15 @@ defineExpose({ openDetails, closeDetails });
   border-bottom: 1px solid #dee2e6;
   padding-bottom: 0.5rem;
 }
-
 .info-item {
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.5rem;
 }
-
 .info-label {
   font-weight: 500;
   color: #6c757d;
 }
-
 .info-value {
   text-align: right;
   color: #212529;
