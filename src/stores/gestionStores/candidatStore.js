@@ -139,7 +139,9 @@ export const useCandidatStore = defineStore('candidatStore', {
           }
         }
       } catch (e) {
-        notifyError(extractErrorMessage(e, "Erreur lors de l'importation des notes des candidats."));
+        notifyError(
+          extractErrorMessage(e, "Erreur lors de l'importation des notes des candidats.")
+        );
       } finally {
         this.loading = false;
       }

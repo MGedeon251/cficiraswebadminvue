@@ -5,7 +5,11 @@
         <div class="modal-content">
           <div class="modal-header bg-primary text-white">
             <h5 class="modal-title">Importer les notes des candidats</h5>
-            <button type="button" class="btn-close btn-close-white" @click="$emit('close')"></button>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              @click="$emit('close')"
+            ></button>
           </div>
 
           <div class="modal-body">
@@ -100,7 +104,6 @@ const notesData = ref([]);
 const isLoading = ref(false);
 const selectedFile = ref(null);
 
-
 const normalizeKey = (key) => key?.toString().trim().toLowerCase();
 
 const handleFile = (event) => {
@@ -118,26 +121,26 @@ const handleFile = (event) => {
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
       const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
 
-      notesData.value = rows.map((row) => {
-        const keys = Object.keys(row).reduce((acc, key) => {
-          acc[normalizeKey(key)] = row[key];
-          return acc;
-        }, {});
+      notesData.value = rows
+        .map((row) => {
+          const keys = Object.keys(row).reduce((acc, key) => {
+            acc[normalizeKey(key)] = row[key];
+            return acc;
+          }, {});
 
-        return {
-          matricule: keys['matricule'] || '',
-          nom: keys['nom'] || '',
-          prenom: keys['prenom'] || '',
-          code: keys['code'] || '',
-          epreuve: keys['epreuve'] || '',
-          note: parseFloat(keys['note']) || 0,
-        };
-      }).filter((item) =>
-        item.matricule && item.code && item.epreuve && !isNaN(item.note)
-      );
+          return {
+            matricule: keys['matricule'] || '',
+            nom: keys['nom'] || '',
+            prenom: keys['prenom'] || '',
+            code: keys['code'] || '',
+            epreuve: keys['epreuve'] || '',
+            note: parseFloat(keys['note']) || 0,
+          };
+        })
+        .filter((item) => item.matricule && item.code && item.epreuve && !isNaN(item.note));
 
       if (!notesData.value.length) {
-        alert("Aucune donnée valide détectée. Vérifiez les colonnes attendues.");
+        alert('Aucune donnée valide détectée. Vérifiez les colonnes attendues.');
       }
     } catch (err) {
       console.error('Erreur de lecture du fichier', err);

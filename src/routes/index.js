@@ -33,8 +33,9 @@ import Salles from '../views/examens/salles/Salles.vue'; // Salles d'examen
 import RapportExamens from '../views/examens/rapports/RapportExamens.vue'; // Rapport des examens
 
 //Gestion des concours
-import EditionConcours from '../views/concours/Edition.vue';
-import DetailsConcours from '../views/concours/components/details/Details.vue';
+import EditionConcours from '../views/concours/editions/Edition.vue';
+import DetailsConcours from '../views/concours/editions/components/details/Details.vue';
+import ResultatsConcours from '../views/concours/resultats/resultats.vue'; // Résultats des concours
 //Notes et résultats
 import Notes from '../views/notes/Notes.vue'; // Page des notes
 import appNotes from '../views/notes/addNotes/main/notev1.vue';
@@ -52,7 +53,6 @@ import Admins from '../views/admin/Administration.vue';
 import Finance from '../views/finances/Finance.vue';
 //PAGE  Not Found (ERREUR 404)
 import NotFound from '../views/errors/NotFound.vue';
-import ResultatsConcours from '../views/concours/resultats/resultats.vue'; // Résultats des concours  
 
 const routes = [
   // Route de login (pas besoin de layout global ici)
@@ -103,7 +103,7 @@ const routes = [
         props: true,
       },
       { path: '/edition-concours', name: 'InscriptionConcours', component: EditionConcours },
-      { path: '/resultats-concours', name: 'ResultatsConcours', component: ResultatsConcours},
+      { path: '/resultats-concours', name: 'ResultatsConcours', component: ResultatsConcours },
       { path: '/edition-concours/edit/:id', name: 'EditionConcours', component: DetailsConcours },
 
       { path: '/planification-examens', name: 'Planification', component: Plannification },

@@ -6,28 +6,48 @@
         <div class="col-md-12 grid margin stretch-card">
           <div class="card">
             <div class="card-body">
-              <h2>Liste des Formateurs</h2>
-
-              <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1" />
+              <SkeletonLoader v-if="concourStore.loading" type="table" :rows="3" :columns="1" />
               <table v-else class="table table-striped">
                 <thead>
                   <tr>
-                    <th>Matricule</th>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Email</th>
-                    <th>Téléphone</th>
-                    <th>Actions</th>
+                    <th>#</th>
+                    <th>Désignation</th>
+                    <th>Date publication</th>
+                    <th>Statut</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="formateur in formateurs" :key="formateur.id">
-                    <td>{{ formateur.matricule }}</td>
-                    <td>{{ formateur.nom }}</td>
-                    <td>{{ formateur.prenom }}</td>
-                    <td>{{ formateur.email }}</td>
-                    <td>{{ formateur.telephone }}</td>
-                    <td>...</td>
+                  <tr v-for="(resultat, index) in concourStore.publication" :key="resultat.id">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ resultat.designation }}</td>
+                    <td>{{ formatDate(resultat.date_publication) ?? 'Non publié' }}</td>
+                    <td>
+                      <span
+                        :class="[
+                          'badge',
+                          {
+                            'bg-success': resultat.statut === 'validé',
+                            'bg-warning': resultat.statut === 'en attente',
+                            'bg-danger': resultat.statut === 'rejeté',
+                          },
+                        ]"
+                      >
+                        {{ resultat.statut }}
+                      </span>
+                    </td>
+                    <td>
+                      <a
+                        :href="`/resultats-concours/${resultat.id}`"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <i class="mdi mdi-launch me-2"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  <tr v-if="concourStore.publication.length === 0">
+                    <td colspan="5" class="text-center">Aucun résultat publié</td>
                   </tr>
                 </tbody>
               </table>
@@ -40,36 +60,19 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import HeaderView from '../components/HeaderResultat.vue';
+import { onMounted } from 'vue';
+import { useConcourStore } from '@/stores/gestionStores/concourStore';
+import HeaderView from './components/HeaderResultat.vue';
 import SkeletonLoader from '@/components/SkeletonLoader.vue';
+import dayjs from 'dayjs'; // ici c'est pour gerer les formats des dates
 
-const loading = ref(true);
-const formateurs = ref([]);
+const concourStore = useConcourStore();
 
 onMounted(() => {
-  setTimeout(() => {
-    formateurs.value = [
-      {
-        id: 1,
-        matricule: 'F001',
-        nom: 'Doe',
-        prenom: 'John',
-        email: 'john@example.com',
-        telephone: '0123456789',
-      },
-      {
-        id: 2,
-        matricule: 'F002',
-        nom: 'Smith',
-        prenom: 'Anna',
-        email: 'anna@example.com',
-        telephone: '0987654321',
-      },
-    ];
-    loading.value = false;
-  }, 3000);
+  concourStore.fetchResultatsPubliee();
 });
+
+const formatDate = (date) => {
+  return date ? dayjs(date).format('DD/MM/YYYY') : 'Non spécifiée';
+};
 </script>
-
-

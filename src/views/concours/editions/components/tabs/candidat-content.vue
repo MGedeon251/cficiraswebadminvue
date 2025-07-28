@@ -27,22 +27,21 @@
                 <i class="mdi mdi-dots-vertical"></i>
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                      <a class="dropdown-item" href="#" @click.prevent="exportToExcel">
-                        <i class="mdi mdi-file-excel me-2"></i>Exporter Excel
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#" @click.prevent="printTable">
-                        <i class="mdi mdi-printer me-2"></i>Imprimer
-                      </a>
-                    </li>
-                    <li><hr class="dropdown-divider" /></li>
-                    <li>
-                      <a class="dropdown-item" href="#"><i class="mdi mdi-cog me-2"></i>Paramètres</a>
-                    </li>
-                  </ul>
-
+                <li>
+                  <a class="dropdown-item" href="#" @click.prevent="exportToExcel">
+                    <i class="mdi mdi-file-excel me-2"></i>Exporter Excel
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" @click.prevent="printTable">
+                    <i class="mdi mdi-printer me-2"></i>Imprimer
+                  </a>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="mdi mdi-cog me-2"></i>Paramètres</a>
+                </li>
+              </ul>
             </div>
             <div class="btn-group">
               <button
@@ -190,7 +189,7 @@ import { saveAs } from 'file-saver';
 const today = () => dayjs().format('DD/MM/YYYY à HH:mm');
 
 const exportToExcel = () => {
-  const data = candidats.value.map(c => ({
+  const data = candidats.value.map((c) => ({
     Matricule: c.matricule,
     Nom: c.nom,
     Prénom: c.prenom,
@@ -208,7 +207,9 @@ const exportToExcel = () => {
 };
 
 const printTable = () => {
-  const rows = candidats.value.map((c, index) => `
+  const rows = candidats.value
+    .map(
+      (c, index) => `
     <tr>
       <td>${index + 1}</td>
       <td>${c.matricule}</td>
@@ -217,7 +218,9 @@ const printTable = () => {
       <td>${c.tel}</td>
       <td>${formatDate(c.date_inscription)}</td>
     </tr>
-  `).join('');
+  `
+    )
+    .join('');
 
   const htmlContent = `
     <html>
@@ -296,5 +299,4 @@ const printTable = () => {
   printWindow.focus();
   printWindow.print();
 };
-
 </script>

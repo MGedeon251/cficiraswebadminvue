@@ -10,6 +10,7 @@ import {
   getResultatsConcours,
   getPublicationConcours,
   calculResultatConcour,
+  getResultatsPubliees,
   getStatistiqueConcoursGlobal,
 } from '@/api/gestions/gestionApi';
 
@@ -22,7 +23,7 @@ export const useConcourStore = defineStore('concourStore', {
     concoursDetail: null,
     epreuves: [],
     resultats: [],
-    publication: null,
+    publication: [],
     statistiques: null,
     loading: false,
   }),
@@ -186,6 +187,18 @@ export const useConcourStore = defineStore('concourStore', {
       } catch (e) {
         this.statistiques = null;
         return [];
+      } finally {
+        this.loading = false;
+      }
+    },
+    async fetchResultatsPubliee() {
+      const { notifyError } = useNotifier();
+      this.loading = true;
+      try {
+        const response = await getResultatsPubliees();
+        this.publication = response;
+      } catch (e) {
+        notifyError('Erreur lors de la récupération des concours.');
       } finally {
         this.loading = false;
       }
