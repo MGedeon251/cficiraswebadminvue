@@ -44,6 +44,21 @@ export const importCandidats = async (file, concoursId) => {
   }
 };
 
+export const importNotesCandidats = async (file, concoursId) => {
+  try {
+    if (!file) throw new Error('Fichier manquant');
+    if (!concoursId) throw new Error('ID Concours manquant');
+
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+    formData.append('concours_id', concoursId);
+    return await gestionFormService.post('/candidat/importNotes', formData);
+  } catch (error) {
+    console.error('Erreur import:', error);
+    throw error;
+  }
+};
+
 // API pour gérer les créneaux (emploi du temps)
 export const getCreneaux = () => gestionService.get('/creneaux');
 export const getCreneauById = (id) => gestionService.get(`/creneaux/${id}`);

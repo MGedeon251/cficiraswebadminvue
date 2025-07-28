@@ -68,7 +68,7 @@
                 @change="saveNote(resultat.candidat.id, epreuve.id, resultat.notes[epreuve.id])"
               />
             </td>
-            <td>{{ resultat.moyenne?.toFixed(2) || '-' }}</td>
+            <td>{{ resultat.moyenne || '-' }}</td>
             <td>{{ resultat.rang || '-' }}</td>
           </tr>
         </tbody>

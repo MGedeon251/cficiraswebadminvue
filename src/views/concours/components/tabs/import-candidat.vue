@@ -37,7 +37,7 @@
             </div>
 
             <!-- Tableau de prévisualisation -->
-            <div v-if="candidatsData.length" class="table-responsive">
+            <div v-if="candidatsData.length" class="notes-table-container">
               <h6>{{ candidatsData.length }} candidat(s) détecté(s)</h6>
               <table class="table table-bordered table-sm table-hover">
                 <thead class="table-light">
@@ -201,5 +201,12 @@ const validateCandidat = (cand) => {
   position: sticky;
   top: 0;
   background-color: #f8f9fa;
+}
+.notes-table-container {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 10px;
 }
 </style>

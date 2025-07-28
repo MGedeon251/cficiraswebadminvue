@@ -52,6 +52,7 @@ import Admins from '../views/admin/Administration.vue';
 import Finance from '../views/finances/Finance.vue';
 //PAGE  Not Found (ERREUR 404)
 import NotFound from '../views/errors/NotFound.vue';
+import ResultatsConcours from '../views/concours/resultats/resultats.vue'; // Résultats des concours  
 
 const routes = [
   // Route de login (pas besoin de layout global ici)
@@ -102,6 +103,7 @@ const routes = [
         props: true,
       },
       { path: '/edition-concours', name: 'InscriptionConcours', component: EditionConcours },
+      { path: '/resultats-concours', name: 'ResultatsConcours', component: ResultatsConcours},
       { path: '/edition-concours/edit/:id', name: 'EditionConcours', component: DetailsConcours },
 
       { path: '/planification-examens', name: 'Planification', component: Plannification },

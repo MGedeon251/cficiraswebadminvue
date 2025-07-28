@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia';
 import {
   getCandidatures,
+  getResultatsConcours,
   getCandidatureById,
   createCandidature,
   updateCandidature,
   deleteCandidature,
   importCandidats,
+  importNotesCandidats,
 } from '@/api/gestions/gestionApi';
 
 import { useNotifier } from '@/stores/messages/useNotifier';
@@ -111,6 +113,33 @@ export const useCandidatStore = defineStore('candidatStore', {
         }
       } catch (e) {
         notifyError(extractErrorMessage(e, "Erreur lors de l'importation des candidats."));
+      } finally {
+        this.loading = false;
+      }
+    },
+    async importNotesCandidats(file, concoursId) {
+      const { notifySuccess, notifyError } = useNotifier();
+      this.loading = true;
+      try {
+        const response = await importNotesCandidats(file, concoursId);
+        if (response.success) {
+          notifySuccess(`Importation réussie de ${response.data.imported} notes de candidat(s).`);
+        } else {
+          notifyError(
+            `Import partiel : ${response.data.imported} réussi(s), ${response.data.failed} échec(s).`
+          );
+        }
+        if (response.success && response.data.imported > 0) {
+          try {
+            await getResultatsConcours(concoursId);
+          } catch (fetchError) {
+            notifyError(
+              extractErrorMessage(fetchError, 'Erreur lors du rechargement des notes des candidats')
+            );
+          }
+        }
+      } catch (e) {
+        notifyError(extractErrorMessage(e, "Erreur lors de l'importation des notes des candidats."));
       } finally {
         this.loading = false;
       }
