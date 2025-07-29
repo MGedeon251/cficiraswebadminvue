@@ -35,8 +35,10 @@ import RapportExamens from '../views/examens/rapports/RapportExamens.vue'; // Ra
 //Gestion des concours
 import EditionConcours from '../views/concours/editions/Edition.vue';
 import DetailsConcours from '../views/concours/editions/components/details/Details.vue';
-import ResultatsConcours from '../views/concours/resultats/resultats.vue'; // Résultats des concours
+import ResultatsDetails from '../views/concours/resultats/components/details/Details.vue'; // Résultats des concours
 //Notes et résultats
+import ResultatsConcours from '../views/concours/resultats/resultats.vue'; // Résultats des concours
+
 import Notes from '../views/notes/Notes.vue'; // Page des notes
 import appNotes from '../views/notes/addNotes/main/notev1.vue';
 //Parcours et filières
@@ -105,6 +107,7 @@ const routes = [
       { path: '/edition-concours', name: 'InscriptionConcours', component: EditionConcours },
       { path: '/resultats-concours', name: 'ResultatsConcours', component: ResultatsConcours },
       { path: '/edition-concours/edit/:id', name: 'EditionConcours', component: DetailsConcours },
+      { path: '/resultats-concours/:id', name: 'ResultatsDetails', component: ResultatsDetails },
 
       { path: '/planification-examens', name: 'Planification', component: Plannification },
       { path: '/calendrier-examens', name: 'CalendrierExamens', component: Calendrier },

@@ -24,6 +24,9 @@ export const calculResultatConcour = (id, data) =>
   gestionService.get(`/concours/${id}/calculate`, data);
 
 export const getResultatsPubliees = () => gestionService.get(`/concours/resultats/publications`);
+export const getResultatsStats = (id) =>
+  gestionService.get(`/concours/${id}/resultats/statistiques`);
+export const getResultatsFinal = (id) => gestionService.get(`/concours/${id}/resultats/final`);
 
 // API pour gérer les candidatures
 export const getCandidatures = (id) => gestionService.get(`/candidat/concours/${id}`);

@@ -10,8 +10,10 @@ import {
   getResultatsConcours,
   getPublicationConcours,
   calculResultatConcour,
+  getResultatsStats,
   getResultatsPubliees,
   getStatistiqueConcoursGlobal,
+  getResultatsFinal,
 } from '@/api/gestions/gestionApi';
 
 import { useNotifier } from '@/stores/messages/useNotifier';
@@ -23,8 +25,9 @@ export const useConcourStore = defineStore('concourStore', {
     concoursDetail: null,
     epreuves: [],
     resultats: [],
+    resultats_finaux: [],
     publication: [],
-    statistiques: null,
+    statistiques: [],
     loading: false,
   }),
 
@@ -197,6 +200,30 @@ export const useConcourStore = defineStore('concourStore', {
       try {
         const response = await getResultatsPubliees();
         this.publication = response;
+      } catch (e) {
+        notifyError('Erreur lors de la récupération des concours.');
+      } finally {
+        this.loading = false;
+      }
+    },
+    async fetchStatsConcours(id) {
+      const { notifyError } = useNotifier();
+      this.loading = true;
+      try {
+        const response = await getResultatsStats(id);
+        this.statistiques = response;
+      } catch (e) {
+        notifyError('Erreur lors de la récupération des concours.');
+      } finally {
+        this.loading = false;
+      }
+    },
+    async fetchResultatsFinaux(id) {
+      const { notifyError } = useNotifier();
+      this.loading = true;
+      try {
+        const response = await getResultatsFinal(id);
+        this.resultats_finaux = response;
       } catch (e) {
         notifyError('Erreur lors de la récupération des concours.');
       } finally {

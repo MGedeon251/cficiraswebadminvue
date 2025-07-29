@@ -38,8 +38,7 @@
                     </td>
                     <td>
                       <a
-                        :href="`/resultats-concours/${resultat.id}`"
-                        target="_blank"
+                        :href="`/resultats-concours/${resultat.concours_id}`"
                         rel="noopener noreferrer"
                       >
                         <i class="mdi mdi-launch me-2"></i>
