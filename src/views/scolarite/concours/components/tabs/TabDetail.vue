@@ -82,6 +82,7 @@ import Epreuve from './epreuve-content.vue'
 import Resultat from './resultat-content.vue'
 import Candidats from './candidat-content.vue'
 
+
 // Récupérer l'ID du concours depuis la route
 const route = useRoute()
 const concoursId = ref(null)
