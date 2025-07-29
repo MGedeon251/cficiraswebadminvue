@@ -50,7 +50,6 @@
             <th>Candidat</th>
             <th v-for="epreuve in epreuves" :key="epreuve.id">{{ epreuve.designation }}</th>
             <th>Moyenne</th>
-            <th>Rang</th>
           </tr>
         </thead>
         <tbody>
@@ -69,7 +68,6 @@
               />
             </td>
             <td>{{ resultat.moyenne || '-' }}</td>
-            <td>{{ resultat.rang || '-' }}</td>
           </tr>
         </tbody>
       </table>

@@ -1,7 +1,7 @@
 <template>
-  <div class="container my-4">
+      <div class="row">
+      <div class="col-md-12 grid-margin">
     <h4 class="mb-3">Détails du Concours</h4>
-
     <div v-if="concours" class="card mb-4">
       <div class="card-body">
         <p><strong>Intitulé :</strong> {{ concours.intitule }}</p>
@@ -11,48 +11,11 @@
         <p><strong>Nombre d'épreuves :</strong> {{ concours.total_epreuves }}</p>
       </div>
     </div>
-
     <div>
-      <h5 class="mb-3">Résultats finaux des candidats</h5>
-
-      <table class="table table-hover table-bordered table-sm">
-        <thead class="table-light">
-          <tr>
-            <th>#</th>
-            <th>Matricule</th>
-            <th>Nom</th>
-            <th>Prénom</th>
-            <th>Sexe</th>
-            <th>Moyenne</th>
-            <th>Rang</th>
-            <th>Mention</th>
-            <th>Statut</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(candidat, index) in resultats" :key="candidat.candidat_id">
-            <td>{{ index + 1 }}</td>
-            <td>{{ candidat.matricule }}</td>
-            <td>{{ candidat.nom }}</td>
-            <td>{{ candidat.prenom }}</td>
-            <td>{{ candidat.sexe }}</td>
-            <td>{{ candidat.moyenne }}</td>
-            <td>{{ candidat.rang }}</td>
-            <td>
-              <span :class="mentionClass(candidat.observation)">
-                {{ candidat.observation }}
-              </span>
-            </td>
-            <td>
-              <span :class="statutClass(candidat.statut)">
-                {{ candidat.statut }}
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
+</div>
+  
 </template>
 
 <script setup>

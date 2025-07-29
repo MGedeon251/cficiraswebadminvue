@@ -197,31 +197,27 @@
               </form>
             </a-tab-pane>
             <a-tab-pane key="2" tab="Dossier" force-render>
-              <div>
-                <a-upload
-                  v-model:file-list="fileList"
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                  list-type="picture"
-                >
-                  <a-button>
-                    <upload-outlined></upload-outlined>
-                    upload
-                  </a-button>
-                </a-upload>
-                <br />
-                <br />
-                <a-upload
-                  v-model:file-list="fileList1"
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                  list-type="picture"
-                  class="upload-list-inline"
-                >
-                  <a-button>
-                    <upload-outlined></upload-outlined>
-                    upload
-                  </a-button>
-                </a-upload>
+              <p class="text-muted">Déposer les pièces justificatives</p>
+              <div v-for="docType in dossierTypes" :key="docType.key" class="mb-3">
+                <label class="form-label">{{ docType.label }}</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  :accept="docType.accept"
+                  @change="(e) => handleDossierUpload(e, docType.key)"
+                />
               </div>
+
+              <ul class="list-group">
+                <li
+                  v-for="doc in candidat.dossiers"
+                  :key="doc.nom"
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  {{ doc.nom }}
+                  <span class="badge bg-secondary">{{ (doc.taille / 1024).toFixed(2) }} KB</span>
+                </li>
+              </ul>
             </a-tab-pane>
           </a-tabs>
         </div>
@@ -268,6 +264,12 @@ function getEmptyCandidat() {
     photourl: '',
   };
 }
+const dossierTypes = [
+  { key: 'extrait_naissance', label: "Extrait d'acte de naissance", accept: 'application/pdf' },
+  { key: 'bac_equivalent', label: "Bac ou équivalent", accept: 'application/pdf' },
+  { key: 'arrete_derniere_promotion', label: "Arrêté de dernière promotion", accept: 'application/pdf' },
+  { key: 'autorisation_concourir', label: "Autorisation de concourir", accept: 'application/pdf' },
+];
 
 const getInitials = (nom, prenom) => {
   if (!nom && !prenom) return 'N/A';
