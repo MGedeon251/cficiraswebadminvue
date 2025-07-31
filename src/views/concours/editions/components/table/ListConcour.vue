@@ -9,19 +9,20 @@
           <th>Date de Début</th>
           <th>Date de Fin</th>
           <th>Statut</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="concour in concours" :key="concour.id">
-          <td>{{ concour.id }}</td>
+        <tr v-for="(concour, index) in concours" :key="concour.id">
+          <td>{{ index + 1 }}</td>
           <td>{{ concour.designation }}</td>
-          <td>{{ concour.type_concours }}</td>
+          <td>{{ concour.type_code }}</td>
           <td>{{ formatDate(concour.date_debut) }}</td>
           <td>{{ formatDate(concour.date_fin) }}</td>
           <td>
             <span
               class="status-badge"
-              :class="concour.statut === 'active' ? 'status-active' : 'status-draft'"
+              :class="concour.statut === 'ouvert' ? 'status-active' : 'status-draft'"
             >
               {{ concour.statut }}
             </span>

@@ -18,7 +18,12 @@ export const useMessageStore = defineStore('messageStore', {
 
   actions: {
     addMessage(message, type = 'success') {
-      this.messages.push({ message, type });
+      const newMessage = {
+        id: Date.now(),
+        message,
+        type,
+      };
+      this.messages.push(newMessage);
 
       const display = {
         success: toast.success,
@@ -27,9 +32,18 @@ export const useMessageStore = defineStore('messageStore', {
         error: toast.error,
       };
 
-      (display[type] || toast)(message, defaultOptions);
-    },
+      const toastFunc = display[type];
 
+      if (toastFunc) {
+        toastFunc(message, defaultOptions);
+      } else {
+        // fallback neutre
+        toast(message, {
+          ...defaultOptions,
+          type: 'default',
+        });
+      }
+    },
     clearMessages() {
       this.messages = [];
     },

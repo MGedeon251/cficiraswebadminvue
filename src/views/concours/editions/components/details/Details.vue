@@ -5,9 +5,9 @@
         <!-- En-tête -->
         <div class="d-flex justify-content-between align-items-center mb-4">
           <div>
-            <h2 class="page-title">Details concours</h2>
+            <h2 class="page-title">Editions concours</h2>
             <p class="page-subtitle text-muted">
-              Gestion des sessions d'examen et répartition des salles/matières
+              Details des concours et editions candidatss, epreuves et resultats
             </p>
           </div>
           <div class="d-flex gap-2">
@@ -49,7 +49,9 @@
                   <polyline points="7 10 12 15 17 10"></polyline>
                   <line x1="12" y1="15" x2="12" y2="3"></line></svg></span
             ></a>
-            <router-link class="btn btn-outline-secondary" to="/etudiants">⬅ Retour</router-link>
+            <router-link class="btn btn-outline-secondary" to="/edition-concours"
+              >⬅ Retour</router-link
+            >
           </div>
         </div>
         <!-- Carte Principale -->
@@ -68,8 +70,6 @@
 import { ref, computed, onMounted } from 'vue';
 import TabDetail from '../tabs/TabDetail.vue';
 import SkeletonLoader from '@/components/SkeletonLoader.vue';
-
-// Computed
 </script>
 
 <style scoped>

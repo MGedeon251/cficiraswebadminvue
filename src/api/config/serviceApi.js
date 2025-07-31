@@ -1,13 +1,25 @@
 import { useErrorStore } from '@/stores/messages/errorStore';
 
+// Fonction de traitement des erreurs
+function handleApiError(error) {
+  // Stocker dans Pinia
+  try {
+    const errorStore = useErrorStore();
+    errorStore.addError(error);
+  } catch (e) {
+    console.warn('Erreur non traitée dans errorStore', error);
+  }
+
+  throw error; // Re-propagation pour traitement dans le composant si nécessaire
+}
+// /api/config/serviceApi.js
 const buildService = (client) => ({
   get: async (url, params = {}) => {
     try {
       const response = await client.get(url, { params });
       return response.data;
     } catch (error) {
-      useErrorStore().addError(error);
-      throw error;
+      throw error; // juste throw, pas de toast ici
     }
   },
 
@@ -16,7 +28,6 @@ const buildService = (client) => ({
       const response = await client.post(url, data);
       return response.data;
     } catch (error) {
-      useErrorStore().addError(error);
       throw error;
     }
   },
@@ -26,7 +37,6 @@ const buildService = (client) => ({
       const response = await client.put(url, data);
       return response.data;
     } catch (error) {
-      useErrorStore().addError(error);
       throw error;
     }
   },
@@ -36,7 +46,6 @@ const buildService = (client) => ({
       const response = await client.delete(url);
       return response.data;
     } catch (error) {
-      useErrorStore().addError(error);
       throw error;
     }
   },

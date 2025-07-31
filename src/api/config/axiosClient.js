@@ -1,9 +1,10 @@
+// config/axiosClient.js
 import axios from 'axios';
 
-export const createApiClient = (prefix = '') => {
+export const createApiClient = (prefix = '', useJson = true) => {
   const instance = axios.create({
     baseURL: `${import.meta.env.VITE_API_URL}/api/v1${prefix}`,
-    headers: { 'Content-Type': 'application/json' },
+    headers: useJson ? { 'Content-Type': 'application/json' } : {},
   });
 
   instance.interceptors.request.use((config) => {

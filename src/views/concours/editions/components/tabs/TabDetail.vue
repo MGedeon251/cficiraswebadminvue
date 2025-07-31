@@ -60,7 +60,7 @@
         <DetailsConcours />
       </div>
       <div class="tab-pane fade" id="epreuve" role="tabpanel" aria-labelledby="epreuve-tab">
-        <Epreuve/>
+        <Epreuve />
       </div>
       <div class="tab-pane fade" id="candidat" role="tabpanel" aria-labelledby="candidat-tab">
         <Candidats />
@@ -75,8 +75,8 @@
 <script setup>
 import DetailsConcours from './detail-content.vue';
 import Epreuve from './epreuve-content.vue';
-import annee from './resultat-content.vue';
-import StatsRapport from './StatsRapport.vue';
+import annee from './resultat1-content.vue';
+import Resultat from './resultat-content.vue';
 import Candidats from './candidat-content.vue';
 </script>
 

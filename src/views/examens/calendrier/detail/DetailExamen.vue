@@ -143,7 +143,6 @@
                   </table>
                 </div>
               </div>
-
               <button class="btn btn-outline-primary mt-3" @click="addEpreuve">
                 + Ajouter une épreuve
               </button>
