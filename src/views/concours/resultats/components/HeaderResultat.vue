@@ -4,7 +4,7 @@
       <div class="d-flex justify-content-between flex-wrap">
         <div class="d-flex align-items-end flex-wrap">
           <div class="me-md-3 me-xl-5">
-            <h2>Resultat concours</h2>
+            <h2>Resultats de concours</h2>
             <p class="mb-md-0">Resultats et publications concours</p>
           </div>
           <div class="d-flex">
