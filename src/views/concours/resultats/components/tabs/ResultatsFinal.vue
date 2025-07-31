@@ -46,14 +46,14 @@
           </div>
           <div class="btn-group">
             <button
-              class="btn btn-success mt-2 mt-xl-0"
+              class="btn btn-secondary mt-xl-0"
               data-bs-toggle="modal"
               data-bs-target="#exampleModal"
             >
-              + Publier pdf
+              Generer pdf
             </button>
             <button
-              class="btn btn-success dropdown-toggle dropdown-toggle-split"
+              class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
               data-bs-toggle="dropdown"
             >
               <span class="visually-hidden">Toggle Dropdown</span>
@@ -116,8 +116,6 @@
               v-model:current="current"
               :total="resultats.length"
               :page-size="pageSize"
-              @change="onPageChange"
-              show-size-changer
               :show-total="showTotal"
             />
           </div>
