@@ -1,71 +1,96 @@
 <template>
-  <div class="stats-container">
-    <h2>Statistiques du Concours</h2>
-
-    <!-- Chargement -->
-    <div v-if="loading" class="loading">
-      <p>Chargement des statistiques...</p>
-    </div>
-
-    <!-- Erreur -->
-    <div v-if="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
-
-    <!-- Statistiques principales -->
-    <div v-if="statsData" class="stats-grid">
-      <div class="stat-card">
-        <h3>Candidats</h3>
-        <div class="stat-value">{{ statsData.total_candidats }}</div>
-        <div class="stat-details">
-          <span class="male">Hommes: {{ statsData.candidats_homme }}</span>
-          <span class="female">Femmes: {{ statsData.candidats_femme }}</span>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <h3>Épreuves</h3>
-        <div class="stat-value">{{ statsData.total_epreuves }}</div>
-      </div>
-
-      <div class="stat-card">
-        <h3>Notes saisies</h3>
-        <div class="stat-value">{{ statsData.notes_saisies }}</div>
-      </div>
-    </div>
-
-    <!-- Détails des épreuves -->
-    <div v-if="statsData?.notes_epreuves?.length" class="epreuves-section">
-      <h3>Avancement par épreuve</h3>
-      <div class="progress-grid">
-        <div
-          v-for="epreuve in statsData.notes_epreuves"
-          :key="epreuve.epreuve_id"
-          class="progress-card"
-        >
-          <h4>{{ epreuve.intitule }}</h4>
-          <div class="progress-container">
-            <div class="progress-bar">
-              <div
-                class="progress-fill"
-                :style="{ width: calculatePercentage(epreuve) + '%' }"
-              ></div>
-            </div>
-            <span class="progress-text">
-              {{ epreuve.notes_enregistrees }} / {{ epreuve.notes_attendues }} ({{
-                calculatePercentage(epreuve)
-              }}%)
-            </span>
+  <div class="row">
+    <div class="col-md-12 grid-margin">
+      <div class="d-flex justify-content-between flex-wrap">
+        <div class="d-flex align-items-end flex-wrap">
+          <div class="me-md-3 me-xl-5">
+            <h3>Statistiques détaillées</h3>
+            <p>Analyse des résultats du concours</p>
           </div>
         </div>
       </div>
+      <div class="d-flex justify-content-end mb-2">
+        <button class="btn btn-outline-dark me-2" @click="refreshStats">
+        Actualiser les statistiques
+      </button>
+      <button class="btn btn-outline-dark me-2" @click="exportToExcel">
+        Exporter en Excel
+      </button>
     </div>
-
-    <button @click="refreshStats" class="refresh-button">Actualiser les statistiques</button>
+      <div v-if="statsData" class="mt-3">
+        <table class="table table-bordered table-striped mb-5">
+          <thead>
+            <tr>
+              <th>Total candidats</th>
+              <th>Hommes</th>
+              <th>Femmes</th>
+              <th>Nombre d'épreuves</th>
+              <th>Notes saisies</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ statsData.total_candidats }}</td>
+              <td>{{ statsData.candidats_homme }}</td>
+              <td>{{ statsData.candidats_femme }}</td>
+              <td>{{ statsData.total_epreuves }}</td>
+              <td>{{ statsData.notes_saisies }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th colspan="5" class="text-center">
+                Statistiques au {{ new Date().toLocaleDateString() }}
+              </th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div v-if="statsData?.notes_epreuves?.length">
+        <h4 class="mb-3">Epreuves et Notes</h4>
+        <table class="table table-bordered table-striped mb-5">
+          <thead>
+            <tr>
+              <th>Épreuve</th>
+              <th>Notes enregistrées</th>
+              <th>Notes attendues</th>
+              <th>Progression</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="epreuve in statsData.notes_epreuves" :key="epreuve.epreuve_id">
+              <td>{{ epreuve.intitule }}</td>
+              <td>{{ epreuve.notes_enregistrees }}</td>
+              <td>{{ epreuve.notes_attendues }}</td>
+              <td>
+                {{ calculatePercentage(epreuve) }}%
+                <div class="progress mt-1">
+                  <div
+                    role="progressbar"
+                    :style="{ width: calculatePercentage(epreuve) + '%' }"
+                    :aria-valuenow="calculatePercentage(epreuve)"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th colspan="4" class="text-center">Fin des données par épreuve</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div></div>
+    </div>
   </div>
 </template>
 
 <script setup>
+import * as XLSX from 'xlsx'
+import { saveAs } from 'file-saver'
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useConcourStore } from '@/stores/gestionStores/concourStore';
@@ -97,6 +122,39 @@ const loadStats = async () => {
     loading.value = false;
   }
 };
+
+
+// Export Excel
+const exportToExcel = () => {
+  const generalStats = [
+    ['Statistique', 'Valeur'],
+    ['Total Candidats', statsData.value.total_candidats],
+    ['Hommes', statsData.value.candidats_homme],
+    ['Femmes', statsData.value.candidats_femme],
+    ['Total Épreuves', statsData.value.total_epreuves],
+    ['Notes Saisies', statsData.value.notes_saisies]
+  ]
+
+  const epreuvesStats = [
+    ['Épreuve', 'Notes enregistrées', 'Notes attendues', 'Pourcentage'],
+    ...statsData.value.notes_epreuves.map(e => [
+      e.intitule,
+      e.notes_enregistrees,
+      e.notes_attendues,
+      `${calculatePercentage(e)}%`
+    ])
+  ]
+
+  const wb = XLSX.utils.book_new()
+  const ws1 = XLSX.utils.aoa_to_sheet(generalStats)
+  const ws2 = XLSX.utils.aoa_to_sheet(epreuvesStats)
+
+  XLSX.utils.book_append_sheet(wb, ws1, 'Statistiques Générales')
+  XLSX.utils.book_append_sheet(wb, ws2, 'Par Épreuve')
+
+  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
+  saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'statistiques_concours.xlsx')
+}
 
 // Actualiser les stats
 const refreshStats = () => {

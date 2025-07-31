@@ -266,9 +266,13 @@ function getEmptyCandidat() {
 }
 const dossierTypes = [
   { key: 'extrait_naissance', label: "Extrait d'acte de naissance", accept: 'application/pdf' },
-  { key: 'bac_equivalent', label: "Bac ou équivalent", accept: 'application/pdf' },
-  { key: 'arrete_derniere_promotion', label: "Arrêté de dernière promotion", accept: 'application/pdf' },
-  { key: 'autorisation_concourir', label: "Autorisation de concourir", accept: 'application/pdf' },
+  { key: 'bac_equivalent', label: 'Bac ou équivalent', accept: 'application/pdf' },
+  {
+    key: 'arrete_derniere_promotion',
+    label: 'Arrêté de dernière promotion',
+    accept: 'application/pdf',
+  },
+  { key: 'autorisation_concourir', label: 'Autorisation de concourir', accept: 'application/pdf' },
 ];
 
 const getInitials = (nom, prenom) => {

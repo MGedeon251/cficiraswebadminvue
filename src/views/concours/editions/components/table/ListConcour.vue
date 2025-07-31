@@ -9,6 +9,7 @@
           <th>Date de Début</th>
           <th>Date de Fin</th>
           <th>Statut</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
