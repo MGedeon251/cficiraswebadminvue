@@ -46,7 +46,7 @@
           role="tab"
           aria-controls="resultat"
           aria-selected="false"
-          >Resultats</a
+          >Notes et resultats</a
         >
       </li>
     </ul>
