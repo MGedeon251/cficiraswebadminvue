@@ -94,11 +94,8 @@
                 <td>{{ candidat.tel }}</td>
                 <td>{{ formatDate(candidat.date_inscription) }}</td>
                 <td>
-                  <ItemActions
+                  <ItemActionsCandidat
                     :item="candidat"
-                    concourRoute="/details-candidat/"
-                    :showAdd="false"
-                    editModalTarget="#editModuleModal"
                     @edit="editModule"
                     @delete="confirmDelete"
                   />
@@ -125,7 +122,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import dayjs from 'dayjs';
-import ItemActions from '../details/ItemActions.vue';
+import ItemActionsCandidat from '../details/ItemActionsCandidat.vue';
 import Pagination from '@/components/shared/Pagination.vue';
 import AddCandidat from '../modal/addCandidat.vue';
 import ImportModal from './import-candidat.vue';

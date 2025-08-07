@@ -22,7 +22,11 @@
           <td>
             <span
               class="status-badge"
-              :class="concour.statut === 'ouvert' ? 'status-active' : 'status-draft'"
+              :class="{
+                'status-active': concour.statut === 'ouvert',
+                'status-draft': concour.statut !== 'ouvert' && concour.statut !== 'planifié',
+                'status-warning': concour.statut === 'planifié'
+              }"
             >
               {{ concour.statut }}
             </span>
@@ -95,5 +99,8 @@ const formatDate = (date) => {
 }
 .status-active {
   background-color: #0d6efd;
+}
+.status-warning{
+  background-color: #ffcb1f;
 }
 </style>
