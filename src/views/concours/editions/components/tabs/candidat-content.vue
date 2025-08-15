@@ -125,7 +125,7 @@ import dayjs from 'dayjs';
 import ItemActionsCandidat from '../details/ItemActionsCandidat.vue';
 import Pagination from '@/components/shared/Pagination.vue';
 import AddCandidat from '../modal/addCandidat.vue';
-import ImportModal from './import-candidat.vue';
+import ImportModal from '../modal/ImportCandidat.vue';
 const showImportModal = ref(false);
 
 //données des candidats

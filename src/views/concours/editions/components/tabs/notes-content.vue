@@ -90,8 +90,8 @@ import { useConcourStore } from '@/stores/gestionStores/concourStore';
 import { useNotifier } from '@/stores/messages/useNotifier';
 import * as XLSX from 'xlsx';
 
-import ImportModal from './ImportModal.vue';
-import StatsModal from './StatsModal.vue';
+import ImportModal from '../modal/ImportNotesModal.vue';
+import StatsModal from '../modal/StatsModal.vue';
 
 const route = useRoute();
 const concoursId = route.params.id;
