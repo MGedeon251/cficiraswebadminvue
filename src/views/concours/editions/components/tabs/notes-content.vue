@@ -10,14 +10,14 @@
             </div>
           </div>
           <div class="d-flex align-items-end flex-wrap">
-            <button class="btn btn-primary me-2" @click="showImportModal = true">
-              <i class="mdi mdi-upload me-1"></i> Importer notes
+            <button class="btn btn-outline-dark me-2" @click="showImportModal = true">
+              Importer notes
             </button>
-            <button class="btn btn-success me-2" @click="handleCalculate">
-              <i class="mdi mdi-calculator me-1"></i> Calculer moyennes
+            <button class="btn btn-outline-dark me-2" @click="handleCalculate">
+              Calculer moyennes
             </button>
-            <button class="btn btn-info me-2" @click="showStatsModal = true">
-              <i class="mdi mdi-chart-bar me-1"></i> Statistiques
+            <button class="btn btn-outline-dark me-2" @click="showStatsModal = true">
+             Statistiques
             </button>
             <div class="dropdown">
               <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
@@ -87,6 +87,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useConcourStore } from '@/stores/gestionStores/concourStore';
+import { useCandidatStore } from '@/stores/gestionStores/candidatStore';
 import { useNotifier } from '@/stores/messages/useNotifier';
 import * as XLSX from 'xlsx';
 
@@ -96,6 +97,7 @@ import StatsModal from '../modal/StatsModal.vue';
 const route = useRoute();
 const concoursId = route.params.id;
 const concourStore = useConcourStore();
+const candidatStore = useCandidatStore();
 const { notifySuccess, notifyError } = useNotifier();
 
 const concours = computed(() => concourStore.concoursDetail);
@@ -140,8 +142,8 @@ onMounted(() => {
 // ✅ Enregistrement d'une note
 const saveNote = async (candidatId, epreuveId, note) => {
   try {
-    await concourStore.updateNote({ candidatId, epreuveId, note });
-    notifySuccess('Note mise à jour');
+    await candidatStore.AddUpdateNotes({ candidatId, epreuveId, note });
+    //notifySuccess('Note mise à jour');
   } catch (err) {
     notifyError('Erreur lors de la mise à jour de la note');
   }
@@ -151,7 +153,7 @@ const saveNote = async (candidatId, epreuveId, note) => {
 const handleCalculate = async () => {
   try {
     await concourStore.calculerResultatConcour(concoursId);
-    notifySuccess('Moyennes et rangs calculés');
+    //notifySuccess('Moyennes et rangs calculés');
     await concourStore.fetchResultatsConcours(concoursId); // Refresh
   } catch (e) {
     notifyError('Erreur lors du calcul des moyennes');
