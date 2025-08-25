@@ -20,6 +20,7 @@
                       </span>
                     </div>
                     <input
+                      v-model="credentials.email"
                       type="text"
                       class="form-control form-control-lg border-left-0"
                       id="exampleInputEmail"
@@ -40,6 +41,7 @@
                       class="form-control form-control-lg border-left-0"
                       id="exampleInputPassword"
                       placeholder="Password"
+                      v-model="credentials.password"
                     />
                   </div>
                 </div>
@@ -52,12 +54,10 @@
                   </div>
                   <a href="#" class="auth-link text-black">Mot de passe oublié ?</a>
                 </div>
-                <div class="my-3">
-                  <a
-                    class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"
-                    href="/home"
-                    >Connexion</a
-                  >
+               <div class="my-3">
+                  <button @click.prevent="handleLogin" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">
+                    Connexion
+                  </button>
                 </div>
                 <div class="text-center mt-4 font-weight-light">
                   Vous n'avez pas de compte ? <a href="/auth/register" class="text-primary">soummettre</a>
@@ -77,3 +77,21 @@
     <!-- page-body-wrapper ends -->
   </div>
 </template>
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/authStore/authStore";
+
+const authStore = useAuthStore();
+const router = useRouter();
+const credentials = ref({ email: "", password: "" });
+
+const handleLogin = async () => {
+  await authStore.loginUser(credentials.value);
+   // Appelle isAuthenticated comme une fonction
+   // Accède à isAuthenticated directement comme une propriété, pas comme une fonction
+  if (authStore.isAuthenticated) {
+    router.push("/dashboard"); // Redirection après connexion réussie
+  }
+};
+</script>
