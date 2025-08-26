@@ -53,7 +53,11 @@
       </SidebarDropdown>
       <SidebarItem icon="mdi-briefcase" title="Services" to="/administration" />
 
-      <SidebarDropdown icon="mdi-clipboard-text" title="Coordination académique" collapseId="coordination">
+      <SidebarDropdown
+        icon="mdi-clipboard-text"
+        title="Coordination académique"
+        collapseId="coordination"
+      >
         <SidebarSubItem title="Cycles & niveaux" to="/cycles" />
         <SidebarSubItem title="Thèmes & mémoires" to="/memoires" />
         <SidebarSubItem title="Soutenances" to="/soutenances" />
@@ -80,11 +84,7 @@
 </template>
 
 <script setup>
-import SidebarItem from './SidebarItem.vue'
-import SidebarDropdown from './SidebarDropdown.vue'
-import SidebarSubItem from './SidebarSubItem.vue'
+import SidebarItem from './SidebarItem.vue';
+import SidebarDropdown from './SidebarDropdown.vue';
+import SidebarSubItem from './SidebarSubItem.vue';
 </script>
-
-
-
-

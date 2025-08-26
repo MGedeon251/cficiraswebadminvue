@@ -5,14 +5,13 @@ import { useRouter } from 'vue-router';
 import { useNotifier } from '@/stores/messages/useNotifier';
 import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
 
-
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
     token: localStorage.getItem('token') || null,
-    status: 'idle',   // idle | loading | success | error
+    status: 'idle', // idle | loading | success | error
     error: null,
-    lastFetch: null,  // cache de la dernière récupération user
+    lastFetch: null, // cache de la dernière récupération user
   }),
 
   actions: {

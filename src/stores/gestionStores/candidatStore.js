@@ -8,7 +8,7 @@ import {
   deleteCandidature,
   importCandidats,
   importNotesCandidats,
-  addOrUpdatesNotes
+  addOrUpdatesNotes,
 } from '@/api/gestions/gestionApi';
 
 import { useNotifier } from '@/stores/messages/useNotifier';

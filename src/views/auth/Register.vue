@@ -8,7 +8,7 @@
               <div class="brand-logo">
                 <img src="/img/photo-format.ico" alt="logo" />
               </div>
-              <h4>Soummission demande d'un compte </h4>
+              <h4>Soummission demande d'un compte</h4>
               <h6 class="font-weight-light">Join us today! It takes only few steps</h6>
               <form class="pt-3">
                 <div class="form-group">
@@ -19,7 +19,11 @@
                         <i class="mdi mdi-account-outline text-primary"></i>
                       </span>
                     </div>
-                    <input type="text" class="form-control form-control-lg border-left-0" placeholder="Username">
+                    <input
+                      type="text"
+                      class="form-control form-control-lg border-left-0"
+                      placeholder="Username"
+                    />
                   </div>
                 </div>
                 <div class="form-group">
@@ -30,7 +34,11 @@
                         <i class="mdi mdi-email-outline text-primary"></i>
                       </span>
                     </div>
-                    <input type="email" class="form-control form-control-lg border-left-0" placeholder="Email">
+                    <input
+                      type="email"
+                      class="form-control form-control-lg border-left-0"
+                      placeholder="Email"
+                    />
                   </div>
                 </div>
                 <div class="form-group">
@@ -52,19 +60,28 @@
                         <i class="mdi mdi-lock-outline text-primary"></i>
                       </span>
                     </div>
-                    <input type="password" class="form-control form-control-lg border-left-0" id="exampleInputPassword" placeholder="Password">                        
+                    <input
+                      type="password"
+                      class="form-control form-control-lg border-left-0"
+                      id="exampleInputPassword"
+                      placeholder="Password"
+                    />
                   </div>
                 </div>
                 <div class="mb-4">
                   <div class="form-check">
                     <label class="form-check-label text-muted">
-                      <input type="checkbox" class="form-check-input">
+                      <input type="checkbox" class="form-check-input" />
                       I agree to all Terms & Conditions
                     </label>
                   </div>
                 </div>
                 <div class="mt-3">
-                  <a class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" href="/home">SOUMETTRE</a>
+                  <a
+                    class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"
+                    href="/home"
+                    >SOUMETTRE</a
+                  >
                 </div>
                 <div class="text-center mt-4 font-weight-light">
                   Already have an account? <a href="login.html" class="text-primary">Login</a>
@@ -73,7 +90,9 @@
             </div>
           </div>
           <div class="col-lg-6 register-half-bg d-flex flex-row">
-            <p class="text-white font-weight-medium text-center flex-grow align-self-end">Copyright &copy; 2020  All rights reserved.</p>
+            <p class="text-white font-weight-medium text-center flex-grow align-self-end">
+              Copyright &copy; 2020 All rights reserved.
+            </p>
           </div>
         </div>
       </div>

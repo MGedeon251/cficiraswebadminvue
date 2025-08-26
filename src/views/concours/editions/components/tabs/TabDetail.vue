@@ -60,10 +60,10 @@
         <DetailsConcours />
       </div>
       <div class="tab-pane fade" id="epreuve" role="tabpanel" aria-labelledby="epreuve-tab">
-        <Epreuve/>
+        <Epreuve />
       </div>
       <div class="tab-pane fade" id="candidat" role="tabpanel" aria-labelledby="candidat-tab">
-        <Candidats/>
+        <Candidats />
       </div>
       <div class="tab-pane fade" id="resultat" role="tabpanel" aria-labelledby="resultat-tab">
         <Resultat />

@@ -20,9 +20,7 @@
       </div>
     </div>
 
-    <div
-      class="navbar-menu-wrapper d-flex align-items-center justify-content-end"
-    >
+    <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
       <!-- Barre de recherche -->
       <ul class="navbar-nav mr-lg-4 w-100">
         <li class="nav-item nav-search d-none d-lg-block w-100">
@@ -60,9 +58,7 @@
             class="dropdown-menu dropdown-menu-right navbar-dropdown"
             aria-labelledby="notificationDropdown"
           >
-            <p class="mb-0 font-weight-normal float-left dropdown-header">
-              Notifications
-            </p>
+            <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
           </div>
         </li>
 
@@ -114,25 +110,24 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { useAuthStore } from '@/stores/authStore/authStore'
-import { storeToRefs } from 'pinia'
-import { useRouter } from 'vue-router'
+import { onMounted } from 'vue';
+import { useAuthStore } from '@/stores/authStore/authStore';
+import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 
-const authStore = useAuthStore()
-const { user, isAuthenticated } = storeToRefs(authStore)
-const router = useRouter()
+const authStore = useAuthStore();
+const { user, isAuthenticated } = storeToRefs(authStore);
+const router = useRouter();
 
 const handleLogout = async () => {
-  await authStore.logoutUser()
-  router.push('/auth/login')
-}
+  await authStore.logoutUser();
+  router.push('/auth/login');
+};
 
 // Assure que le user est chargé si token présent
 onMounted(async () => {
   if (authStore.token && !authStore.user) {
-    await authStore.fetchCurrentUser()
+    await authStore.fetchCurrentUser();
   }
-})
+});
 </script>
-

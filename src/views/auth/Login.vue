@@ -54,13 +54,17 @@
                   </div>
                   <a href="#" class="auth-link text-black">Mot de passe oublié ?</a>
                 </div>
-               <div class="my-3">
-                  <button @click.prevent="handleLogin" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">
+                <div class="my-3">
+                  <button
+                    @click.prevent="handleLogin"
+                    class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"
+                  >
                     Connexion
                   </button>
                 </div>
                 <div class="text-center mt-4 font-weight-light">
-                  Vous n'avez pas de compte ? <a href="/auth/register" class="text-primary">soummettre</a>
+                  Vous n'avez pas de compte ?
+                  <a href="/auth/register" class="text-primary">soummettre</a>
                 </div>
               </form>
             </div>
@@ -78,20 +82,20 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/authStore/authStore";
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/authStore/authStore';
 
 const authStore = useAuthStore();
 const router = useRouter();
-const credentials = ref({ email: "", password: "" });
+const credentials = ref({ email: '', password: '' });
 
 const handleLogin = async () => {
   await authStore.loginUser(credentials.value);
-   // Appelle isAuthenticated comme une fonction
-   // Accède à isAuthenticated directement comme une propriété, pas comme une fonction
+  // Appelle isAuthenticated comme une fonction
+  // Accède à isAuthenticated directement comme une propriété, pas comme une fonction
   if (authStore.isAuthenticated) {
-    router.push("/home"); // Redirection après connexion réussie
+    router.push('/home'); // Redirection après connexion réussie
   }
 };
 </script>
