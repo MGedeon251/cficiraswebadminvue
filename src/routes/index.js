@@ -59,9 +59,9 @@ import NotFound from '../views/errors/NotFound.vue';
 
 const routes = [
   // Route de login (pas besoin de layout global ici)
-  { path: '/auth/login', name: 'Login', component: Login },
-  { path: '/auth/register', name: 'Register', component: Register },
-  { path: '/auth/new-password', name: 'NewPassword', component: Login },
+  { path: '/auth/login', name: 'Login', component: Login, meta: { public: true } },
+  { path: '/auth/register', name: 'Register', component: Register, meta: { public: true } },
+  { path: '/auth/new-password', name: 'NewPassword', component: Login, meta: { public: true } },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound, meta: { public: true } },
   { path: '/addNotes', name: 'appNotes', component: appNotes },
   // Routes qui utilisent le layout global DefaultLayout
@@ -123,6 +123,23 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+// Guard global: protège les routes qui nécessitent une authentification
+router.beforeEach((to, from, next) => {
+  const isPublic = to.matched.some((record) => record.meta && record.meta.public);
+  const isLoggedIn = !!localStorage.getItem('token');
+
+  if (!isPublic && !isLoggedIn) {
+    return next({ path: '/auth/login', query: { redirect: to.fullPath } });
+  }
+
+  // Redirige un utilisateur connecté loin des pages d'auth
+  if (isLoggedIn && to.path.startsWith('/auth')) {
+    return next('/');
+  }
+
+  return next();
 });
 
 export default router;
