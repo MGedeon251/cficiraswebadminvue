@@ -68,6 +68,7 @@ const routes = [
   {
     path: '/',
     component: DefaultLayout, // Enveloppe tout le contenu avec le DefaultLayout
+    meta: { requiresAuth: true }, // Toutes les routes enfants hériteront de ce meta
     children: [
       { path: '', name: 'root', component: Home },
       { path: '/home', name: 'Home', component: Home },

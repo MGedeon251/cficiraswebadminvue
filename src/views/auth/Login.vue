@@ -91,7 +91,7 @@ const handleLogin = async () => {
    // Appelle isAuthenticated comme une fonction
    // Accède à isAuthenticated directement comme une propriété, pas comme une fonction
   if (authStore.isAuthenticated) {
-    router.push("/dashboard"); // Redirection après connexion réussie
+    router.push("/home"); // Redirection après connexion réussie
   }
 };
 </script>
