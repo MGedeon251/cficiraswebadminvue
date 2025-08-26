@@ -1,7 +1,7 @@
 <!-- settings.vue -->
 <template>
   <div class="row">
-    <h2>Paramètres </h2>
+    <h2>Paramètres</h2>
     <p>Contrôle de votre compte et de toutes les communications</p>
     <div class="col-md-12 grid-margin stretch-card">
       <div class="card">
