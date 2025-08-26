@@ -5,6 +5,7 @@ import DefaultLayout from '../layouts/DefaultLayout.vue'; // Importer le layout 
 //page  d'accueil
 import Home from '../views/dashboard/Dashboard.vue'; // Page d'accueil
 import Login from '../views/auth/Login.vue'; // Page de login
+import Register from '../views/auth/Register.vue'; // Page de login
 
 //Tableau de bord
 import Dashboard from '../views/dashboard/Dashboard.vue'; // Page du tableau de bord
@@ -58,7 +59,9 @@ import NotFound from '../views/errors/NotFound.vue';
 
 const routes = [
   // Route de login (pas besoin de layout global ici)
-  { path: '/login', name: 'Login', component: Login },
+  { path: '/auth/login', name: 'Login', component: Login },
+  { path: '/auth/register', name: 'Register', component: Register },
+  { path: '/auth/new-password', name: 'NewPassword', component: Login },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound, meta: { public: true } },
   { path: '/addNotes', name: 'appNotes', component: appNotes },
   // Routes qui utilisent le layout global DefaultLayout

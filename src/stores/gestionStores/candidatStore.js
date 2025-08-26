@@ -8,6 +8,7 @@ import {
   deleteCandidature,
   importCandidats,
   importNotesCandidats,
+  addOrUpdatesNotes
 } from '@/api/gestions/gestionApi';
 
 import { useNotifier } from '@/stores/messages/useNotifier';
@@ -53,6 +54,20 @@ export const useCandidatStore = defineStore('candidatStore', {
       try {
         const response = await createCandidature(data);
         notifySuccess(response?.message || 'Candidat ajouté avec succès.');
+        // Optionnel : actualiser la liste si nécessaire
+        await this.fetchCandidatures(response.concours_id);
+      } catch (e) {
+        notifyError(extractErrorMessage(e, 'Erreur lors de l’ajout du candidat.'));
+      } finally {
+        this.loading = false;
+      }
+    },
+    async AddUpdateNotes(data) {
+      const { notifySuccess, notifyError } = useNotifier();
+      this.loading = true;
+      try {
+        const response = await addOrUpdatesNotes(data);
+        notifySuccess(response?.message || 'Notes mises a jour avec succès.');
         // Optionnel : actualiser la liste si nécessaire
         await this.fetchCandidatures(response.concours_id);
       } catch (e) {

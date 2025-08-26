@@ -4,7 +4,7 @@
       <div class="d-flex justify-content-between flex-wrap">
         <div class="d-flex align-items-end flex-wrap">
           <div class="me-md-3 me-xl-5">
-            <h2>Gestions des concours</h2>
+            <h2>Editions de concours</h2>
             <p class="mb-md-0">
               Ouverture d'un concours et inscription des candidats année academique
             </p>

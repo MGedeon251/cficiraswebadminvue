@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center mt-3">
       <span class="me-2">Afficher</span>
       <select v-model="localItemsPerPage" class="form-select" @change="updateItemsPerPage">
-        <option v-for="n in [5, 10, 15, 20]" :key="n" :value="n">{{ n }}</option>
+        <option v-for="n in [10, 15, 20]" :key="n" :value="n">{{ n }}</option>
       </select>
     </div>
     <div class="d-flex justify-content-between align-items-center mt-3">

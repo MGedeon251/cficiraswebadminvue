@@ -13,7 +13,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" id="final-tab" data-bs-toggle="tab" href="#final" role="tab"
-          >Résultats finaux</a
+          >Résultats final</a
         >
       </li>
       <li class="nav-item">
@@ -43,6 +43,6 @@
 <script setup>
 import DetailsConcours from './detail-content.vue';
 import StatistiquesConcours from './StatistiquesConcours.vue';
-import ResultatsFinaux from './ResultatsFinaux.vue';
+import ResultatsFinaux from './ResultatsFinal.vue';
 import PublicationResultats from './PublicationResultats.vue';
 </script>

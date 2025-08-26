@@ -12,7 +12,7 @@
               <h6 class="font-weight-light">Ravi de vous revoir !</h6>
               <form class="pt-3">
                 <div class="form-group">
-                  <label for="exampleInputEmail">Username</label>
+                  <label for="exampleInputEmail">Email/username</label>
                   <div class="input-group">
                     <div class="input-group-prepend bg-transparent">
                       <span class="input-group-text bg-transparent border-right-0">
@@ -20,6 +20,7 @@
                       </span>
                     </div>
                     <input
+                      v-model="credentials.email"
                       type="text"
                       class="form-control form-control-lg border-left-0"
                       id="exampleInputEmail"
@@ -28,7 +29,7 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="exampleInputPassword">Password</label>
+                  <label for="exampleInputPassword">Mot de passe</label>
                   <div class="input-group">
                     <div class="input-group-prepend bg-transparent">
                       <span class="input-group-text bg-transparent border-right-0">
@@ -40,6 +41,7 @@
                       class="form-control form-control-lg border-left-0"
                       id="exampleInputPassword"
                       placeholder="Password"
+                      v-model="credentials.password"
                     />
                   </div>
                 </div>
@@ -47,20 +49,18 @@
                   <div class="form-check">
                     <label class="form-check-label text-muted">
                       <input type="checkbox" class="form-check-input" />
-                      Keep me signed in
+                      Souvenir de moi
                     </label>
                   </div>
-                  <a href="#" class="auth-link text-black">Forgot password?</a>
+                  <a href="#" class="auth-link text-black">Mot de passe oublié ?</a>
                 </div>
-                <div class="my-3">
-                  <a
-                    class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"
-                    href="../../index.html"
-                    >LOGIN</a
-                  >
+               <div class="my-3">
+                  <button @click.prevent="handleLogin" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">
+                    Connexion
+                  </button>
                 </div>
                 <div class="text-center mt-4 font-weight-light">
-                  Don't have an account? <a href="/register" class="text-primary">Create</a>
+                  Vous n'avez pas de compte ? <a href="/auth/register" class="text-primary">soummettre</a>
                 </div>
               </form>
             </div>
@@ -77,3 +77,21 @@
     <!-- page-body-wrapper ends -->
   </div>
 </template>
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/authStore/authStore";
+
+const authStore = useAuthStore();
+const router = useRouter();
+const credentials = ref({ email: "", password: "" });
+
+const handleLogin = async () => {
+  await authStore.loginUser(credentials.value);
+   // Appelle isAuthenticated comme une fonction
+   // Accède à isAuthenticated directement comme une propriété, pas comme une fonction
+  if (authStore.isAuthenticated) {
+    router.push("/dashboard"); // Redirection après connexion réussie
+  }
+};
+</script>

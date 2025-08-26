@@ -25,7 +25,8 @@
               <label class="form-label">Type concours</label>
               <select v-model="form.type_concours" class="form-select" required>
                 <option value="">Sélectionner</option>
-                <option value="ENTREE">ENTRE</option>
+                <option value="ENTREE">ENTREE</option>
+                <option value="TEST">TEST</option>
                 <option value="PASSERELLE">PASSERELLE</option>
                 <option value="SPECIAL">SPECIAL</option>
               </select>
@@ -60,9 +61,10 @@
               <label class="form-label">Statut</label>
               <select v-model="form.statut" class="form-select" required>
                 <option value="">Sélectionner</option>
+                <option value="planifié">Planifié</option>
                 <option value="ouvert">Ouvert</option>
-                <option value="fermé">Fermé</option>
-                <option value="planifie">En attente</option>
+                <option value="clôturé">Cloturer</option>
+                
               </select>
             </div>
             <div class="mb-3">

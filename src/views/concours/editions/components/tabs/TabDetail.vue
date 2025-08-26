@@ -46,7 +46,7 @@
           role="tab"
           aria-controls="resultat"
           aria-selected="false"
-          >Resultats</a
+          >Notes et resultats</a
         >
       </li>
     </ul>
@@ -60,10 +60,10 @@
         <DetailsConcours />
       </div>
       <div class="tab-pane fade" id="epreuve" role="tabpanel" aria-labelledby="epreuve-tab">
-        <Epreuve />
+        <Epreuve/>
       </div>
       <div class="tab-pane fade" id="candidat" role="tabpanel" aria-labelledby="candidat-tab">
-        <Candidats />
+        <Candidats/>
       </div>
       <div class="tab-pane fade" id="resultat" role="tabpanel" aria-labelledby="resultat-tab">
         <Resultat />
@@ -75,8 +75,7 @@
 <script setup>
 import DetailsConcours from './detail-content.vue';
 import Epreuve from './epreuve-content.vue';
-import annee from './resultat1-content.vue';
-import Resultat from './resultat-content.vue';
+import Resultat from './notes-content.vue';
 import Candidats from './candidat-content.vue';
 </script>
 
