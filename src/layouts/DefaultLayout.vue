@@ -19,6 +19,6 @@
 
 <script setup>
 import Header from '@/components/partials/header.vue';
-import Sidebar from '@/components/partials/sidebar.vue';
+import Sidebar from '@/components/partials/sidebarv1.vue';
 import Footer from '@/components/partials/footer.vue';
 </script>
