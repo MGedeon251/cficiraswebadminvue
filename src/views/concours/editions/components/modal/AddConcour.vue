@@ -64,7 +64,6 @@
                 <option value="planifié">Planifié</option>
                 <option value="ouvert">Ouvert</option>
                 <option value="clôturé">Cloturer</option>
-                
               </select>
             </div>
             <div class="mb-3">

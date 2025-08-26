@@ -17,7 +17,7 @@
               Calculer moyennes
             </button>
             <button class="btn btn-outline-dark me-2" @click="showStatsModal = true">
-             Statistiques
+              Statistiques
             </button>
             <div class="dropdown">
               <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">

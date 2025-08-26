@@ -25,7 +25,7 @@
               :class="{
                 'status-active': concour.statut === 'ouvert',
                 'status-draft': concour.statut !== 'ouvert' && concour.statut !== 'planifié',
-                'status-warning': concour.statut === 'planifié'
+                'status-warning': concour.statut === 'planifié',
               }"
             >
               {{ concour.statut }}
@@ -100,7 +100,7 @@ const formatDate = (date) => {
 .status-active {
   background-color: #0d6efd;
 }
-.status-warning{
+.status-warning {
   background-color: #ffcb1f;
 }
 </style>

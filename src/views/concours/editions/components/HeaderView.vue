@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="d-flex justify-content-between align-items-end flex-wrap">
-          <button class="btn btn-outline-dark me-2"> Exporter </button>
+          <button class="btn btn-outline-dark me-2">Exporter</button>
           <div class="btn-group">
             <button
               class="btn btn-primary mt-2 mt-xl-0"
