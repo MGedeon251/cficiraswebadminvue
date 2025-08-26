@@ -1,70 +1,99 @@
 // stores/authStore.js
 import { defineStore } from 'pinia';
-import { login, logout, getCurrentUser } from '@/api/auth/authApi';
+import { login, logout, getCurrentUser, signup } from '@/api/auth/authApi';
 import { useRouter } from 'vue-router';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
-    token: localStorage.getItem('token') || null,  // Récupérer le token dans le stockage local si disponible
-    status: 'idle',  // Pour gérer l'état de chargement ou d'erreur
+    token: localStorage.getItem('token') || null,
+    status: 'idle',   // idle | loading | success | error
+    error: null,
+    lastFetch: null,  // cache de la dernière récupération user
   }),
 
   actions: {
-    async fetchUser(force = false) {
-      const now = Date.now();
-      if (!force && this.user && now - this.lastFetch < 300000) { // 5min cache
-        return this.user;
-      }
-      this.user = await getCurrentUser().then(res => res.data);
-      this.lastFetch = now;
-    },
-    async loginUser(credentials) {
+    // ====== SIGNUP ======
+    async signupUser(data) {
       this.status = 'loading';
+      this.error = null;
       try {
-        const response = await login(credentials);  // Appel API de connexion
-        
-        // Vérifie que la réponse contient un token
-        if (response && response.token) {
-          this.token = response.token;  // Sauvegarde le token reçu
-          localStorage.setItem('token', this.token);  // Sauvegarde le token dans le localStorage
+        const response = await signup(data); // API backend
+        if (response.success && response.token) {
+          this.token = response.token;
+          localStorage.setItem('token', this.token);
+          this.user = response.user;
           this.status = 'success';
-          await this.fetchCurrentUser();  // Récupère les informations de l'utilisateur après la connexion
         } else {
-          throw new Error('Token manquant dans la réponse de l\'API');
+          throw new Error(response.message || 'Erreur lors de l’inscription');
         }
       } catch (error) {
         this.status = 'error';
-        console.error('Erreur de connexion:', error.message);  // Log de l'erreur avec message
+        this.error = error.response?.data?.message || error.message;
+        console.error('Erreur signup:', this.error);
       }
     },
 
-    async logoutUser() {
+    // ====== LOGIN ======
+    async loginUser(credentials) {
+      this.status = 'loading';
+      this.error = null;
       try {
-        await logout();
-        this.token = null;
-        this.user = null;
-        localStorage.removeItem('token'); 
+        const response = await login(credentials);
+
+        if (response.success && response.token) {
+          this.token = response.token;
+          localStorage.setItem('token', this.token);
+          this.user = response.user; // le backend renvoie déjà user
+          this.status = 'success';
+        } else {
+          throw new Error(response.message || 'Identifiants invalides');
+        }
       } catch (error) {
-        console.error('Erreur de déconnexion:', error);
+        this.status = 'error';
+        this.error = error.response?.data?.message || error.message;
+        console.error('Erreur login:', this.error);
       }
     },
-    async fetchCurrentUser() {
-      const router = useRouter();
+
+    // ====== LOGOUT ======
+    async logoutUser() {
+      try {
+        await logout(); // backend peut juste renvoyer {success:true}
+      } catch (error) {
+        console.warn('Erreur logout (côté backend):', error.message);
+      }
+      this.token = null;
+      this.user = null;
+      localStorage.removeItem('token');
+      this.status = 'idle';
+    },
+
+    // ====== GET CURRENT USER ======
+    async fetchCurrentUser(force = false) {
+      const now = Date.now();
+      if (!force && this.user && this.lastFetch && now - this.lastFetch < 300000) {
+        return this.user; // cache 5min
+      }
       try {
         const response = await getCurrentUser();
-        this.user = response.user;  // Sauvegarde les informations de l'utilisateur
-        console.log('Utilisateur récupéré:', this.user);  // Log de l'utilisateur récupéré
-        this.status = 'success';
+        if (response.success) {
+          this.user = response.user;
+          this.status = 'success';
+          this.lastFetch = now;
+        } else {
+          throw new Error(response.message || 'Impossible de récupérer l’utilisateur');
+        }
       } catch (error) {
-        // Vérification si l'erreur est liée au token expiré
         if (error.response && error.response.status === 401) {
-          this.status = 'error';
-          console.error('Token expiré, redirection vers la page de connexion');
-          this.logoutUser();  // Déconnexion de l'utilisateur en cas de token expiré
+          console.warn('Token expiré, redirection login');
+          this.logoutUser();
+          const router = useRouter();
           router.push('/login');
         } else {
-          console.error('Erreur lors de la récupération de l\'utilisateur:', error);
+          this.status = 'error';
+          this.error = error.response?.data?.message || error.message;
+          console.error('Erreur fetchCurrentUser:', this.error);
         }
       }
     },
@@ -73,21 +102,21 @@ export const useAuthStore = defineStore('auth', {
       return !!this.token;
     },
   },
-  
+
   getters: {
-    isAuthenticated: (state) => {
-      return !!state.token;  // Vérifie si un token existe
-    },
-    getUser: (state) =>  state.user,
+    isAuthenticated: (state) => !!state.token,
+    getUser: (state) => state.user,
     getToken: (state) => state.token,
     userRole: (state) => state.user?.role,
-    // Getters par rôle
+
+    // ====== Match avec les rôles backend ======
     isAdmin: (state) => state.user?.role === 'admin',
-    isAgent: (state) => state.user?.role === 'agent',
-    isResponsable: (state) => state.user?.role === 'responsable',
+    isScolarite: (state) => state.user?.role === 'scolarite',
+    isPedagogie: (state) => state.user?.role === 'pedagogie',
+    isCCycle: (state) => state.user?.role === 'c_cycle',
+    isFinances: (state) => state.user?.role === 'finances',
     isDirecteur: (state) => state.user?.role === 'directeur',
-    isChefDivision: (state) => state.user?.role === 'chef_division',
-    isStandard: (state) => state.user?.role === 'standard',
-    isManager: (state) => state.user?.role === 'manager'  // si tu l'utilises encore
-  }
+    isEnseignant: (state) => state.user?.role === 'enseignant',
+    isGestionnaire: (state) => state.user?.role === 'gestionnaire',
+  },
 });
