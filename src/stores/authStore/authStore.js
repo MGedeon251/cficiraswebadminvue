@@ -2,6 +2,9 @@
 import { defineStore } from 'pinia';
 import { login, logout, getCurrentUser, signup } from '@/api/auth/authApi';
 import { useRouter } from 'vue-router';
+import { useNotifier } from '@/stores/messages/useNotifier';
+import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
+
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -30,6 +33,7 @@ export const useAuthStore = defineStore('auth', {
       } catch (error) {
         this.status = 'error';
         this.error = error.response?.data?.message || error.message;
+        notifyError(extractErrorMessage(error, 'Erreur lors de l’inscription'));
         console.error('Erreur signup:', this.error);
       }
     },
@@ -50,8 +54,10 @@ export const useAuthStore = defineStore('auth', {
           throw new Error(response.message || 'Identifiants invalides');
         }
       } catch (error) {
+        const { notifyError } = useNotifier();
         this.status = 'error';
         this.error = error.response?.data?.message || error.message;
+        notifyError(extractErrorMessage(error, 'Erreur lors de la connexion'));
         console.error('Erreur login:', this.error);
       }
     },
@@ -59,7 +65,9 @@ export const useAuthStore = defineStore('auth', {
     // ====== LOGOUT ======
     async logoutUser() {
       try {
+        const { notifySuccess } = useNotifier();
         await logout(); // backend peut juste renvoyer {success:true}
+        notifySuccess('Déconnexion réussie');
       } catch (error) {
         console.warn('Erreur logout (côté backend):', error.message);
       }
