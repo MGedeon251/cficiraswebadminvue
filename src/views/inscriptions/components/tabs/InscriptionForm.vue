@@ -88,7 +88,7 @@
                   <div class="d-flex flex-column align-items-center">
                     <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
                   </div>
-                  <div class="text-pr">Aucune donnée </div>
+                  <div class="text-pr">Aucune donnée</div>
                 </td>
               </tr>
             </tbody>

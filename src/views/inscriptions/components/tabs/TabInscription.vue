@@ -38,7 +38,7 @@
           aria-controls="recherche"
           aria-selected="false"
         >
-          Recherche / Filtres
+          Reinscriptions
         </a>
       </li>
       <li class="nav-item">
