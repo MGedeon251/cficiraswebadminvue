@@ -48,13 +48,13 @@
           <div class="d-flex justify-content-between align-items-end flex-wrap">
             <button class="btn btn-outline-dark me-2">Exporter</button>
             <div class="btn-group">
-              <button
-                class="btn btn-primary mt-2 mt-xl-0"
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModal3"
-              >
-                + Ajouter
-              </button>
+            <button
+              class="btn btn-primary mt-2 mt-xl-0"
+              data-bs-toggle="modal"
+              data-bs-target="#wizardModal"
+            >
+              + Inscription
+            </button>
               <button
                 class="btn btn-primary dropdown-toggle dropdown-toggle-split"
                 data-bs-toggle="dropdown"
@@ -68,6 +68,11 @@
               </ul>
             </div>
           </div>
+          <WizardModal
+            id="wizardModal"
+            v-model="workflowData"
+            @finish="submitWorkflow"
+          />
         </div>
         <div class="table-responsive mt-3">
           <table class="table table-hover align-middle">
@@ -107,6 +112,20 @@ const classes = ref(['L1', 'L2', 'L3', 'M1', 'M2']);
 const selectedYear = ref('2024-2025');
 const selectedClass = ref('L1');
 const selectedPaymentStatus = ref('all');
+
+import WizardModal from "../wizard/WizarModal.vue";
+
+const workflowData = ref({});
+
+async function submitWorkflow(data) {
+  try {
+    //const res = await api.post("/api/workflow/inscriptions", data);
+    alert("✅ Inscription créée !");
+    //console.log(res.data);
+  } catch (err) {
+    alert("❌ Erreur : " + err.message);
+  }
+}
 
 onMounted(() => {
   candidats.value = [
