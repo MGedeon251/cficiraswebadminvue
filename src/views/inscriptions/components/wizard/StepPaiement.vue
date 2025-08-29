@@ -25,25 +25,24 @@
 
     <div class="mb-3">
       <label class="form-label">Référence transaction</label>
-      <input
-        type="text"
-        v-model="localData.reference_transaction"
-        class="form-control"
-        required
-      />
+      <input type="text" v-model="localData.reference_transaction" class="form-control" required />
     </div>
   </form>
 </template>
 
 <script setup>
-import { reactive, watch } from "vue";
+import { reactive, watch } from 'vue';
 
 const props = defineProps({ modelValue: Object });
-const emit = defineEmits(["update:modelValue", "next", "prev"]);
+const emit = defineEmits(['update:modelValue', 'next', 'prev']);
 
 const localData = reactive(props.modelValue.paiement || {});
 
-watch(localData, (val) => {
-  emit("update:modelValue", { ...props.modelValue, paiement: val });
-}, { deep: true });
+watch(
+  localData,
+  (val) => {
+    emit('update:modelValue', { ...props.modelValue, paiement: val });
+  },
+  { deep: true }
+);
 </script>

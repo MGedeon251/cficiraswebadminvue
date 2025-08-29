@@ -5,12 +5,8 @@
       <li class="list-group-item">
         👤 Étudiant : {{ modelValue.etudiant?.nom }} {{ modelValue.etudiant?.prenom }}
       </li>
-      <li class="list-group-item">
-        🎓 Classe : {{ modelValue.inscription?.classe_id }}
-      </li>
-      <li class="list-group-item">
-        📅 Année : {{ modelValue.inscription?.annee_academique_id }}
-      </li>
+      <li class="list-group-item">🎓 Classe : {{ modelValue.inscription?.classe_id }}</li>
+      <li class="list-group-item">📅 Année : {{ modelValue.inscription?.annee_academique_id }}</li>
       <li class="list-group-item">
         💳 Paiement : {{ modelValue.paiement?.montant }} ({{ modelValue.paiement?.mode_paiement }})
       </li>

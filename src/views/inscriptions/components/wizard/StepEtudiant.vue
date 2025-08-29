@@ -32,14 +32,18 @@
 </template>
 
 <script setup>
-import { reactive, watch } from "vue";
+import { reactive, watch } from 'vue';
 
 const props = defineProps({ modelValue: Object });
-const emit = defineEmits(["update:modelValue", "next", "prev"]);
+const emit = defineEmits(['update:modelValue', 'next', 'prev']);
 
 const localData = reactive(props.modelValue.etudiant || {});
 
-watch(localData, (val) => {
-  emit("update:modelValue", { ...props.modelValue, etudiant: val });
-}, { deep: true });
+watch(
+  localData,
+  (val) => {
+    emit('update:modelValue', { ...props.modelValue, etudiant: val });
+  },
+  { deep: true }
+);
 </script>

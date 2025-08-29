@@ -3,27 +3,19 @@
     <h2 class="mb-4">Assistant d'inscription</h2>
 
     <!-- Bouton d’ouverture du wizard -->
-    <button
-      class="btn btn-primary"
-      data-bs-toggle="modal"
-      data-bs-target="#wizardModal"
-    >
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#wizardModal">
       Nouvelle inscription
     </button>
 
     <!-- Modal wizard -->
-    <WizardModal
-      id="wizardModal"
-      v-model="workflowData"
-      @finish="submitWorkflow"
-    />
+    <WizardModal id="wizardModal" v-model="workflowData" @finish="submitWorkflow" />
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import WizardModal from "@/components/wizard/WizardModal.vue";
-import api from "@/services/api";
+import { ref } from 'vue';
+import WizardModal from '@/components/wizard/WizardModal.vue';
+import api from '@/services/api';
 
 const workflowData = ref({
   candidatId: null,
@@ -36,12 +28,12 @@ const workflowData = ref({
 async function submitWorkflow(data) {
   try {
     // ⚡ API backend → orchestration inscription complète
-    const res = await api.post("/api/workflow/inscriptions", data);
-    alert("✅ Inscription finalisée avec succès !");
+    const res = await api.post('/api/workflow/inscriptions', data);
+    alert('✅ Inscription finalisée avec succès !');
     console.log(res.data);
   } catch (err) {
     console.error(err);
-    alert("❌ Erreur : " + err.message);
+    alert('❌ Erreur : ' + err.message);
   }
 }
 </script>

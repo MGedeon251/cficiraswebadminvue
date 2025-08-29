@@ -1,10 +1,5 @@
 <template>
-  <div
-    class="modal fade"
-    id="wizardModal"
-    tabindex="-1"
-    aria-hidden="true"
-  >
+  <div class="modal fade" id="wizardModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
         <!-- Header -->
@@ -17,17 +12,13 @@
         <div class="modal-body">
           <!-- Stepper -->
           <ul class="nav nav-pills justify-content-center mb-4">
-            <li
-              v-for="(step, index) in steps"
-              :key="index"
-              class="nav-item"
-            >
+            <li v-for="(step, index) in steps" :key="index" class="nav-item">
               <button
                 class="nav-link"
                 :class="{
                   active: currentStep === index,
                   disabled: index > currentStep,
-                  'bg-success text-white': index < currentStep
+                  'bg-success text-white': index < currentStep,
                 }"
                 @click="goToStep(index)"
               >
@@ -48,11 +39,7 @@
 
         <!-- Footer Navigation -->
         <div class="modal-footer d-flex justify-content-between">
-          <button
-            v-if="currentStep > 0"
-            class="btn btn-secondary"
-            @click="prevStep"
-          >
+          <button v-if="currentStep > 0" class="btn btn-secondary" @click="prevStep">
             ← Précédent
           </button>
 
@@ -64,13 +51,7 @@
             Suivant →
           </button>
 
-          <button
-            v-else
-            class="btn btn-success ms-auto"
-            @click="finishWizard"
-          >
-            ✅ Terminer
-          </button>
+          <button v-else class="btn btn-success ms-auto" @click="finishWizard">✅ Terminer</button>
         </div>
       </div>
     </div>
@@ -78,25 +59,25 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import StepEtudiant from "./StepEtudiant.vue";
-import StepInscription from "./StepInscription.vue";
-import StepValidation from "./StepValidation.vue";
-import StepPaiement from "./StepPaiement.vue";
+import { ref } from 'vue';
+import StepEtudiant from './StepEtudiant.vue';
+import StepInscription from './StepInscription.vue';
+import StepValidation from './StepValidation.vue';
+import StepPaiement from './StepPaiement.vue';
 // ⚠️ ton StepPaiement.vue reste séparé
 //const StepPaiement = () => import("./StepPaiement.vue");
 
 const props = defineProps({ modelValue: Object });
-const emit = defineEmits(["update:modelValue", "finish"]);
+const emit = defineEmits(['update:modelValue', 'finish']);
 
 const formData = ref(props.modelValue || {});
 
 const currentStep = ref(0);
 const steps = [
-  { label: "Étudiant", component: StepEtudiant },
-  { label: "Inscription", component: StepInscription },
-  { label: "Paiement", component: StepPaiement },
-  { label: "Validation", component: StepValidation }
+  { label: 'Étudiant', component: StepEtudiant },
+  { label: 'Inscription', component: StepInscription },
+  { label: 'Paiement', component: StepPaiement },
+  { label: 'Validation', component: StepValidation },
 ];
 
 function nextStep() {
@@ -109,6 +90,6 @@ function goToStep(index) {
   if (index <= currentStep.value) currentStep.value = index;
 }
 function finishWizard() {
-  emit("finish", formData.value);
+  emit('finish', formData.value);
 }
 </script>
