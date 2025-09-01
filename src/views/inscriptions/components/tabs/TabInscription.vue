@@ -51,7 +51,7 @@
           aria-controls="gestion"
           aria-selected="false"
         >
-          Gestion inscriptions
+          Classes & Niveaux
         </a>
       </li>
       <li class="nav-item">

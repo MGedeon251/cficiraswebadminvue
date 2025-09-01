@@ -46,7 +46,27 @@
             </div>
           </div>
           <div class="d-flex justify-content-between align-items-end flex-wrap">
-            <button class="btn btn-outline-dark me-2">Exporter</button>
+            <div class="dropdown me-2">
+              <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
+                <i class="mdi mdi-dots-vertical"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <a class="dropdown-item" href="#" @click.prevent="exportToExcel">
+                    <i class="mdi mdi-file-excel me-2"></i>Exporter Excel
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" @click.prevent="printTable">
+                    <i class="mdi mdi-printer me-2"></i>Imprimer
+                  </a>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="#"><i class="mdi mdi-cog me-2"></i>Paramètres</a>
+                </li>
+              </ul>
+            </div>
             <div class="btn-group">
               <button
                 class="btn btn-primary mt-2 mt-xl-0"
@@ -227,4 +247,16 @@ onMounted(() => {
     },
   ];
 });
+
+const triggerFileInput = () => {
+  fileInput.value.click();
+};
+
+const handleFileUpload = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    candidat.value.photo = file;
+    previewImage.value = URL.createObjectURL(file);
+  }
+};
 </script>

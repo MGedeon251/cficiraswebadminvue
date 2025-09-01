@@ -11,7 +11,7 @@
         <!-- Body -->
         <div class="modal-body">
           <!-- Stepper -->
-          <ul class="nav nav-pills justify-content-center mb-4">
+          <ul class="nav nav-pills justify-content-center mb-4 mr-2">
             <li v-for="(step, index) in steps" :key="index" class="nav-item">
               <button
                 class="nav-link"
@@ -59,30 +59,46 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+
+// Étapes importées
 import StepEtudiant from './StepEtudiant.vue';
+import StepTuteurs from './StepTuteurs.vue';
 import StepInscription from './StepInscription.vue';
 import StepValidation from './StepValidation.vue';
-import StepPaiement from './StepPaiement.vue';
-// ⚠️ ton StepPaiement.vue reste séparé
-//const StepPaiement = () => import("./StepPaiement.vue");
 
 const props = defineProps({ modelValue: Object });
 const emit = defineEmits(['update:modelValue', 'finish']);
 
 const formData = ref(props.modelValue || {});
 
+// Position actuelle du wizard
 const currentStep = ref(0);
+
+// ⚡️ Nouveau workflow
 const steps = [
   { label: 'Étudiant', component: StepEtudiant },
+  { label: 'Tuteurs', component: StepTuteurs },
   { label: 'Inscription', component: StepInscription },
-  { label: 'Paiement', component: StepPaiement },
   { label: 'Validation', component: StepValidation },
 ];
 
-function nextStep() {
+onMounted(() => {
+  const modal = document.getElementById('wizardModal');
+  modal.addEventListener('hidden.bs.modal', () => {
+    currentStep.value = 0;
+    formData.value = { etudiant: {}, tuteurs: [], dossier: {}, inscription: {} };
+  });
+});
+
+async function nextStep() {
+  const component = steps[currentStep.value].component;
+  if (component.validate && !(await component.validate(formData.value))) {
+    return; // stop si invalid
+  }
   if (currentStep.value < steps.length - 1) currentStep.value++;
 }
+
 function prevStep() {
   if (currentStep.value > 0) currentStep.value--;
 }
@@ -91,5 +107,14 @@ function goToStep(index) {
 }
 function finishWizard() {
   emit('finish', formData.value);
+  const modal = bootstrap.Modal.getInstance(document.getElementById('wizardModal'));
+  modal.hide();
 }
+watch(
+  formData,
+  (newVal) => {
+    emit('update:modelValue', newVal);
+  },
+  { deep: true }
+);
 </script>
