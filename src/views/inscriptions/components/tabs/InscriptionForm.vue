@@ -83,12 +83,21 @@
               </button>
               <ul class="dropdown-menu">
                 <li>
-                  <a class="dropdown-item" href="#drag-drop-area">Importer fichier</a>
+                  <a class="dropdown-item" href="#inscription-par-classe" data-bs-toggle="modal" data-bs-target="#inscriptionClasseModal">
+                    Inscription par classe
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#ajouter-tuteur" data-bs-toggle="modal" data-bs-target="#ajouterTuteurModal">
+                    Ajouter tuteur étudiant
+                  </a>
                 </li>
               </ul>
             </div>
           </div>
           <WizardModal id="wizardModal" v-model="workflowData" @finish="submitWorkflow" />
+          <InscriptionClasse/>
+          <AjouterTuteur/>
         </div>
         <div class="table-responsive mt-3">
           <table class="table table-hover align-middle">
@@ -130,6 +139,8 @@ const selectedClass = ref('L1');
 const selectedPaymentStatus = ref('all');
 
 import WizardModal from '../wizard/WizarModal.vue';
+import InscriptionClasse from '../modal/InscriptionClasse.vue';
+import AjouterTuteur from '../modal/AddTuteur.vue';
 
 const workflowData = ref({});
 
