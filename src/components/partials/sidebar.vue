@@ -9,6 +9,25 @@
         </a>
       </li>
 
+      <!-- Structure Académique (NOUVEAU) -->
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#structure-academique" aria-expanded="false">
+          <i class="mdi mdi-sitemap menu-icon"></i>
+          <span class="menu-title">Structure Académique</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="structure-academique">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"><a class="nav-link" href="/annees-academiques">Années académiques</a></li>
+            <li class="nav-item"><a class="nav-link" href="/cycles">Cycles</a></li>
+            <li class="nav-item"><a class="nav-link" href="/filieres">Filières</a></li>
+            <li class="nav-item"><a class="nav-link" href="/niveaux">Niveaux</a></li>
+            <li class="nav-item"><a class="nav-link" href="/classes">Classes</a></li>
+            <li class="nav-item"><a class="nav-link" href="/semestres">Semestres</a></li>
+          </ul>
+        </div>
+      </li>
+
       <!-- Scolarité -->
       <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#scolarite" aria-expanded="false">
@@ -162,8 +181,7 @@
         </a>
         <div class="collapse" id="coordination">
           <ul class="nav flex-column sub-menu">
-            <li class="nav-item"><a class="nav-link" href="/cycles">Cycles & niveaux</a></li>
-            <li class="nav-item"><a class="nav-link" href="/memoires">Thèmes & mémoires</a></li>
+            <li class="nav-item"><a class="nav-link" href="/themes-memoires">Thèmes & mémoires</a></li>
             <li class="nav-item"><a class="nav-link" href="/soutenances">Soutenances</a></li>
             <li class="nav-item"><a class="nav-link" href="/statut">Statut étudiant</a></li>
           </ul>
