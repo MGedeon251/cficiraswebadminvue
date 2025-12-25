@@ -30,17 +30,17 @@
       <!-- Scolarité -->
       <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#scolarite" aria-expanded="false">
-          <i class="mdi mdi-domain menu-icon"></i>
+          <i class="mdi mdi-account-group menu-icon"></i>
           <span class="menu-title">Scolarité</span>
           <i class="menu-arrow"></i>
         </a>
         <div class="collapse" id="scolarite">
           <ul class="nav flex-column sub-menu">
-            <li class="nav-item"><a class="nav-link" href="/etudiants">Étudiants</a></li>
-            <li class="nav-item"><a class="nav-link" href="/modules">Modules / UV</a></li>
-            <li class="nav-item"><a class="nav-link" href="/parcours">Parcours académique</a></li>
-            <li class="nav-item"><a class="nav-link" href="/notes">Notes et Résultats</a></li>
-            <li class="nav-item"><a class="nav-link" href="/supcours">Support & cours</a></li>
+            <li class="nav-item"><a class="nav-link" href="/etudiants">Gestion des étudiants</a></li>
+            <li class="nav-item"><a class="nav-link" href="/dossiers-scolaires">Dossiers scolaires</a></li>
+            <li class="nav-item"><a class="nav-link" href="/absences">Absences & Présences</a></li>
+            <li class="nav-item"><a class="nav-link" href="/notes">Évaluations & Notes</a></li>
+            <li class="nav-item"><a class="nav-link" href="/deliberations">Délibérations</a></li>
           </ul>
         </div>
       </li>
