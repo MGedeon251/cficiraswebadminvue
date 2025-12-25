@@ -233,7 +233,7 @@
       </li>
 
       <!-- Statistiques -->
-      <li class="nav-item">
+c      <li class="nav-item">
         <a class="nav-link" href="/statistiques">
           <i class="mdi mdi-chart-bar menu-icon"></i>
           <span class="menu-title">Statistiques</span>
