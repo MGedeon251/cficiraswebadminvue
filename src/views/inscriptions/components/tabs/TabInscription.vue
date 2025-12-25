@@ -1,127 +1,104 @@
 <template>
   <div>
+    <!-- Onglets navigation -->
     <ul class="nav nav-tabs px-4" role="tablist">
       <li class="nav-item">
         <a
           class="nav-link active"
-          id="concours-tab"
+          id="inscriptions-tab"
           data-bs-toggle="tab"
-          href="#concours"
+          href="#inscriptions"
           role="tab"
-          aria-controls="concours"
+          aria-controls="inscriptions"
           aria-selected="true"
-          >Concours</a
         >
+          Inscriptions
+        </a>
       </li>
       <li class="nav-item">
         <a
           class="nav-link"
-          id="devoirf-tab"
+          id="paiements-tab"
           data-bs-toggle="tab"
-          href="#devoirf"
+          href="#paiements"
           role="tab"
-          aria-controls="devoirf"
+          aria-controls="paiements"
           aria-selected="false"
-          >Candidats</a
         >
+          Paiements
+        </a>
       </li>
       <li class="nav-item">
         <a
           class="nav-link"
-          id="sales-tab"
+          id="recherche-tab"
           data-bs-toggle="tab"
-          href="#sales"
+          href="#recherche"
           role="tab"
-          aria-controls="sales"
+          aria-controls="recherche"
           aria-selected="false"
-          >Etudiants</a
         >
+          Reinscriptions
+        </a>
       </li>
       <li class="nav-item">
         <a
           class="nav-link"
-          id="purchases-tab"
+          id="gestion-tab"
           data-bs-toggle="tab"
-          href="#purchases"
+          href="#gestion"
           role="tab"
-          aria-controls="purchases"
+          aria-controls="gestion"
           aria-selected="false"
-          >Exportations</a
         >
+          Classes & Niveaux
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          id="stats-tab"
+          data-bs-toggle="tab"
+          href="#stats"
+          role="tab"
+          aria-controls="stats"
+          aria-selected="false"
+        >
+          Rapports & Stats
+        </a>
       </li>
     </ul>
+
+    <!-- Contenu des onglets -->
     <div class="tab-content p-4">
       <div
         class="tab-pane fade show active"
-        id="concours"
+        id="inscriptions"
         role="tabpanel"
-        aria-labelledby="concours-tab"
+        aria-labelledby="inscriptions-tab"
       >
-        <concours />
+        <inscription-form />
       </div>
-      <div class="tab-pane fade" id="devoirf" role="tabpanel" aria-labelledby="devoirf-tab">
-        <candidats />
+      <div class="tab-pane fade" id="paiements" role="tabpanel" aria-labelledby="paiements-tab">
+        <paiement-list />
       </div>
-      <div class="tab-pane fade" id="sales" role="tabpanel" aria-labelledby="sales-tab">
-        <annee />
+      <div class="tab-pane fade" id="recherche" role="tabpanel" aria-labelledby="recherche-tab">
+        <recherche-inscriptions />
       </div>
-      <div class="tab-pane fade" id="purchases" role="tabpanel" aria-labelledby="purchases-tab">
-        <StatsRapport />
+      <div class="tab-pane fade" id="gestion" role="tabpanel" aria-labelledby="gestion-tab">
+        <gestion-inscriptions />
+      </div>
+      <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats-tab">
+        <stats-rapports />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import concours from './concours.vue';
-import candidats from './candidats.vue';
-import annee from './Etudiants.vue';
-import StatsRapport from './StatsRapport.vue';
+import InscriptionForm from './InscriptionForm.vue'; // Cas d’utilisation 1
+import PaiementList from './PaiementList.vue'; // Cas d’utilisation 2
+import RechercheInscriptions from './Recherche.vue'; // Cas d’utilisation 3
+import GestionInscriptions from './GestionInscriptions.vue'; // Cas d’utilisation 4
+import StatsRapports from './StatsRapports.vue'; // Cas d’utilisation 5
 </script>
-
-<style scoped>
-.drag-drop-area {
-  background: #f8f9fa;
-  border: 2px dashed #007bff;
-  cursor: pointer;
-}
-.drag-drop-area.drag-over {
-  background: #e9ecef;
-}
-</style>
-
-<style scoped>
-body {
-  background-color: #f8f9fa;
-  color: #212529;
-}
-.card {
-  background-color: #ffffff;
-  border: 1px solid #dee2e6;
-  border-radius: 12px;
-}
-.btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
-  color: #fff;
-}
-.btn-primary:hover {
-  background-color: #0056b3;
-  border-color: #004080;
-}
-.status-badge {
-  padding: 0.5em 1em;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  color: #fff;
-}
-.status-draft {
-  background-color: #6c757d;
-}
-.status-active {
-  background-color: #0d6efd;
-}
-.table thead th {
-  border-bottom: 2px solid #dee2e6;
-}
-</style>
