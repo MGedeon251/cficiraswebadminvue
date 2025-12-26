@@ -29,15 +29,10 @@
     </div>
   </div>
 
-  <div class="row">
-    
-  </div>
-
-  
+  <div class="row"></div>
 </template>
 <script setup>
 import { ref, computed } from 'vue';
-
 </script>
 
 <style scoped>

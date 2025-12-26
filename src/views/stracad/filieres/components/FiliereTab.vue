@@ -67,12 +67,7 @@
       </div>
 
       <!-- Onglet Niveaux -->
-      <div
-        class="tab-pane fade"
-        id="niveaux"
-        role="tabpanel"
-        aria-labelledby="niveaux-tab"
-      >
+      <div class="tab-pane fade" id="niveaux" role="tabpanel" aria-labelledby="niveaux-tab">
         <NiveauxContent />
       </div>
 

@@ -1,7 +1,6 @@
 <!-- CyclesContent.vue -->
 <template>
   <div class="row">
-
     <div class="table-responsive">
       <table class="table table-bordered table-striped mb-5">
         <thead>
@@ -30,7 +29,6 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-
 </script>
 
 <style scoped>

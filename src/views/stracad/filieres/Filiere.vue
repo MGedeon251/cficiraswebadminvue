@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <FiliereHeader/>
+      <FiliereHeader />
     </div>
     <div class="row">
       <div class="col-md-12 grid-margin stretch-card">

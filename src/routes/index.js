@@ -130,7 +130,7 @@ const routes = [
         name: 'CyclesAcademiqueHeader',
         component: CyclesAcademiqueHeader,
       },
-            {
+      {
         path: '/filieres-academiques',
         name: 'FiliereHeader',
         component: FiliereHeader,

@@ -1,9 +1,7 @@
 <template>
   <div class="row">
     <h4>Liste des filières</h4>
-    <p class="text-muted">
-       Listes de tout les filière ajoutées jusque là.
-    </p>
+    <p class="text-muted">Listes de tout les filière ajoutées jusque là.</p>
 
     <div class="table-responsive">
       <table class="table table-striped">

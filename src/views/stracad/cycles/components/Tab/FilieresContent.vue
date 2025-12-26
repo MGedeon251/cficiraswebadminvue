@@ -70,34 +70,34 @@
 
 <script>
 export default {
-  name: "FiliereView",
+  name: 'FiliereView',
   data() {
     return {
       cycles: [
         {
-          name: "Cycle Licence (L)",
+          name: 'Cycle Licence (L)',
           filieres: [
             {
-              name: "Filière Informatique",
+              name: 'Filière Informatique',
               niveaux: [
-                { name: "L1 Informatique", etudiants: 120 },
-                { name: "L2 Informatique", etudiants: 95 },
-                { name: "L3 Informatique", etudiants: 80 },
+                { name: 'L1 Informatique', etudiants: 120 },
+                { name: 'L2 Informatique', etudiants: 95 },
+                { name: 'L3 Informatique', etudiants: 80 },
               ],
             },
-            { name: "Filière Génie Civil", niveaux: [1,2,3] },
-            { name: "Filière Électronique", niveaux: [] },
+            { name: 'Filière Génie Civil', niveaux: [1, 2, 3] },
+            { name: 'Filière Électronique', niveaux: [] },
           ],
         },
         {
-          name: "Cycle Master (M)",
+          name: 'Cycle Master (M)',
           filieres: [
-            { name: "Filière IA & Data Science", niveaux: [] },
-            { name: "Filière Cybersécurité", niveaux: [] },
+            { name: 'Filière IA & Data Science', niveaux: [] },
+            { name: 'Filière Cybersécurité', niveaux: [] },
           ],
         },
         {
-          name: "Cycle Doctorat (D)",
+          name: 'Cycle Doctorat (D)',
           filieres: [],
         },
       ],
