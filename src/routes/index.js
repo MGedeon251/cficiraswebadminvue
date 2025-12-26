@@ -94,7 +94,7 @@ const routes = [
         props: true,
       },
       { path: '/notes', name: 'Notes', component: Notes },
-      { path: '/parcours', name: 'Parcours', component: Parcours },
+      { path: '/dossiers-scolaires', name: 'dossiers-scolaires', component: Parcours },
       { path: '/supcours', name: 'Support', component: Support },
       { path: '/settings', name: 'Settings', component: Settings },
       { path: '/enseignants', name: 'Formateur', component: Formateur },

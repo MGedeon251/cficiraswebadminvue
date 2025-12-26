@@ -5,7 +5,7 @@
         <div class="d-flex align-items-end flex-wrap">
           <div class="me-md-3 me-xl-5">
            <h2>Gestion Années Académiques</h2>
-            <p class="mb-md-0">Attributions des notes de devoir et examens</p>
+            <p class="mb-md-0">Configuration et gestion des années académiques</p>
             <p class="mb-md-0"></p>
           </div>
           <div class="d-flex">
