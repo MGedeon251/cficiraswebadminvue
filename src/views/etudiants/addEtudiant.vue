@@ -1,187 +1,312 @@
 <template>
   <div class="modal-content">
-    <div class="modal-header bg-primary text-white">
-      <h5 class="modal-title" id="exampleModalLabel">Ajouter etudiant</h5>
-      <button type="button" class="btn-close btn-close-white" @click="closeDetails"></button>
-    </div>
-    <div class="modal-body">
-      <div class="row">
-        <p class="text-muted">Photo format profil</p>
-        <div class="col-md-3 text-center">
-          <div
-            class="avatar bg-warning text-white d-flex align-items-center justify-content-center"
-          >
-            <!-- Si la photo existe, on l'affiche, sinon on montre les initiales -->
-            <img
-              v-if="etudiant.photourl"
-              :src="getImageUrl(etudiant.photourl)"
-              alt="Photo du etudiant"
-              class="avatar-img"
-            />
-            <span v-else class="fs-1">{{ 'N/A' }}</span>
-          </div>
+    <!-- Header -->
+            <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="filiereModalLabel">
+            {{ isEdit ? 'Modifier' : 'Ajouter' }} un etudiant
+          </h5>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
-        <div class="col-md-9">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputName1">Noms<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="form-label">Prenoms <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" />
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputName1"
-                  >Date de naissance<span class="text-danger">*</span></label
-                >
-                <input type="text" class="form-control" />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="form-label"
-                  >Lieu de naissance<span class="text-danger">*</span></label
-                >
-                <input type="text" class="form-control" />
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputName1">Sexe<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="form-label">Adresse<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" />
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputName1">Telephone<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" placeholder="+242 066034357 " />
-              </div>
-            </div>
-          </div>
-        </div>
+
+        <!-- Body -->
+        <div class="modal-body">
+          <form @submit.prevent="submitEtudiant">
+            <div class="row">
+    <div class="col-md-3 text-center mb-4">
+      <div class="avatar bg-warning text-white mx-auto mb-2">
+        <img
+          v-if="form.photoPreview"
+          :src="form.photoPreview"
+          alt="Photo étudiant"
+          class="avatar-img"
+        />
+        <span v-else class="fs-1">N/A</span>
       </div>
+
+      <!-- Input file caché -->
+      <input
+        ref="photoInput"
+        type="file"
+        class="d-none"
+        accept="image/*"
+        @change="handlePhotoUpload"
+      />
+
+      <!-- Bouton upload -->
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-sm w-70"
+        @click="triggerPhotoInput"
+      > Charger une photo
+      </button>
+
+  <small class="text-muted d-block mt-2">
+    Photo récente (JPG ou PNG, max 2 Mo)
+  </small>
+</div>
+
+
+          <!-- Informations personnelles -->
+          <div class="col-md-9">
+            <div class="row">
+              <!-- Noms -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label">
+                  Noms <span class="text-danger">*</span>
+                </label>
+                <input
+                  v-model="form.nom"
+                  type="text"
+                  class="form-control"
+                  placeholder="Ex : NDZIE, KOUASSI"
+                  required
+                />
+                <small class="text-muted">
+                  Nom de famille tel qu’indiqué sur les documents officiels
+                </small>
+              </div>
+
+              <!-- Prénoms -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label">
+                  Prénoms <span class="text-danger">*</span>
+                </label>
+                <input
+                  v-model="form.prenom"
+                  type="text"
+                  class="form-control"
+                  placeholder="Ex : Jean Marc"
+                  required
+                />
+                <small class="text-muted">
+                  Tous les prénoms de l’étudiant
+                </small>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Date de naissance -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label">
+                  Date de naissance <span class="text-danger">*</span>
+                </label>
+                <input
+                  v-model="form.date_naissance"
+                  type="date"
+                  class="form-control"
+                  required
+                />
+                <small class="text-muted">
+                  Format : JJ/MM/AAAA
+                </small>
+              </div>
+
+              <!-- Lieu de naissance -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label">
+                  Lieu de naissance <span class="text-danger">*</span>
+                </label>
+                <input
+                  v-model="form.lieu_naissance"
+                  type="text"
+                  class="form-control"
+                  placeholder="Ex : Brazzaville"
+                  required
+                />
+                <small class="text-muted">
+                  Ville ou localité de naissance
+                </small>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Sexe -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label">
+                  Sexe <span class="text-danger">*</span>
+                </label>
+                <select
+                  v-model="form.sexe"
+                  class="form-select"
+                  required
+                >
+                  <option value="">-- Sélectionner le sexe --</option>
+                  <option value="M">Masculin</option>
+                  <option value="F">Féminin</option>
+                </select>
+                <small class="text-muted">
+                  Sexe tel que déclaré à l’état civil
+                </small>
+              </div>
+
+              <!-- Adresse -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label">
+                  Adresse <span class="text-danger">*</span>
+                </label>
+                <input
+                  v-model="form.adresse"
+                  type="text"
+                  class="form-control"
+                  placeholder="Quartier, rue, ville"
+                  required
+                />
+                <small class="text-muted">
+                  Adresse actuelle de résidence
+                </small>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Téléphone -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label">
+                  Téléphone <span class="text-danger">*</span>
+                </label>
+                <input
+                  v-model="form.telephone"
+                  type="text"
+                  class="form-control"
+                  placeholder="+242 06 603 43 57"
+                  required
+                />
+                <small class="text-muted">
+                  Numéro joignable (indicatif pays inclus)
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div v-if="errorMessage" class="alert alert-danger mt-3">
+          {{ errorMessage }}
+        </div>
+
+        <div v-if="successMessage" class="alert alert-success mt-3">
+          {{ successMessage }}
+        </div>
+      </form>
     </div>
+
+    <!-- Footer -->
     <div class="modal-footer">
-      <button type="submit" class="btn btn-success">Enregistrer</button>
-      <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
+      <button
+        type="button"
+        class="btn btn-secondary"
+        @click="closeDetails"
+      >
+        Annuler
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        @click="submitEtudiant"
+      >
+        Enregistrer
+      </button>
     </div>
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue';
-const etudiant = ref({});
 
-// Gestion de l'upload de la photo
-const handleFileUpload = (event) => {
-  newPersonnel.value.photo = event.target.files[0];
-  personnel.value.photo = file;
+<script setup>
+import { ref } from 'vue';
+
+const photoInput = ref(null);
+
+const form = ref({
+  photoFile: null,
+  photoPreview: null,
+});
+
+// Ouvrir le sélecteur de fichiers
+const triggerPhotoInput = () => {
+  photoInput.value.click();
 };
-const isDetailsVisible = ref(false);
+
+// Upload + preview
+const handlePhotoUpload = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  // Validation taille
+  if (file.size > 2 * 1024 * 1024) {
+    errorMessage.value = 'La photo ne doit pas dépasser 2 Mo.';
+    return;
+  }
+
+  // Validation type
+  if (!file.type.startsWith('image/')) {
+    errorMessage.value = 'Veuillez sélectionner une image valide.';
+    return;
+  }
+
+  form.value.photoFile = file;
+  form.value.photoPreview = URL.createObjectURL(file);
+};
+
+const errorMessage = ref('');
+const successMessage = ref('');
+
+const submitEtudiant = () => {
+  errorMessage.value = '';
+  successMessage.value = '';
+
+  if (!form.value.nom || !form.value.prenom) {
+    errorMessage.value = 'Veuillez remplir tous les champs obligatoires.';
+    return;
+  }
+
+  successMessage.value = 'Étudiant enregistré avec succès.';
+};
 
 const closeDetails = () => {
-  isDetailsVisible.value = false;
+  // fermeture du modal
 };
-// Fonction d'envoi du formulaire
-// Fonction pour obtenir l'URL de l'image du etudiant
-const getImageUrl = (photoPath) => {
-  return `http://localhost:3500${photoPath}`; // Remplace cette URL par celle de ton backend
-};
+
+const getImageUrl = (path) => `http://localhost:3500${path}`;
 </script>
+
+
 <style scoped>
+.modal-content {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  border-bottom: 2px solid #e9ecef;
+}
+
+.modal-footer {
+  border-top: 2px solid #e9ecef;
+}
+
+.form-label {
+  font-weight: 500;
+}
+
 .avatar {
-  width: 150px;
-  height: 150px;
-  border-radius: 8px;
-  border-color: antiquewhite;
-  border-style: solid;
-  font-weight: bold;
-  font-size: 2rem;
-  overflow: hidden; /* Masque l'excédent d'image */
+  width: 140px;
+  height: 140px;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .avatar-img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Permet à l'image de couvrir l'espace sans déformation */
-}
-.modal-content {
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-}
-
-.info-card {
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  padding: 15px;
-  height: 100%;
-}
-
-.info-title {
-  color: #495057;
-  font-weight: 600;
-  margin-bottom: 15px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #dee2e6;
-}
-
-.info-item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.info-label {
-  font-weight: 500;
-  color: #6c757d;
-}
-
-.info-value {
-  font-weight: 400;
-  color: #212529;
-  text-align: right;
-}
-
-.badge {
-  padding: 5px 10px;
-  border-radius: 50px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.progress {
-  border-radius: 5px;
-  background-color: #e9ecef;
-}
-
-.btn-close:focus {
-  box-shadow: none;
-}
-
-.modal-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.modal-footer {
-  border-top: 1px solid #dee2e6;
+  object-fit: cover;
 }
 </style>
+
