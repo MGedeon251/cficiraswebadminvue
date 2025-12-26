@@ -6,7 +6,14 @@
         <p class="text-muted">Liste des niveaux académiques associés à cette filière.</p>
       </div>
 
-      <button class="btn btn-outline-dark me-2" @click="openCreateModal">+ Créer un niveau</button>
+      <button
+        class="btn btn-outline-dark me-2"
+        data-bs-toggle="modal"
+        data-bs-target="#niveauModal"
+      >
+        + Créer un niveau
+      </button>
+      <NiveauFormModal />
     </div>
 
     <div class="col-12">
@@ -64,19 +71,11 @@
         </table>
       </div>
     </div>
-
-    <!-- Modal création / édition -->
-    <NiveauFormModal
-      v-if="showModal"
-      :niveau="selectedNiveau"
-      @close="closeModal"
-      @save="saveNiveau"
-    />
   </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import NiveauFormModal from '../Modal/NiveauFormModal.vue';
+import NiveauFormModal from '../Modal/addNiveau.vue';
 import ItemActions from '../details/ItemActions.vue';
 
 /* =====================

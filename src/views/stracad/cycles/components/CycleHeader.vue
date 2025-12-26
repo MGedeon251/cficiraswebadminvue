@@ -29,7 +29,14 @@
           >
             <i class="mdi mdi-clock-outline text-muted"></i>
           </button>
-          <button class="btn btn-primary mt-2 mt-xl-0">+ Ajouter un nouveau</button>
+          <button
+            class="btn btn-primary mt-2 mt-xl-0"
+            data-bs-toggle="modal"
+            data-bs-target="#cycleModal"
+          >
+            + Ajouter un nouveau
+          </button>
+          <AddCycle />
         </div>
       </div>
     </div>
@@ -37,6 +44,8 @@
 </template>
 
 <script setup>
+import AddCycle from './Modal/addCycle.vue';
+
 const exportData = () => {
   console.log('Export des années académiques');
 };

@@ -25,27 +25,13 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="exampleInputName1">Noms</label>
+                <label for="exampleInputName1">Noms<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" />
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label class="form-label">Prenoms</label>
-                <input type="text" class="form-control" />
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputName1">Date de naissance</label>
-                <input type="text" class="form-control" />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="form-label">Lieu de naissance</label>
+                <label class="form-label">Prenoms <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" />
               </div>
             </div>
@@ -53,13 +39,17 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="exampleInputName1">Sexe</label>
+                <label for="exampleInputName1"
+                  >Date de naissance<span class="text-danger">*</span></label
+                >
                 <input type="text" class="form-control" />
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label class="form-label">Adresse</label>
+                <label class="form-label"
+                  >Lieu de naissance<span class="text-danger">*</span></label
+                >
                 <input type="text" class="form-control" />
               </div>
             </div>
@@ -67,7 +57,21 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="exampleInputName1">Telephone</label>
+                <label for="exampleInputName1">Sexe<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label">Adresse<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="exampleInputName1">Telephone<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" placeholder="+242 066034357 " />
               </div>
             </div>

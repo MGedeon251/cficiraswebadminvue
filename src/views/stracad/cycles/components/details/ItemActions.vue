@@ -36,7 +36,7 @@
       </li>
     </ul>
   </div>
-   <!-- Modal pour les détails -->
+  <!-- Modal pour les détails -->
   <teleport to="body">
     <div
       v-if="isDetailsVisible"
@@ -65,7 +65,6 @@
       </div>
     </div>
   </teleport>
-  
 </template>
 
 <script setup>
@@ -89,4 +88,3 @@ const closeDetails = () => {
   isDetailsVisible.value = false;
 };
 </script>
-
