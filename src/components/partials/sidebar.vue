@@ -19,7 +19,7 @@
         <div class="collapse" id="structure-academique">
           <ul class="nav flex-column sub-menu">
             <li class="nav-item"><a class="nav-link" href="/annees-academiques">Années académiques</a></li>
-            <li class="nav-item"><a class="nav-link" href="/cycles">Cycles</a></li>
+            <li class="nav-item"><a class="nav-link" href="/cycles-academiques">Cycles</a></li>
             <li class="nav-item"><a class="nav-link" href="/filieres">Filières</a></li>
             <li class="nav-item"><a class="nav-link" href="/classes-niveaux">Classes</a></li>
             <li class="nav-item"><a class="nav-link" href="/semestres">Semestres</a></li>

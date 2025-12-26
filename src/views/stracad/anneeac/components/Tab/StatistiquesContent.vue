@@ -53,27 +53,27 @@
     
       <div class="card-body">
         <div class="table-responsive">
-       <table class="table table-bordered table-striped mb-5">
-        <thead>
-          <tr>
-              <th>Total candidats</th>
-              <th>Hommes</th>
-              <th>Femmes</th>
-              <th>Nombre d'épreuves</th>
-              <th>Notes saisies</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td colspan="9" class="text-center py-4">
-              <div class="d-flex flex-column align-items-center">
-                <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
-              </div>
-              <div class="text-pr">Aucune donnée</div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <table class="table table-bordered table-striped mb-5">
+          <thead>
+            <tr>
+                <th>Total candidats</th>
+                <th>Hommes</th>
+                <th>Femmes</th>
+                <th>Nombre d'épreuves</th>
+                <th>Notes saisies</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="9" class="text-center py-4">
+                <div class="d-flex flex-column align-items-center">
+                  <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
+                </div>
+                <div class="text-pr">Aucune donnée</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
