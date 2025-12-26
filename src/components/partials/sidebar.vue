@@ -246,7 +246,6 @@
       </li>
 
       <!-- Statistiques -->
-      c
       <li class="nav-item">
         <a class="nav-link" href="/statistiques">
           <i class="mdi mdi-chart-bar menu-icon"></i>
