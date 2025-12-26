@@ -15,7 +15,7 @@
               <th>Filière</th>
               <th>Niveau</th>
               <th>Capacité max</th>
-              <th width="120"></th>
+              <th></th>
             </tr>
           </thead>
 
@@ -33,9 +33,13 @@
               <td>{{ classe.niveau }}</td>
               <td>{{ classe.capacite }}</td>
               <td>
-                <button class="btn btn-sm btn-outline-primary" @click="editClasse(classe)">
-                  Modifier
-                </button>
+                <ItemActions
+                  :item="classe"
+                  concourRoute="/edition-concours/"
+                  :showAdd="false"
+                  @edit="editClasse"
+                  @delete="confirmDelete"
+                />
               </td>
             </tr>
 
@@ -56,6 +60,7 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
+import ItemActions from '../details/ItemActions.vue';
 
 /* =====================
    États

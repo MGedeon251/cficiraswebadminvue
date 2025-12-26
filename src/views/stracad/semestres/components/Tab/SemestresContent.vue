@@ -41,9 +41,13 @@
                 </span>
               </td>
               <td>
-                <button class="btn btn-sm btn-outline-primary" @click="editSemestre(semestre)">
-                  Modifier
-                </button>
+                <ItemActions
+                  :item="semestre"
+                  concourRoute="/edition-semestre/"
+                  :showAdd="false"
+                  @edit="editSemestre"
+                  @delete="confirmDelete"
+                />
               </td>
             </tr>
 
@@ -64,6 +68,7 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
+import ItemActions from '../details/ItemActions.vue';
 
 /* =====================
    États

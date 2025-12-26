@@ -41,9 +41,14 @@
                 </span>
               </td>
               <td>
-                <button class="btn btn-sm btn-outline-primary me-1" @click="editNiveau(niveau)">
-                  Modifier
-                </button>
+                <ItemActions
+                  :item="niveau"
+                  concourRoute="/edition-concours/"
+                  :showAdd="false"
+                  editModalTarget="#editModuleModal"
+                  @edit="editModule"
+                  @delete="confirmDelete"
+                />
               </td>
             </tr>
 
@@ -72,6 +77,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import NiveauFormModal from '../Modal/NiveauFormModal.vue';
+import ItemActions from '../details/ItemActions.vue';
 
 /* =====================
    États

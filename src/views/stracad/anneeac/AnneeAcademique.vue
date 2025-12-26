@@ -24,10 +24,6 @@ import AnneeTab from './components/AnneeTab.vue';
 
 const loading = ref(true);
 const formateurs = ref([]);
-const examDevoirData = ref([]);
-const sessionOrdinaireData = ref([]);
-const sessionRappelData = ref([]);
-
 onMounted(() => {
   setTimeout(() => {
     formateurs.value = [
