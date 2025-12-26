@@ -29,7 +29,10 @@
           >
             <i class="mdi mdi-clock-outline text-muted"></i>
           </button>
-          <button class="btn btn-primary mt-2 mt-xl-0">+ Ajouter un nouveau</button>
+          <button class="btn btn-primary mt-2 mt-xl-0"
+            data-bs-toggle="modal"
+            data-bs-target="#semestreModal">+ Ajouter nouveau</button>
+          <AddSemestre/>
         </div>
       </div>
     </div>
@@ -37,6 +40,8 @@
 </template>
 
 <script setup>
+import AddSemestre from './Modal/addSemestre.vue';
+
 const exportData = () => {
   console.log('Export des années académiques');
 };
