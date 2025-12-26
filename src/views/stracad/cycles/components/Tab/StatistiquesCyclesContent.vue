@@ -2,11 +2,9 @@
 <template>
   <div>
     <!-- Statistiques rapides -->
-      <div class="col-12 mb-2">
+    <div class="col-12 mb-2">
       <h4>Statistiques des cycles</h4>
-      <p class="text-muted">
-        Indicateurs globaux liés aux cycles et à l’activité académique.
-      </p>
+      <p class="text-muted">Indicateurs globaux liés aux cycles et à l’activité académique.</p>
     </div>
 
     <div class="table-responsive">

@@ -3,14 +3,10 @@
     <div class="col-12 d-flex justify-content-between align-items-center mb-3">
       <div>
         <h4>Niveaux de la filière</h4>
-        <p class="text-muted">
-          Liste des niveaux académiques associés à cette filière.
-        </p>
+        <p class="text-muted">Liste des niveaux académiques associés à cette filière.</p>
       </div>
 
-      <button class="btn btn-outline-dark me-2" @click="openCreateModal">
-        + Créer un niveau
-      </button>
+      <button class="btn btn-outline-dark me-2" @click="openCreateModal">+ Créer un niveau</button>
     </div>
 
     <div class="col-12">
@@ -30,33 +26,22 @@
 
           <tbody>
             <tr v-if="loading">
-              <td colspan="7" class="text-center py-4">
-                Chargement des niveaux...
-              </td>
+              <td colspan="7" class="text-center py-4">Chargement des niveaux...</td>
             </tr>
 
-            <tr
-              v-for="(niveau, index) in niveaux"
-              :key="niveau.id"
-            >
+            <tr v-for="(niveau, index) in niveaux" :key="niveau.id">
               <td>{{ index + 1 }}</td>
               <td>{{ niveau.code }}</td>
               <td>{{ niveau.designation }}</td>
               <td>{{ niveau.annee }}</td>
               <td>{{ niveau.credits }}</td>
               <td>
-                <span
-                  class="badge"
-                  :class="niveau.actif ? 'bg-success' : 'bg-secondary'"
-                >
+                <span class="badge" :class="niveau.actif ? 'bg-success' : 'bg-secondary'">
                   {{ niveau.actif ? 'Actif' : 'Inactif' }}
                 </span>
               </td>
               <td>
-                <button
-                  class="btn btn-sm btn-outline-primary me-1"
-                  @click="editNiveau(niveau)"
-                >
+                <button class="btn btn-sm btn-outline-primary me-1" @click="editNiveau(niveau)">
                   Modifier
                 </button>
               </td>
@@ -65,12 +50,7 @@
             <tr v-if="!loading && niveaux.length === 0">
               <td colspan="7" class="text-center py-4">
                 <div class="d-flex flex-column align-items-center">
-                  <img
-                    src="/img/empty-box.svg"
-                    alt="Aucune donnée"
-                    class="mb-2"
-                    width="80"
-                  />
+                  <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="80" />
                   <div class="text-muted">Aucun niveau enregistré</div>
                 </div>
               </td>
@@ -90,23 +70,23 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
-import NiveauFormModal from '../Modal/NiveauFormModal.vue'
+import { ref, onMounted } from 'vue';
+import NiveauFormModal from '../Modal/NiveauFormModal.vue';
 
 /* =====================
    États
 ===================== */
-const loading = ref(false)
-const niveaux = ref([])
+const loading = ref(false);
+const niveaux = ref([]);
 
-const showModal = ref(false)
-const selectedNiveau = ref(null)
+const showModal = ref(false);
+const selectedNiveau = ref(null);
 
 /* =====================
    Méthodes
 ===================== */
 const fetchNiveaux = async () => {
-  loading.value = true
+  loading.value = true;
 
   // Simulation API
   niveaux.value = [
@@ -116,7 +96,7 @@ const fetchNiveaux = async () => {
       designation: 'Licence 1',
       annee: 1,
       credits: 60,
-      actif: true
+      actif: true,
     },
     {
       id: 2,
@@ -124,43 +104,43 @@ const fetchNiveaux = async () => {
       designation: 'Licence 2',
       annee: 2,
       credits: 60,
-      actif: true
-    }
-  ]
+      actif: true,
+    },
+  ];
 
-  loading.value = false
-}
+  loading.value = false;
+};
 
 const openCreateModal = () => {
-  selectedNiveau.value = null
-  showModal.value = true
-}
+  selectedNiveau.value = null;
+  showModal.value = true;
+};
 
 const editNiveau = (niveau) => {
-  selectedNiveau.value = { ...niveau }
-  showModal.value = true
-}
+  selectedNiveau.value = { ...niveau };
+  showModal.value = true;
+};
 
 const closeModal = () => {
-  showModal.value = false
-}
+  showModal.value = false;
+};
 
 const saveNiveau = (niveau) => {
   if (niveau.id) {
-    const index = niveaux.value.findIndex(n => n.id === niveau.id)
-    niveaux.value[index] = niveau
+    const index = niveaux.value.findIndex((n) => n.id === niveau.id);
+    niveaux.value[index] = niveau;
   } else {
-    niveau.id = Date.now()
-    niveau.actif = true
-    niveaux.value.push(niveau)
+    niveau.id = Date.now();
+    niveau.actif = true;
+    niveaux.value.push(niveau);
   }
-  closeModal()
-}
+  closeModal();
+};
 
 /* =====================
    Lifecycle
 ===================== */
 onMounted(() => {
-  fetchNiveaux()
-})
+  fetchNiveaux();
+});
 </script>

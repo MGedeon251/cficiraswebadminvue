@@ -2,9 +2,7 @@
   <div class="row">
     <div class="col-12 mb-2">
       <h4>Statistiques des classes</h4>
-      <p class="text-muted">
-        Indicateurs globaux liés aux classes et à l’activité académique.
-      </p>
+      <p class="text-muted">Indicateurs globaux liés aux classes et à l’activité académique.</p>
     </div>
 
     <div class="col-12">
@@ -23,9 +21,7 @@
           <tbody>
             <!-- Chargement -->
             <tr v-if="loading">
-              <td colspan="5" class="text-center py-4">
-                Chargement des statistiques...
-              </td>
+              <td colspan="5" class="text-center py-4">Chargement des statistiques...</td>
             </tr>
 
             <!-- Données -->
@@ -41,12 +37,7 @@
             <tr v-if="!loading && !stats">
               <td colspan="5" class="text-center py-4">
                 <div class="d-flex flex-column align-items-center">
-                  <img
-                    src="/img/empty-box.svg"
-                    alt="Aucune donnée"
-                    class="mb-2"
-                    width="80"
-                  />
+                  <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="80" />
                   <div class="text-muted">Aucune donnée statistique disponible</div>
                 </div>
               </td>
@@ -58,19 +49,19 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
 
 /* =====================
    États
 ===================== */
-const loading = ref(false)
-const stats = ref(null)
+const loading = ref(false);
+const stats = ref(null);
 
 /* =====================
    Méthodes
 ===================== */
 const fetchStatistiquesClasses = async () => {
-  loading.value = true
+  loading.value = true;
 
   // Simulation API (agrégats globaux)
   stats.value = {
@@ -78,16 +69,16 @@ const fetchStatistiquesClasses = async () => {
     cyclesActifs: 2,
     filieresAssociees: 5,
     etudiantsInscrits: 340,
-    notesSaisies: 1280
-  }
+    notesSaisies: 1280,
+  };
 
-  loading.value = false
-}
+  loading.value = false;
+};
 
 /* =====================
    Lifecycle
 ===================== */
 onMounted(() => {
-  fetchStatistiquesClasses()
-})
+  fetchStatistiquesClasses();
+});
 </script>

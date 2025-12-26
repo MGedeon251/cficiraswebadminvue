@@ -1,7 +1,6 @@
 <template>
   <div>
     <ul class="nav nav-tabs px-4" role="tablist">
-
       <!-- Onglet Classes -->
       <li class="nav-item">
         <a
@@ -64,7 +63,6 @@
     </ul>
 
     <div class="tab-content p-4">
-
       <!-- Classes -->
       <div
         class="tab-pane fade show active"
@@ -76,12 +74,7 @@
       </div>
 
       <!-- Niveaux -->
-      <div
-        class="tab-pane fade"
-        id="niveaux"
-        role="tabpanel"
-        aria-labelledby="niveaux-tab"
-      >
+      <div class="tab-pane fade" id="niveaux" role="tabpanel" aria-labelledby="niveaux-tab">
         <NiveauxContent />
       </div>
 
@@ -104,13 +97,12 @@
       >
         <StatistiquesClassesContent />
       </div>
-
     </div>
   </div>
 </template>
 <script setup>
-import ClassesContent from './Tab/ClassesContent.vue'
-import NiveauxContent from './Tab/NiveauxContent.vue'
-import OrganisationClassesContent from './Tab/OrganisationClassesContent.vue'
-import StatistiquesClassesContent from './Tab/StatistiquesClassesContent.vue'
+import ClassesContent from './Tab/ClassesContent.vue';
+import NiveauxContent from './Tab/NiveauxContent.vue';
+import OrganisationClassesContent from './Tab/OrganisationClassesContent.vue';
+import StatistiquesClassesContent from './Tab/StatistiquesClassesContent.vue';
 </script>

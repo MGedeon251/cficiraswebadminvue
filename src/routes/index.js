@@ -136,7 +136,7 @@ const routes = [
         name: 'FiliereHeader',
         component: FiliereHeader,
       },
-            {
+      {
         path: '/classes-niveaux',
         name: 'ClassesNiveaux',
         component: Classes,
