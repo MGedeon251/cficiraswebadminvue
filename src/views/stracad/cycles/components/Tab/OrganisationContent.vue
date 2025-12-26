@@ -1,51 +1,49 @@
 <template>
   <div class="row">
     <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="mb-0">
-            <i class="mdi mdi-filter-variant"></i> Filtres
-          </h5>
-          <button class="btn btn-sm btn-link text-decoration-none" @click="resetFilters">
-            <i class="mdi mdi-refresh"></i> Réinitialiser
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0"><i class="mdi mdi-filter-variant"></i> Filtres</h5>
+        <button class="btn btn-sm btn-link text-decoration-none" @click="resetFilters">
+          <i class="mdi mdi-refresh"></i> Réinitialiser
+        </button>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-5">
+          <label class="form-label">Rechercher</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="mdi mdi-magnify"></i></span>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Code, nom du cycle..."
+              v-model="searchQuery"
+            />
+          </div>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Statut</label>
+          <select class="form-select" v-model="filterStatut">
+            <option value="">Tous</option>
+            <option value="actif">Actif</option>
+            <option value="inactif">Inactif</option>
+            <option value="brouillon">Brouillon</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Niveau</label>
+          <select class="form-select" v-model="filterNiveau">
+            <option value="">Tous les niveaux</option>
+            <option value="1">Niveau 1</option>
+            <option value="2">Niveau 2</option>
+            <option value="3">Niveau 3</option>
+          </select>
+        </div>
+        <div class="col-md-1 d-flex align-items-end">
+          <button class="btn btn-primary w-100" @click="applyFilters">
+            <i class="mdi mdi-check"></i>
           </button>
         </div>
-        <div class="row g-3">
-          <div class="col-md-5">
-            <label class="form-label">Rechercher</label>
-            <div class="input-group">
-              <span class="input-group-text"><i class="mdi mdi-magnify"></i></span>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Code, nom du cycle..."
-                v-model="searchQuery"
-              />
-            </div>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">Statut</label>
-            <select class="form-select" v-model="filterStatut">
-              <option value="">Tous</option>
-              <option value="actif">Actif</option>
-              <option value="inactif">Inactif</option>
-              <option value="brouillon">Brouillon</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">Niveau</label>
-            <select class="form-select" v-model="filterNiveau">
-              <option value="">Tous les niveaux</option>
-              <option value="1">Niveau 1</option>
-              <option value="2">Niveau 2</option>
-              <option value="3">Niveau 3</option>
-            </select>
-          </div>
-          <div class="col-md-1 d-flex align-items-end">
-            <button class="btn btn-primary w-100" @click="applyFilters">
-              <i class="mdi mdi-check"></i>
-            </button>
-          </div>
-        </div>
+      </div>
     </div>
     <div class="table-responsive">
       <table class="table table-striped">
@@ -144,9 +142,10 @@ const formData = ref({
 
 // Computed
 const filteredCycles = computed(() => {
-  return cycles.value.filter(cycle => {
-    const matchSearch = cycle.nom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-                       cycle.code.toLowerCase().includes(searchQuery.value.toLowerCase());
+  return cycles.value.filter((cycle) => {
+    const matchSearch =
+      cycle.nom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      cycle.code.toLowerCase().includes(searchQuery.value.toLowerCase());
     const matchStatut = !filterStatut.value || cycle.statut === filterStatut.value;
     return matchSearch && matchStatut;
   });
@@ -155,27 +154,27 @@ const filteredCycles = computed(() => {
 // Méthodes
 const getCycleIcon = (type) => {
   const icons = {
-    'licence': 'mdi mdi-school text-primary',
-    'master': 'mdi mdi-school-outline text-success',
-    'doctorat': 'mdi mdi-certificate text-warning',
+    licence: 'mdi mdi-school text-primary',
+    master: 'mdi mdi-school-outline text-success',
+    doctorat: 'mdi mdi-certificate text-warning',
   };
   return icons[type] || 'mdi mdi-school';
 };
 
 const getStatutClass = (statut) => {
   const classes = {
-    'actif': 'status-badge status-active',
-    'inactif': 'status-badge status-inactive',
-    'brouillon': 'status-badge status-draft',
+    actif: 'status-badge status-active',
+    inactif: 'status-badge status-inactive',
+    brouillon: 'status-badge status-draft',
   };
   return classes[statut] || 'status-badge';
 };
 
 const getStatutLabel = (statut) => {
   const labels = {
-    'actif': 'Actif',
-    'inactif': 'Inactif',
-    'brouillon': 'Brouillon',
+    actif: 'Actif',
+    inactif: 'Inactif',
+    brouillon: 'Brouillon',
   };
   return labels[statut] || statut;
 };
@@ -256,10 +255,18 @@ const enregistrerCycle = () => {
   font-size: 0.9rem;
 }
 
-.bg-primary-soft { background-color: rgba(0, 123, 255, 0.1); }
-.bg-success-soft { background-color: rgba(40, 167, 69, 0.1); }
-.bg-info-soft { background-color: rgba(23, 162, 184, 0.1); }
-.bg-warning-soft { background-color: rgba(255, 193, 7, 0.1); }
+.bg-primary-soft {
+  background-color: rgba(0, 123, 255, 0.1);
+}
+.bg-success-soft {
+  background-color: rgba(40, 167, 69, 0.1);
+}
+.bg-info-soft {
+  background-color: rgba(23, 162, 184, 0.1);
+}
+.bg-warning-soft {
+  background-color: rgba(255, 193, 7, 0.1);
+}
 
 .cycle-icon {
   width: 40px;

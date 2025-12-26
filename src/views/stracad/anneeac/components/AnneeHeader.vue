@@ -4,7 +4,7 @@
       <div class="d-flex justify-content-between flex-wrap">
         <div class="d-flex align-items-end flex-wrap">
           <div class="me-md-3 me-xl-5">
-           <h2>Gestion Années Académiques</h2>
+            <h2>Gestion Années Académiques</h2>
             <p class="mb-md-0">Configuration et gestion des années académiques</p>
             <p class="mb-md-0"></p>
           </div>
@@ -15,10 +15,18 @@
           </div>
         </div>
         <div class="d-flex justify-content-between align-items-end aflex-wrap">
-          <button type="button" @click="exportData" class="btn btn-light bg-white btn-icon me-3 d-none d-md-block">
+          <button
+            type="button"
+            @click="exportData"
+            class="btn btn-light bg-white btn-icon me-3 d-none d-md-block"
+          >
             <i class="mdi mdi-download text-muted"></i>
           </button>
-          <button type="button" @click="printData" class="btn btn-light bg-white btn-icon me-3 mt-2 mt-xl-0">
+          <button
+            type="button"
+            @click="printData"
+            class="btn btn-light bg-white btn-icon me-3 mt-2 mt-xl-0"
+          >
             <i class="mdi mdi-clock-outline text-muted"></i>
           </button>
           <button class="btn btn-primary mt-2 mt-xl-0">+Nouvelle année</button>

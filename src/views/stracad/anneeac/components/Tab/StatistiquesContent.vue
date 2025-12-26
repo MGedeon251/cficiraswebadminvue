@@ -1,4 +1,3 @@
-
 <!-- ListeAnneesContent.vue -->
 <template>
   <div>
@@ -50,17 +49,17 @@
       </div>
     </div>
     <!-- Tableau -->
-    
-      <div class="card-body">
-        <div class="table-responsive">
+
+    <div class="card-body">
+      <div class="table-responsive">
         <table class="table table-bordered table-striped mb-5">
           <thead>
             <tr>
-                <th>Total candidats</th>
-                <th>Hommes</th>
-                <th>Femmes</th>
-                <th>Nombre d'épreuves</th>
-                <th>Notes saisies</th>
+              <th>Total candidats</th>
+              <th>Hommes</th>
+              <th>Femmes</th>
+              <th>Nombre d'épreuves</th>
+              <th>Notes saisies</th>
             </tr>
           </thead>
           <tbody>
@@ -78,7 +77,6 @@
     </div>
   </div>
 </template>
-
 
 <script setup>
 import { ref, computed } from 'vue';
@@ -131,10 +129,18 @@ const totalEtudiants = ref(1250);
   font-size: 0.9rem;
 }
 
-.bg-primary-soft { background-color: rgba(0, 123, 255, 0.1); }
-.bg-success-soft { background-color: rgba(40, 167, 69, 0.1); }
-.bg-info-soft { background-color: rgba(23, 162, 184, 0.1); }
-.bg-warning-soft { background-color: rgba(255, 193, 7, 0.1); }
+.bg-primary-soft {
+  background-color: rgba(0, 123, 255, 0.1);
+}
+.bg-success-soft {
+  background-color: rgba(40, 167, 69, 0.1);
+}
+.bg-info-soft {
+  background-color: rgba(23, 162, 184, 0.1);
+}
+.bg-warning-soft {
+  background-color: rgba(255, 193, 7, 0.1);
+}
 
 .table th {
   font-weight: 600;

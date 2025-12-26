@@ -2,7 +2,7 @@
   <div class="row">
     <h4>Liste des cycles</h4>
     <p>Vous pouvez consulter les détails de chaque examen en cliquant sur le lien correspondant.</p>
-    
+
     <div class="table-responsive">
       <table class="table table-striped">
         <thead>

@@ -1,6 +1,5 @@
 <template>
-
-      <div class="dropdown">
+  <div class="dropdown">
     <button class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
       ...
     </button>
@@ -38,50 +37,49 @@
     </ul>
   </div>
 
-    <teleport to="body">
-  <div
-    v-if="showDetails"
-    class="modal fade show d-block"
-    tabindex="-1"
-    style="background: rgba(0, 0, 0, 0.3)"
-  >
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Détails du candidat</h5>
-          <button type="button" class="btn-close" @click="showDetails = false"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <!-- Colonne image (photo identité) -->
-            <div class="col-md-4 text-center mb-3">
-              <img
-                :src="item.photo || 'https://static-cse.canva.com/blob/996499/Sanstitre.jpg'"
-                alt="Photo du candidat"
-                class="img-thumbnail"
-                style="max-width: 150px; max-height: 300px;"
-              />
-            </div>
+  <teleport to="body">
+    <div
+      v-if="showDetails"
+      class="modal fade show d-block"
+      tabindex="-1"
+      style="background: rgba(0, 0, 0, 0.3)"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Détails du candidat</h5>
+            <button type="button" class="btn-close" @click="showDetails = false"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <!-- Colonne image (photo identité) -->
+              <div class="col-md-4 text-center mb-3">
+                <img
+                  :src="item.photo || 'https://static-cse.canva.com/blob/996499/Sanstitre.jpg'"
+                  alt="Photo du candidat"
+                  class="img-thumbnail"
+                  style="max-width: 150px; max-height: 300px"
+                />
+              </div>
 
-            <!-- Colonne infos personnelles -->
-            <div class="col-md-8">
-              <p><strong>Matricule :</strong> {{ item.matricule }}</p>
-              <p><strong>Nom :</strong> {{ item.nom }}</p>
-              <p><strong>Prénom :</strong> {{ item.prenom }}</p>
-              <p><strong>Téléphone :</strong> {{ item.tel }}</p>
-              <p><strong>Date inscription :</strong> {{ formatDate(item.date_inscription) }}</p>
-              <!-- Ajoute ici d'autres infos si besoin -->
+              <!-- Colonne infos personnelles -->
+              <div class="col-md-8">
+                <p><strong>Matricule :</strong> {{ item.matricule }}</p>
+                <p><strong>Nom :</strong> {{ item.nom }}</p>
+                <p><strong>Prénom :</strong> {{ item.prenom }}</p>
+                <p><strong>Téléphone :</strong> {{ item.tel }}</p>
+                <p><strong>Date inscription :</strong> {{ formatDate(item.date_inscription) }}</p>
+                <!-- Ajoute ici d'autres infos si besoin -->
+              </div>
             </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" @click="showDetails = false">Fermer</button>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" @click="showDetails = false">Fermer</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</teleport>
-
+  </teleport>
 </template>
 
 <script setup>
@@ -91,5 +89,5 @@ const props = defineProps({ item: Object });
 const emit = defineEmits(['edit', 'delete']);
 const showDetails = ref(false);
 
-const formatDate = (date) => date ? dayjs(date).format('DD-MM-YYYY') : '';
+const formatDate = (date) => (date ? dayjs(date).format('DD-MM-YYYY') : '');
 </script>

@@ -122,9 +122,10 @@ const formData = ref({
 
 // Computed
 const filteredAnnees = computed(() => {
-  return anneesAcademiques.value.filter(annee => {
-    const matchSearch = annee.code.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-                       annee.libelle.toLowerCase().includes(searchQuery.value.toLowerCase());
+  return anneesAcademiques.value.filter((annee) => {
+    const matchSearch =
+      annee.code.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      annee.libelle.toLowerCase().includes(searchQuery.value.toLowerCase());
     const matchStatut = !filterStatut.value || annee.statut === filterStatut.value;
     return matchSearch && matchStatut;
   });
@@ -135,7 +136,7 @@ const formatDate = (date) => {
   return new Date(date).toLocaleDateString('fr-FR', {
     day: '2-digit',
     month: 'long',
-    year: 'numeric'
+    year: 'numeric',
   });
 };
 
@@ -147,20 +148,20 @@ const calculerDuree = (debut, fin) => {
 
 const getStatutClass = (statut) => {
   const classes = {
-    'active': 'badge bg-success',
-    'en_preparation': 'badge bg-info',
-    'terminee': 'badge bg-warning',
-    'archivee': 'badge bg-secondary'
+    active: 'badge bg-success',
+    en_preparation: 'badge bg-info',
+    terminee: 'badge bg-warning',
+    archivee: 'badge bg-secondary',
   };
   return classes[statut] || 'badge bg-secondary';
 };
 
 const getStatutLabel = (statut) => {
   const labels = {
-    'active': 'Active',
-    'en_preparation': 'En préparation',
-    'terminee': 'Terminée',
-    'archivee': 'Archivée'
+    active: 'Active',
+    en_preparation: 'En préparation',
+    terminee: 'Terminée',
+    archivee: 'Archivée',
   };
   return labels[statut] || statut;
 };

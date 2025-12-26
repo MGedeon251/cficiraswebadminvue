@@ -11,7 +11,7 @@
           aria-controls="cycles"
           aria-selected="true"
         >
-        Cycles
+          Cycles
         </a>
       </li>
       <li class="nav-item">
@@ -23,7 +23,8 @@
           role="tab"
           aria-controls="filieres"
           aria-selected="false"
-        > Filières
+        >
+          Filières
         </a>
       </li>
       <li class="nav-item">
@@ -35,7 +36,8 @@
           role="tab"
           aria-controls="organisation"
           aria-selected="false"
-        > Organisation
+        >
+          Organisation
         </a>
       </li>
       <li class="nav-item">
@@ -47,7 +49,8 @@
           role="tab"
           aria-controls="statistiques"
           aria-selected="false"
-        > Statistiques
+        >
+          Statistiques
         </a>
       </li>
     </ul>
@@ -61,26 +64,21 @@
       >
         <CyclesContent />
       </div>
-      <div 
-        class="tab-pane fade" 
-        id="filieres" 
-        role="tabpanel" 
-        aria-labelledby="filieres-tab"
-      >
+      <div class="tab-pane fade" id="filieres" role="tabpanel" aria-labelledby="filieres-tab">
         <FilieresContent />
       </div>
-      <div 
-        class="tab-pane fade" 
-        id="organisation" 
-        role="tabpanel" 
+      <div
+        class="tab-pane fade"
+        id="organisation"
+        role="tabpanel"
         aria-labelledby="organisation-tab"
       >
         <OrganisationContent />
       </div>
-      <div 
-        class="tab-pane fade" 
-        id="statistiques" 
-        role="tabpanel" 
+      <div
+        class="tab-pane fade"
+        id="statistiques"
+        role="tabpanel"
         aria-labelledby="statistiques-tab"
       >
         <StatistiquesCyclesContent />

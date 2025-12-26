@@ -11,14 +11,21 @@
 
       <!-- Structure Académique (NOUVEAU) -->
       <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="collapse" href="#structure-academique" aria-expanded="false">
+        <a
+          class="nav-link"
+          data-bs-toggle="collapse"
+          href="#structure-academique"
+          aria-expanded="false"
+        >
           <i class="mdi mdi-sitemap menu-icon"></i>
           <span class="menu-title">Structure Académique</span>
           <i class="menu-arrow"></i>
         </a>
         <div class="collapse" id="structure-academique">
           <ul class="nav flex-column sub-menu">
-            <li class="nav-item"><a class="nav-link" href="/annees-academiques">Années académiques</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="/annees-academiques">Années académiques</a>
+            </li>
             <li class="nav-item"><a class="nav-link" href="/cycles-academiques">Cycles</a></li>
             <li class="nav-item"><a class="nav-link" href="/filieres">Filières</a></li>
             <li class="nav-item"><a class="nav-link" href="/classes-niveaux">Classes</a></li>
@@ -36,8 +43,12 @@
         </a>
         <div class="collapse" id="scolarite">
           <ul class="nav flex-column sub-menu">
-            <li class="nav-item"><a class="nav-link" href="/etudiants">Gestion des étudiants</a></li>
-            <li class="nav-item"><a class="nav-link" href="/dossiers-scolaires">Dossiers scolaires</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="/etudiants">Gestion des étudiants</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/dossiers-scolaires">Dossiers scolaires</a>
+            </li>
             <li class="nav-item"><a class="nav-link" href="/absences">Absences & Présences</a></li>
             <li class="nav-item"><a class="nav-link" href="/notes">Évaluations & Notes</a></li>
             <li class="nav-item"><a class="nav-link" href="/deliberations">Délibérations</a></li>
@@ -180,7 +191,9 @@
         </a>
         <div class="collapse" id="coordination">
           <ul class="nav flex-column sub-menu">
-            <li class="nav-item"><a class="nav-link" href="/themes-memoires">Thèmes & mémoires</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="/themes-memoires">Thèmes & mémoires</a>
+            </li>
             <li class="nav-item"><a class="nav-link" href="/soutenances">Soutenances</a></li>
             <li class="nav-item"><a class="nav-link" href="/statut">Statut étudiant</a></li>
           </ul>
@@ -233,7 +246,8 @@
       </li>
 
       <!-- Statistiques -->
-c      <li class="nav-item">
+      c
+      <li class="nav-item">
         <a class="nav-link" href="/statistiques">
           <i class="mdi mdi-chart-bar menu-icon"></i>
           <span class="menu-title">Statistiques</span>

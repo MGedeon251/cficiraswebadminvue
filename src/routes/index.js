@@ -7,7 +7,7 @@ import Home from '../views/dashboard/Dashboard.vue'; // Page d'accueil
 import Login from '../views/auth/Login.vue'; // Page de login
 import Register from '../views/auth/Register.vue'; // Page de login
 
-// Structure academique 
+// Structure academique
 import AnneeAcademiqueHeader from '@/views/stracad/anneeac/AnneeAcademique.vue';
 import CyclesAcademiqueHeader from '@/views/stracad/cycles/Cycle.vue';
 //Tableau de bord
@@ -119,8 +119,16 @@ const routes = [
       { path: '/calendrier-examens', name: 'CalendrierExamens', component: Calendrier },
       { path: '/salles-horaires', name: 'SallesExamens', component: Salles },
       { path: '/rapport-examens', name: 'RapportExamens', component: RapportExamens },
-      {path : '/annees-academiques', name: 'AnneeAcademiqueHeader', component: AnneeAcademiqueHeader},
-      {path : '/cycles-academiques', name: 'CyclesAcademiqueHeader', component: CyclesAcademiqueHeader},
+      {
+        path: '/annees-academiques',
+        name: 'AnneeAcademiqueHeader',
+        component: AnneeAcademiqueHeader,
+      },
+      {
+        path: '/cycles-academiques',
+        name: 'CyclesAcademiqueHeader',
+        component: CyclesAcademiqueHeader,
+      },
     ],
   },
 ];

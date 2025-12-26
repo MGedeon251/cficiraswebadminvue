@@ -7,8 +7,7 @@
           <div class="card">
             <div class="card-body">
               <div class="d-flex justify-content-between flex-wrap">
-                <div class="d-flex align-items-end flex-wrap">
-                </div>
+                <div class="d-flex align-items-end flex-wrap"></div>
                 <div class="d-flex justify-content-between align-items-end flex-wrap">
                   <!--
                   <button class="btn btn-outline-dark me-2">Cloturer un concours </button>

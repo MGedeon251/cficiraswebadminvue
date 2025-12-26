@@ -11,12 +11,10 @@
       </div>
       <div class="d-flex justify-content-end mb-2">
         <button class="btn btn-outline-dark me-2" @click="refreshStats">
-        Actualiser les statistiques
-      </button>
-      <button class="btn btn-outline-dark me-2" @click="exportToExcel">
-        Exporter en Excel
-      </button>
-    </div>
+          Actualiser les statistiques
+        </button>
+        <button class="btn btn-outline-dark me-2" @click="exportToExcel">Exporter en Excel</button>
+      </div>
       <div v-if="statsData" class="mt-3">
         <table class="table table-bordered table-striped mb-5">
           <thead>
@@ -89,8 +87,8 @@
 </template>
 
 <script setup>
-import * as XLSX from 'xlsx'
-import { saveAs } from 'file-saver'
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useConcourStore } from '@/stores/gestionStores/concourStore';
@@ -123,7 +121,6 @@ const loadStats = async () => {
   }
 };
 
-
 // Export Excel
 const exportToExcel = () => {
   const generalStats = [
@@ -132,29 +129,29 @@ const exportToExcel = () => {
     ['Hommes', statsData.value.candidats_homme],
     ['Femmes', statsData.value.candidats_femme],
     ['Total Épreuves', statsData.value.total_epreuves],
-    ['Notes Saisies', statsData.value.notes_saisies]
-  ]
+    ['Notes Saisies', statsData.value.notes_saisies],
+  ];
 
   const epreuvesStats = [
     ['Épreuve', 'Notes enregistrées', 'Notes attendues', 'Pourcentage'],
-    ...statsData.value.notes_epreuves.map(e => [
+    ...statsData.value.notes_epreuves.map((e) => [
       e.intitule,
       e.notes_enregistrees,
       e.notes_attendues,
-      `${calculatePercentage(e)}%`
-    ])
-  ]
+      `${calculatePercentage(e)}%`,
+    ]),
+  ];
 
-  const wb = XLSX.utils.book_new()
-  const ws1 = XLSX.utils.aoa_to_sheet(generalStats)
-  const ws2 = XLSX.utils.aoa_to_sheet(epreuvesStats)
+  const wb = XLSX.utils.book_new();
+  const ws1 = XLSX.utils.aoa_to_sheet(generalStats);
+  const ws2 = XLSX.utils.aoa_to_sheet(epreuvesStats);
 
-  XLSX.utils.book_append_sheet(wb, ws1, 'Statistiques Générales')
-  XLSX.utils.book_append_sheet(wb, ws2, 'Par Épreuve')
+  XLSX.utils.book_append_sheet(wb, ws1, 'Statistiques Générales');
+  XLSX.utils.book_append_sheet(wb, ws2, 'Par Épreuve');
 
-  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
-  saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'statistiques_concours.xlsx')
-}
+  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'statistiques_concours.xlsx');
+};
 
 // Actualiser les stats
 const refreshStats = () => {

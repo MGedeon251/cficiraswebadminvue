@@ -1,33 +1,32 @@
-
 <!-- CyclesContent.vue -->
 <template>
   <div>
     <!-- Statistiques rapides -->
 
-        <div class="table-responsive">
-        <table class="table table-bordered table-striped mb-5">
-          <thead>
-            <tr>
-                <th>cycles au total </th>
-                <th>cycles actif</th>
-                <th>filieres associées</th>
-                <th>etudiants inscrits</th>
-                <th>Notes saisies</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="9" class="text-center py-4">
-                <div class="d-flex flex-column align-items-center">
-                  <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
-                </div>
-                <div class="text-pr">Aucune donnée</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped mb-5">
+        <thead>
+          <tr>
+            <th>cycles au total</th>
+            <th>cycles actif</th>
+            <th>filieres associées</th>
+            <th>etudiants inscrits</th>
+            <th>Notes saisies</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="9" class="text-center py-4">
+              <div class="d-flex flex-column align-items-center">
+                <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
+              </div>
+              <div class="text-pr">Aucune donnée</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </div>  
+  </div>
 </template>
 
 <script setup>
@@ -101,9 +100,10 @@ const formData = ref({
 
 // Computed
 const filteredCycles = computed(() => {
-  return cycles.value.filter(cycle => {
-    const matchSearch = cycle.nom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-                       cycle.code.toLowerCase().includes(searchQuery.value.toLowerCase());
+  return cycles.value.filter((cycle) => {
+    const matchSearch =
+      cycle.nom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      cycle.code.toLowerCase().includes(searchQuery.value.toLowerCase());
     const matchStatut = !filterStatut.value || cycle.statut === filterStatut.value;
     return matchSearch && matchStatut;
   });
@@ -112,27 +112,27 @@ const filteredCycles = computed(() => {
 // Méthodes
 const getCycleIcon = (type) => {
   const icons = {
-    'licence': 'mdi mdi-school text-primary',
-    'master': 'mdi mdi-school-outline text-success',
-    'doctorat': 'mdi mdi-certificate text-warning',
+    licence: 'mdi mdi-school text-primary',
+    master: 'mdi mdi-school-outline text-success',
+    doctorat: 'mdi mdi-certificate text-warning',
   };
   return icons[type] || 'mdi mdi-school';
 };
 
 const getStatutClass = (statut) => {
   const classes = {
-    'actif': 'status-badge status-active',
-    'inactif': 'status-badge status-inactive',
-    'brouillon': 'status-badge status-draft',
+    actif: 'status-badge status-active',
+    inactif: 'status-badge status-inactive',
+    brouillon: 'status-badge status-draft',
   };
   return classes[statut] || 'status-badge';
 };
 
 const getStatutLabel = (statut) => {
   const labels = {
-    'actif': 'Actif',
-    'inactif': 'Inactif',
-    'brouillon': 'Brouillon',
+    actif: 'Actif',
+    inactif: 'Inactif',
+    brouillon: 'Brouillon',
   };
   return labels[statut] || statut;
 };
@@ -213,10 +213,18 @@ const enregistrerCycle = () => {
   font-size: 0.9rem;
 }
 
-.bg-primary-soft { background-color: rgba(0, 123, 255, 0.1); }
-.bg-success-soft { background-color: rgba(40, 167, 69, 0.1); }
-.bg-info-soft { background-color: rgba(23, 162, 184, 0.1); }
-.bg-warning-soft { background-color: rgba(255, 193, 7, 0.1); }
+.bg-primary-soft {
+  background-color: rgba(0, 123, 255, 0.1);
+}
+.bg-success-soft {
+  background-color: rgba(40, 167, 69, 0.1);
+}
+.bg-info-soft {
+  background-color: rgba(23, 162, 184, 0.1);
+}
+.bg-warning-soft {
+  background-color: rgba(255, 193, 7, 0.1);
+}
 
 .cycle-icon {
   width: 40px;

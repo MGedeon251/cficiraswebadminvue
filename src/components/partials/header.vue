@@ -91,10 +91,10 @@
               <i class="mdi mdi-settings text-primary"></i>
               Settings
             </a>
-           <a @click="handleLogout" class="dropdown-item">
-                <i class="mdi mdi-logout text-primary"></i>
-                Deconnexion 
-              </a>
+            <a @click="handleLogout" class="dropdown-item">
+              <i class="mdi mdi-logout text-primary"></i>
+              Deconnexion
+            </a>
           </div>
         </li>
       </ul>
@@ -109,16 +109,16 @@
   </nav>
 </template>
 <script setup>
-import { useAuthStore } from '@/stores/authStore/authStore'
-import { storeToRefs } from 'pinia'
-import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore/authStore';
+import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 
-const authStore = useAuthStore()
-const { user, isAuthenticated } = storeToRefs(authStore)
-const router = useRouter()
+const authStore = useAuthStore();
+const { user, isAuthenticated } = storeToRefs(authStore);
+const router = useRouter();
 
 const handleLogout = async () => {
-  await authStore.logoutUser()
-  router.push('/auth/login')
-}
+  await authStore.logoutUser();
+  router.push('/auth/login');
+};
 </script>

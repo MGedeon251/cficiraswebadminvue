@@ -34,7 +34,8 @@
           role="tab"
           aria-controls="statistiques"
           aria-selected="false"
-        > Statistiques
+        >
+          Statistiques
         </a>
       </li>
       <li class="nav-item">
@@ -46,41 +47,27 @@
           role="tab"
           aria-controls="historique"
           aria-selected="false"
-        > Historique
+        >
+          Historique
         </a>
       </li>
     </ul>
-<div class="tab-content p-4">
-      <div
-        class="tab-pane fade show active"
-        id="liste"
-        role="tabpanel"
-        aria-labelledby="liste-tab"
-      >
+    <div class="tab-content p-4">
+      <div class="tab-pane fade show active" id="liste" role="tabpanel" aria-labelledby="liste-tab">
         <ListeAnneesContent />
       </div>
-      <div 
-        class="tab-pane fade" 
-        id="calendrier" 
-        role="tabpanel" 
-        aria-labelledby="calendrier-tab"
-      >
+      <div class="tab-pane fade" id="calendrier" role="tabpanel" aria-labelledby="calendrier-tab">
         <CalendrierContent />
       </div>
-      <div 
-        class="tab-pane fade" 
-        id="statistiques" 
-        role="tabpanel" 
+      <div
+        class="tab-pane fade"
+        id="statistiques"
+        role="tabpanel"
         aria-labelledby="statistiques-tab"
       >
         <StatistiquesContent />
       </div>
-      <div 
-        class="tab-pane fade" 
-        id="historique" 
-        role="tabpanel" 
-        aria-labelledby="historique-tab"
-      >
+      <div class="tab-pane fade" id="historique" role="tabpanel" aria-labelledby="historique-tab">
         <HistoriqueContent />
       </div>
     </div>

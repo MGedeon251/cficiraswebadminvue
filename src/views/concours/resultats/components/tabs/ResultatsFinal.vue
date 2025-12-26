@@ -122,14 +122,11 @@
           </div>
         </div>
       </div>
-      
-      
     </div>
   </div>
 </template>
 
 <script setup>
-
 import { ref, computed, onMounted } from 'vue';
 import { useConcourStore } from '@/stores/gestionStores/concourStore';
 import { useRoute } from 'vue-router';
@@ -184,7 +181,7 @@ const exportToExcel = () => {
     Moyenne: candidat.moyenne,
     Rang: candidat.rang,
     Mention: candidat.observation,
-    Statut: candidat.statut
+    Statut: candidat.statut,
   }));
 
   const worksheet = XLSX.utils.json_to_sheet(data);
@@ -290,8 +287,6 @@ const printAnonyme = () => {
   win.print();
   win.close();
 };
-
-
 </script>
 
 <style scoped>
