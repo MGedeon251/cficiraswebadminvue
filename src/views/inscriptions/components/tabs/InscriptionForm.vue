@@ -1,226 +1,204 @@
 <template>
-  <div>
-    <div class="row">
-      <div class="col-md-12 grid-margin">
-        <div class="d-flex align-items-end flex-wrap">
-          <div class="me-md-3 me-xl-5">
-            <h3>Inscription des etudiants</h3>
-            <p>Inscription & reinscription pour une année académique</p>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between flex-wrap">
-          <div class="d-flex align-items-end flex-wrap">
-            <div class="me-md-4 me-xl-5">
-              <div class="filters d-flex gap-2 mb-3">
-                <a-input
-                  class="me-1 mt-1 mt-xl-0"
-                  v-model:value="searchQuery"
-                  placeholder="Rechercher..."
-                  allow-clear
-                  style="width: 180px"
-                >
-                  <template #prefix>
-                    <i class="mdi mdi-magnify" />
-                  </template>
-                </a-input>
-                <a-select
-                  class="me-1 mt-1 mt-xl-0"
-                  v-model:value="selectedAnnee"
-                  placeholder="Année académique"
-                  style="width: 180px"
-                  :loading="loadingAnnees"
-                  allow-clear
-                >
-                  <a-select-option value="lucy">lucy</a-select-option>
-                </a-select>
-                <a-select
-                  v-model:value="selectedFiliere"
-                  placeholder="Filiere"
-                  style="width: 180px"
-                  :loading="loadingFilieres"
-                  allow-clear
-                >
-                  <a-select-option value="lucy">lucy</a-select-option>
-                </a-select>
-              </div>
+  <div class="row">
+    <div class="col-12 grid-margin">
+
+      <!-- Header -->
+      <div class="mb-4">
+        <h3>Inscription des étudiants</h3>
+        <p class="text-muted">
+          Gestion des inscriptions et réinscriptions par année académique
+        </p>
+      </div>
+
+      <!-- Filtres -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row g-3">
+
+            <div class="col-md-4">
+              <label class="form-label">Recherche</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Nom, prénom ou matricule..."
+                v-model="searchQuery"
+              />
             </div>
-          </div>
-          <div class="d-flex justify-content-between align-items-end flex-wrap">
+
+            <div class="col-md-3">
+              <label class="form-label">Année académique</label>
+              <select class="form-select" v-model="selectedYear">
+                <option value="">Toutes</option>
+                <option v-for="year in academicYears" :key="year">
+                  {{ year }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Statut</label>
+              <select class="form-select" v-model="selectedStatut">
+                <option value="">Tous</option>
+                <option value="en attente">En attente</option>
+                <option value="validée">Validée</option>
+                <option value="annulée">Annulée</option>
+              </select>
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+              <button class="btn btn-outline-secondary w-100" @click="resetFilters">
+                Réinitialiser
+              </button>
+            </div>
 
           </div>
-          <WizardModal id="wizardModal" v-model="workflowData" @finish="submitWorkflow" />
-          <InscriptionClasse/>
-          <AjouterTuteur/>
-        </div>
-        <div class="table-responsive mt-3">
-          <table class="table table-hover align-middle">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col"></th>
-                <th scope="col">noms</th>
-                <th scope="col">prenoms</th>
-                <th scope="col">classe</th>
-                <th scope="col">paiement</th>
-                <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="9" class="text-center py-4">
-                  <div class="d-flex flex-column align-items-center">
-                    <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
-                  </div>
-                  <div class="text-pr">Aucune donnée</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
+
+      <!-- Actions -->
+      <div class="d-flex justify-content-end mb-3 gap-2">
+        <InscriptionClasse />
+        <AjouterTuteur />
+      </div>
+
+      <!-- Table -->
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Matricule</th>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Classe</th>
+              <th>Année</th>
+              <th>Statut</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr v-for="(inscription, index) in filteredInscriptions" :key="inscription.id">
+              <td>{{ index + 1 }}</td>
+              <td>{{ inscription.matricule }}</td>
+              <td>{{ inscription.nom }}</td>
+              <td>{{ inscription.prenom }}</td>
+              <td>{{ inscription.classe }}</td>
+              <td>{{ inscription.annee }}</td>
+              <td>
+                <span
+                  class="badge"
+                  :class="statutClass(inscription.statut)"
+                >
+                  {{ inscription.statut }}
+                </span>
+              </td>
+              <td class="text-end">
+                <button class="btn btn-sm btn-outline-primary me-1">
+                  Détails
+                </button>
+                <button class="btn btn-sm btn-outline-danger">
+                  Annuler
+                </button>
+              </td>
+            </tr>
+
+            <tr v-if="filteredInscriptions.length === 0">
+              <td colspan="8" class="text-center py-4">
+                <img src="/img/empty-box.svg" width="80" class="mb-2" />
+                <div class="text-muted">Aucune inscription trouvée</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
   </div>
 </template>
+<script setup>
+import { ref, computed, onMounted } from 'vue'
 
-<script setup="setup">
-import { ref, onMounted } from 'vue';
-const candidats = ref([]);
-const academicYears = ref(['2022-2023', '2023-2024', '2024-2025']);
-const classes = ref(['L1', 'L2', 'L3', 'M1', 'M2']);
-const selectedYear = ref('2024-2025');
-const selectedClass = ref('L1');
-const selectedPaymentStatus = ref('all');
+import InscriptionClasse from '../modal/InscriptionClasse.vue'
+import AjouterTuteur from '../modal/AddTuteur.vue'
 
-import WizardModal from '../wizard/WizarModal.vue';
-import InscriptionClasse from '../modal/InscriptionClasse.vue';
-import AjouterTuteur from '../modal/AddTuteur.vue';
+/* =====================
+   États
+===================== */
+const inscriptions = ref([])
+const searchQuery = ref('')
+const selectedYear = ref('')
+const selectedStatut = ref('')
 
-const workflowData = ref({});
+const academicYears = ['2022-2023', '2023-2024', '2024-2025']
 
-async function submitWorkflow(data) {
-  try {
-    //const res = await api.post("/api/workflow/inscriptions", data);
-    alert('✅ Inscription créée !');
-    //console.log(res.data);
-  } catch (err) {
-    alert('❌ Erreur : ' + err.message);
-  }
-}
-
+/* =====================
+   Données simulées (alignées SQL)
+===================== */
 onMounted(() => {
-  candidats.value = [
+  inscriptions.value = [
     {
       id: 1,
       matricule: 'ETU2025001',
       nom: 'Kouadio',
       prenom: 'Eric',
-      telephone: '0102030405',
-      statut: 'Payé',
+      classe: 'L1 Informatique',
       annee: '2024-2025',
-      classe: 'L1',
+      statut: 'validée'
     },
     {
       id: 2,
       matricule: 'ETU2025002',
       nom: 'Yao',
       prenom: 'Marie',
-      telephone: '0605040302',
-      statut: 'Non payé',
+      classe: 'L2 Informatique',
       annee: '2024-2025',
-      classe: 'L2',
+      statut: 'en attente'
     },
     {
       id: 3,
       matricule: 'ETU2025003',
       nom: 'Koffi',
       prenom: 'Serge',
-      telephone: '0708091011',
-      statut: 'Payé',
+      classe: 'L3 Informatique',
       annee: '2023-2024',
-      classe: 'L3',
-    },
-    {
-      id: 4,
-      matricule: 'ETU2025004',
-      nom: 'N’Guessan',
-      prenom: 'Aline',
-      telephone: '0203040506',
-      statut: 'Non payé',
-      annee: '2022-2023',
-      classe: 'M1',
-    },
-    {
-      id: 5,
-      matricule: 'ETU2025005',
-      nom: 'Bamba',
-      prenom: 'Moussa',
-      telephone: '0807060504',
-      statut: 'Payé',
-      annee: '2024-2025',
-      classe: 'M2',
-    },
-    {
-      id: 6,
-      matricule: 'ETU2025006',
-      nom: 'Coulibaly',
-      prenom: 'Fatou',
-      telephone: '0908070605',
-      statut: 'Non payé',
-      annee: '2023-2024',
-      classe: 'L1',
-    },
-    {
-      id: 7,
-      matricule: 'ETU2025007',
-      nom: 'Fofana',
-      prenom: 'Salif',
-      telephone: '0302010405',
-      statut: 'Payé',
-      annee: '2022-2023',
-      classe: 'L2',
-    },
-    {
-      id: 8,
-      matricule: 'ETU2025008',
-      nom: 'Cissé',
-      prenom: 'Awa',
-      telephone: '0504030201',
-      statut: 'Non payé',
-      annee: '2024-2025',
-      classe: 'L3',
-    },
-    {
-      id: 9,
-      matricule: 'ETU2025009',
-      nom: 'Sangaré',
-      prenom: 'Kader',
-      telephone: '0607080910',
-      statut: 'Payé',
-      annee: '2023-2024',
-      classe: 'M1',
-    },
-    {
-      id: 10,
-      matricule: 'ETU2025010',
-      nom: 'Diabaté',
-      prenom: 'Aminata',
-      telephone: '0105060708',
-      statut: 'Non payé',
-      annee: '2022-2023',
-      classe: 'M2',
-    },
-  ];
-});
+      statut: 'annulée'
+    }
+  ]
+})
 
-const triggerFileInput = () => {
-  fileInput.value.click();
-};
+/* =====================
+   Computed
+===================== */
+const filteredInscriptions = computed(() => {
+  return inscriptions.value.filter(i => {
+    const matchSearch =
+      i.nom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      i.prenom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      i.matricule.toLowerCase().includes(searchQuery.value.toLowerCase())
 
-const handleFileUpload = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    candidat.value.photo = file;
-    previewImage.value = URL.createObjectURL(file);
+    const matchYear = !selectedYear.value || i.annee === selectedYear.value
+    const matchStatut = !selectedStatut.value || i.statut === selectedStatut.value
+
+    return matchSearch && matchYear && matchStatut
+  })
+})
+
+/* =====================
+   Helpers
+===================== */
+const statutClass = (statut) => {
+  return {
+    'bg-success': statut === 'validée',
+    'bg-warning text-dark': statut === 'en attente',
+    'bg-danger': statut === 'annulée'
   }
-};
+}
+
+const resetFilters = () => {
+  searchQuery.value = ''
+  selectedYear.value = ''
+  selectedStatut.value = ''
+}
 </script>
+
