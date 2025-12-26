@@ -1,6 +1,6 @@
 <template>
   <div class="modal fade" id="inscriptionClasseModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-md">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Inscription par classe</h5>
