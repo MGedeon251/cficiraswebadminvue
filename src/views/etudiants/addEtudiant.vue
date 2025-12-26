@@ -179,6 +179,23 @@
                   Numéro joignable (indicatif pays inclus)
                 </small>
               </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">
+                  Filière <span class="text-danger">*</span>
+                </label>
+                <select
+                  v-model="form.filiere"
+                  class="form-select"
+                  required
+                >
+                  <option :selected>-- Sélectionner la filière --</option>
+                  <option value="M">Informatique</option>
+                  <option value="F">Administratio</option>
+                </select>
+                <small class="text-muted">
+                  Filiere d'inscription de l’étudiant
+                </small>
+              </div>
             </div>
           </div>
         </div>
