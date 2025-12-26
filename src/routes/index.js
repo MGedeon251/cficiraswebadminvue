@@ -11,6 +11,7 @@ import Register from '../views/auth/Register.vue'; // Page de login
 import AnneeAcademiqueHeader from '@/views/stracad/anneeac/AnneeAcademique.vue';
 import CyclesAcademiqueHeader from '@/views/stracad/cycles/Cycle.vue';
 import FiliereHeader from '@/views/stracad/filieres/Filiere.vue';
+import Classes from '@/views/stracad/classes/Classes.vue';
 //Tableau de bord
 import Dashboard from '../views/dashboard/Dashboard.vue'; // Page du tableau de bord
 // Notification
@@ -134,6 +135,11 @@ const routes = [
         path: '/filieres-academiques',
         name: 'FiliereHeader',
         component: FiliereHeader,
+      },
+            {
+        path: '/classes-niveaux',
+        name: 'ClassesNiveaux',
+        component: Classes,
       },
     ],
   },

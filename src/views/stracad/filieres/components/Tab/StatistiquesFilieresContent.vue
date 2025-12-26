@@ -1,6 +1,11 @@
-<!-- CyclesContent.vue -->
 <template>
   <div class="row">
+      <div class="col-12 mb-2">
+      <h4>Statistiques des filières</h4>
+      <p class="text-muted">
+        Indicateurs globaux liés aux filières et à l’activité académique.
+      </p>
+    </div>
     <div class="table-responsive">
       <table class="table table-bordered table-striped mb-5">
         <thead>
