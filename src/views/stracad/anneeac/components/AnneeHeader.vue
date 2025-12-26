@@ -29,7 +29,7 @@
           >
             <i class="mdi mdi-clock-outline text-muted"></i>
           </button>
-          <button class="btn btn-primary mt-2 mt-xl-0">+Nouvelle année</button>
+          <button class="btn btn-primary mt-2 mt-xl-0">+ Ajouter un nouveau</button>
         </div>
       </div>
     </div>

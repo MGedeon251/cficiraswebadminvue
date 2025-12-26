@@ -4,7 +4,7 @@
       <div class="d-flex justify-content-between flex-wrap">
         <div class="d-flex align-items-end flex-wrap">
           <div class="me-md-3 me-xl-5">
-            <h2>Cycles Académiques</h2>
+            <h2>Gestions de Cycles</h2>
             <p class="mb-md-0">Configuration et gestion des cycles académiques</p>
             <p class="mb-md-0"></p>
           </div>
@@ -29,7 +29,7 @@
           >
             <i class="mdi mdi-clock-outline text-muted"></i>
           </button>
-          <button class="btn btn-primary mt-2 mt-xl-0">+ Ajouter cycle</button>
+          <button class="btn btn-primary mt-2 mt-xl-0">+ Ajouter un nouveau</button>
         </div>
       </div>
     </div>

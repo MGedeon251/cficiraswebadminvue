@@ -10,6 +10,7 @@ import Register from '../views/auth/Register.vue'; // Page de login
 // Structure academique
 import AnneeAcademiqueHeader from '@/views/stracad/anneeac/AnneeAcademique.vue';
 import CyclesAcademiqueHeader from '@/views/stracad/cycles/Cycle.vue';
+import FiliereHeader from '@/views/stracad/filieres/Filiere.vue';
 //Tableau de bord
 import Dashboard from '../views/dashboard/Dashboard.vue'; // Page du tableau de bord
 // Notification
@@ -128,6 +129,11 @@ const routes = [
         path: '/cycles-academiques',
         name: 'CyclesAcademiqueHeader',
         component: CyclesAcademiqueHeader,
+      },
+            {
+        path: '/filieres-academiques',
+        name: 'FiliereHeader',
+        component: FiliereHeader,
       },
     ],
   },
