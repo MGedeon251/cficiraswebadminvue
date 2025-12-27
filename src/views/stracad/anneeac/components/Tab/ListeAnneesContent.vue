@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <h4>Listes des années académiques</h4>
+    <h4>Liste des années académiques</h4>
     <p>Vous pouvez consulter les détails de chaque examen en cliquant sur le lien correspondant.</p>
 
     <div class="table-responsive">
@@ -8,153 +8,118 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>code</th>
-            <th>debut</th>
-            <th>fin</th>
-            <th>statut</th>
+            <th>Code</th>
+            <th>Début</th>
+            <th>Fin</th>
+            <th>Statut</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td colspan="9" class="text-center py-4">
+          <!-- Vérifie si la liste est vide -->
+          <tr v-if="annees.length === 0">
+            <td colspan="6" class="text-center py-4">
               <div class="d-flex flex-column align-items-center">
                 <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
+                <div class="text-pr">Aucune donnée</div>
               </div>
-              <div class="text-pr">Aucune donnée</div>
             </td>
+          </tr>
+          <!-- Boucle sur les années -->
+          <tr v-for="(annee, index) in annees" :key="annee.id">
+            <td>{{ index + 1 }}</td>
+            <td class="fw-bold">{{ annee.code }}</td>
+            <td>{{ formatDate(annee.date_debut) }}</td>
+            <td>{{ formatDate(annee.date_fin) }}</td>
+            <td>
+                <span :class="mapStatut(annee.est_actif).class">
+                  {{ mapStatut(annee.est_actif).label }}
+                </span>
+            </td>
+            <td>
+                <ItemActions
+                  :item="annee"
+                  anneeRoute="/edition-concours/"
+                  :showAdd="false"
+                  @edit="editAnnee"
+                  @delete="confirmDelete"
+                />
+
+              </td>
           </tr>
         </tbody>
       </table>
     </div>
+    <nav v-if="totalPages > 1" class="mt-3">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" :class="{ disabled: currentPage === 1 }">
+          <button class="page-link" @click="prevPage">Précédent</button>
+        </li>
+        <li 
+          v-for="page in totalPages" 
+          :key="page" 
+          class="page-item" 
+          :class="{ active: currentPage === page }"
+        >
+          <button class="page-link" @click="goToPage(page)">{{ page }}</button>
+        </li>
+        <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+          <button class="page-link" @click="nextPage">Suivant</button>
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
+
 <script setup>
-import { ref, computed } from 'vue';
+import { computed, onMounted } from 'vue';
+import { useAnneeStore } from '@/stores/academiqueStore/anneStore';
+import { useNotifier} from '@/stores/messages/useNotifier';
+import ItemActions from '../details/ItemActions.vue'; 
 
-// Données
-const totalAnnees = ref(5);
-const joursRestants = ref(245);
-const totalEtudiants = ref(1250);
+// Stores
+const anneeStore = useAnneeStore();
+const messageStore = useNotifier();
 
-const searchQuery = ref('');
-const filterStatut = ref('');
-const filterPeriode = ref('');
+// Récupération des années depuis le store
+const annees = computed(() => anneeStore.anneesAcademiques);
 
-const anneesAcademiques = ref([
-  {
-    id: 1,
-    code: '2022-2023',
-    libelle: 'Année Académique 2022-2023',
-    dateDebut: '2022-09-01',
-    dateFin: '2023-07-31',
-    statut: 'archivee',
-    estActive: false,
-  },
-  {
-    id: 2,
-    code: '2023-2024',
-    libelle: 'Année Académique 2023-2024',
-    dateDebut: '2023-09-01',
-    dateFin: '2024-07-31',
-    statut: 'terminee',
-    estActive: false,
-  },
-  {
-    id: 3,
-    code: '2024-2025',
-    libelle: 'Année Académique 2024-2025',
-    dateDebut: '2024-09-01',
-    dateFin: '2025-07-31',
-    statut: 'active',
-    estActive: true,
-  },
-]);
-
-const formData = ref({
-  code: '',
-  libelle: '',
-  dateDebut: '',
-  dateFin: '',
-  description: '',
-  estActive: false,
+// Charger les données au montage
+onMounted(async () => {
+  try {
+    await anneeStore.fetchAnneesAcademiques();
+  } catch (error) {
+    messageStore.error("Erreur lors du chargement des années académiques");
+  }
 });
-
-// Computed
-const filteredAnnees = computed(() => {
-  return anneesAcademiques.value.filter((annee) => {
-    const matchSearch =
-      annee.code.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      annee.libelle.toLowerCase().includes(searchQuery.value.toLowerCase());
-    const matchStatut = !filterStatut.value || annee.statut === filterStatut.value;
-    return matchSearch && matchStatut;
-  });
-});
-
-// Méthodes
+// Méthodes de formatage
 const formatDate = (date) => {
+  if (!date) return '-';
   return new Date(date).toLocaleDateString('fr-FR', {
     day: '2-digit',
     month: 'long',
     year: 'numeric',
   });
 };
-
-const calculerDuree = (debut, fin) => {
-  const d1 = new Date(debut);
-  const d2 = new Date(fin);
-  return Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
-};
-
-const getStatutClass = (statut) => {
-  const classes = {
-    active: 'badge bg-success',
-    en_preparation: 'badge bg-info',
-    terminee: 'badge bg-warning',
-    archivee: 'badge bg-secondary',
+// Fonction de mapping
+const mapStatut = (estActif) => {
+  return {
+    label: estActif ? 'True' : 'False',
+    class: estActif ? 'badge bg-success' : 'badge bg-secondary'
   };
-  return classes[statut] || 'badge bg-secondary';
 };
 
-const getStatutLabel = (statut) => {
-  const labels = {
-    active: 'Active',
-    en_preparation: 'En préparation',
-    terminee: 'Terminée',
-    archivee: 'Archivée',
-  };
-  return labels[statut] || statut;
+const editAnnee = (annee) => {
+  currentAnnee.value = { ...annee }; // clone pour éviter mutation directe
+  const modal = new bootstrap.Modal(document.getElementById('anneeModal'));
+  modal.show();
 };
 
-const resetFilters = () => {
-  searchQuery.value = '';
-  filterStatut.value = '';
-  filterPeriode.value = '';
-};
-
-const voirDetails = (annee) => {
-  console.log('Voir détails:', annee);
-};
-
-const modifierAnnee = (annee) => {
-  console.log('Modifier:', annee);
-};
-
-const activerAnnee = (annee) => {
-  console.log('Activer:', annee);
-};
-
-const archiverAnnee = (annee) => {
-  console.log('Archiver:', annee);
-};
-
-const supprimerAnnee = (annee) => {
-  if (confirm(`Êtes-vous sûr de vouloir supprimer l'année ${annee.code} ?`)) {
-    console.log('Supprimer:', annee);
+const saveAnnee = async () => {
+  if (currentAnnee.value.id) {
+    await anneeStore.updateAnnee(currentAnnee.value);
+  } else {
+    await anneeStore.addAnnee(currentAnnee.value);
   }
-};
-
-const enregistrerAnnee = () => {
-  console.log('Enregistrer:', formData.value);
 };
 </script>

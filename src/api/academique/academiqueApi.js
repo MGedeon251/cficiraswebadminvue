@@ -5,7 +5,7 @@ const academiqueService = buildService(academiqueApi);
 
 // API pour gérer les années académiques
 export const getAnneesAcademiques = () => academiqueService.get('/annees');
-export const createAnneeAcademique = (data) => academiqueService.post('/annees', data);
+export const createAnneeAcademique = (data) => academiqueService.post('/annees/create', data);
 export const updateAnneeAcademique = (id, data) => academiqueService.put(`/annees/${id}`, data);
 export const deleteAnneeAcademique = (id) => academiqueService.delete(`/annes/${id}`);
 

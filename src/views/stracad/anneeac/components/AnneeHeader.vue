@@ -31,12 +31,14 @@
           </button>
           <button
             class="btn btn-primary mt-2 mt-xl-0"
-            data-bs-toggle="modal"
-            data-bs-target="#anneeModal"
+            @click="openAddModal"
           >
             + Ajouter un nouveau
           </button>
-          <AddAnnees />
+          <AddAnnees
+          :anneeToEdit="anneeToEdit"
+          @anneeCreated="onAnneeCreated"
+          @anneeUpdated="onAnneeUpdated" />
         </div>
       </div>
     </div>
@@ -44,6 +46,8 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import { useAnneeStore } from '@/stores/academiqueStore/anneStore';
 import AddAnnees from '../components/Modal/addAnnee.vue';
 const exportData = () => {
   console.log('Export des années académiques');
@@ -53,7 +57,27 @@ const printData = () => {
   window.print();
 };
 
-const refreshData = () => {
-  window.location.reload();
+const anneeStore = useAnneeStore();
+const anneeToEdit = ref(null);
+
+const openAddModal = () => {
+  anneeToEdit.value = null;
+  const modal = new bootstrap.Modal(document.getElementById('anneeModal'));
+  modal.show();
+};
+
+const editAnnee = (annee) => {
+  anneeToEdit.value = annee;
+  const modal = new bootstrap.Modal(document.getElementById('anneeModal'));
+  modal.show();
+};
+
+const onAnneeCreated = () => {
+  anneeStore.fetchAnneesAcademiques();
+};
+
+const onAnneeUpdated = () => {
+  anneeStore.fetchAnneesAcademiques();
 };
 </script>
+

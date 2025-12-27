@@ -53,11 +53,16 @@
           </div>
           <div class="modal-body">
             <p><strong>Code:</strong> {{ item.code }}</p>
-            <p><strong>Désignation:</strong> {{ item.designation }}</p>
-            <p><strong>Crédit:</strong> {{ item.credit }}</p>
-            <p><strong>Volume horaire:</strong> {{ item.volume_horaire }}</p>
-            <!-- Ajoute d'autres champs si nécessaire -->
+            <p><strong>Date début:</strong> {{ formatDate(item.date_debut) }}</p>
+            <p><strong>Date fin:</strong> {{ formatDate(item.date_fin) }}</p>
+            <p>
+              <strong>Statut:</strong>
+              <span :class="mapStatut(item.est_actif).class">
+                {{ mapStatut(item.est_actif).label }}
+              </span>
+            </p>
           </div>
+
           <div class="modal-footer">
             <button class="btn btn-secondary" @click="closeDetails">Fermer</button>
           </div>
@@ -66,7 +71,6 @@
     </div>
   </teleport>
 </template>
-
 <script setup>
 import { ref } from 'vue';
 
@@ -86,5 +90,22 @@ const isDetailsVisible = ref(false);
 
 const closeDetails = () => {
   isDetailsVisible.value = false;
+};
+
+// Helpers
+const formatDate = (date) => {
+  if (!date) return '-';
+  return new Date(date).toLocaleDateString('fr-FR', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
+};
+
+const mapStatut = (estActif) => {
+  return {
+    label: estActif ? 'Actif' : 'Inactif',
+    class: estActif ? 'badge bg-success' : 'badge bg-secondary'
+  };
 };
 </script>

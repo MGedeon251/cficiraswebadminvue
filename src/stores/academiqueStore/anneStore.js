@@ -6,6 +6,8 @@ import {
   deleteAnneeAcademique,
 } from '@/api/academique/academiqueApi';
 import { useMessageStore } from '@/stores/messages/messageStore';
+import { useNotifier } from '@/stores/messages/useNotifier';
+import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
 
 export const useAnneeStore = defineStore('anneeStore', {
   state: () => ({
@@ -15,6 +17,7 @@ export const useAnneeStore = defineStore('anneeStore', {
   }),
 
   actions: {
+    
     // Récupérer toutes les années académiques
     async fetchAnneesAcademiques() {
       this.loading = true;
@@ -30,13 +33,14 @@ export const useAnneeStore = defineStore('anneeStore', {
 
     // Ajouter une nouvelle année académique
     async addAnneeAcademique(data) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         await createAnneeAcademique(data);
-        useMessageStore().addSuccess('Année académique créée avec succès.');
+        useMessageStore().addMessage('Année académique créée avec succès.');
         this.fetchAnneesAcademiques();
       } catch (error) {
-        useMessageStore().addError("Erreur lors de la création de l'année académique.");
+        notifyError(extractErrorMessage(error, 'Erreur lors de la création de l\'année.'));
       } finally {
         this.loading = false;
       }

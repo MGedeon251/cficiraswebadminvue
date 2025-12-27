@@ -111,6 +111,10 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import { useAnneeStore } from '@/stores/academiqueStore/anneStore';
+
+const anneeStore = useAnneeStore();
+
 
 // Props
 const props = defineProps({
@@ -193,61 +197,38 @@ const validateForm = () => {
 };
 
 const submitAnnee = async () => {
-  // Réinitialiser les messages
   errorMessage.value = '';
   successMessage.value = '';
 
-  // Validation
-  if (!validateForm()) {
-    return;
-  }
+  if (!validateForm()) return;
 
   loading.value = true;
 
   try {
-    // Simuler un appel API (à remplacer par votre vrai appel)
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    // Simulation de réponse
-    const result = {
-      ...form.value,
-      id: isEdit.value ? form.value.id : Date.now(),
-      created_at: new Date().toISOString(),
-    };
-
-    successMessage.value = isEdit.value
-      ? 'Année académique modifiée avec succès !'
-      : 'Année académique créée avec succès !';
-
-    // Émettre l'événement
     if (isEdit.value) {
-      emit('anneeUpdated', result);
+      // Edition
+      await anneeStore.editAnneeAcademique(form.value.id, form.value);
+      successMessage.value = 'Année académique modifiée avec succès !';
+      emit('anneeUpdated', form.value);
     } else {
-      emit('anneeCreated', result);
+      // Création
+      await anneeStore.addAnneeAcademique(form.value);
+      successMessage.value = 'Année académique créée avec succès !';
+      emit('anneeCreated', form.value);
     }
 
-    // Fermer le modal après 1 seconde
+    // Fermer le modal après succès
     setTimeout(() => {
       closeModal();
     }, 1000);
   } catch (error) {
-    console.error('Erreur:', error);
+    console.error(error);
     errorMessage.value = error.message || "Une erreur est survenue lors de l'enregistrement.";
   } finally {
     loading.value = false;
   }
 };
 
-const closeModal = () => {
-  const modalEl = document.getElementById('anneeModal');
-  const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
-  modal.hide();
-
-  // Réinitialiser le formulaire après fermeture
-  setTimeout(() => {
-    resetForm();
-  }, 300);
-};
 
 // Exposer les méthodes pour utilisation externe si nécessaire
 defineExpose({
