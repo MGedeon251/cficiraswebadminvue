@@ -50,24 +50,7 @@
         </tbody>
       </table>
     </div>
-    <nav v-if="totalPages > 1" class="mt-3">
-      <ul class="pagination justify-content-center">
-        <li class="page-item" :class="{ disabled: currentPage === 1 }">
-          <button class="page-link" @click="prevPage">Précédent</button>
-        </li>
-        <li 
-          v-for="page in totalPages" 
-          :key="page" 
-          class="page-item" 
-          :class="{ active: currentPage === page }"
-        >
-          <button class="page-link" @click="goToPage(page)">{{ page }}</button>
-        </li>
-        <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-          <button class="page-link" @click="nextPage">Suivant</button>
-        </li>
-      </ul>
-    </nav>
+  
   </div>
 </template>
 

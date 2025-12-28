@@ -53,7 +53,7 @@
                   <div class="accordion-body">
                     <ul v-if="filiere.niveaux && filiere.niveaux.length">
                       <li v-for="niveau in filiere.niveaux" :key="niveau.name">
-                        {{ niveau.name }} ({{ niveau.etudiants }} étudiants)
+                        {{ niveau.name }} {{ niveau.etudiants }}
                       </li>
                     </ul>
                     <span v-else class="text-muted">Aucun niveau renseigné</span>
@@ -67,41 +67,24 @@
     </div>
   </div>
 </template>
+<script setup>
+import { computed, onMounted } from 'vue';
+import { useCycleStore } from '@/stores/academiqueStore/cycleStore';
+import { useNotifier } from '@/stores/messages/useNotifier';
 
-<script>
-export default {
-  name: 'FiliereView',
-  data() {
-    return {
-      cycles: [
-        {
-          name: 'Cycle Licence (L)',
-          filieres: [
-            {
-              name: 'Filière Informatique',
-              niveaux: [
-                { name: 'L1 Informatique', etudiants: 120 },
-                { name: 'L2 Informatique', etudiants: 95 },
-                { name: 'L3 Informatique', etudiants: 80 },
-              ],
-            },
-            { name: 'Filière Génie Civil', niveaux: [1, 2, 3] },
-            { name: 'Filière Électronique', niveaux: [] },
-          ],
-        },
-        {
-          name: 'Cycle Master (M)',
-          filieres: [
-            { name: 'Filière IA & Data Science', niveaux: [] },
-            { name: 'Filière Cybersécurité', niveaux: [] },
-          ],
-        },
-        {
-          name: 'Cycle Doctorat (D)',
-          filieres: [],
-        },
-      ],
-    };
-  },
-};
+const cycleStore = useCycleStore();
+const messageStore = useNotifier();
+
+// Récupération des cycles + filières depuis le store
+const cycles = computed(() => cycleStore.Filierecycles);
+
+// Charger les données au montage
+onMounted(async () => {
+  try {
+    await cycleStore.fetchFiliereCycle();
+  } catch (error) {
+    messageStore.error("Erreur lors du chargement des cycles et filières");
+  }
+});
 </script>
+

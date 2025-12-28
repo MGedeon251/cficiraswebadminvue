@@ -216,7 +216,6 @@ const submitAnnee = async () => {
       successMessage.value = 'Année académique créée avec succès !';
       emit('anneeCreated', form.value);
     }
-
     // Fermer le modal après succès
     setTimeout(() => {
       closeModal();
