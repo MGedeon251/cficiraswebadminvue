@@ -34,7 +34,7 @@
             data-bs-toggle="modal"
             data-bs-target="#classeModal"
           >
-            + Ajouter nouveau
+            + Ajouter un nouveau
           </button>
           <AddClasse />
         </div>

@@ -34,7 +34,7 @@
             data-bs-toggle="modal"
             data-bs-target="#filiereModal"
           >
-            + Ajouter nouveau
+            + Ajouter un nouveau
           </button>
           <AddFiliere />
         </div>
