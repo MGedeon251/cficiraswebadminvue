@@ -21,7 +21,7 @@ export const useFiliereStore = defineStore('filiereStore', {
         const response = await getFilieres();
         this.filieres = response;
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la récupération des filières.');
+        useMessageStore().addMessage('Erreur lors de la récupération des filières.');
       } finally {
         this.loading = false;
       }

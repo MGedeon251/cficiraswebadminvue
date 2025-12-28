@@ -37,34 +37,62 @@
     </ul>
   </div>
   <!-- Modal pour les détails -->
-  <teleport to="body">
-    <div
-      v-if="isDetailsVisible"
-      class="modal fade show d-block"
-      tabindex="-1"
-      role="dialog"
-      style="background-color: rgba(0, 0, 0, 0.5)"
-    >
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Détails</h5>
-            <button type="button" class="btn-close" @click="closeDetails"></button>
-          </div>
-          <div class="modal-body">
-            <p><strong>Code:</strong> {{ item.code }}</p>
-            <p><strong>Désignation:</strong> {{ item.designation }}</p>
-            <p><strong>Crédit:</strong> {{ item.credit }}</p>
-            <p><strong>Volume horaire:</strong> {{ item.volume_horaire }}</p>
-            <!-- Ajoute d'autres champs si nécessaire -->
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-secondary" @click="closeDetails">Fermer</button>
-          </div>
+<teleport to="body">
+  <div
+    v-if="isDetailsVisible"
+    class="modal fade show d-block"
+    tabindex="-1"
+    role="dialog"
+    style="background-color: rgba(0, 0, 0, 0.5)"
+  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content shadow-lg">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">
+            Détails de la filière
+          </h5>
+          <button type="button" class="btn-close btn-close-white" @click="closeDetails"></button>
+        </div>
+
+        <div class="modal-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between">
+              <strong>Code :</strong>
+              <span class="fw-bold text-primary">{{ item.code }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <strong>Désignation :</strong>
+              <span>{{ item.designation }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <strong>Crédit total :</strong>
+              <span class="badge bg-info">{{ item.credit_total }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <strong>Cycle :</strong>
+              <span class="text-success">{{ item.cycle_nom }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <strong>Nombre de classes :</strong>
+              <span class="badge bg-secondary">{{ item.nb_classes }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <strong>Nombre d'étudiants :</strong>
+              <span class="badge bg-warning text-dark">{{ item.nb_etudiants }}</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" @click="closeDetails">
+            Fermer
+          </button>
         </div>
       </div>
     </div>
-  </teleport>
+  </div>
+</teleport>
+
 </template>
 
 <script setup>
