@@ -6,19 +6,17 @@
         <p class="text-muted">Liste des niveaux académiques associés à cette filière.</p>
       </div>
 
-      <div class="d-flex">
-        <!-- Bouton Filtrer par cycle -->
-        <div class="dropdown">
+      <div class="d-flex align-items-center">
+        <div class="dropdown me-2">
           <button
-            class="btn btn-outline-primary dropdown-toggle me-2"
+            class="btn btn-outline-primary dropdown-toggle"
             type="button"
-            id="filterCycleBtn"
             data-bs-toggle="dropdown"
-            aria-expanded="false"
           >
             Filtrer par cycle
           </button>
-          <ul class="dropdown-menu" aria-labelledby="filterCycleBtn">
+
+          <ul class="dropdown-menu">
             <li>
               <button class="dropdown-item" @click="filterByCycle(null)">
                 Tous les cycles
@@ -30,16 +28,16 @@
               </button>
             </li>
           </ul>
-
-          <!-- Bouton Créer -->
-          <button
-            class="btn btn-outline-dark me-2"
-            data-bs-toggle="modal"
-            data-bs-target="#niveauModal"
-          >
-            + Créer un niveau
-          </button>
         </div>
+
+        <!-- Créer -->
+        <button
+          class="btn btn-outline-dark"
+          data-bs-toggle="modal"
+          data-bs-target="#niveauModal"
+        >
+          + Créer un niveau
+        </button>
       </div>
 
       <NiveauFormModal />
@@ -55,24 +53,28 @@
               <th>Niveau</th>
               <th>Cycle</th>
               <th>Frais scolarité</th>
-              <th>Nombre de classes</th>
+              <th>Classes</th>
               <th width="120"></th>
             </tr>
           </thead>
 
           <tbody>
-            <!-- Loader -->
             <tr v-if="loading">
-              <td colspan="7" class="text-center py-4">Chargement des niveaux...</td>
+              <td colspan="7" class="text-center py-4">
+                Chargement des niveaux...
+              </td>
             </tr>
 
-            <!-- Liste des niveaux -->
-            <tr v-for="(niveau, index) in niveaux" :key="niveau.id">
-              <td>{{ index + 1 }}</td>
+            <tr v-for="(niveau, index) in paginatedNiveaux" :key="niveau.id">
+              <td>{{ startIndex + index + 1 }}</td>
               <td>{{ niveau.code }}</td>
-              <td>{{ niveau.ordre }}</td>
+              <td>
+              <span class="badge bg-secondary">
+                {{ niveau.ordre + "e année" }}
+              </span>
+              </td>
               <td>{{ niveau.cycle_designation }}</td>
-              <td>{{ formatMoney(niveau.frais_scolarite )}}</td>
+              <td>{{ formatMoney(niveau.frais_scolarite) }}</td>
               <td>
                 <span class="badge" :class="niveau.nb_classes > 0 ? 'bg-success' : 'bg-secondary'">
                   {{ niveau.nb_classes }}
@@ -81,7 +83,6 @@
               <td>
                 <ItemActions
                   :item="niveau"
-                  concourRoute="/edition-concours/"
                   :showAdd="false"
                   editModalTarget="#editModuleModal"
                   @edit="editModule"
@@ -90,68 +91,90 @@
               </td>
             </tr>
 
-            <!-- Cas vide -->
             <tr v-if="!loading && niveaux.length === 0">
               <td colspan="7" class="text-center py-4">
-                <div class="d-flex flex-column align-items-center">
-                  <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="80" />
-                  <div class="text-muted">Aucun niveau enregistré</div>
-                </div>
+                <img src="/img/empty-box.svg" width="80" />
+                <div class="text-muted">Aucun niveau enregistré</div>
               </td>
             </tr>
           </tbody>
         </table>
+
+        <Pagination
+          v-model="currentPage"
+          :items-per-page="itemsPerPage"
+          :total-items="niveaux.length"
+        />
       </div>
     </div>
   </div>
 </template>
-
-
-
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import { useNiveauStore } from '@/stores/academiqueStore/niveauStore';
-import { useCycleStore } from '@/stores/academiqueStore/cycleStore'; // <-- ton store des cycles
-import NiveauFormModal from '../Modal/addNiveau.vue';
-import ItemActions from '../details/ItemActions2.vue';
+import { ref, computed, onMounted } from 'vue'
+import { useNiveauStore } from '@/stores/academiqueStore/niveauStore'
+import { useCycleStore } from '@/stores/academiqueStore/cycleStore'
 
+import NiveauFormModal from '../Modal/addNiveau.vue'
+import ItemActions from '../details/ItemActions2.vue'
 
-const niveauStore = useNiveauStore();
-const cycleStore = useCycleStore();
+const niveauStore = useNiveauStore()
+const cycleStore = useCycleStore()
 
-
-const selectedCycle = ref(null);
+const selectedCycle = ref(null)
+const currentPage = ref(1)
+const itemsPerPage = ref(10)
 
 /* =====================
-   Méthodes
+   Computed sécurisés
+===================== */
+const niveaux = computed(() =>
+  Array.isArray(niveauStore.niveaux) ? niveauStore.niveaux : []
+)
+
+const cycles = computed(() =>
+  Array.isArray(cycleStore.cycles) ? cycleStore.cycles : []
+)
+
+const loading = computed(() =>
+  niveauStore.loading || cycleStore.loading
+)
+
+/* =====================
+   Pagination
+===================== */
+const startIndex = computed(() =>
+  (currentPage.value - 1) * itemsPerPage.value
+)
+
+const paginatedNiveaux = computed(() =>
+  niveaux.value.slice(startIndex.value, startIndex.value + itemsPerPage.value)
+)
+
+/* =====================
+   Actions
 ===================== */
 const filterByCycle = async (cycleId) => {
-  selectedCycle.value = cycleId;
-  if (cycleId) {
-    await niveauStore.getNiveauByCycle(cycleId);
-  } else {
-    await niveauStore.fetchNiveaux();
-  }
-};
+  selectedCycle.value = cycleId
+  currentPage.value = 1 
 
-/* =====================
-   Computed
-===================== */
-const niveaux = computed(() => niveauStore.niveaux);
-const cycles = computed(() => cycleStore.cycles);
-const loading = computed(() => niveauStore.loading || cycleStore.loading);
+  if (cycleId) {
+    await niveauStore.getNiveauByCycle(cycleId)
+  } else {
+    await niveauStore.fetchNiveaux()
+  }
+}
+
+const formatMoney = (value) => {
+  return new Intl.NumberFormat('fr-FR').format(value || 0) + ' FCFA'
+}
 
 /* =====================
    Lifecycle
 ===================== */
-onMounted(() => {
-  niveauStore.fetchNiveaux();
-  cycleStore.fetchCycles(); // 🔥 récupère les cycles depuis l’API
-});
-const formatMoney = (value) => {
-  if (!value) return '0 FCFA';
-  return new Intl.NumberFormat('fr-FR').format(Number(value)) + ' FCFA';
-};
+onMounted(async () => {
+  await Promise.all([
+    niveauStore.fetchNiveaux(),
+    cycleStore.fetchCycles()
+  ])
+})
 </script>
-
-

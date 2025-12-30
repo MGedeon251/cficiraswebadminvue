@@ -30,7 +30,7 @@
             <td>{{ index + 1 }}</td>
             <td class="fw-bold">{{ filiere.code }}</td>
             <td>{{ filiere.designation }}</td>
-            <td class="fw-bold">{{ filiere.cycle_nom || '-' }}</td>
+            <td>{{ filiere.cycle_nom || '-' }}</td>
             <td>
                 <span class="badge" :class="filiere.nb_classes > 0 ? 'bg-success' : 'bg-secondary'">
                   {{ filiere.nb_classes }}

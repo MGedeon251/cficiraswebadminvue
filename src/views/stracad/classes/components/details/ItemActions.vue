@@ -12,10 +12,10 @@
       <li v-if="showAdd">
         <RouterLink
           class="dropdown-item"
-          :to="`/edition-concours/edit/${item.concours_id}`"
+          :to="`/edition-concours/edit/${item.classe_id}`"
           @click="$emit('add', item)"
         >
-          <i class="mdi mdi mdi-launch me-2"></i> Editer
+          <i class="mdi mdi-launch me-2"></i> Editer
         </RouterLink>
       </li>
       <li>
@@ -36,6 +36,7 @@
       </li>
     </ul>
   </div>
+
   <!-- Modal pour les détails -->
   <teleport to="body">
     <div
@@ -46,20 +47,47 @@
       style="background-color: rgba(0, 0, 0, 0.5)"
     >
       <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Détails</h5>
-            <button type="button" class="btn-close" @click="closeDetails"></button>
+        <div class="modal-content shadow-lg">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">
+              Détails de la classe
+            </h5>
+            <button type="button" class="btn-close btn-close-white" @click="closeDetails"></button>
           </div>
+
           <div class="modal-body">
-            <p><strong>Code:</strong> {{ item.code }}</p>
-            <p><strong>Désignation:</strong> {{ item.designation }}</p>
-            <p><strong>Crédit:</strong> {{ item.credit }}</p>
-            <p><strong>Volume horaire:</strong> {{ item.volume_horaire }}</p>
-            <!-- Ajoute d'autres champs si nécessaire -->
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between">
+                <strong>Code :</strong>
+                <span class="fw-bold text-primary">{{ item.classe_code }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <strong>Capacité :</strong>
+                <span class="badge bg-info">{{ item.classe_capacite }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <strong>Niveau :</strong>
+                <span>{{ item.niveau_code }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <strong>Frais :</strong>
+                <span class="text-success">{{ item.niveau_frais }} FCFA</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <strong>Filière :</strong>
+                <span>{{ item.filiere_designation }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <strong>Cycle :</strong>
+                <span>{{ item.cycle_designation }}</span>
+              </li>
+            </ul>
           </div>
+
           <div class="modal-footer">
-            <button class="btn btn-secondary" @click="closeDetails">Fermer</button>
+            <button class="btn btn-secondary" @click="closeDetails">
+              Fermer
+            </button>
           </div>
         </div>
       </div>

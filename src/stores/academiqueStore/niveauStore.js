@@ -25,7 +25,7 @@ export const useNiveauStore = defineStore('niveauStore', {
       this.loading = true;
       try {
         const response = await getNiveaux();
-        this.niveaux = response.data;
+        this.niveaux = response;
       } catch (error) {
         notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
       } finally {

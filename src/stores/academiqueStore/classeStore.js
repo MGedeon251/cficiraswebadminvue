@@ -1,12 +1,15 @@
 import { defineStore } from 'pinia';
 import {
   getClasses,
+  getClassesDetails,
   createClasse,
   updateClasse,
   deleteClasse,
   getClassesByFiliere,
 } from '@/api/academique/academiqueApi';
 import { useMessageStore } from '@/stores/messages/messageStore';
+import { useNotifier } from '@/stores/messages/useNotifier';
+import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
 
 export const useClasseStore = defineStore('classeStore', {
   state: () => ({
@@ -17,24 +20,38 @@ export const useClasseStore = defineStore('classeStore', {
   actions: {
     // Récupérer toutes les classes
     async fetchClasses() {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         const response = await getClasses();
         this.classes = response.data;
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la récupération des classes.');
+       notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+      } finally {
+        this.loading = false;
+      }
+    },
+    async fetchClassesDetails() {
+      const { notifyError } = useNotifier();
+      this.loading = true;
+      try {
+        const response = await getClassesDetails();
+        this.classes = response;
+      } catch (error) {
+        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
       } finally {
         this.loading = false;
       }
     },
     // Récupérer les classes par filière
     async fetchClassesByFiliere(id) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         const response = await getClassesByFiliere(id);
         this.classes = response;
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la récupération des classes par filière.');
+        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
       } finally {
         this.loading = false;
       }
@@ -42,13 +59,14 @@ export const useClasseStore = defineStore('classeStore', {
 
     // Ajouter une nouvelle classe
     async addClasse(data) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         await createClasse(data);
         useMessageStore().addSuccess('Classe créée avec succès.');
         this.fetchClasses();
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la création de la classe.');
+        notifyError(extractErrorMessage(error, 'Échec lors de l\'ajout des données.'));
       } finally {
         this.loading = false;
       }
@@ -56,13 +74,14 @@ export const useClasseStore = defineStore('classeStore', {
 
     // Modifier une classe existante
     async editClasse(id, data) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         await updateClasse(id, data);
         useMessageStore().addSuccess('Classe mise à jour avec succès.');
         this.fetchClasses();
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la mise à jour de la classe.');
+        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
       } finally {
         this.loading = false;
       }
@@ -70,10 +89,11 @@ export const useClasseStore = defineStore('classeStore', {
 
     // Supprimer une classe
     async removeClasse(id) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         await deleteClasse(id);
-        useMessageStore().addSuccess('Classe supprimée avec succès.');
+        useMessageStore().addMessage('Classe supprimée avec succès.');
         this.fetchClasses();
       } catch (error) {
         useMessageStore().addError('Erreur lors de la suppression de la classe.');

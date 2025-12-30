@@ -11,6 +11,7 @@ export const deleteAnneeAcademique = (id) => academiqueService.delete(`/annes/${
 
 // API pour gérer les classes
 export const getClasses = () => academiqueService.get('/classes');
+export const getClassesDetails = () => academiqueService.get('/classes/all/details');
 export const getClassesByFiliere = (id) => academiqueService.get(`/classes/filiere/${id}`);
 export const createClasse = (data) => academiqueService.post('/classes', data);
 export const updateClasse = (id, data) => academiqueService.put(`/classes/${id}`, data);
@@ -36,7 +37,8 @@ export const updateFiliere = (id, data) => academiqueService.put(`/filieres/${id
 export const deleteFiliere = (id) => academiqueService.delete(`/filieres/${id}`);
 
 // API pour gérer les niveaux
-export const getNiveaux = () => academiqueService.get('/niveaux');
+export const getNiveaux = () => academiqueService.get('/niveaux/all/cycles');
+export const getNiveauxClasses = () => academiqueService.get('/niveaux/all/classes');
 export const getCycleNiveau = (id) => academiqueService.get(`/niveaux/cycles/${id}`);
 export const createNiveau = (data) => academiqueService.post('/niveaux', data);
 export const updateNiveau = (id, data) => academiqueService.put(`/niveaux/${id}`, data);
