@@ -6,17 +6,16 @@
     </div>
 
     <div class="col-12">
-      <div class="table-responsive">
+      <div class="table">
         <table class="table table-striped align-middle">
           <thead>
             <tr>
               <th>#</th>
               <th>Code</th>
-              <th>Annee</th>
-              <th>Niveau</th>
-              <th>date debut</th>
-              <th>date fin</th>
-              <th>statut</th>
+              <th>Année</th>
+              <th>Date début</th>
+              <th>Date fin</th>
+              <th>Statut</th>
               <th></th>
             </tr>
           </thead>
@@ -30,11 +29,10 @@
             <!-- Données -->
             <tr v-for="(semestre, index) in semestres" :key="semestre.id">
               <td>{{ index + 1 }}</td>
-              <td>{{ semestre.code }}</td>
+              <td class="fw-bold">{{ semestre.code }}</td>
               <td>{{ semestre.annee }}</td>
-              <td>{{ semestre.niveau }}</td>
-              <td>{{ semestre.dateDebut }}</td>
-              <td>{{ semestre.dateFin }}</td>
+              <td>{{ formatDate(semestre.dateDebut) }}</td>
+              <td>{{ formatDate(semestre.dateFin) }}</td>
               <td>
                 <span class="badge" :class="semestre.actif ? 'bg-success' : 'bg-secondary'">
                   {{ semestre.actif ? 'Actif' : 'Inactif' }}
@@ -66,68 +64,57 @@
     </div>
   </div>
 </template>
+
 <script setup>
-import { ref, onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import ItemActions from '../details/ItemActions.vue';
+import { useSemestreStore } from '@/stores/academiqueStore/semestreStore';
 
 /* =====================
-   États
+   Store
 ===================== */
-const loading = ref(false);
-const semestres = ref([]);
+const semestreStore = useSemestreStore();
+
+/* =====================
+   Computed
+===================== */
+const loading = computed(() => semestreStore.loading);
+
+// Mapping API → format tableau
+const semestres = computed(() =>
+  semestreStore.semestres.map((s) => ({
+    id: s.id,
+    code: s.code,
+    annee: s.annee_code,        // API: annee_code
+    dateDebut: s.date_debut,    // API: date_debut
+    dateFin: s.date_fin,        // API: date_fin
+    actif: s.est_actif,         // API: est_actif
+    nbClasses: s.nb_classes,
+    nbModules: s.nb_modules,
+  }))
+);
+
 
 /* =====================
    Méthodes
 ===================== */
-const fetchSemestres = async () => {
-  loading.value = true;
-
-  // Simulation API
-  semestres.value = [
-    {
-      id: 1,
-      annee: '2025-2026',
-      code: 'S1',
-      designation: 'Semestre 1',
-      niveau: 'Licence 1',
-      dateDebut: '01/09/2025',
-      dateFin: '31/01/2026',
-      actif: true,
-    },
-    {
-      id: 2,
-      annee: '2025-2026',
-      code: 'S2',
-      designation: 'Semestre 2',
-      niveau: 'Licence 1',
-      dateDebut: '01/02/2026',
-      dateFin: '30/06/2026',
-      actif: true,
-    },
-    {
-      id: 3,
-      annee: '2025-2026',
-      code: 'S1',
-      designation: 'Semestre 1',
-      niveau: 'Master 1',
-      dateDebut: '01/09/2025',
-      dateFin: '31/01/2026',
-      actif: false,
-    },
-  ];
-  loading.value = false;
+const editSemestre = (semestre) => {
+  console.log('Édition du semestre :', semestre);
 };
 
-const editSemestre = (semestre) => {
-  // Prévu pour l'ouverture d'un modal de modification
-  console.log('Édition du semestre :', semestre);
+const confirmDelete = (semestre) => {
+  semestreStore.removeSemestre(semestre.id);
+};
+
+const formatDate = (dateStr) => {
+  if (!dateStr) return '-';
+  return new Date(dateStr).toLocaleDateString('fr-FR');
 };
 
 /* =====================
    Lifecycle
 ===================== */
 onMounted(() => {
-  fetchSemestres();
+  semestreStore.fetchSemestres();
 });
 </script>
-<style scoped></style>

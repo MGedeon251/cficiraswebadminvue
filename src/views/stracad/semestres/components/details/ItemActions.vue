@@ -12,10 +12,10 @@
       <li v-if="showAdd">
         <RouterLink
           class="dropdown-item"
-          :to="`/edition-concours/edit/${item.concours_id}`"
+          :to="`/edition-semestre/edit/${item.id}`"
           @click="$emit('add', item)"
         >
-          <i class="mdi mdi mdi-launch me-2"></i> Editer
+          <i class="mdi mdi-launch me-2"></i> Editer
         </RouterLink>
       </li>
       <li>
@@ -36,6 +36,7 @@
       </li>
     </ul>
   </div>
+
   <!-- Modal pour les détails -->
   <teleport to="body">
     <div
@@ -46,17 +47,44 @@
       style="background-color: rgba(0, 0, 0, 0.5)"
     >
       <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Détails</h5>
-            <button type="button" class="btn-close" @click="closeDetails"></button>
+        <div class="modal-content shadow-lg">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">Détails du semestre</h5>
+            <button type="button" class="btn-close btn-close-white" @click="closeDetails"></button>
           </div>
           <div class="modal-body">
-            <p><strong>Code:</strong> {{ item.code }}</p>
-            <p><strong>Désignation:</strong> {{ item.designation }}</p>
-            <p><strong>Crédit:</strong> {{ item.credit }}</p>
-            <p><strong>Volume horaire:</strong> {{ item.volume_horaire }}</p>
-            <!-- Ajoute d'autres champs si nécessaire -->
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between">
+                <strong>Code :</strong>
+                <span class="fw-bold text-primary">{{ item.code }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <strong>Année :</strong>
+                <span>{{ item.annee}}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <strong>Date début :</strong>
+                <span>{{ formatDate(item.dateDebut) }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <strong>Date fin :</strong>
+                <span>{{ formatDate(item.dateFin) }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <strong>Statut :</strong>
+                <span :class="item.actif ? 'text-success' : 'text-secondary'">
+                  {{ item.est_actif ? 'Actif' : 'Inactif' }}
+                </span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <strong>Nombre de classes :</strong>
+                <span class="badge bg-info">{{ item.nbClasses }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <strong>Nombre de modules :</strong>
+                <span class="badge bg-warning text-dark">{{ item.nbModules }}</span>
+              </li>
+            </ul>
           </div>
           <div class="modal-footer">
             <button class="btn btn-secondary" @click="closeDetails">Fermer</button>
@@ -86,5 +114,10 @@ const isDetailsVisible = ref(false);
 
 const closeDetails = () => {
   isDetailsVisible.value = false;
+};
+
+const formatDate = (dateStr) => {
+  if (!dateStr) return '-';
+  return new Date(dateStr).toLocaleDateString('fr-FR');
 };
 </script>
