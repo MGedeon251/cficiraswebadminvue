@@ -17,7 +17,6 @@ export const useAnneeStore = defineStore('anneeStore', {
   }),
 
   actions: {
-    
     // Récupérer toutes les années académiques
     async fetchAnneesAcademiques() {
       this.loading = true;
@@ -40,7 +39,7 @@ export const useAnneeStore = defineStore('anneeStore', {
         useMessageStore().addMessage('Année académique créée avec succès.');
         this.fetchAnneesAcademiques();
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Erreur lors de la création de l\'année.'));
+        notifyError(extractErrorMessage(error, "Erreur lors de la création de l'année."));
       } finally {
         this.loading = false;
       }

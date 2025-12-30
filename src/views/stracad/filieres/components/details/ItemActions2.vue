@@ -38,11 +38,10 @@
       v-if="isDetailsVisible"
       class="modal fade show d-block"
       tabindex="-1"
-      style="background-color: rgba(0,0,0,0.5)"
+      style="background-color: rgba(0, 0, 0, 0.5)"
     >
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content shadow-lg">
-
           <div class="modal-header bg-primary text-white">
             <h5 class="modal-title">Détails du niveau</h5>
             <button class="btn-close btn-close-white" @click="closeDetails"></button>
@@ -50,7 +49,6 @@
 
           <div class="modal-body">
             <ul class="list-group list-group-flush">
-
               <li class="list-group-item d-flex justify-content-between">
                 <strong>Code :</strong>
                 <span class="fw-bold text-primary">{{ item.code }}</span>
@@ -68,9 +66,7 @@
 
               <li class="list-group-item d-flex justify-content-between">
                 <strong>Frais de scolarité :</strong>
-                <span class="badge bg-info">
-                  {{ formatMoney(item.frais_scolarite) }} FCFA
-                </span>
+                <span class="badge bg-info"> {{ formatMoney(item.frais_scolarite) }} FCFA </span>
               </li>
 
               <li class="list-group-item d-flex justify-content-between">
@@ -79,16 +75,12 @@
                   {{ item.nb_classes }}
                 </span>
               </li>
-
             </ul>
           </div>
 
           <div class="modal-footer">
-            <button class="btn btn-secondary" @click="closeDetails">
-              Fermer
-            </button>
+            <button class="btn btn-secondary" @click="closeDetails">Fermer</button>
           </div>
-
         </div>
       </div>
     </div>

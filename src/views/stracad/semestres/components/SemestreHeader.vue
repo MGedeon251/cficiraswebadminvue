@@ -29,10 +29,14 @@
           >
             <i class="mdi mdi-clock-outline text-muted"></i>
           </button>
-          <button class="btn btn-primary mt-2 mt-xl-0"
+          <button
+            class="btn btn-primary mt-2 mt-xl-0"
             data-bs-toggle="modal"
-            data-bs-target="#semestreModal">+ Ajouter nouveau</button>
-          <AddSemestre/>
+            data-bs-target="#semestreModal"
+          >
+            + Ajouter nouveau
+          </button>
+          <AddSemestre />
         </div>
       </div>
     </div>

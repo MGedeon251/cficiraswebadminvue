@@ -83,8 +83,7 @@ onMounted(async () => {
   try {
     await cycleStore.fetchFiliereCycle();
   } catch (error) {
-    messageStore.error("Erreur lors du chargement des cycles et filières");
+    messageStore.error('Erreur lors du chargement des cycles et filières');
   }
 });
 </script>
-

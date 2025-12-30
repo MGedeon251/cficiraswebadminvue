@@ -1,5 +1,11 @@
 import { defineStore } from 'pinia';
-import { getCycles, getCycleFiliere, createCycle, updateCycle, deleteCycle } from '@/api/academique/academiqueApi';
+import {
+  getCycles,
+  getCycleFiliere,
+  createCycle,
+  updateCycle,
+  deleteCycle,
+} from '@/api/academique/academiqueApi';
 import { useMessageStore } from '@/stores/messages/messageStore';
 
 import { useNotifier } from '@/stores/messages/useNotifier';
@@ -8,7 +14,7 @@ import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
 export const useCycleStore = defineStore('cycleStore', {
   state: () => ({
     cycles: [],
-    Filierecycles : [],
+    Filierecycles: [],
     loading: false,
   }),
 
@@ -35,11 +41,8 @@ export const useCycleStore = defineStore('cycleStore', {
 
         // Sécurisation de la structure
         this.Filierecycles = response?.[0]?.data?.cycles ?? [];
-
       } catch (error) {
-        notifyError(
-          extractErrorMessage(error, 'Échec lors du chargement des données.')
-        );
+        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
       } finally {
         this.loading = false;
       }

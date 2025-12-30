@@ -10,7 +10,6 @@ import { useMessageStore } from '@/stores/messages/messageStore';
 import { useNotifier } from '@/stores/messages/useNotifier';
 import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
 
-
 export const useNiveauStore = defineStore('niveauStore', {
   state: () => ({
     niveaux: [],
@@ -18,7 +17,6 @@ export const useNiveauStore = defineStore('niveauStore', {
   }),
 
   actions: {
-    
     // Récupérer tous les niveaux
     async fetchNiveaux() {
       const { notifyError } = useNotifier();
@@ -77,7 +75,7 @@ export const useNiveauStore = defineStore('niveauStore', {
         this.loading = false;
       }
     },
-   async getNiveauByCycle(id) {
+    async getNiveauByCycle(id) {
       const { notifyError } = useNotifier();
       this.loading = true;
       try {
@@ -88,6 +86,6 @@ export const useNiveauStore = defineStore('niveauStore', {
       } finally {
         this.loading = false;
       }
-    }
+    },
   },
 });

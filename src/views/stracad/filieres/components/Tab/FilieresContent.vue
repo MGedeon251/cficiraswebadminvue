@@ -32,9 +32,9 @@
             <td>{{ filiere.designation }}</td>
             <td>{{ filiere.cycle_nom || '-' }}</td>
             <td>
-                <span class="badge" :class="filiere.nb_classes > 0 ? 'bg-success' : 'bg-secondary'">
-                  {{ filiere.nb_classes }}
-                </span>
+              <span class="badge" :class="filiere.nb_classes > 0 ? 'bg-success' : 'bg-secondary'">
+                {{ filiere.nb_classes }}
+              </span>
             </td>
             <td>
               <ItemActions
@@ -69,18 +69,17 @@ onMounted(async () => {
   try {
     await filiereStore.fetchFilieres();
   } catch (error) {
-    messageStore.addMessage("Erreur lors du chargement des filières");
+    messageStore.addMessage('Erreur lors du chargement des filières');
   }
 });
 
 // Méthodes pour actions
 const editFiliere = (filiere) => {
   // ouvrir ton modal d’édition avec la filière sélectionnée
-  console.log("Édition de la filière :", filiere);
+  console.log('Édition de la filière :', filiere);
 };
 
 const deleteFiliere = async (filiere) => {
   await filiereStore.removeFiliere(filiere.id);
 };
 </script>
-

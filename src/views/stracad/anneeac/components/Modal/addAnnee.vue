@@ -115,7 +115,6 @@ import { useAnneeStore } from '@/stores/academiqueStore/anneStore';
 
 const anneeStore = useAnneeStore();
 
-
 // Props
 const props = defineProps({
   anneeToEdit: {
@@ -227,7 +226,6 @@ const submitAnnee = async () => {
     loading.value = false;
   }
 };
-
 
 // Exposer les méthodes pour utilisation externe si nécessaire
 defineExpose({

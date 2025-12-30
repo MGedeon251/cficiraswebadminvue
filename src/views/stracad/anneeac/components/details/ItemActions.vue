@@ -105,7 +105,7 @@ const formatDate = (date) => {
 const mapStatut = (estActif) => {
   return {
     label: estActif ? 'Actif' : 'Inactif',
-    class: estActif ? 'badge bg-success' : 'badge bg-secondary'
+    class: estActif ? 'badge bg-success' : 'badge bg-secondary',
   };
 };
 </script>

@@ -29,16 +29,14 @@
           >
             <i class="mdi mdi-clock-outline text-muted"></i>
           </button>
-          <button
-            class="btn btn-primary mt-2 mt-xl-0"
-            @click="openAddModal"
-          >
+          <button class="btn btn-primary mt-2 mt-xl-0" @click="openAddModal">
             + Ajouter un nouveau
           </button>
           <AddAnnees
-          :anneeToEdit="anneeToEdit"
-          @anneeCreated="onAnneeCreated"
-          @anneeUpdated="onAnneeUpdated" />
+            :anneeToEdit="anneeToEdit"
+            @anneeCreated="onAnneeCreated"
+            @anneeUpdated="onAnneeUpdated"
+          />
         </div>
       </div>
     </div>
@@ -80,4 +78,3 @@ const onAnneeUpdated = () => {
   anneeStore.fetchAnneesAcademiques();
 };
 </script>
-

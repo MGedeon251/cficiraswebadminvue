@@ -11,11 +11,7 @@
         <label class="me-2">Classe :</label>
         <select v-model="selectedClasseId" class="form-select form-select-sm w-auto">
           <option :value="null">Toutes les classes</option>
-          <option
-            v-for="c in classes"
-            :key="c.classe_id"
-            :value="c.classe_id"
-          >
+          <option v-for="c in classes" :key="c.classe_id" :value="c.classe_id">
             {{ c.classe_code }} — {{ c.filiere_designation }}
           </option>
         </select>
@@ -88,9 +84,7 @@ const selectedClasseId = ref(null);
    Données & chargement
 ===================== */
 const loading = computed(() => classeStore.loading);
-const classes = computed(() =>
-  Array.isArray(classeStore.classes) ? classeStore.classes : []
-);
+const classes = computed(() => (Array.isArray(classeStore.classes) ? classeStore.classes : []));
 
 /* =====================
    Construction des niveaux à partir des classes
@@ -99,7 +93,7 @@ const classes = computed(() =>
 ===================== */
 const niveaux = computed(() => {
   const source = selectedClasseId.value
-    ? classes.value.filter(c => c.classe_id === selectedClasseId.value)
+    ? classes.value.filter((c) => c.classe_id === selectedClasseId.value)
     : classes.value;
 
   const map = new Map();

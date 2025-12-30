@@ -26,7 +26,7 @@ export const useClasseStore = defineStore('classeStore', {
         const response = await getClasses();
         this.classes = response.data;
       } catch (error) {
-       notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
       } finally {
         this.loading = false;
       }
@@ -66,7 +66,7 @@ export const useClasseStore = defineStore('classeStore', {
         useMessageStore().addSuccess('Classe créée avec succès.');
         this.fetchClasses();
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors de l\'ajout des données.'));
+        notifyError(extractErrorMessage(error, "Échec lors de l'ajout des données."));
       } finally {
         this.loading = false;
       }

@@ -32,33 +32,31 @@
             <td>{{ formatDate(annee.date_debut) }}</td>
             <td>{{ formatDate(annee.date_fin) }}</td>
             <td>
-                <span :class="mapStatut(annee.est_actif).class">
-                  {{ mapStatut(annee.est_actif).label }}
-                </span>
+              <span :class="mapStatut(annee.est_actif).class">
+                {{ mapStatut(annee.est_actif).label }}
+              </span>
             </td>
             <td>
-                <ItemActions
-                  :item="annee"
-                  anneeRoute="/edition-concours/"
-                  :showAdd="false"
-                  @edit="editAnnee"
-                  @delete="confirmDelete"
-                />
-
-              </td>
+              <ItemActions
+                :item="annee"
+                anneeRoute="/edition-concours/"
+                :showAdd="false"
+                @edit="editAnnee"
+                @delete="confirmDelete"
+              />
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
-  
   </div>
 </template>
 
 <script setup>
 import { computed, onMounted } from 'vue';
 import { useAnneeStore } from '@/stores/academiqueStore/anneStore';
-import { useNotifier} from '@/stores/messages/useNotifier';
-import ItemActions from '../details/ItemActions.vue'; 
+import { useNotifier } from '@/stores/messages/useNotifier';
+import ItemActions from '../details/ItemActions.vue';
 
 // Stores
 const anneeStore = useAnneeStore();
@@ -72,7 +70,7 @@ onMounted(async () => {
   try {
     await anneeStore.fetchAnneesAcademiques();
   } catch (error) {
-    messageStore.error("Erreur lors du chargement des années académiques");
+    messageStore.error('Erreur lors du chargement des années académiques');
   }
 });
 // Méthodes de formatage
@@ -88,7 +86,7 @@ const formatDate = (date) => {
 const mapStatut = (estActif) => {
   return {
     label: estActif ? 'True' : 'False',
-    class: estActif ? 'badge bg-success' : 'badge bg-secondary'
+    class: estActif ? 'badge bg-success' : 'badge bg-secondary',
   };
 };
 

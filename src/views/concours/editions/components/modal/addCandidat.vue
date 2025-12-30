@@ -10,14 +10,8 @@
       <div class="modal-content">
         <!-- Header -->
         <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title" id="exampleModalLabel">
-            Ajouter un candidat
-          </h5>
-          <button
-            type="button"
-            class="btn-close btn-close-white"
-            @click="closeDetails"
-          ></button>
+          <h5 class="modal-title" id="exampleModalLabel">Ajouter un candidat</h5>
+          <button type="button" class="btn-close btn-close-white" @click="closeDetails"></button>
         </div>
 
         <!-- Body -->
@@ -70,9 +64,7 @@
                     <!-- Nom / Prénom -->
                     <div class="row">
                       <div class="col-md-6 mb-3">
-                        <label class="form-label">
-                          Nom <span class="text-danger">*</span>
-                        </label>
+                        <label class="form-label"> Nom <span class="text-danger">*</span> </label>
                         <input
                           type="text"
                           class="form-control"
@@ -130,14 +122,8 @@
                     <!-- Sexe / Téléphone -->
                     <div class="row">
                       <div class="col-md-6 mb-3">
-                        <label class="form-label">
-                          Sexe <span class="text-danger">*</span>
-                        </label>
-                        <select
-                          class="form-select"
-                          v-model="candidat.sexe"
-                          required
-                        >
+                        <label class="form-label"> Sexe <span class="text-danger">*</span> </label>
+                        <select class="form-select" v-model="candidat.sexe" required>
                           <option value="">-- Sélectionner --</option>
                           <option value="M">Masculin</option>
                           <option value="F">Féminin</option>
@@ -172,9 +158,7 @@
                       </div>
 
                       <div class="col-md-6 mb-3">
-                        <label class="form-label">
-                          Ville <span class="text-danger">*</span>
-                        </label>
+                        <label class="form-label"> Ville <span class="text-danger">*</span> </label>
                         <input
                           type="text"
                           class="form-control"
@@ -201,11 +185,7 @@
                         <label class="form-label">
                           Filière choisie <span class="text-danger">*</span>
                         </label>
-                        <select
-                          class="form-select"
-                          v-model="candidat.filiere"
-                          required
-                        >
+                        <select class="form-select" v-model="candidat.filiere" required>
                           <option value="">-- Sélectionner une filière --</option>
                           <option value="LAP">ADMINISTRATION PUBLIQUE</option>
                           <option value="INF">INFORMATIQUE</option>
@@ -230,15 +210,8 @@
                     Annuler
                   </button>
 
-                  <button
-                    type="submit"
-                    class="btn btn-primary"
-                    :disabled="isSubmitting"
-                  >
-                    <span
-                      v-if="isSubmitting"
-                      class="spinner-border spinner-border-sm me-2"
-                    ></span>
+                  <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
+                    <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
                     Enregistrer
                   </button>
                 </div>
@@ -247,15 +220,9 @@
 
             <!-- ================= ONGLET 2 ================= -->
             <a-tab-pane key="2" tab="Dossier" force-render>
-              <p class="text-muted mb-3">
-                Déposez les pièces justificatives du candidat
-              </p>
+              <p class="text-muted mb-3">Déposez les pièces justificatives du candidat</p>
 
-              <div
-                v-for="docType in dossierTypes"
-                :key="docType.key"
-                class="mb-3"
-              >
+              <div v-for="docType in dossierTypes" :key="docType.key" class="mb-3">
                 <label class="form-label">{{ docType.label }}</label>
                 <input
                   type="file"
@@ -263,9 +230,7 @@
                   :accept="docType.accept"
                   @change="(e) => handleDossierUpload(e, docType.key)"
                 />
-                <small class="text-muted">
-                  Formats acceptés : {{ docType.accept }}
-                </small>
+                <small class="text-muted"> Formats acceptés : {{ docType.accept }} </small>
               </div>
 
               <ul class="list-group mt-3">
@@ -275,9 +240,7 @@
                   class="list-group-item d-flex justify-content-between align-items-center"
                 >
                   {{ doc.nom }}
-                  <span class="badge bg-secondary">
-                    {{ (doc.taille / 1024).toFixed(2) }} KB
-                  </span>
+                  <span class="badge bg-secondary"> {{ (doc.taille / 1024).toFixed(2) }} KB </span>
                 </li>
               </ul>
             </a-tab-pane>
@@ -287,7 +250,6 @@
     </div>
   </div>
 </template>
-
 
 <script setup>
 import { ref, computed, watch } from 'vue';

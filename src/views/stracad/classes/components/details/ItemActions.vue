@@ -49,9 +49,7 @@
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content shadow-lg">
           <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title">
-              Détails de la classe
-            </h5>
+            <h5 class="modal-title">Détails de la classe</h5>
             <button type="button" class="btn-close btn-close-white" @click="closeDetails"></button>
           </div>
 
@@ -85,9 +83,7 @@
           </div>
 
           <div class="modal-footer">
-            <button class="btn btn-secondary" @click="closeDetails">
-              Fermer
-            </button>
+            <button class="btn btn-secondary" @click="closeDetails">Fermer</button>
           </div>
         </div>
       </div>

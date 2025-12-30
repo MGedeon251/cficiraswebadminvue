@@ -29,24 +29,14 @@
               <label class="form-label">
                 Année académique <span class="text-danger">*</span>
               </label>
-              <select
-                v-model="form.annee_id"
-                class="form-select"
-                required
-              >
+              <select v-model="form.annee_id" class="form-select" required>
                 <option value="">-- Sélectionner une année --</option>
-                <option
-                  v-for="annee in anneesAcademiques"
-                  :key="annee.id"
-                  :value="annee.id"
-                >
+                <option v-for="annee in anneesAcademiques" :key="annee.id" :value="annee.id">
                   {{ annee.code }}
                   <span v-if="annee.est_active"> (active)</span>
                 </option>
               </select>
-              <small class="text-muted">
-                Année académique du semestre
-              </small>
+              <small class="text-muted"> Année académique du semestre </small>
             </div>
 
             <!-- Code -->
@@ -62,29 +52,19 @@
                 maxlength="10"
                 required
               />
-              <small class="text-muted">
-                Code unique par année académique
-              </small>
+              <small class="text-muted"> Code unique par année académique </small>
             </div>
 
             <!-- Dates -->
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label">Date de début</label>
-                <input
-                  v-model="form.date_debut"
-                  type="date"
-                  class="form-control"
-                />
+                <input v-model="form.date_debut" type="date" class="form-control" />
               </div>
 
               <div class="col-md-6 mb-3">
                 <label class="form-label">Date de fin</label>
-                <input
-                  v-model="form.date_fin"
-                  type="date"
-                  class="form-control"
-                />
+                <input v-model="form.date_fin" type="date" class="form-control" />
               </div>
             </div>
 
@@ -99,9 +79,7 @@
                 />
                 <label class="form-check-label" for="actifCheck">
                   <strong>Définir comme semestre actif</strong><br />
-                  <small class="text-muted">
-                    Un seul semestre actif par année académique
-                  </small>
+                  <small class="text-muted"> Un seul semestre actif par année académique </small>
                 </label>
               </div>
             </div>
@@ -135,16 +113,8 @@
             <i class="mdi mdi-close"></i> Annuler
           </button>
 
-          <button
-            type="button"
-            class="btn btn-primary"
-            @click="submitSemestre"
-            :disabled="loading"
-          >
-            <span
-              v-if="loading"
-              class="spinner-border spinner-border-sm me-2"
-            ></span>
+          <button type="button" class="btn btn-primary" @click="submitSemestre" :disabled="loading">
+            <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
             <i v-else class="mdi mdi-content-save"></i>
             {{ loading ? 'Enregistrement...' : 'Enregistrer' }}
           </button>
@@ -161,8 +131,8 @@ import { ref, onMounted, watch } from 'vue';
 const props = defineProps({
   semestreToEdit: {
     type: Object,
-    default: null
-  }
+    default: null,
+  },
 });
 
 /* Emits */
@@ -191,7 +161,7 @@ onMounted(async () => {
 /* Load années */
 const loadAnneesAcademiques = async () => {
   try {
-    await new Promise(r => setTimeout(r, 400));
+    await new Promise((r) => setTimeout(r, 400));
 
     anneesAcademiques.value = [
       { id: 1, code: '2024-2025', est_active: true },
@@ -203,16 +173,19 @@ const loadAnneesAcademiques = async () => {
 };
 
 /* Watch edit */
-watch(() => props.semestreToEdit, (val) => {
-  if (val) {
-    isEdit.value = true;
-    form.value = { ...val };
+watch(
+  () => props.semestreToEdit,
+  (val) => {
+    if (val) {
+      isEdit.value = true;
+      form.value = { ...val };
+    }
   }
-});
+);
 
 /* Helpers */
 const getPreview = () => {
-  const annee = anneesAcademiques.value.find(a => a.id === form.value.annee_id);
+  const annee = anneesAcademiques.value.find((a) => a.id === form.value.annee_id);
   return annee ? `${form.value.code} - ${annee.code}` : '';
 };
 
@@ -255,7 +228,7 @@ const submitSemestre = async () => {
       est_actif: form.value.est_actif,
     };
 
-    await new Promise(r => setTimeout(r, 1200));
+    await new Promise((r) => setTimeout(r, 1200));
 
     const result = {
       ...payload,
@@ -269,7 +242,6 @@ const submitSemestre = async () => {
     emit(isEdit.value ? 'semestreUpdated' : 'semestreCreated', result);
 
     setTimeout(closeModal, 1000);
-
   } catch (e) {
     errorMessage.value = 'Erreur lors de l’enregistrement.';
   } finally {
@@ -304,6 +276,6 @@ defineExpose({
   openForEdit: (semestre) => {
     isEdit.value = true;
     form.value = { ...semestre };
-  }
+  },
 });
 </script>

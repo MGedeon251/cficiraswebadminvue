@@ -18,9 +18,7 @@
 
           <ul class="dropdown-menu">
             <li>
-              <button class="dropdown-item" @click="filterByCycle(null)">
-                Tous les cycles
-              </button>
+              <button class="dropdown-item" @click="filterByCycle(null)">Tous les cycles</button>
             </li>
             <li v-for="cycle in cycles" :key="cycle.id">
               <button class="dropdown-item" @click="filterByCycle(cycle.id)">
@@ -31,11 +29,7 @@
         </div>
 
         <!-- Créer -->
-        <button
-          class="btn btn-outline-dark"
-          data-bs-toggle="modal"
-          data-bs-target="#niveauModal"
-        >
+        <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#niveauModal">
           + Créer un niveau
         </button>
       </div>
@@ -60,18 +54,16 @@
 
           <tbody>
             <tr v-if="loading">
-              <td colspan="7" class="text-center py-4">
-                Chargement des niveaux...
-              </td>
+              <td colspan="7" class="text-center py-4">Chargement des niveaux...</td>
             </tr>
 
             <tr v-for="(niveau, index) in paginatedNiveaux" :key="niveau.id">
               <td>{{ startIndex + index + 1 }}</td>
               <td>{{ niveau.code }}</td>
               <td>
-              <span class="badge bg-secondary">
-                {{ niveau.ordre + "e année" }}
-              </span>
+                <span class="badge bg-secondary">
+                  {{ niveau.ordre + 'e année' }}
+                </span>
               </td>
               <td>{{ niveau.cycle_designation }}</td>
               <td>{{ formatMoney(niveau.frais_scolarite) }}</td>
@@ -110,71 +102,60 @@
   </div>
 </template>
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useNiveauStore } from '@/stores/academiqueStore/niveauStore'
-import { useCycleStore } from '@/stores/academiqueStore/cycleStore'
+import { ref, computed, onMounted } from 'vue';
+import { useNiveauStore } from '@/stores/academiqueStore/niveauStore';
+import { useCycleStore } from '@/stores/academiqueStore/cycleStore';
 
-import NiveauFormModal from '../Modal/addNiveau.vue'
-import ItemActions from '../details/ItemActions2.vue'
+import NiveauFormModal from '../Modal/addNiveau.vue';
+import ItemActions from '../details/ItemActions2.vue';
 
-const niveauStore = useNiveauStore()
-const cycleStore = useCycleStore()
+const niveauStore = useNiveauStore();
+const cycleStore = useCycleStore();
 
-const selectedCycle = ref(null)
-const currentPage = ref(1)
-const itemsPerPage = ref(10)
+const selectedCycle = ref(null);
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
 
 /* =====================
    Computed sécurisés
 ===================== */
-const niveaux = computed(() =>
-  Array.isArray(niveauStore.niveaux) ? niveauStore.niveaux : []
-)
+const niveaux = computed(() => (Array.isArray(niveauStore.niveaux) ? niveauStore.niveaux : []));
 
-const cycles = computed(() =>
-  Array.isArray(cycleStore.cycles) ? cycleStore.cycles : []
-)
+const cycles = computed(() => (Array.isArray(cycleStore.cycles) ? cycleStore.cycles : []));
 
-const loading = computed(() =>
-  niveauStore.loading || cycleStore.loading
-)
+const loading = computed(() => niveauStore.loading || cycleStore.loading);
 
 /* =====================
    Pagination
 ===================== */
-const startIndex = computed(() =>
-  (currentPage.value - 1) * itemsPerPage.value
-)
+const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage.value);
 
 const paginatedNiveaux = computed(() =>
   niveaux.value.slice(startIndex.value, startIndex.value + itemsPerPage.value)
-)
+);
 
 /* =====================
    Actions
 ===================== */
 const filterByCycle = async (cycleId) => {
-  selectedCycle.value = cycleId
-  currentPage.value = 1 
+  selectedCycle.value = cycleId;
+  currentPage.value = 1;
 
   if (cycleId) {
-    await niveauStore.getNiveauByCycle(cycleId)
+    await niveauStore.getNiveauByCycle(cycleId);
   } else {
-    await niveauStore.fetchNiveaux()
+    await niveauStore.fetchNiveaux();
   }
-}
+};
 
 const formatMoney = (value) => {
-  return new Intl.NumberFormat('fr-FR').format(value || 0) + ' FCFA'
-}
+  return new Intl.NumberFormat('fr-FR').format(value || 0) + ' FCFA';
+};
 
 /* =====================
    Lifecycle
 ===================== */
 onMounted(async () => {
-  await Promise.all([
-    niveauStore.fetchNiveaux(),
-    cycleStore.fetchCycles()
-  ])
-})
+  await Promise.all([niveauStore.fetchNiveaux(), cycleStore.fetchCycles()]);
+});
 </script>

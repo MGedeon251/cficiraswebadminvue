@@ -92,13 +92,9 @@ const itemsPerPage = ref(10); // par défaut 5
 ===================== */
 const loading = computed(() => classeStore.loading);
 
-const classes = computed(() =>
-  Array.isArray(classeStore.classes) ? classeStore.classes : []
-);
+const classes = computed(() => (Array.isArray(classeStore.classes) ? classeStore.classes : []));
 
-const startIndex = computed(() =>
-  (currentPage.value - 1) * itemsPerPage.value
-);
+const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage.value);
 
 const paginatedClasses = computed(() =>
   classes.value.slice(startIndex.value, startIndex.value + itemsPerPage.value)
