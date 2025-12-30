@@ -11,7 +11,7 @@
             <th>code</th>
             <th>designation</th>
             <th>cycles</th>
-            <th>classes</th>
+            <th>nbre classes</th>
             <th></th>
           </tr>
         </thead>
@@ -31,7 +31,11 @@
             <td class="fw-bold">{{ filiere.code }}</td>
             <td>{{ filiere.designation }}</td>
             <td class="fw-bold">{{ filiere.cycle_nom || '-' }}</td>
-            <td class="text-center">{{ filiere.nb_classes }}</td>
+            <td>
+                <span class="badge" :class="filiere.nb_classes > 0 ? 'bg-success' : 'bg-secondary'">
+                  {{ filiere.nb_classes }}
+                </span>
+            </td>
             <td>
               <ItemActions
                 :item="filiere"

@@ -37,6 +37,7 @@ export const deleteFiliere = (id) => academiqueService.delete(`/filieres/${id}`)
 
 // API pour gérer les niveaux
 export const getNiveaux = () => academiqueService.get('/niveaux');
+export const getCycleNiveau = (id) => academiqueService.get(`/niveaux/cycles/${id}`);
 export const createNiveau = (data) => academiqueService.post('/niveaux', data);
 export const updateNiveau = (id, data) => academiqueService.put(`/niveaux/${id}`, data);
 export const deleteNiveau = (id) => academiqueService.delete(`/niveaux/${id}`);

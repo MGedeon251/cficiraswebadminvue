@@ -16,7 +16,7 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-          Filtrer par cycle
+            Filtrer par cycle
           </button>
           <ul class="dropdown-menu" aria-labelledby="filterCycleBtn">
             <li>
@@ -30,14 +30,15 @@
               </button>
             </li>
           </ul>
+
           <!-- Bouton Créer -->
           <button
-          class="btn btn-outline-dark me-2"
-          data-bs-toggle="modal"
-          data-bs-target="#niveauModal"
-        >
-          + Créer un niveau
-        </button>
+            class="btn btn-outline-dark me-2"
+            data-bs-toggle="modal"
+            data-bs-target="#niveauModal"
+          >
+            + Créer un niveau
+          </button>
         </div>
       </div>
 
@@ -51,28 +52,30 @@
             <tr>
               <th>#</th>
               <th>Code</th>
-              <th>Désignation</th>
-              <th>Année</th>
-              <th>Crédits totaux</th>
-              <th>Statut</th>
+              <th>Niveau</th>
+              <th>Cycle</th>
+              <th>Frais scolarité</th>
+              <th>Nombre de classes</th>
               <th width="120"></th>
             </tr>
           </thead>
 
           <tbody>
+            <!-- Loader -->
             <tr v-if="loading">
               <td colspan="7" class="text-center py-4">Chargement des niveaux...</td>
             </tr>
 
-            <tr v-for="(niveau, index) in filteredNiveaux" :key="niveau.id">
+            <!-- Liste des niveaux -->
+            <tr v-for="(niveau, index) in niveaux" :key="niveau.id">
               <td>{{ index + 1 }}</td>
               <td>{{ niveau.code }}</td>
-              <td>{{ niveau.designation }}</td>
-              <td>{{ niveau.annee }}</td>
-              <td>{{ niveau.credits }}</td>
+              <td>{{ niveau.ordre }}</td>
+              <td>{{ niveau.cycle_designation }}</td>
+              <td>{{ formatMoney(niveau.frais_scolarite )}}</td>
               <td>
-                <span class="badge" :class="niveau.actif ? 'bg-success' : 'bg-secondary'">
-                  {{ niveau.actif ? 'Actif' : 'Inactif' }}
+                <span class="badge" :class="niveau.nb_classes > 0 ? 'bg-success' : 'bg-secondary'">
+                  {{ niveau.nb_classes }}
                 </span>
               </td>
               <td>
@@ -87,7 +90,8 @@
               </td>
             </tr>
 
-            <tr v-if="!loading && filteredNiveaux.length === 0">
+            <!-- Cas vide -->
+            <tr v-if="!loading && niveaux.length === 0">
               <td colspan="7" class="text-center py-4">
                 <div class="d-flex flex-column align-items-center">
                   <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="80" />
@@ -101,56 +105,53 @@
     </div>
   </div>
 </template>
-<script setup>
-import { ref, computed, onMounted } from 'vue';
-import NiveauFormModal from '../Modal/addNiveau.vue';
-import ItemActions from '../details/ItemActions.vue';
 
-/* =====================
-   États
-===================== */
-const loading = ref(false);
-const niveaux = ref([]);
-const cycles = ref([
-  { id: 1, designation: 'Licence' },
-  { id: 2, designation: 'Master' },
-  { id: 3, designation: 'Doctorat' },
-]);
+
+
+<script setup>
+import { ref, onMounted, computed } from 'vue';
+import { useNiveauStore } from '@/stores/academiqueStore/niveauStore';
+import { useCycleStore } from '@/stores/academiqueStore/cycleStore'; // <-- ton store des cycles
+import NiveauFormModal from '../Modal/addNiveau.vue';
+import ItemActions from '../details/ItemActions2.vue';
+
+
+const niveauStore = useNiveauStore();
+const cycleStore = useCycleStore();
+
 
 const selectedCycle = ref(null);
 
 /* =====================
    Méthodes
 ===================== */
-const fetchNiveaux = async () => {
-  loading.value = true;
-
-  // Simulation API
-  niveaux.value = [
-    { id: 1, code: 'L1', designation: 'Licence 1', annee: 1, credits: 60, actif: true, cycle_id: 1 },
-    { id: 2, code: 'M1', designation: 'Master 1', annee: 1, credits: 60, actif: true, cycle_id: 2 },
-    { id: 3, code: 'D1', designation: 'Doctorat 1', annee: 1, credits: 60, actif: false, cycle_id: 3 },
-  ];
-
-  loading.value = false;
-};
-
-const filterByCycle = (cycleId) => {
+const filterByCycle = async (cycleId) => {
   selectedCycle.value = cycleId;
+  if (cycleId) {
+    await niveauStore.getNiveauByCycle(cycleId);
+  } else {
+    await niveauStore.fetchNiveaux();
+  }
 };
 
 /* =====================
    Computed
 ===================== */
-const filteredNiveaux = computed(() => {
-  if (!selectedCycle.value) return niveaux.value;
-  return niveaux.value.filter((n) => n.cycle_id === selectedCycle.value);
-});
+const niveaux = computed(() => niveauStore.niveaux);
+const cycles = computed(() => cycleStore.cycles);
+const loading = computed(() => niveauStore.loading || cycleStore.loading);
 
 /* =====================
    Lifecycle
 ===================== */
 onMounted(() => {
-  fetchNiveaux();
+  niveauStore.fetchNiveaux();
+  cycleStore.fetchCycles(); // 🔥 récupère les cycles depuis l’API
 });
+const formatMoney = (value) => {
+  if (!value) return '0 FCFA';
+  return new Intl.NumberFormat('fr-FR').format(Number(value)) + ' FCFA';
+};
 </script>
+
+
