@@ -26,7 +26,7 @@
 
           <tbody>
             <!-- Loader -->
-            <tr v-if="loading">
+            <tr v-if="store.loading">
               <td colspan="9" class="text-center py-4">Chargement des étudiants...</td>
             </tr>
 
@@ -59,7 +59,7 @@
             </tr>
 
             <!-- Vide -->
-            <tr v-if="!loading && etudiants.length === 0">
+            <tr v-if="!store.loading && store.etudiants.length === 0">
               <td colspan="9" class="text-center py-4">
                 <div class="d-flex flex-column align-items-center">
                   <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="80" />
@@ -74,7 +74,7 @@
         <Pagination
           v-model="currentPage"
           :items-per-page="itemsPerPage"
-          :total-items="etudiants.length"
+          :total-items="store.etudiants.length"
         />
       </div>
     </div>
@@ -82,59 +82,34 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import ItemActions from '../details/ItemDetails.vue';
-import Pagination from '@/components/shared/Pagination.vue';
-// Prévoir un store Pinia pour gérer les étudiants
-// import { useEtudiantStore } from '@/stores/academiqueStore/etudiantStore';
+import { computed, onMounted, ref } from 'vue'
+import ItemActions from '../details/ItemActions.vue'
+import Pagination from '@/components/shared/Pagination.vue'
+import { useEtudiantStore } from '@/stores/etudiants/etudiantStore' 
 
-const loading = ref(false);
-const etudiants = ref([]);
+const store = useEtudiantStore()
+console.log('data :', store.etudiants)
 
 // Pagination
-const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const currentPage = ref(1)
+const itemsPerPage = ref(10)
 
-const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage.value);
+const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage.value)
 const paginatedEtudiants = computed(() =>
-  etudiants.value.slice(startIndex.value, startIndex.value + itemsPerPage.value)
-);
+  store.etudiants.slice(startIndex.value, startIndex.value + itemsPerPage.value)
+)
 
 // Actions
 const editEtudiant = (etudiant) => {
-  console.log('Édition de l’étudiant :', etudiant);
-};
+  store.fetchEtudiantById(etudiant.id)
+  // ouvrir modal édition par exemple
+}
 const confirmDelete = (etudiant) => {
-  console.log('Suppression de l’étudiant :', etudiant);
-};
+  store.removeEtudiant(etudiant.id)
+}
 
-// Simulation API (à remplacer par store.fetchEtudiants())
+// Charger les étudiants au montage
 onMounted(() => {
-  loading.value = true;
-  setTimeout(() => {
-    etudiants.value = [
-      {
-        id: 1,
-        matricule: 'E001',
-        nom: 'Diallo',
-        prenom: 'Mamadou',
-        sexe: 'M',
-        annee_academique: '2024-2025',
-        filiere: 'Informatique',
-        classe: 'L1-INFO-A',
-      },
-      {
-        id: 2,
-        matricule: 'E002',
-        nom: 'Ndiaye',
-        prenom: 'Awa',
-        sexe: 'F',
-        annee_academique: '2024-2025',
-        filiere: 'Informatique',
-        classe: 'L2-INFO-B',
-      },
-    ];
-    loading.value = false;
-  }, 2000);
-});
+  store.fetchEtudiants()
+})
 </script>

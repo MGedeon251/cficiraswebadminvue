@@ -27,9 +27,9 @@ export const useEtudiantStore = defineStore('etudiantStore', {
       this.loading = true;
       try {
         const response = await getEtudiants();
-        this.etudiants = response.data;
+        this.etudiants = response;
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la récupération des étudiants.');
+        useMessageStore().addMessage('Erreur lors de la récupération des étudiants.');
       } finally {
         this.loading = false;
       }
