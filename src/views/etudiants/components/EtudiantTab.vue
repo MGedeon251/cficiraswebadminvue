@@ -72,19 +72,14 @@
           aria-controls="export"
           aria-selected="false"
         >
-          Exportation
+          Exportations
         </a>
       </li>
     </ul>
 
     <div class="tab-content p-4">
       <!-- Liste des étudiants -->
-      <div
-        class="tab-pane fade show active"
-        id="liste"
-        role="tabpanel"
-        aria-labelledby="liste-tab"
-      >
+      <div class="tab-pane fade show active" id="liste" role="tabpanel" aria-labelledby="liste-tab">
         <EtudiantsListContent />
       </div>
 
@@ -119,22 +114,12 @@
       </div>
 
       <!-- Import -->
-      <div
-        class="tab-pane fade"
-        id="import"
-        role="tabpanel"
-        aria-labelledby="import-tab"
-      >
+      <div class="tab-pane fade" id="import" role="tabpanel" aria-labelledby="import-tab">
         <ImportEtudiantsContent />
       </div>
 
       <!-- Export -->
-      <div
-        class="tab-pane fade"
-        id="export"
-        role="tabpanel"
-        aria-labelledby="export-tab"
-      >
+      <div class="tab-pane fade" id="export" role="tabpanel" aria-labelledby="export-tab">
         <ExportEtudiantsContent />
       </div>
     </div>
@@ -142,7 +127,7 @@
 </template>
 
 <script setup>
-import EtudiantsListContent from './Tab/EtudiantsListContent.vue'
+import EtudiantsListContent from './Tab/EtudiantsListContent.vue';
 import EtudiantsClassesContent from './Tab/EtudiantsClassesContent.vue';
 import OrganisationEtudiantsContent from './Tab/OrganisationEtudiantsContent.vue';
 import StatistiquesEtudiantsContent from './Tab/StatistiquesEtudiantsContent.vue';

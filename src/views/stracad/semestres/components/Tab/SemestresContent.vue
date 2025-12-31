@@ -85,15 +85,14 @@ const semestres = computed(() =>
   semestreStore.semestres.map((s) => ({
     id: s.id,
     code: s.code,
-    annee: s.annee_code,        // API: annee_code
-    dateDebut: s.date_debut,    // API: date_debut
-    dateFin: s.date_fin,        // API: date_fin
-    actif: s.est_actif,         // API: est_actif
+    annee: s.annee_code, // API: annee_code
+    dateDebut: s.date_debut, // API: date_debut
+    dateFin: s.date_fin, // API: date_fin
+    actif: s.est_actif, // API: est_actif
     nbClasses: s.nb_classes,
     nbModules: s.nb_modules,
   }))
 );
-
 
 /* =====================
    Méthodes

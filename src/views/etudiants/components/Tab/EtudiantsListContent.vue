@@ -2,7 +2,9 @@
   <div class="row">
     <div class="col-12 mb-3">
       <h4>Liste des étudiants</h4>
-      <p class="text-muted">Tous les étudiants inscrits avec leurs filières, classes et années académiques.</p>
+      <p class="text-muted">
+        Tous les étudiants inscrits avec leurs filières, classes et années académiques.
+      </p>
     </div>
 
     <div class="col-12">
@@ -35,7 +37,10 @@
               <td>{{ etudiant.nom }}</td>
               <td>{{ etudiant.prenom }}</td>
               <td>
-                <span class="badge" :class="etudiant.sexe === 'M' ? 'bg-info' : 'bg-warning text-dark'">
+                <span
+                  class="badge"
+                  :class="etudiant.sexe === 'M' ? 'bg-info' : 'bg-warning text-dark'"
+                >
                   {{ etudiant.sexe }}
                 </span>
               </td>

@@ -60,7 +60,7 @@
               </li>
               <li class="list-group-item d-flex justify-content-between">
                 <strong>Année :</strong>
-                <span>{{ item.annee}}</span>
+                <span>{{ item.annee }}</span>
               </li>
               <li class="list-group-item d-flex justify-content-between">
                 <strong>Date début :</strong>

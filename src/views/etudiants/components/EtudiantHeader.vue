@@ -35,53 +35,54 @@
             <i class="mdi mdi-printer text-muted"></i>
           </button>
 
-                    <!-- Ajouter / Importer -->
-            <div class="btn-group">
+          <!-- Ajouter / Importer -->
+          <div class="btn-group">
             <!-- Ajouter -->
             <button
-                type="button"
-                class="btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#addEtudiantModal"
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#addEtudiantModal"
             >
-             Ajouter un étudiant
-            </button>             <!-- Dropdown -->
+              Ajouter un étudiant
+            </button>
+            <!-- Dropdown -->
             <button
-                type="button"
-                class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
+              type="button"
+              class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
             >
-                <span class="visually-hidden">Toggle Dropdown</span>
+              <span class="visually-hidden">Toggle Dropdown</span>
             </button>
 
             <!-- Menu Import -->
             <ul class="dropdown-menu">
-                <li>
+              <li>
                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#importModal">
-                    Importer fichier (Excel/CSV)
+                  Importer fichier (Excel/CSV)
                 </a>
-                </li>
-                <li>
-                <a class="dropdown-item" @click="downloadTemplate">
-                  Télécharger modèle
-                </a>
-                </li>
-                <li>
-                <a class="dropdown-item" @click="bulkDelete">
-                    Suppression en masse
-                </a>
-                </li>
+              </li>
+              <li>
+                <a class="dropdown-item" @click="downloadTemplate">Télécharger modèle</a>
+              </li>
+              <li>
+                <a class="dropdown-item text-danger" @click="bulkDelete">Suppression en masse</a>
+              </li>
             </ul>
-            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+  <AddEtudiant />
+  <ImportEtudiantsModal @import-complete="handleImport" />
 </template>
 
 <script setup>
 import AddEtudiant from './Modal/addEtudiant.vue';
+import ImportEtudiantsModal from './Modal/importEtudiantModal.vue';
 
 const exportData = () => {
   console.log('Export des étudiants');
@@ -92,7 +93,17 @@ const printData = () => {
   window.print();
 };
 
-const refreshData = () => {
-  window.location.reload();
+const downloadTemplate = () => {
+  console.log('Téléchargement du modèle CSV/Excel');
+  // TODO: utiliser la fonction downloadTemplate du composant ImportEtudiantsModal
+};
+
+const bulkDelete = () => {
+  console.log('Suppression en masse des étudiants sélectionnés');
+};
+
+const handleImport = (data) => {
+  console.log('Données importées:', data);
+  // TODO: envoyer à l’API ou insérer dans le store
 };
 </script>
