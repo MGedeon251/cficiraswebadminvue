@@ -105,8 +105,11 @@ const editEtudiant = (etudiant) => {
   // ouvrir modal édition par exemple
 }
 const confirmDelete = (etudiant) => {
-  store.removeEtudiant(etudiant.id)
+  if (confirm(`Voulez-vous vraiment supprimer ${etudiant.nom} ${etudiant.prenom} ?`)) {
+    store.removeEtudiant(etudiant.id)
+  }
 }
+
 
 // Charger les étudiants au montage
 onMounted(() => {
