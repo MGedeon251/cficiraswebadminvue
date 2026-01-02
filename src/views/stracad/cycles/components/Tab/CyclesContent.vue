@@ -10,6 +10,9 @@
             <th>#</th>
             <th>Code</th>
             <th>Désignation</th>
+            <th>Diplome</th>
+            <th>Durées</th>
+            <th>Credits</th>
             <th></th>
           </tr>
         </thead>
@@ -29,12 +32,19 @@
             <td>{{ index + 1 }}</td>
             <td class="fw-bold">{{ cycle.code }}</td>
             <td>{{ cycle.designation }}</td>
+            <td>{{ cycle.diplome }}</td>
+            <td>
+              <span class="badge bg-info">{{ cycle.duree_annees }}</span>
+            </td>
+            <td>
+              <span class="badge bg-secondary">{{ cycle.credits_total }}</span>
+            </td>
             <td>
               <ItemActions
                 :item="cycle"
                 :showAdd="false"
                 @edit="editCycle"
-                @delete="cycleStore.removeCycle"
+                @delete="deleteCycle"
               />
             </td>
           </tr>
@@ -62,9 +72,14 @@ const cycles = computed(() => cycleStore.cycles);
 onMounted(async () => {
   try {
     await cycleStore.fetchCycles(); // appel à l’action du store
-    console.log('Cycles chargés:', cycles.value);
   } catch (error) {
     notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
   }
 });
+
+const deleteCycle = async (id) => {
+  await cycleStore.removeCycle(id);
+};
+
+
 </script>

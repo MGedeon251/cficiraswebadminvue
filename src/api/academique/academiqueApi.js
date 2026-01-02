@@ -27,8 +27,8 @@ export const deleteCursus = (id) => academiqueService.delete(`/cursus/${id}`);
 export const getCycles = () => academiqueService.get('/cycles');
 export const getCycleFiliere = () => academiqueService.get('/cycles/filieres');
 export const createCycle = (data) => academiqueService.post('/cycles', data);
-export const updateCycle = (id, data) => academiqueService.put(`/cycle/${id}`, data);
-export const deleteCycle = (id) => academiqueService.delete(`/cycle/${id}`);
+export const updateCycle = (id, data) => academiqueService.put(`/cycles/${id}`, data);
+export const deleteCycle = (id) => academiqueService.delete(`/cycles/${id}`);
 
 // API pour gérer les filières
 export const getFilieres = () => academiqueService.get('/filieres');

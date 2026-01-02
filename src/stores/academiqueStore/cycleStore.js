@@ -80,14 +80,15 @@ export const useCycleStore = defineStore('cycleStore', {
 
     // Ajouter un nouveau cycle
     async addCycle(data) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         await createCycle(data);
-        useMessageStore().addSuccess('Cycle créé avec succès.');
+        useMessageStore().addMessage('Cycle créé avec succès.');
         localStorage.removeItem('cycles'); // Invalider le cache
         this.fetchCycles();
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la création du cycle.');
+        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
       } finally {
         this.loading = false;
       }
@@ -95,14 +96,15 @@ export const useCycleStore = defineStore('cycleStore', {
 
     // Modifier un cycle existant
     async editCycle(id, data) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         await updateCycle(id, data);
-        useMessageStore().addSuccess('Cycle mis à jour avec succès.');
+        useMessageStore().addMessage('Cycle mis à jour avec succès.');
         localStorage.removeItem('cycles'); // Invalider le cache
         this.fetchCycles();
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la mise à jour du cycle.');
+        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
       } finally {
         this.loading = false;
       }
@@ -110,14 +112,15 @@ export const useCycleStore = defineStore('cycleStore', {
 
     // Supprimer un cycle
     async removeCycle(id) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         await deleteCycle(id);
-        useMessageStore().addSuccess('Cycle supprimé avec succès.');
+        useMessageStore().addMessage('Cycle supprimé avec succès.');
         localStorage.removeItem('cycles'); // Invalider le cache
         this.fetchCycles();
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la suppression du cycle.');
+        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
       } finally {
         this.loading = false;
       }

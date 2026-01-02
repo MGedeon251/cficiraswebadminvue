@@ -71,7 +71,7 @@
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Durée (années)</label>
                   <input
-                    v-model.number="form.duree"
+                    v-model.number="form.duree_annees"
                     type="number"
                     class="form-control"
                     placeholder="3"
@@ -82,7 +82,7 @@
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Crédits ECTS</label>
                   <input
-                    v-model.number="form.credits_ects"
+                    v-model.number="form.credits_total"
                     type="number"
                     class="form-control"
                     placeholder="180"
@@ -156,6 +156,10 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import { useCycleStore } from '@/stores/academiqueStore/cycleStore';
+
+const cycleStore = useCycleStore();
+
 
 // Props
 const props = defineProps({
@@ -173,8 +177,8 @@ const form = ref({
   code: '',
   designation: '',
   description: '',
-  duree: null,
-  credits_ects: null,
+  duree_annees: '',
+  credits_total: '',
   diplome: '',
   est_actif: true,
 });
@@ -188,21 +192,23 @@ const isEdit = ref(false);
 watch(
   () => props.cycleToEdit,
   (newVal) => {
-    if (newVal) {
-      isEdit.value = true;
-      form.value = {
-        id: newVal.id,
-        code: newVal.code,
-        designation: newVal.designation,
-        description: newVal.description || '',
-        duree: newVal.duree || null,
-        credits_ects: newVal.credits_ects || null,
-        diplome: newVal.diplome || '',
-        est_actif: newVal.est_actif !== undefined ? newVal.est_actif : true,
-      };
-    }
-  }
+    if (!newVal) return;
+
+    isEdit.value = true;
+    form.value = {
+      id: newVal.id,
+      code: newVal.code,
+      designation: newVal.designation,
+      description: newVal.description ?? '',
+      diplome: newVal.diplome ?? '',
+      duree_annees: newVal.duree_annees ?? null,
+      credits_total: newVal.credits_total ?? null,
+      statut: newVal.statut === true || newVal.statut === 'true',
+    };
+  },
+  { immediate: true }
 );
+
 
 // Méthodes
 const resetForm = () => {
@@ -210,15 +216,16 @@ const resetForm = () => {
     code: '',
     designation: '',
     description: '',
-    duree: null,
-    credits_ects: null,
+    duree_annees: null,
+    credits_total: null,
     diplome: '',
-    est_actif: true,
+    statut: true,
   };
   errorMessage.value = '';
   successMessage.value = '';
   isEdit.value = false;
 };
+
 
 const validateForm = () => {
   // Vérifier les champs obligatoires
@@ -249,11 +256,9 @@ const validateForm = () => {
 };
 
 const submitCycle = async () => {
-  // Réinitialiser les messages
   errorMessage.value = '';
   successMessage.value = '';
 
-  // Validation
   if (!validateForm()) {
     return;
   }
@@ -261,67 +266,27 @@ const submitCycle = async () => {
   loading.value = true;
 
   try {
-    // Préparer les données pour l'API
     const dataToSend = {
-      code: form.value.code.trim().toUpperCase(), // Normaliser en majuscules
+      code: form.value.code.trim().toUpperCase(),
       designation: form.value.designation.trim(),
-      description: form.value.description.trim() || null,
-    };
+      description: form.value.description || null,
+      diplome: form.value.diplome || null,
+      duree_annees: form.value.duree_annees,
+      credits_total: form.value.credits_total,
+      statut: form.value.statut,
+};
 
-    // Ajouter les champs optionnels s'ils sont renseignés
-    if (form.value.duree) dataToSend.duree = form.value.duree;
-    if (form.value.credits_ects) dataToSend.credits_ects = form.value.credits_ects;
-    if (form.value.diplome) dataToSend.diplome = form.value.diplome.trim();
-    if (form.value.est_actif !== undefined) dataToSend.est_actif = form.value.est_actif;
 
-    // Simuler un appel API
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    // Exemple d'appel API réel (décommenter et adapter)
-    /*
-    const url = isEdit.value 
-      ? `/api/cycles/${form.value.id}` 
-      : '/api/cycles';
-    
-    const method = isEdit.value ? 'PUT' : 'POST';
-    
-    const response = await fetch(url, {
-      method: method,
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-      body: JSON.stringify(dataToSend),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Erreur lors de l\'enregistrement');
-    }
-
-    const result = await response.json();
-    */
-
-    // Simulation de réponse
-    const result = {
-      ...dataToSend,
-      id: isEdit.value ? form.value.id : Date.now(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-
-    successMessage.value = isEdit.value
-      ? 'Cycle modifié avec succès !'
-      : 'Cycle créé avec succès !';
-
-    // Émettre l'événement
     if (isEdit.value) {
-      emit('cycleUpdated', result);
+      await cycleStore.editCycle(form.value.id, dataToSend);
+      successMessage.value = 'Cycle modifié avec succès !';
+      emit('cycleUpdated', { ...dataToSend, id: form.value.id });
     } else {
-      emit('cycleCreated', result);
+      await cycleStore.addCycle(dataToSend);
+      successMessage.value = 'Cycle créé avec succès !';
+      emit('cycleCreated', { ...dataToSend });
     }
 
-    // Fermer le modal après 1 seconde
     setTimeout(() => {
       closeModal();
     }, 1000);
@@ -332,6 +297,7 @@ const submitCycle = async () => {
     loading.value = false;
   }
 };
+
 
 const closeModal = () => {
   const modalEl = document.getElementById('cycleModal');
