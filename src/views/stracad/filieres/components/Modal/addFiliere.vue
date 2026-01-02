@@ -129,71 +129,47 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue';
+import { useFiliereStore } from '@/stores/academiqueStore/filiereStore';
+import { useCycleStore } from '@/stores/academiqueStore/cycleStore';
+import { useNotifier } from '@/stores/messages/useNotifier';
 
-// Props
+// Props & Emits
 const props = defineProps({
-  filiereToEdit: {
-    type: Object,
-    default: null,
-  },
+  filiereToEdit: { type: Object, default: null },
 });
-
-// Emits
 const emit = defineEmits(['filiereCreated', 'filiereUpdated']);
 
-// État
+// Stores
+const filiereStore = useFiliereStore();
+const cycleStore = useCycleStore();
+const { notifyError } = useNotifier();
+
+// États
 const form = ref({
   code: '',
   designation: '',
   cycle_id: '',
-  credit_total: null,
-  departement: '',
-  coordonnateur: '',
-  capacite: null,
-  type_formation: '',
-  description: '',
-  est_active: true,
+  credit_total: '',
+  description : '',
 });
-
 const cycles = ref([]);
 const loading = ref(false);
 const errorMessage = ref('');
 const successMessage = ref('');
 const isEdit = ref(false);
 
-// Charger les cycles disponibles au montage
+// Charger les cycles depuis le store
 onMounted(async () => {
   await loadCycles();
 });
 
-// Charger la liste des cycles
+// Fonction pour charger les cycles
 const loadCycles = async () => {
   try {
-    // Simuler un appel API
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    // Exemple d'appel API réel (décommenter et adapter)
-    /*
-    const response = await fetch('/api/cycles', {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    });
-    
-    if (!response.ok) throw new Error('Erreur lors du chargement des cycles');
-    
-    cycles.value = await response.json();
-    */
-
-    // Simulation de données
-    cycles.value = [
-      { id: 1, code: 'L', designation: 'Licence' },
-      { id: 2, code: 'M', designation: 'Master' },
-      { id: 3, code: 'D', designation: 'Doctorat' },
-    ];
+    await cycleStore.fetchCycles();
+    cycles.value = cycleStore.cycles; // récupérer la liste du store
   } catch (error) {
-    console.error('Erreur lors du chargement des cycles:', error);
-    errorMessage.value = 'Impossible de charger les cycles disponibles.';
+    notifyError('Impossible de charger les cycles disponibles.');
   }
 };
 
@@ -204,180 +180,85 @@ watch(
     if (newVal) {
       isEdit.value = true;
       form.value = {
-        id: newVal.id,
         code: newVal.code,
         designation: newVal.designation,
         cycle_id: newVal.cycle_id,
         credit_total: newVal.credit_total || null,
-        departement: newVal.departement || '',
-        coordonnateur: newVal.coordonnateur || '',
-        capacite: newVal.capacite || null,
-        type_formation: newVal.type_formation || '',
-        description: newVal.description || '',
-        est_active: newVal.est_active !== undefined ? newVal.est_active : true,
+        description: newVal.description || null,
       };
     }
-  }
+  },
+  { immediate: true }
 );
 
-// Méthodes
+// Reset du formulaire
 const resetForm = () => {
-  form.value = {
-    code: '',
-    designation: '',
-    cycle_id: '',
-    credit_total: null,
-    departement: '',
-    coordonnateur: '',
-    capacite: null,
-    type_formation: '',
-    description: '',
-    est_active: true,
-  };
+  form.value = { code: '', designation: '', cycle_id: '', credit_total: '' };
   errorMessage.value = '';
   successMessage.value = '';
   isEdit.value = false;
 };
 
+// Validation
 const validateForm = () => {
-  // Vérifier les champs obligatoires
-  if (!form.value.code.trim()) {
-    errorMessage.value = 'Le code est obligatoire.';
-    return false;
-  }
-
-  if (!form.value.designation.trim()) {
-    errorMessage.value = 'La désignation est obligatoire.';
-    return false;
-  }
-
-  if (!form.value.cycle_id) {
-    errorMessage.value = 'Veuillez sélectionner un cycle.';
-    return false;
-  }
-
-  // Vérifier la longueur du code
-  if (form.value.code.length > 10) {
-    errorMessage.value = 'Le code ne doit pas dépasser 10 caractères.';
-    return false;
-  }
-
-  // Vérifier la longueur de la désignation
-  if (form.value.designation.length > 100) {
-    errorMessage.value = 'La désignation ne doit pas dépasser 100 caractères.';
-    return false;
-  }
-
-  // Vérifier que les crédits sont positifs si renseignés
-  if (form.value.credit_total && form.value.credit_total < 0) {
-    errorMessage.value = 'Les crédits totaux doivent être positifs.';
-    return false;
-  }
+  if (!form.value.code.trim()) { errorMessage.value = 'Le code est obligatoire.'; return false; }
+  if (!form.value.designation.trim()) { errorMessage.value = 'La désignation est obligatoire.'; return false; }
+  if (!form.value.cycle_id) { errorMessage.value = 'Veuillez sélectionner un cycle.'; return false; }
+  if (form.value.code.length > 10) { errorMessage.value = 'Le code ne doit pas dépasser 10 caractères.'; return false; }
+  if (form.value.designation.length > 100) { errorMessage.value = 'La désignation ne doit pas dépasser 100 caractères.'; return false; }
+  if (form.value.credit_total && form.value.credit_total < 0) { errorMessage.value = 'Les crédits totaux doivent être positifs.'; return false; }
 
   errorMessage.value = '';
   return true;
 };
 
+// Soumission du formulaire
 const submitFiliere = async () => {
-  // Réinitialiser les messages
   errorMessage.value = '';
   successMessage.value = '';
 
-  // Validation
-  if (!validateForm()) {
-    return;
-  }
+  if (!validateForm()) return;
 
   loading.value = true;
 
+  const dataToSend = {
+    code: form.value.code.trim().toUpperCase(),
+    designation: form.value.designation.trim(),
+    cycle_id: parseInt(form.value.cycle_id),
+    credit_total: form.value.credit_total || null,
+    description: form.value.description || null,
+  };
+
   try {
-    // Préparer les données pour l'API (selon le schéma SQL)
-    const dataToSend = {
-      code: form.value.code.trim().toUpperCase(), // Normaliser en majuscules
-      designation: form.value.designation.trim(),
-      cycle_id: parseInt(form.value.cycle_id),
-      credit_total: form.value.credit_total || null,
-    };
-
-    // Ajouter les champs optionnels s'ils sont renseignés
-    if (form.value.departement) dataToSend.departement = form.value.departement.trim();
-    if (form.value.coordonnateur) dataToSend.coordonnateur = form.value.coordonnateur.trim();
-    if (form.value.capacite) dataToSend.capacite = form.value.capacite;
-    if (form.value.type_formation) dataToSend.type_formation = form.value.type_formation;
-    if (form.value.description) dataToSend.description = form.value.description.trim();
-    if (form.value.est_active !== undefined) dataToSend.est_active = form.value.est_active;
-
-    // Simuler un appel API
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    // Exemple d'appel API réel (décommenter et adapter)
-    /*
-    const url = isEdit.value 
-      ? `/api/filieres/${form.value.id}` 
-      : '/api/filieres';
-    
-    const method = isEdit.value ? 'PUT' : 'POST';
-    
-    const response = await fetch(url, {
-      method: method,
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-      body: JSON.stringify(dataToSend),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Erreur lors de l\'enregistrement');
-    }
-
-    const result = await response.json();
-    */
-
-    // Simulation de réponse
-    const result = {
-      ...dataToSend,
-      id: isEdit.value ? form.value.id : Date.now(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-
-    successMessage.value = isEdit.value
-      ? 'Filière modifiée avec succès !'
-      : 'Filière créée avec succès !';
-
-    // Émettre l'événement
     if (isEdit.value) {
-      emit('filiereUpdated', result);
+      await filiereStore.editFiliere(props.filiereToEdit.id, dataToSend);
+      successMessage.value = 'Filière modifiée avec succès !';
+      emit('filiereUpdated', { id: props.filiereToEdit.id, ...dataToSend });
     } else {
-      emit('filiereCreated', result);
+      await filiereStore.addFiliere(dataToSend);
+      successMessage.value = 'Filière créée avec succès !';
+      emit('filiereCreated', dataToSend);
     }
 
-    // Fermer le modal après 1 seconde
-    setTimeout(() => {
-      closeModal();
-    }, 1000);
+    setTimeout(() => closeModal(), 1000);
   } catch (error) {
-    console.error('Erreur:', error);
-    errorMessage.value = error.message || "Une erreur est survenue lors de l'enregistrement.";
+    errorMessage.value = error.message || 'Erreur lors de l\'enregistrement.';
+    notifyError(errorMessage.value);
   } finally {
     loading.value = false;
   }
 };
 
+// Fermeture du modal
 const closeModal = () => {
   const modalEl = document.getElementById('filiereModal');
   const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
   modal.hide();
 
-  // Réinitialiser le formulaire après fermeture
-  setTimeout(() => {
-    resetForm();
-  }, 300);
+  setTimeout(() => resetForm(), 300);
 };
 
-// Exposer les méthodes pour utilisation externe
+// Exposer méthodes
 defineExpose({
   resetForm,
   openForEdit: (filiere) => {
@@ -386,6 +267,7 @@ defineExpose({
   },
 });
 </script>
+
 
 <style scoped>
 .modal-header.bg-primary {

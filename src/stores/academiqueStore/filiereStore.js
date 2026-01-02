@@ -6,6 +6,8 @@ import {
   deleteFiliere,
 } from '@/api/academique/academiqueApi';
 import { useMessageStore } from '@/stores/messages/messageStore';
+import { useNotifier } from '@/stores/messages/useNotifier';
+import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
 
 // Helpers pour gérer le cache
 function setCache(key, data) {
@@ -36,6 +38,7 @@ export const useFiliereStore = defineStore('filiereStore', {
   actions: {
     // Récupérer toutes les filières
     async fetchFilieres() {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         const cached = getCache('filieres');
@@ -47,7 +50,7 @@ export const useFiliereStore = defineStore('filiereStore', {
           setCache('filieres', response);
         }
       } catch (error) {
-        useMessageStore().addMessage('Erreur lors de la récupération des filières.');
+        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
       } finally {
         this.loading = false;
       }
@@ -55,14 +58,15 @@ export const useFiliereStore = defineStore('filiereStore', {
 
     // Ajouter une nouvelle filière
     async addFiliere(data) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         await createFiliere(data);
-        useMessageStore().addSuccess('Filière créée avec succès.');
+        useMessageStore().addMessage('Filière créée avec succès.');
         localStorage.removeItem('filieres'); // Invalider le cache
         this.fetchFilieres();
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la création de la filière.');
+        notifyError(extractErrorMessage(error, 'Échec lors de la creation de la filiere.'));
       } finally {
         this.loading = false;
       }
@@ -70,14 +74,15 @@ export const useFiliereStore = defineStore('filiereStore', {
 
     // Modifier une filière existante
     async editFiliere(id, data) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         await updateFiliere(id, data);
-        useMessageStore().addSuccess('Filière mise à jour avec succès.');
+        useMessageStore().addMessage('Filière mise à jour avec succès.');
         localStorage.removeItem('filieres'); // Invalider le cache
         this.fetchFilieres();
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la mise à jour de la filière.');
+       notifyError(extractErrorMessage(error, 'Échec lors de l\'edition de la filiere.'));
       } finally {
         this.loading = false;
       }
@@ -85,14 +90,15 @@ export const useFiliereStore = defineStore('filiereStore', {
 
     // Supprimer une filière
     async removeFiliere(id) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         await deleteFiliere(id);
-        useMessageStore().addSuccess('Filière supprimée avec succès.');
+        useMessageStore().addMessage('Filière supprimée avec succès.');
         localStorage.removeItem('filieres'); // Invalider le cache
         this.fetchFilieres();
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la suppression de la filière.');
+        notifyError(extractErrorMessage(error, 'Échec lors de la suppresion .'));
       } finally {
         this.loading = false;
       }
