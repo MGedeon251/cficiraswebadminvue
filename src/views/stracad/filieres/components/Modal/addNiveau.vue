@@ -80,8 +80,7 @@
 
             <!-- Aperçu -->
             <div v-if="form.cycle_id && form.code" class="alert alert-info">
-              <strong>Aperçu :</strong>
-              {{ getPreview() }}
+              <strong>Aperçu :</strong> {{ getPreview() }}
             </div>
 
             <!-- Erreur -->
@@ -120,17 +119,18 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
+import { useNiveauStore } from '@/stores/academiqueStore/niveauStore';
+import { useCycleStore } from '@/stores/academiqueStore/cycleStore';
+import { useNotifier } from '@/stores/messages/useNotifier';
 
-/* Props */
-const props = defineProps({
-  niveauToEdit: {
-    type: Object,
-    default: null,
-  },
-});
-
-/* Emits */
+/* Props & Emits */
+const props = defineProps({ niveauToEdit: { type: Object, default: null } });
 const emit = defineEmits(['niveauCreated', 'niveauUpdated']);
+
+/* Stores */
+const niveauStore = useNiveauStore();
+const cycleStore = useCycleStore();
+const { notifyError } = useNotifier();
 
 /* State */
 const form = ref({
@@ -139,7 +139,6 @@ const form = ref({
   ordre: '',
   frais_scolarite: null,
 });
-
 const cycles = ref([]);
 const loading = ref(false);
 const errorMessage = ref('');
@@ -151,18 +150,17 @@ onMounted(async () => {
   await loadCycles();
 });
 
-/* Load cycles */
+/* Charger cycles depuis le store */
 const loadCycles = async () => {
+  loading.value = true;
   try {
-    await new Promise((r) => setTimeout(r, 400));
-
-    cycles.value = [
-      { id: 1, code: 'L', designation: 'Licence' },
-      { id: 2, code: 'M', designation: 'Master' },
-      { id: 3, code: 'D', designation: 'Doctorat' },
-    ];
-  } catch {
+    await cycleStore.fetchCycles();
+    cycles.value = cycleStore.cycles || [];
+  } catch (error) {
     errorMessage.value = 'Impossible de charger les cycles.';
+    notifyError(errorMessage.value);
+  } finally {
+    loading.value = false;
   }
 };
 
@@ -174,7 +172,8 @@ watch(
       isEdit.value = true;
       form.value = { ...val };
     }
-  }
+  },
+  { immediate: true }
 );
 
 /* Helpers */
@@ -183,19 +182,12 @@ const getPreview = () => {
   return cycle ? `${form.value.code} (${cycle.code})` : '';
 };
 
+/* Validation */
 const validateForm = () => {
-  if (!form.value.cycle_id) {
-    errorMessage.value = 'Le cycle est obligatoire.';
-    return false;
-  }
-  if (!form.value.code.trim()) {
-    errorMessage.value = 'Le code est obligatoire.';
-    return false;
-  }
-  if (!form.value.ordre || form.value.ordre < 1) {
-    errorMessage.value = 'L’ordre doit être supérieur à 0.';
-    return false;
-  }
+  if (!form.value.cycle_id) { errorMessage.value = 'Le cycle est obligatoire.'; return false; }
+  if (!form.value.code.trim()) { errorMessage.value = 'Le code est obligatoire.'; return false; }
+  if (!form.value.ordre || form.value.ordre < 1) { errorMessage.value = 'L’ordre doit être supérieur à 0.'; return false; }
+  errorMessage.value = '';
   return true;
 };
 
@@ -208,30 +200,28 @@ const submitNiveau = async () => {
 
   loading.value = true;
 
+  const payload = {
+    cycle_id: parseInt(form.value.cycle_id),
+    code: form.value.code.trim().toUpperCase(),
+    ordre: parseInt(form.value.ordre),
+    frais_scolarite: form.value.frais_scolarite ?? null,
+  };
+
   try {
-    const payload = {
-      cycle_id: parseInt(form.value.cycle_id),
-      code: form.value.code.trim().toUpperCase(),
-      ordre: parseInt(form.value.ordre),
-      frais_scolarite: form.value.frais_scolarite ?? null,
-    };
-
-    await new Promise((r) => setTimeout(r, 1200));
-
-    const result = {
-      ...payload,
-      id: isEdit.value ? form.value.id : Date.now(),
-    };
-
-    successMessage.value = isEdit.value
-      ? 'Niveau modifié avec succès.'
-      : 'Niveau créé avec succès.';
-
-    emit(isEdit.value ? 'niveauUpdated' : 'niveauCreated', result);
+    if (isEdit.value) {
+      await niveauStore.editNiveau(form.value.id, payload);
+      successMessage.value = 'Niveau modifié avec succès.';
+      emit('niveauUpdated', { id: form.value.id, ...payload });
+    } else {
+      await niveauStore.addNiveau(payload);
+      successMessage.value = 'Niveau créé avec succès.';
+      emit('niveauCreated', payload);
+    }
 
     setTimeout(closeModal, 1000);
-  } catch (e) {
-    errorMessage.value = 'Erreur lors de l’enregistrement.';
+  } catch (error) {
+    errorMessage.value = error.message || 'Erreur lors de l’enregistrement.';
+    notifyError(errorMessage.value);
   } finally {
     loading.value = false;
   }
