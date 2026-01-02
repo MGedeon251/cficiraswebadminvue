@@ -183,6 +183,7 @@ export const useEtudiantStore = defineStore('etudiantStore', {
       }
     },
 
+
     // Récupérer les étudiants par classe, filière et année académique
     async fetchEtudiantsByClasseFiliereAnnee(classeId, filiereId, anneeAcademiqueId) {
       this.loading = true;

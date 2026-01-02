@@ -26,8 +26,15 @@
               <label class="form-label">Année académique</label>
               <select v-model="selectedAnnee" class="form-select">
                 <option value="">Toutes</option>
-                <option v-for="annee in annees" :key="annee" :value="annee">{{ annee }}</option>
+                <option
+                  v-for="annee in anneesAcademiques"
+                  :key="annee.id"
+                  :value="annee.id"
+                >
+                  {{ annee.code }}
+                </option>
               </select>
+
             </div>
 
             <!-- Filière -->
@@ -35,17 +42,34 @@
               <label class="form-label">Filière</label>
               <select v-model="selectedFiliere" class="form-select">
                 <option value="">Toutes</option>
-                <option v-for="f in filieres" :key="f" :value="f">{{ f }}</option>
+                <option
+                  v-for="f in filieres"
+                  :key="f.id"
+                  :value="f.id"
+                >
+                  {{ f.designation }}
+                </option>
               </select>
+
             </div>
 
             <!-- Classe -->
             <div class="col-md-3">
               <label class="form-label">Classe</label>
-              <select v-model="selectedClasse" class="form-select">
+              <select v-model="selectedClasse"
+              :disabled="!selectedFiliere"
+              class="form-select">
                 <option value="">Toutes</option>
-                <option v-for="c in classes" :key="c" :value="c">{{ c }}</option>
+                <option
+                  v-for="c in classes"
+                  :key="c.id"
+                  :value="c.id"
+                  
+                >
+                  {{ c.code }}
+                </option>
               </select>
+
             </div>
 
             <!-- Barre de recherche -->
@@ -86,10 +110,22 @@
           </thead>
           <tbody>
             <tr v-if="loading">
-              <td colspan="8" class="text-center py-4">Chargement des étudiants...</td>
+              <td colspan="8" class="text-center py-4">
+                <div class="spinner-border spinner-border-sm me-2" role="status">
+                  <span class="visually-hidden">Chargement...</span>
+                </div>
+                Chargement des étudiants...
+              </td>
             </tr>
-
-            <tr v-for="(etudiant, index) in paginatedEtudiants" :key="etudiant.id">
+            <tr v-else-if="!selectedAnnee || !selectedFiliere || !selectedClasse">
+              <td colspan="8" class="text-center py-4">
+                <div class="text-muted">
+                  <i class="mdi mdi-filter-outline mdi-24px mb-2"></i>
+                  <p>Veuillez sélectionner une année académique, une filière et une classe pour afficher les étudiants.</p>
+                </div>
+              </td>
+            </tr>
+            <tr v-else-if="paginatedEtudiants.length > 0" v-for="(etudiant, index) in paginatedEtudiants" :key="etudiant.id">
               <td>{{ startIndex + index + 1 }}</td>
               <td class="fw-bold">{{ etudiant.matricule }}</td>
               <td>{{ etudiant.nom }}</td>
@@ -106,12 +142,15 @@
               <td>{{ etudiant.filiere }}</td>
               <td>{{ etudiant.classe }}</td>
             </tr>
-
-            <tr v-if="!loading && filteredEtudiants.length === 0">
+            <tr v-else>
               <td colspan="8" class="text-center py-4">
-                <div class="text-muted">Aucun étudiant trouvé</div>
+                <div class="text-muted">
+                  <i class="mdi mdi-alert-circle-outline mdi-24px mb-2"></i>
+                  <p>Aucun étudiant trouvé avec ces critères</p>
+                </div>
               </td>
             </tr>
+
           </tbody>
         </table>
 
@@ -125,56 +164,104 @@
     </div>
   </div>
 </template>
-
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useEtudiantStore } from '@/stores/etudiants/etudiantStore';
+import Pagination from '@/components/shared/Pagination.vue';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import Pagination from '@/components/shared/Pagination.vue';
+import autoTable from 'jspdf-autotable';
 
-const loading = ref(false);
-const etudiants = ref([]);
+/* =========================
+   STORE
+========================= */
+const etudiantStore = useEtudiantStore();
+const {
+  filteredEtudiants,
+  anneesAcademiques,
+  filieres,
+  classes,
+  loading
+} = storeToRefs(etudiantStore);
 
-// Filtres
-const annees = ref(['2023-2024', '2024-2025']);
-const filieres = ref(['Informatique', 'Administration']);
-const classes = ref(['L1-INFO-A', 'L2-INFO-B', 'M1-ADM-A']);
-
+/* =========================
+   FILTRES
+========================= */
 const selectedAnnee = ref('');
 const selectedFiliere = ref('');
 const selectedClasse = ref('');
 const searchQuery = ref('');
 
-// Pagination
+/* =========================
+   PAGINATION
+========================= */
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
 const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage.value);
 
-// Filtrage
-const filteredEtudiants = computed(() => {
-  return etudiants.value.filter((e) => {
-    const matchAnnee = !selectedAnnee.value || e.annee_academique === selectedAnnee.value;
-    const matchFiliere = !selectedFiliere.value || e.filiere === selectedFiliere.value;
-    const matchClasse = !selectedClasse.value || e.classe === selectedClasse.value;
-    const matchSearch =
-      !searchQuery.value ||
-      [e.matricule, e.nom, e.prenom]
-        .join(' ')
-        .toLowerCase()
-        .includes(searchQuery.value.toLowerCase());
-    return matchAnnee && matchFiliere && matchClasse && matchSearch;
-  });
+/* =========================
+   APPEL API SELON FILTRES
+========================= */
+watch([selectedAnnee, selectedFiliere, selectedClasse], async ([annee, filiere, classe]) => {
+  currentPage.value = 1;
+
+  if (annee && filiere && classe) {
+    loading.value = true;
+    try {
+      const response = await etudiantStore.fetchEtudiantsByClasseFiliereAnnee(classe, filiere, annee);
+      filteredEtudiants.value = response.data; // ⚡ utiliser .value
+    } catch (error) {
+      console.error('Erreur chargement étudiants:', error);
+      filteredEtudiants.value = [];
+    } finally {
+      loading.value = false;
+    }
+  } else {
+    filteredEtudiants.value = [];
+  }
 });
 
-// Pagination appliquée
+// Mettre à jour les classes quand la filière change
+watch(selectedFiliere, async (newFiliere) => {
+  if (newFiliere) {
+    await etudiantStore.fetchClassesByFiliere(newFiliere);
+    selectedClasse.value = '';
+  } else {
+    etudiantStore.classes.value = [];
+  }
+});
+
+
+/* =========================
+   RECHERCHE (client-side)
+========================= */
+const searchedEtudiants = computed(() => {
+  if (!searchQuery.value) return filteredEtudiants.value;
+
+  return filteredEtudiants.value.filter(e =>
+    [e.matricule, e.nom, e.prenom]
+      .join(' ')
+      .toLowerCase()
+      .includes(searchQuery.value.toLowerCase())
+  );
+});
+
+/* =========================
+   PAGINATION APPLIQUÉE
+========================= */
 const paginatedEtudiants = computed(() =>
-  filteredEtudiants.value.slice(startIndex.value, startIndex.value + itemsPerPage.value)
+  searchedEtudiants.value.slice(
+    startIndex.value,
+    startIndex.value + itemsPerPage.value
+  )
 );
 
-// Export Excel
+/* =========================
+   EXPORTS
+========================= */
 const exportExcel = () => {
-  const data = filteredEtudiants.value.map((e) => ({
+  const data = searchedEtudiants.value.map(e => ({
     Matricule: e.matricule,
     Nom: e.nom,
     Prénom: e.prenom,
@@ -183,20 +270,21 @@ const exportExcel = () => {
     Filière: e.filiere,
     Classe: e.classe,
   }));
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Étudiants');
-  XLSX.writeFile(workbook, 'etudiants_par_classes.xlsx');
+
+  const ws = XLSX.utils.json_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Étudiants');
+  XLSX.writeFile(wb, 'etudiants_par_classes.xlsx');
 };
 
 const exportPDF = () => {
-  const doc = new jsPDF()
-
-  doc.text('Liste des étudiants par classes', 14, 16)
+  const doc = new jsPDF();
+  doc.text('Liste des étudiants par classes', 14, 16);
 
   autoTable(doc, {
+    startY: 20,
     head: [['Matricule', 'Nom', 'Prénom', 'Sexe', 'Année', 'Filière', 'Classe']],
-    body: filteredEtudiants.value.map((e) => [
+    body: searchedEtudiants.value.map(e => [
       e.matricule,
       e.nom,
       e.prenom,
@@ -205,53 +293,23 @@ const exportPDF = () => {
       e.filiere,
       e.classe,
     ]),
-  })
+  });
 
-  doc.save('etudiants_par_classes.pdf')
-}
+  doc.save('etudiants_par_classes.pdf');
+};
 
-
-
-// Simulation API
-onMounted(() => {
-  loading.value = true;
-  setTimeout(() => {
-    etudiants.value = [
-      {
-        id: 1,
-        matricule: 'E001',
-        nom: 'Diallo',
-        prenom: 'Mamadou',
-        sexe: 'M',
-        annee_academique: '2024-2025',
-        filiere: 'Informatique',
-        classe: 'L1-INFO-A',
-      },
-      {
-        id: 2,
-        matricule: 'E002',
-        nom: 'Ndiaye',
-        prenom: 'Awa',
-        sexe: 'F',
-        annee_academique: '2024-2025',
-        filiere: 'Informatique',
-        classe: 'L2-INFO-B',
-      },
-      {
-        id: 3,
-        matricule: 'E003',
-        nom: 'Kouassi',
-        prenom: 'Jean',
-        sexe: 'M',
-        annee_academique: '2023-2024',
-        filiere: 'Administration',
-        classe: 'M1-ADM-A',
-      },
-    ];
-    loading.value = false;
-  }, 2000);
+/* =========================
+   INIT
+========================= */
+onMounted(async () => {
+  await Promise.all([
+    etudiantStore.fetchAnneesAcademiques(),
+    etudiantStore.fetchFilieres(),
+    etudiantStore.fetchClasses()
+  ]);
 });
 </script>
+
 
 <style scoped>
 .search-bar .form-control {
