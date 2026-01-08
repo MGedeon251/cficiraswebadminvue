@@ -27,7 +27,7 @@
             </tr>
 
             <!-- Données -->
-            <tr v-for="org in organisations" :key="org.id">
+            <tr v-for="org in paginatedOrganisations" :key="org.id">
               <td>{{ org.classe }}</td>
               <td>{{ org.filiere }}</td>
               <td>{{ org.niveau }}</td>
@@ -46,8 +46,8 @@
                 </div>
               </td>
               <td>
-                <span class="badge" :class="getStatusClass(org.taux)">
-                  {{ getStatusLabel(org.taux) }}
+                <span class="badge" :class="getStatusClass(org.statut)">
+                  {{ getStatusLabel(org.statut) }}
                 </span>
               </td>
             </tr>
@@ -63,81 +63,75 @@
             </tr>
           </tbody>
         </table>
+        <Pagination
+          v-model="currentPage"
+          :items-per-page="itemsPerPage"
+          :total-items="organisations.length"
+        />
+
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useClasseStore } from '@/stores/academiqueStore/classeStore';
+
+const classeStore = useClasseStore();
 
 /* =====================
-   États
+   Pagination
 ===================== */
-const loading = ref(false);
-const organisations = ref([]);
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
 
 /* =====================
-   Méthodes
+   Computed
 ===================== */
-const fetchOrganisationClasses = async () => {
-  loading.value = true;
+const loading = computed(() => classeStore.loading);
 
-  // Simulation API
-  organisations.value = [
-    {
-      id: 1,
-      classe: 'L1-A',
-      filiere: 'Informatique',
-      niveau: 'Licence 1',
-      effectif: 52,
-      capacite: 60,
-      taux: 87,
-    },
-    {
-      id: 2,
-      classe: 'L2-B',
-      filiere: 'Informatique',
-      niveau: 'Licence 2',
-      effectif: 60,
-      capacite: 60,
-      taux: 100,
-    },
-    {
-      id: 3,
-      classe: 'M1-DS',
-      filiere: 'Data Science',
-      niveau: 'Master 1',
-      effectif: 28,
-      capacite: 40,
-      taux: 70,
-    },
-  ];
+const organisations = computed(() =>
+  Array.isArray(classeStore.organisationClasses)
+    ? classeStore.organisationClasses
+    : []
+);
 
-  loading.value = false;
-};
+const startIndex = computed(() =>
+  (currentPage.value - 1) * itemsPerPage.value
+);
 
+const paginatedOrganisations = computed(() =>
+  organisations.value.slice(
+    startIndex.value,
+    startIndex.value + itemsPerPage.value
+  )
+);
+
+/* =====================
+   Lifecycle
+===================== */
+onMounted(() => {
+  classeStore.fetchOrganisationClasses();
+});
+
+/* =====================
+   Helpers UI
+===================== */
 const getProgressClass = (taux) => {
   if (taux < 60) return 'bg-success';
   if (taux < 90) return 'bg-warning';
   return 'bg-danger';
 };
 
-const getStatusLabel = (taux) => {
-  if (taux < 60) return 'Sous-remplie';
-  if (taux < 90) return 'Équilibrée';
-  return 'Saturée';
+const getStatusLabel = (statut) => {
+  if (statut === 'OUVERTE') return 'Ouverte';
+  if (statut === 'COMPLÈTE') return 'Complète';
+  return 'Fermée';
 };
 
-const getStatusClass = (taux) => {
-  if (taux < 60) return 'bg-success';
-  if (taux < 90) return 'bg-warning';
-  return 'bg-danger';
+const getStatusClass = (statut) => {
+  if (statut === 'OUVERTE') return 'bg-success';
+  if (statut === 'COMPLÈTE') return 'bg-danger';
+  return 'bg-secondary';
 };
-
-/* =====================
-   Lifecycle
-===================== */
-onMounted(() => {
-  fetchOrganisationClasses();
-});
 </script>

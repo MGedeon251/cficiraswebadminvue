@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import {
   getClasses,
   getClassesDetails,
+  getOrganisationClasses,
   createClasse,
   updateClasse,
   deleteClasse,
@@ -34,6 +35,7 @@ function getCache(key, ttl = 5 * 60 * 1000) { // TTL par défaut : 5 minutes
 export const useClasseStore = defineStore('classeStore', {
   state: () => ({
     classes: [],
+    organisationClasses : [],
     loading: false,
   }),
 
@@ -148,5 +150,23 @@ export const useClasseStore = defineStore('classeStore', {
         this.loading = false;
       }
     },
+    async fetchOrganisationClasses() {
+      const { notifyError } = useNotifier();
+      this.loading = true;
+      try {
+        const cached = getCache('organisation_classes');
+        if (cached) {
+          this.organisationClasses = cached;
+        } else {
+          const response = await getOrganisationClasses();
+          this.organisationClasses = response;
+          setCache('organisation_classes', response);
+        } 
+      } catch (error) {
+        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+      } finally {
+        this.loading = false;
+      }
+    }
   },
 });
