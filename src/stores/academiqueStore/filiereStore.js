@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import {
   getFilieres,
+  getFiliereOrganisation,
   createFiliere,
   updateFiliere,
   deleteFiliere,
@@ -32,6 +33,7 @@ function getCache(key, ttl = 5 * 60 * 1000) { // TTL par défaut : 5 minutes
 export const useFiliereStore = defineStore('filiereStore', {
   state: () => ({
     filieres: [],
+    FiliereOrganisation: [],
     loading: false,
   }),
 
@@ -48,6 +50,25 @@ export const useFiliereStore = defineStore('filiereStore', {
           const response = await getFilieres();
           this.filieres = response;
           setCache('filieres', response);
+        }
+      } catch (error) {
+        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+      } finally {
+        this.loading = false;
+      }
+    },
+    async organisationFilieres() {
+      const { notifyError } = useNotifier();
+      this.loading = true;
+      try {
+        const cached = getCache('filieres_organisation');
+        if (cached) {
+          this.FiliereOrganisation = cached;
+        } else {
+          const response = await getFiliereOrganisation();
+          this.FiliereOrganisation = response ;
+          setCache('filieres_organisation', response);
+          return response ; 
         }
       } catch (error) {
         notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));

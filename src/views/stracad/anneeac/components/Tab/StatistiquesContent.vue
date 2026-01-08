@@ -53,39 +53,89 @@
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-bordered table-striped mb-5">
-          <thead>
-            <tr>
-              <th>Total candidats</th>
-              <th>Hommes</th>
-              <th>Femmes</th>
-              <th>Nombre d'épreuves</th>
-              <th>Notes saisies</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="9" class="text-center py-4">
-                <div class="d-flex flex-column align-items-center">
-                  <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
-                </div>
-                <div class="text-pr">Aucune donnée</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+  <thead>
+    <tr>
+      <th>Filière</th>
+      <th>Étudiants</th>
+      <th>Moyenne générale</th>
+      <th>Statut</th>
+    </tr>
+  </thead>
+
+  <tbody v-if="filieres.length">
+    <tr v-for="filiere in filieres" :key="filiere.id">
+      <td>{{ filiere.designation }}</td>
+
+      <td class="text-center">
+        {{ filiere.nb_etudiants }}
+      </td>
+
+      <td class="text-center">
+        <span v-if="filiere.moyenne_generale">
+          {{ filiere.moyenne_generale }}
+        </span>
+        <span v-else class="text-muted">—</span>
+      </td>
+
+      <td class="text-center">
+        <span
+          class="badge"
+          :class="filiere.moyenne_generale ? 'bg-success' : 'bg-warning'"
+        >
+          {{ filiere.moyenne_generale ? 'Notes disponibles' : 'Non évaluée' }}
+        </span>
+      </td>
+    </tr>
+  </tbody>
+
+  <!-- Aucune donnée -->
+  <tbody v-else>
+    <tr>
+      <td colspan="4" class="text-center py-4">
+        <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
+        <div class="text-muted">Aucune filière disponible</div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed } from 'vue'
 
-// Données
-const totalAnnees = ref(5);
-const joursRestants = ref(245);
-const totalEtudiants = ref(1250);
+// Simulation réponse backend
+const backendData = ref({
+  nb_classes: '15',
+  nb_etudiants: '30',
+  nb_modules: '37',
+  nb_semestres: '2',
+  reussite: {
+    total_notes: '10',
+    admis: '8',
+    taux_reussite: '80.00',
+  },
+  filieres: [
+    { id: 1, designation: 'Informatique', nb_etudiants: '7', moyenne_generale: '11.49' },
+    { id: 2, designation: 'Administration Publique', nb_etudiants: '7', moyenne_generale: '10.83' },
+    { id: 3, designation: 'Assistant Manager', nb_etudiants: '7', moyenne_generale: null },
+    { id: 4, designation: 'Économie', nb_etudiants: '7', moyenne_generale: null },
+    { id: 5, designation: 'Biologie', nb_etudiants: '2', moyenne_generale: null },
+  ],
+})
+
+// Table
+const filieres = computed(() => backendData.value.filieres ?? [])
+
+// Cartes statistiques
+const totalAnnees = ref(5)
+const joursRestants = ref(245)
+const totalEtudiants = computed(() => backendData.value.nb_etudiants)
 </script>
+
 
 <style scoped>
 .stat-card {

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import {
   getCycles,
   getCycleFiliere,
+  getOrganisation,
   createCycle,
   updateCycle,
   deleteCycle,
@@ -77,7 +78,19 @@ export const useCycleStore = defineStore('cycleStore', {
         this.loading = false;
       }
     },
-
+    async fetchOrganisation() {
+      const { notifyError } = useNotifier();
+      this.loading = true;
+      try {
+        const response = await getOrganisation();
+        return response;
+      }
+      catch (error) {
+        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+      } finally {
+        this.loading = false;
+      }
+    }, 
     // Ajouter un nouveau cycle
     async addCycle(data) {
       const { notifyError } = useNotifier();

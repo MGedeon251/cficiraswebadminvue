@@ -52,15 +52,20 @@
                 </span>
               </td>
             </tr>
+            <tr v-if="loading">
+            <td colspan="6" class="text-center py-4">
+              Chargement en cours...
+            </td>
+          </tr>
 
-            <tr v-if="!loading && organisationFilieres.length === 0">
-              <td colspan="7" class="text-center py-4">
-                <div class="d-flex flex-column align-items-center">
-                  <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" width="80" />
-                  <span class="text-muted">Aucune donnée disponible</span>
-                </div>
-              </td>
-            </tr>
+          <tr v-else-if="organisationFilieres.length === 0">
+            <td colspan="6" class="text-center py-4">
+              <div class="d-flex flex-column align-items-center">
+                <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
+                <div class="text-pr">Aucune donnée</div>
+              </div>
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -69,55 +74,25 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
+import { useFiliereStore } from '@/stores/academiqueStore/filiereStore';
+import { useNotifier } from '@/stores/messages/useNotifier';
 
-/* =====================
-   États
-===================== */
-const loading = ref(false);
+const filiereStore = useFiliereStore();
+const messageStore = useNotifier();
+
 const organisationFilieres = ref([]);
-
-/* =====================
-   Méthodes
-===================== */
-const fetchOrganisationFilieres = async () => {
-  loading.value = true;
-
-  // Simulation API
-  organisationFilieres.value = [
-    {
-      id: 1,
-      filiere: 'Informatique',
-      responsable: 'Dr. Ndiaye',
-      effectif: 120,
-      capacite: 150,
-      taux: 80,
-      statut: 'OUVERTE',
-    },
-    {
-      id: 2,
-      filiere: 'Data Science',
-      responsable: 'Pr. Fall',
-      effectif: 60,
-      capacite: 60,
-      taux: 100,
-      statut: 'FERMEE',
-    },
-  ];
-
-  loading.value = false;
+const loading = computed(() => filiereStore.loading);
+const loadOrganisation = async () => {
+  organisationFilieres.value = await filiereStore.organisationFilieres();
 };
-
 const getProgressClass = (taux) => {
   if (taux < 60) return 'bg-success';
   if (taux < 90) return 'bg-warning';
   return 'bg-danger';
 };
 
-/* =====================
-   Lifecycle
-===================== */
 onMounted(() => {
-  fetchOrganisationFilieres();
+  loadOrganisation();
 });
 </script>
