@@ -7,10 +7,18 @@
       </div>
       <!-- Bouton Export -->
       <div>
-        <button class="btn btn-outline-dark me-2" @click="exportExcel">
+        <button 
+          class="btn btn-outline-dark me-2" 
+          @click="exportExcel"
+          :disabled="!hasData"
+        >
           <i class="mdi mdi-file-excel-outline me-1"></i> Exporter Excel
         </button>
-        <button class="btn btn-outline-dark" @click="exportPDF">
+        <button 
+          class="btn btn-outline-dark" 
+          @click="exportPDF"
+          :disabled="!hasData"
+        >
           <i class="mdi mdi-file-pdf-box me-1"></i> Exporter PDF
         </button>
       </div>
@@ -24,7 +32,11 @@
             <!-- Année académique -->
             <div class="col-md-3">
               <label class="form-label">Année académique</label>
-              <select v-model="selectedAnnee" class="form-select">
+              <select 
+                v-model="selectedAnnee" 
+                class="form-select"
+                @change="onAnneeChange"
+              >
                 <option value="">Toutes</option>
                 <option
                   v-for="annee in anneesAcademiques"
@@ -34,13 +46,16 @@
                   {{ annee.code }}
                 </option>
               </select>
-
             </div>
 
             <!-- Filière -->
             <div class="col-md-3">
               <label class="form-label">Filière</label>
-              <select v-model="selectedFiliere" class="form-select">
+              <select 
+                v-model="selectedFiliere" 
+                class="form-select"
+                @change="onFiliereChange"
+              >
                 <option value="">Toutes</option>
                 <option
                   v-for="f in filieres"
@@ -50,26 +65,26 @@
                   {{ f.designation }}
                 </option>
               </select>
-
             </div>
 
             <!-- Classe -->
             <div class="col-md-3">
               <label class="form-label">Classe</label>
-              <select v-model="selectedClasse"
-              :disabled="!selectedFiliere"
-              class="form-select">
+              <select 
+                v-model="selectedClasse"
+                :disabled="!selectedFiliere"
+                class="form-select"
+                @change="onClasseChange"
+              >
                 <option value="">Toutes</option>
                 <option
                   v-for="c in classes"
                   :key="c.id"
                   :value="c.id"
-                  
                 >
                   {{ c.code }}
                 </option>
               </select>
-
             </div>
 
             <!-- Barre de recherche -->
@@ -86,6 +101,28 @@
                   placeholder="Matricule, nom ou prénom..."
                 />
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="col-12 mb-3" v-if="hasData">
+      <div class="card bg-light">
+        <div class="card-body py-2">
+          <div class="row text-center">
+            <div class="col-md-3">
+              <strong>Total étudiants :</strong> {{ filteredEtudiants.length }}
+            </div>
+            <div class="col-md-3">
+              <strong>Hommes :</strong> {{ statsHommes }}
+            </div>
+            <div class="col-md-3">
+              <strong>Femmes :</strong> {{ statsFemmes }}
+            </div>
+            <div class="col-md-3">
+              <strong>Affichés :</strong> {{ paginatedEtudiants.length }}
             </div>
           </div>
         </div>
@@ -121,7 +158,7 @@
               <td colspan="8" class="text-center py-4">
                 <div class="text-muted">
                   <i class="mdi mdi-filter-outline mdi-24px mb-2"></i>
-                  <p>Veuillez sélectionner une année académique, une filière et une classe pour afficher les étudiants.</p>
+                  <p class="mb-0">Veuillez sélectionner une année académique, une filière et une classe pour afficher les étudiants.</p>
                 </div>
               </td>
             </tr>
@@ -146,16 +183,16 @@
               <td colspan="8" class="text-center py-4">
                 <div class="text-muted">
                   <i class="mdi mdi-alert-circle-outline mdi-24px mb-2"></i>
-                  <p>Aucun étudiant trouvé avec ces critères</p>
+                  <p class="mb-0">Aucun étudiant trouvé avec ces critères</p>
                 </div>
               </td>
             </tr>
-
           </tbody>
         </table>
 
         <!-- Pagination -->
         <Pagination
+          v-if="filteredEtudiants.length > 0"
           v-model="currentPage"
           :items-per-page="itemsPerPage"
           :total-items="filteredEtudiants.length"
@@ -164,104 +201,122 @@
     </div>
   </div>
 </template>
-<script setup>
+
+<script>
 import { ref, computed, onMounted, watch } from 'vue';
-import { storeToRefs } from 'pinia';
+import { useAnneeStore } from '@/stores/academiqueStore/anneStore';
+import { useFiliereStore } from '@/stores/academiqueStore/filiereStore';
+import { useClasseStore } from '@/stores/academiqueStore/classeStore';
 import { useEtudiantStore } from '@/stores/etudiants/etudiantStore';
 import Pagination from '@/components/shared/Pagination.vue';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-/* =========================
-   STORE
-========================= */
-const etudiantStore = useEtudiantStore();
-const {
-  filteredEtudiants,
-  anneesAcademiques,
-  filieres,
-  classes,
-  loading
-} = storeToRefs(etudiantStore);
+export default {
+  name: 'EtudiantsParClasse',
+  components: {
+    Pagination
+  },
+  setup() {
+    // Stores
+    const anneeStore = useAnneeStore();
+    const filiereStore = useFiliereStore();
+    const classeStore = useClasseStore();
+    const etudiantStore = useEtudiantStore();
 
-/* =========================
-   FILTRES
-========================= */
-const selectedAnnee = ref('');
-const selectedFiliere = ref('');
-const selectedClasse = ref('');
-const searchQuery = ref('');
+    // Refs pour les filtres
+    const selectedAnnee = ref('');
+    const selectedFiliere = ref('');
+    const selectedClasse = ref('');
+    const searchQuery = ref('');
 
-/* =========================
-   PAGINATION
-========================= */
-const currentPage = ref(1);
-const itemsPerPage = ref(10);
-const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage.value);
+    // Pagination
+    const currentPage = ref(1);
+    const itemsPerPage = ref(10);
 
-/* =========================
-   APPEL API SELON FILTRES
-========================= */
-watch([selectedAnnee, selectedFiliere, selectedClasse], async ([annee, filiere, classe]) => {
-  currentPage.value = 1;
+    // Computed
+    const anneesAcademiques = computed(() => anneeStore.anneesAcademiques);
+    const filieres = computed(() => filiereStore.filieres);
+    const classes = computed(() => classeStore.classes);
+    const loading = computed(() => etudiantStore.loading);
 
-  if (annee && filiere && classe) {
-    loading.value = true;
-    try {
-      const response = await etudiantStore.fetchEtudiantsByClasseFiliereAnnee(classe, filiere, annee);
-      filteredEtudiants.value = response.data; // ⚡ utiliser .value
-    } catch (error) {
-      console.error('Erreur chargement étudiants:', error);
-      filteredEtudiants.value = [];
-    } finally {
-      loading.value = false;
-    }
-  } else {
-    filteredEtudiants.value = [];
-  }
-});
+    // Filtrage des étudiants avec recherche
+    const filteredEtudiants = computed(() => {
+      let etudiants = etudiantStore.filteredEtudiants || [];
+      
+      if (!searchQuery.value) {
+        return etudiants;
+      }
 
-// Mettre à jour les classes quand la filière change
-watch(selectedFiliere, async (newFiliere) => {
-  if (newFiliere) {
-    await etudiantStore.fetchClassesByFiliere(newFiliere);
-    selectedClasse.value = '';
-  } else {
-    etudiantStore.classes.value = [];
-  }
-});
+      const query = searchQuery.value.toLowerCase().trim();
+      return etudiants.filter(etudiant => {
+        return (
+          etudiant.matricule?.toLowerCase().includes(query) ||
+          etudiant.nom?.toLowerCase().includes(query) ||
+          etudiant.prenom?.toLowerCase().includes(query)
+        );
+      });
+    });
 
+    // Pagination
+    const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage.value);
+    const paginatedEtudiants = computed(() => {
+      const start = startIndex.value;
+      const end = start + itemsPerPage.value;
+      return filteredEtudiants.value.slice(start, end);
+    });
 
-/* =========================
-   RECHERCHE (client-side)
-========================= */
-const searchedEtudiants = computed(() => {
-  if (!searchQuery.value) return filteredEtudiants.value;
+    // Statistiques
+    const statsHommes = computed(() => {
+      return filteredEtudiants.value.filter(e => e.sexe === 'M').length;
+    });
 
-  return filteredEtudiants.value.filter(e =>
-    [e.matricule, e.nom, e.prenom]
-      .join(' ')
-      .toLowerCase()
-      .includes(searchQuery.value.toLowerCase())
-  );
-});
+    const statsFemmes = computed(() => {
+      return filteredEtudiants.value.filter(e => e.sexe === 'F').length;
+    });
 
-/* =========================
-   PAGINATION APPLIQUÉE
-========================= */
-const paginatedEtudiants = computed(() =>
-  searchedEtudiants.value.slice(
-    startIndex.value,
-    startIndex.value + itemsPerPage.value
-  )
-);
+    const hasData = computed(() => {
+      return selectedAnnee.value && selectedFiliere.value && selectedClasse.value && 
+             filteredEtudiants.value.length > 0;
+    });
 
-/* =========================
-   EXPORTS
-========================= */
-const exportExcel = () => {
-  const data = searchedEtudiants.value.map(e => ({
+    // Methods
+    const onAnneeChange = () => {
+      // Réinitialiser les données étudiants quand on change d'année
+      loadEtudiants();
+    };
+
+    const onFiliereChange = async () => {
+      selectedClasse.value = '';
+      etudiantStore.filteredEtudiants = [];
+      
+      if (selectedFiliere.value) {
+        await classeStore.fetchClassesByFiliere(selectedFiliere.value);
+      } else {
+        classeStore.classes = [];
+      }
+    };
+
+    const onClasseChange = () => {
+      loadEtudiants();
+    };
+
+    const loadEtudiants = async () => {
+      if (selectedAnnee.value && selectedFiliere.value && selectedClasse.value) {
+        currentPage.value = 1;
+        await etudiantStore.fetchEtudiantsByClasseFiliereAnnee(
+          selectedClasse.value,
+          selectedFiliere.value,
+          selectedAnnee.value
+        );
+      } else {
+        etudiantStore.filteredEtudiants = [];
+      }
+    };
+
+    const exportExcel = () => {
+     const data = filteredEtudiants.value.map(e => ({
     Matricule: e.matricule,
     Nom: e.nom,
     Prénom: e.prenom,
@@ -277,14 +332,14 @@ const exportExcel = () => {
   XLSX.writeFile(wb, 'etudiants_par_classes.xlsx');
 };
 
-const exportPDF = () => {
+  const exportPDF = () => {
   const doc = new jsPDF();
   doc.text('Liste des étudiants par classes', 14, 16);
 
   autoTable(doc, {
     startY: 20,
     head: [['Matricule', 'Nom', 'Prénom', 'Sexe', 'Année', 'Filière', 'Classe']],
-    body: searchedEtudiants.value.map(e => [
+    body: filteredEtudiants.value.map(e => [
       e.matricule,
       e.nom,
       e.prenom,
@@ -298,26 +353,72 @@ const exportPDF = () => {
   doc.save('etudiants_par_classes.pdf');
 };
 
-/* =========================
-   INIT
-========================= */
-onMounted(async () => {
-  await Promise.all([
-    etudiantStore.fetchAnneesAcademiques(),
-    etudiantStore.fetchFilieres(),
-    etudiantStore.fetchClasses()
-  ]);
-});
+    // Lifecycle
+    onMounted(async () => {
+      await anneeStore.fetchAnneesAcademiques();
+      await filiereStore.fetchFilieres();
+    });
+
+    // Watch pour réinitialiser la pagination lors de la recherche
+    watch(searchQuery, () => {
+      currentPage.value = 1;
+    });
+
+    return {
+      // Data
+      selectedAnnee,
+      selectedFiliere,
+      selectedClasse,
+      searchQuery,
+      currentPage,
+      itemsPerPage,
+      
+      // Computed
+      anneesAcademiques,
+      filieres,
+      classes,
+      loading,
+      filteredEtudiants,
+      paginatedEtudiants,
+      startIndex,
+      statsHommes,
+      statsFemmes,
+      hasData,
+      
+      // Methods
+      onAnneeChange,
+      onFiliereChange,
+      onClasseChange,
+      exportExcel,
+      exportPDF
+    };
+  }
+};
 </script>
 
-
 <style scoped>
-.search-bar .form-control {
-  border-radius: 0 6px 6px 0;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-}
 .search-bar .input-group-text {
-  border-radius: 6px 0 0 6px;
-  font-weight: bold;
+  border-right: none;
+}
+
+.search-bar .form-control {
+  border-left: none;
+}
+
+.search-bar .form-control:focus {
+  box-shadow: none;
+  border-color: #ced4da;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.badge {
+  font-size: 0.85rem;
+  padding: 0.35em 0.65em;
 }
 </style>
