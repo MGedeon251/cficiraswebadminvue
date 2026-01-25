@@ -3,22 +3,16 @@
     <div class="col-12 mb-3 d-flex justify-content-between align-items-center">
       <div>
         <h4>Étudiants par classes</h4>
-        <p class="text-muted mb-0">Filtrez les étudiants par année académique, filière et classe.</p>
+        <p class="text-muted mb-0">
+          Filtrez les étudiants par année académique, filière et classe.
+        </p>
       </div>
       <!-- Bouton Export -->
       <div>
-        <button 
-          class="btn btn-outline-dark me-2" 
-          @click="exportExcel"
-          :disabled="!hasData"
-        >
+        <button class="btn btn-outline-dark me-2" @click="exportExcel" :disabled="!hasData">
           <i class="mdi mdi-file-excel-outline me-1"></i> Exporter Excel
         </button>
-        <button 
-          class="btn btn-outline-dark" 
-          @click="exportPDF"
-          :disabled="!hasData"
-        >
+        <button class="btn btn-outline-dark" @click="exportPDF" :disabled="!hasData">
           <i class="mdi mdi-file-pdf-box me-1"></i> Exporter PDF
         </button>
       </div>
@@ -32,17 +26,9 @@
             <!-- Année académique -->
             <div class="col-md-3">
               <label class="form-label">Année académique</label>
-              <select 
-                v-model="selectedAnnee" 
-                class="form-select"
-                @change="onAnneeChange"
-              >
+              <select v-model="selectedAnnee" class="form-select" @change="onAnneeChange">
                 <option value="">Toutes</option>
-                <option
-                  v-for="annee in anneesAcademiques"
-                  :key="annee.id"
-                  :value="annee.id"
-                >
+                <option v-for="annee in anneesAcademiques" :key="annee.id" :value="annee.id">
                   {{ annee.code }}
                 </option>
               </select>
@@ -51,17 +37,9 @@
             <!-- Filière -->
             <div class="col-md-3">
               <label class="form-label">Filière</label>
-              <select 
-                v-model="selectedFiliere" 
-                class="form-select"
-                @change="onFiliereChange"
-              >
+              <select v-model="selectedFiliere" class="form-select" @change="onFiliereChange">
                 <option value="">Toutes</option>
-                <option
-                  v-for="f in filieres"
-                  :key="f.id"
-                  :value="f.id"
-                >
+                <option v-for="f in filieres" :key="f.id" :value="f.id">
                   {{ f.designation }}
                 </option>
               </select>
@@ -70,18 +48,14 @@
             <!-- Classe -->
             <div class="col-md-3">
               <label class="form-label">Classe</label>
-              <select 
+              <select
                 v-model="selectedClasse"
                 :disabled="!selectedFiliere"
                 class="form-select"
                 @change="onClasseChange"
               >
                 <option value="">Toutes</option>
-                <option
-                  v-for="c in classes"
-                  :key="c.id"
-                  :value="c.id"
-                >
+                <option v-for="c in classes" :key="c.id" :value="c.id">
                   {{ c.code }}
                 </option>
               </select>
@@ -115,15 +89,9 @@
             <div class="col-md-3">
               <strong>Total étudiants :</strong> {{ filteredEtudiants.length }}
             </div>
-            <div class="col-md-3">
-              <strong>Hommes :</strong> {{ statsHommes }}
-            </div>
-            <div class="col-md-3">
-              <strong>Femmes :</strong> {{ statsFemmes }}
-            </div>
-            <div class="col-md-3">
-              <strong>Affichés :</strong> {{ paginatedEtudiants.length }}
-            </div>
+            <div class="col-md-3"><strong>Hommes :</strong> {{ statsHommes }}</div>
+            <div class="col-md-3"><strong>Femmes :</strong> {{ statsFemmes }}</div>
+            <div class="col-md-3"><strong>Affichés :</strong> {{ paginatedEtudiants.length }}</div>
           </div>
         </div>
       </div>
@@ -158,11 +126,18 @@
               <td colspan="8" class="text-center py-4">
                 <div class="text-muted">
                   <i class="mdi mdi-filter-outline mdi-24px mb-2"></i>
-                  <p class="mb-0">Veuillez sélectionner une année académique, une filière et une classe pour afficher les étudiants.</p>
+                  <p class="mb-0">
+                    Veuillez sélectionner une année académique, une filière et une classe pour
+                    afficher les étudiants.
+                  </p>
                 </div>
               </td>
             </tr>
-            <tr v-else-if="paginatedEtudiants.length > 0" v-for="(etudiant, index) in paginatedEtudiants" :key="etudiant.id">
+            <tr
+              v-else-if="paginatedEtudiants.length > 0"
+              v-for="(etudiant, index) in paginatedEtudiants"
+              :key="etudiant.id"
+            >
               <td>{{ startIndex + index + 1 }}</td>
               <td class="fw-bold">{{ etudiant.matricule }}</td>
               <td>{{ etudiant.nom }}</td>
@@ -212,11 +187,12 @@ import Pagination from '@/components/shared/Pagination.vue';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import logoCFI from '@/assets/logoBase64'
 
 export default {
   name: 'EtudiantsParClasse',
   components: {
-    Pagination
+    Pagination,
   },
   setup() {
     // Stores
@@ -244,13 +220,13 @@ export default {
     // Filtrage des étudiants avec recherche
     const filteredEtudiants = computed(() => {
       let etudiants = etudiantStore.filteredEtudiants || [];
-      
+
       if (!searchQuery.value) {
         return etudiants;
       }
 
       const query = searchQuery.value.toLowerCase().trim();
-      return etudiants.filter(etudiant => {
+      return etudiants.filter((etudiant) => {
         return (
           etudiant.matricule?.toLowerCase().includes(query) ||
           etudiant.nom?.toLowerCase().includes(query) ||
@@ -269,16 +245,20 @@ export default {
 
     // Statistiques
     const statsHommes = computed(() => {
-      return filteredEtudiants.value.filter(e => e.sexe === 'M').length;
+      return filteredEtudiants.value.filter((e) => e.sexe === 'M').length;
     });
 
     const statsFemmes = computed(() => {
-      return filteredEtudiants.value.filter(e => e.sexe === 'F').length;
+      return filteredEtudiants.value.filter((e) => e.sexe === 'F').length;
     });
 
     const hasData = computed(() => {
-      return selectedAnnee.value && selectedFiliere.value && selectedClasse.value && 
-             filteredEtudiants.value.length > 0;
+      return (
+        selectedAnnee.value &&
+        selectedFiliere.value &&
+        selectedClasse.value &&
+        filteredEtudiants.value.length > 0
+      );
     });
 
     // Methods
@@ -290,7 +270,7 @@ export default {
     const onFiliereChange = async () => {
       selectedClasse.value = '';
       etudiantStore.filteredEtudiants = [];
-      
+
       if (selectedFiliere.value) {
         await classeStore.fetchClassesByFiliere(selectedFiliere.value);
       } else {
@@ -316,42 +296,108 @@ export default {
     };
 
     const exportExcel = () => {
-     const data = filteredEtudiants.value.map(e => ({
-    Matricule: e.matricule,
-    Nom: e.nom,
-    Prénom: e.prenom,
-    Sexe: e.sexe,
-    Année: e.annee_academique,
-    Filière: e.filiere,
-    Classe: e.classe,
-  }));
+      const data = filteredEtudiants.value.map((e) => ({
+        Matricule: e.matricule,
+        Nom: e.nom,
+        Prénom: e.prenom,
+        Sexe: e.sexe,
+        Année: e.annee_academique,
+        Filière: e.filiere,
+        Classe: e.classe,
+      }));
 
-  const ws = XLSX.utils.json_to_sheet(data);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Étudiants');
-  XLSX.writeFile(wb, 'etudiants_par_classes.xlsx');
-};
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Étudiants');
+      XLSX.writeFile(wb, 'etudiants_par_classes.xlsx');
+    };
+    const exportPDF = () => {
+      const doc = new jsPDF();
 
-  const exportPDF = () => {
-  const doc = new jsPDF();
-  doc.text('Liste des étudiants par classes', 14, 16);
+      // Dimensions
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      // Image logo occupant toute la largeur
+      doc.addImage(logoCFI, 'PNG', 0, 0, pageWidth, 50);
+      // === TITRE DU DOCUMENT ===
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(14);
+      doc.setTextColor(0, 0, 0);
+      doc.text('LISTE DES ÉTUDIANTS PAR CLASSE', pageWidth / 2, 60, { align: 'center' });
 
-  autoTable(doc, {
-    startY: 20,
-    head: [['Matricule', 'Nom', 'Prénom', 'Sexe', 'Année', 'Filière', 'Classe']],
-    body: filteredEtudiants.value.map(e => [
-      e.matricule,
-      e.nom,
-      e.prenom,
-      e.sexe,
-      e.annee_academique,
-      e.filiere,
-      e.classe,
-    ]),
-  });
+      // === INFORMATIONS DE FILTRAGE ===
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(80, 80, 80);
 
-  doc.save('etudiants_par_classes.pdf');
-};
+      const anneeText =
+        anneesAcademiques.value.find((a) => a.id === selectedAnnee.value)?.code || '-';
+      const filiereText =
+        filieres.value.find((f) => f.id === selectedFiliere.value)?.designation || '-';
+      const classeText = classes.value.find((c) => c.id === selectedClasse.value)?.code || '-';
+
+      doc.text(`Année académique: ${anneeText}`, 14, 68);
+      doc.text(`Filière: ${filiereText}`, 14, 73);
+      doc.text(`Classe: ${classeText}`, 14, 78);
+      doc.text(`Total étudiants: ${filteredEtudiants.value.length}`, pageWidth - 14, 68, {
+        align: 'right',
+      });
+      doc.text(`Date d'édition: ${new Date().toLocaleDateString('fr-FR')}`, pageWidth - 14, 73, {
+        align: 'right',
+      });
+
+      // === TABLEAU ===
+      autoTable(doc, {
+        startY: 83,
+        head: [['N°', 'Matricule', 'Nom', 'Prénom', 'Sexe', 'Année', 'Filière', 'Classe']],
+        body: filteredEtudiants.value.map((e, index) => [
+          index + 1,
+          e.matricule,
+          e.nom,
+          e.prenom,
+          e.sexe,
+          e.annee_academique,
+          e.filiere,
+          e.classe,
+        ]),
+        headStyles: {
+          fillColor: [41, 128, 185],
+          textColor: 255,
+          fontSize: 9,
+          fontStyle: 'bold',
+          halign: 'center',
+        },
+        bodyStyles: {
+          fontSize: 8,
+          textColor: 50,
+        },
+        alternateRowStyles: {
+          fillColor: [245, 245, 245],
+        },
+        columnStyles: {
+          0: { halign: 'center', cellWidth: 10 },
+          1: { halign: 'center', cellWidth: 25 },
+          4: { halign: 'center', cellWidth: 15 },
+        },
+        margin: { top: 83, left: 14, right: 14 },
+        didDrawPage: (data) => {
+          // Pied de page
+          const pageCount = doc.internal.pages.length - 1;
+          doc.setFontSize(8);
+          doc.setTextColor(128);
+          doc.text(
+            `Page ${doc.internal.getCurrentPageInfo().pageNumber} / ${pageCount}`,
+            pageWidth / 2,
+            pageHeight - 10,
+            { align: 'center' }
+          );
+        },
+      });
+
+      // Sauvegarde
+      const fileName = `etudiants_${classeText}_${anneeText}_${new Date().getTime()}.pdf`;
+      doc.save(fileName);
+    };
 
     // Lifecycle
     onMounted(async () => {
@@ -372,7 +418,7 @@ export default {
       searchQuery,
       currentPage,
       itemsPerPage,
-      
+
       // Computed
       anneesAcademiques,
       filieres,
@@ -384,15 +430,15 @@ export default {
       statsHommes,
       statsFemmes,
       hasData,
-      
+
       // Methods
       onAnneeChange,
       onFiliereChange,
       onClasseChange,
       exportExcel,
-      exportPDF
+      exportPDF,
     };
-  }
+  },
 };
 </script>
 

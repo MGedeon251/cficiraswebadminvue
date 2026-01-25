@@ -68,7 +68,6 @@
           :items-per-page="itemsPerPage"
           :total-items="organisations.length"
         />
-
       </div>
     </div>
   </div>
@@ -91,20 +90,13 @@ const itemsPerPage = ref(10);
 const loading = computed(() => classeStore.loading);
 
 const organisations = computed(() =>
-  Array.isArray(classeStore.organisationClasses)
-    ? classeStore.organisationClasses
-    : []
+  Array.isArray(classeStore.organisationClasses) ? classeStore.organisationClasses : []
 );
 
-const startIndex = computed(() =>
-  (currentPage.value - 1) * itemsPerPage.value
-);
+const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage.value);
 
 const paginatedOrganisations = computed(() =>
-  organisations.value.slice(
-    startIndex.value,
-    startIndex.value + itemsPerPage.value
-  )
+  organisations.value.slice(startIndex.value, startIndex.value + itemsPerPage.value)
 );
 
 /* =====================

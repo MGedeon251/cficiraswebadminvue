@@ -13,13 +13,17 @@ import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
 
 // Helpers pour gérer le cache
 function setCache(key, data) {
-  localStorage.setItem(key, JSON.stringify({
-    data,
-    timestamp: Date.now()
-  }));
+  localStorage.setItem(
+    key,
+    JSON.stringify({
+      data,
+      timestamp: Date.now(),
+    })
+  );
 }
 
-function getCache(key, ttl = 5 * 60 * 1000) { // TTL par défaut : 5 minutes
+function getCache(key, ttl = 5 * 60 * 1000) {
+  // TTL par défaut : 5 minutes
   const cached = localStorage.getItem(key);
   if (!cached) return null;
 
@@ -84,13 +88,12 @@ export const useCycleStore = defineStore('cycleStore', {
       try {
         const response = await getOrganisation();
         return response;
-      }
-      catch (error) {
+      } catch (error) {
         notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
       } finally {
         this.loading = false;
       }
-    }, 
+    },
     // Ajouter un nouveau cycle
     async addCycle(data) {
       const { notifyError } = useNotifier();

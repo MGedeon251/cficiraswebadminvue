@@ -82,37 +82,36 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import ItemActions from '../details/ItemActions.vue'
-import Pagination from '@/components/shared/Pagination.vue'
-import { useEtudiantStore } from '@/stores/etudiants/etudiantStore' 
+import { computed, onMounted, ref } from 'vue';
+import ItemActions from '../details/ItemActions.vue';
+import Pagination from '@/components/shared/Pagination.vue';
+import { useEtudiantStore } from '@/stores/etudiants/etudiantStore';
 
-const store = useEtudiantStore()
-console.log('data :', store.etudiants)
+const store = useEtudiantStore();
+console.log('data :', store.etudiants);
 
 // Pagination
-const currentPage = ref(1)
-const itemsPerPage = ref(10)
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
 
-const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage.value)
+const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage.value);
 const paginatedEtudiants = computed(() =>
   store.etudiants.slice(startIndex.value, startIndex.value + itemsPerPage.value)
-)
+);
 
 // Actions
 const editEtudiant = (etudiant) => {
-  store.fetchEtudiantById(etudiant.id)
+  store.fetchEtudiantById(etudiant.id);
   // ouvrir modal édition par exemple
-}
+};
 const confirmDelete = (etudiant) => {
   if (confirm(`Voulez-vous vraiment supprimer ${etudiant.nom} ${etudiant.prenom} ?`)) {
-    store.removeEtudiant(etudiant.id)
+    store.removeEtudiant(etudiant.id);
   }
-}
-
+};
 
 // Charger les étudiants au montage
 onMounted(() => {
-  store.fetchEtudiants()
-})
+  store.fetchEtudiants();
+});
 </script>

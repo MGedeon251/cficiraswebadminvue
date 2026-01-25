@@ -150,7 +150,7 @@ const form = ref({
   designation: '',
   cycle_id: '',
   credit_total: '',
-  description : '',
+  description: '',
 });
 const cycles = ref([]);
 const loading = ref(false);
@@ -201,12 +201,30 @@ const resetForm = () => {
 
 // Validation
 const validateForm = () => {
-  if (!form.value.code.trim()) { errorMessage.value = 'Le code est obligatoire.'; return false; }
-  if (!form.value.designation.trim()) { errorMessage.value = 'La désignation est obligatoire.'; return false; }
-  if (!form.value.cycle_id) { errorMessage.value = 'Veuillez sélectionner un cycle.'; return false; }
-  if (form.value.code.length > 10) { errorMessage.value = 'Le code ne doit pas dépasser 10 caractères.'; return false; }
-  if (form.value.designation.length > 100) { errorMessage.value = 'La désignation ne doit pas dépasser 100 caractères.'; return false; }
-  if (form.value.credit_total && form.value.credit_total < 0) { errorMessage.value = 'Les crédits totaux doivent être positifs.'; return false; }
+  if (!form.value.code.trim()) {
+    errorMessage.value = 'Le code est obligatoire.';
+    return false;
+  }
+  if (!form.value.designation.trim()) {
+    errorMessage.value = 'La désignation est obligatoire.';
+    return false;
+  }
+  if (!form.value.cycle_id) {
+    errorMessage.value = 'Veuillez sélectionner un cycle.';
+    return false;
+  }
+  if (form.value.code.length > 10) {
+    errorMessage.value = 'Le code ne doit pas dépasser 10 caractères.';
+    return false;
+  }
+  if (form.value.designation.length > 100) {
+    errorMessage.value = 'La désignation ne doit pas dépasser 100 caractères.';
+    return false;
+  }
+  if (form.value.credit_total && form.value.credit_total < 0) {
+    errorMessage.value = 'Les crédits totaux doivent être positifs.';
+    return false;
+  }
 
   errorMessage.value = '';
   return true;
@@ -242,7 +260,7 @@ const submitFiliere = async () => {
 
     setTimeout(() => closeModal(), 1000);
   } catch (error) {
-    errorMessage.value = error.message || 'Erreur lors de l\'enregistrement.';
+    errorMessage.value = error.message || "Erreur lors de l'enregistrement.";
     notifyError(errorMessage.value);
   } finally {
     loading.value = false;
@@ -267,7 +285,6 @@ defineExpose({
   },
 });
 </script>
-
 
 <style scoped>
 .modal-header.bg-primary {

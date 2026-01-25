@@ -26,7 +26,7 @@ export const deleteCursus = (id) => academiqueService.delete(`/cursus/${id}`);
 
 // API pour gérer les cycles
 export const getCycles = () => academiqueService.get('/cycles');
-export const getOrganisation = ()=> academiqueService.get('/cycles/organisation');
+export const getOrganisation = () => academiqueService.get('/cycles/organisation');
 export const getCycleFiliere = () => academiqueService.get('/cycles/filieres');
 export const createCycle = (data) => academiqueService.post('/cycles', data);
 export const updateCycle = (id, data) => academiqueService.put(`/cycles/${id}`, data);

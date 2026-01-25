@@ -12,13 +12,17 @@ import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
 
 // Helpers pour gérer le cache
 function setCache(key, data) {
-  localStorage.setItem(key, JSON.stringify({
-    data,
-    timestamp: Date.now()
-  }));
+  localStorage.setItem(
+    key,
+    JSON.stringify({
+      data,
+      timestamp: Date.now(),
+    })
+  );
 }
 
-function getCache(key, ttl = 5 * 60 * 1000) { // TTL par défaut : 5 minutes
+function getCache(key, ttl = 5 * 60 * 1000) {
+  // TTL par défaut : 5 minutes
   const cached = localStorage.getItem(key);
   if (!cached) return null;
 
@@ -66,9 +70,9 @@ export const useFiliereStore = defineStore('filiereStore', {
           this.FiliereOrganisation = cached;
         } else {
           const response = await getFiliereOrganisation();
-          this.FiliereOrganisation = response ;
+          this.FiliereOrganisation = response;
           setCache('filieres_organisation', response);
-          return response ; 
+          return response;
         }
       } catch (error) {
         notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
@@ -103,7 +107,7 @@ export const useFiliereStore = defineStore('filiereStore', {
         localStorage.removeItem('filieres'); // Invalider le cache
         this.fetchFilieres();
       } catch (error) {
-       notifyError(extractErrorMessage(error, 'Échec lors de l\'edition de la filiere.'));
+        notifyError(extractErrorMessage(error, "Échec lors de l'edition de la filiere."));
       } finally {
         this.loading = false;
       }

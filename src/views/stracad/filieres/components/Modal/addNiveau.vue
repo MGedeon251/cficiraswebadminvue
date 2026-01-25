@@ -184,9 +184,18 @@ const getPreview = () => {
 
 /* Validation */
 const validateForm = () => {
-  if (!form.value.cycle_id) { errorMessage.value = 'Le cycle est obligatoire.'; return false; }
-  if (!form.value.code.trim()) { errorMessage.value = 'Le code est obligatoire.'; return false; }
-  if (!form.value.ordre || form.value.ordre < 1) { errorMessage.value = 'L’ordre doit être supérieur à 0.'; return false; }
+  if (!form.value.cycle_id) {
+    errorMessage.value = 'Le cycle est obligatoire.';
+    return false;
+  }
+  if (!form.value.code.trim()) {
+    errorMessage.value = 'Le code est obligatoire.';
+    return false;
+  }
+  if (!form.value.ordre || form.value.ordre < 1) {
+    errorMessage.value = 'L’ordre doit être supérieur à 0.';
+    return false;
+  }
   errorMessage.value = '';
   return true;
 };

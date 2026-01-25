@@ -99,62 +99,65 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue';
 
-const loading = ref(false)
-const etudiants = ref([])
+const loading = ref(false);
+const etudiants = ref([]);
 
 // Filtres
-const annees = ref(['2023-2024', '2024-2025'])
-const filieres = ref(['Informatique', 'Administration'])
-const classes = ref(['L1-INFO-A', 'L2-INFO-B', 'M1-ADM-A'])
+const annees = ref(['2023-2024', '2024-2025']);
+const filieres = ref(['Informatique', 'Administration']);
+const classes = ref(['L1-INFO-A', 'L2-INFO-B', 'M1-ADM-A']);
 
-const selectedAnnee = ref('')
-const selectedFiliere = ref('')
-const selectedClasse = ref('')
-const searchQuery = ref('')
+const selectedAnnee = ref('');
+const selectedFiliere = ref('');
+const selectedClasse = ref('');
+const searchQuery = ref('');
 
 // Groupes
 const groupes = ref([
   { id: 1, nom: 'Groupe TP1' },
   { id: 2, nom: 'Projet Web' },
   { id: 3, nom: 'Club Robotique' },
-])
+]);
 
 // Filtrage
 const filteredEtudiants = computed(() => {
   return etudiants.value.filter((e) => {
-    const matchAnnee = !selectedAnnee.value || e.annee_academique === selectedAnnee.value
-    const matchFiliere = !selectedFiliere.value || e.filiere === selectedFiliere.value
-    const matchClasse = !selectedClasse.value || e.classe === selectedClasse.value
+    const matchAnnee = !selectedAnnee.value || e.annee_academique === selectedAnnee.value;
+    const matchFiliere = !selectedFiliere.value || e.filiere === selectedFiliere.value;
+    const matchClasse = !selectedClasse.value || e.classe === selectedClasse.value;
     const matchSearch =
       !searchQuery.value ||
-      [e.matricule, e.nom, e.prenom].join(' ').toLowerCase().includes(searchQuery.value.toLowerCase())
-    return matchAnnee && matchFiliere && matchClasse && matchSearch
-  })
-})
+      [e.matricule, e.nom, e.prenom]
+        .join(' ')
+        .toLowerCase()
+        .includes(searchQuery.value.toLowerCase());
+    return matchAnnee && matchFiliere && matchClasse && matchSearch;
+  });
+});
 
 // Organisation
-const affectations = ref({}) // { etudiantId: groupeId }
+const affectations = ref({}); // { etudiantId: groupeId }
 
 const etudiantsParGroupe = (groupeId) => {
-  return etudiants.value.filter((e) => affectations.value[e.id] === groupeId)
-}
+  return etudiants.value.filter((e) => affectations.value[e.id] === groupeId);
+};
 
 const ajouterAuGroupe = (groupeId) => {
-  const etudiant = filteredEtudiants.value[0] // exemple: premier étudiant filtré
-  if (etudiant) affectations.value[etudiant.id] = groupeId
-}
+  const etudiant = filteredEtudiants.value[0]; // exemple: premier étudiant filtré
+  if (etudiant) affectations.value[etudiant.id] = groupeId;
+};
 
 const retirerDuGroupe = (etudiantId, groupeId) => {
   if (affectations.value[etudiantId] === groupeId) {
-    delete affectations.value[etudiantId]
+    delete affectations.value[etudiantId];
   }
-}
+};
 
 // Simulation API
 onMounted(() => {
-  loading.value = true
+  loading.value = true;
   setTimeout(() => {
     etudiants.value = [
       {
@@ -187,10 +190,10 @@ onMounted(() => {
         filiere: 'Administration',
         classe: 'M1-ADM-A',
       },
-    ]
-    loading.value = false
-  }, 2000)
-})
+    ];
+    loading.value = false;
+  }, 2000);
+});
 </script>
 
 <style scoped>
@@ -203,4 +206,3 @@ onMounted(() => {
   font-weight: bold;
 }
 </style>
-

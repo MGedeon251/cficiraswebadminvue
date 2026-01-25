@@ -4,11 +4,11 @@
     <div class="pagination-info">
       <div class="items-per-page-selector">
         <span class="text-muted me-2">Afficher</span>
-        <select 
-          v-model="localItemsPerPage" 
+        <select
+          v-model="localItemsPerPage"
           class="form-select form-select-sm"
           @change="updateItemsPerPage"
-          style="width: auto;"
+          style="width: auto"
         >
           <option v-for="n in itemsPerPageOptions" :key="n" :value="n">
             {{ n }}
@@ -16,12 +16,12 @@
         </select>
         <span class="text-muted ms-2">éléments</span>
       </div>
-      
+
       <!-- Informations sur les résultats affichés -->
       <div class="results-info text-muted">
         <span v-if="totalItems > 0">
-          Affichage de <strong>{{ startItem }}</strong> à <strong>{{ endItem }}</strong> 
-          sur <strong>{{ totalItems }}</strong> résultat{{ totalItems > 1 ? 's' : '' }}
+          Affichage de <strong>{{ startItem }}</strong> à <strong>{{ endItem }}</strong> sur
+          <strong>{{ totalItems }}</strong> résultat{{ totalItems > 1 ? 's' : '' }}
         </span>
         <span v-else>Aucun résultat</span>
       </div>
@@ -32,9 +32,9 @@
       <ul class="pagination pagination-sm mb-0">
         <!-- Bouton Première page -->
         <li class="page-item" :class="{ disabled: currentPage === 1 }">
-          <a 
-            class="page-link" 
-            href="#" 
+          <a
+            class="page-link"
+            href="#"
             @click.prevent="goToPage(1)"
             :tabindex="currentPage === 1 ? -1 : 0"
             title="Première page"
@@ -45,9 +45,9 @@
 
         <!-- Bouton Précédent -->
         <li class="page-item" :class="{ disabled: currentPage === 1 }">
-          <a 
-            class="page-link" 
-            href="#" 
+          <a
+            class="page-link"
+            href="#"
             @click.prevent="prevPage"
             :tabindex="currentPage === 1 ? -1 : 0"
             title="Page précédente"
@@ -58,20 +58,16 @@
 
         <!-- Pages numérotées avec ellipses intelligentes -->
         <template v-for="page in displayedPages" :key="page">
-          <li 
+          <li
             v-if="page === 'ellipsis-start' || page === 'ellipsis-end'"
             class="page-item disabled"
           >
             <span class="page-link">...</span>
           </li>
-          <li 
-            v-else
-            class="page-item"
-            :class="{ active: page === currentPage }"
-          >
-            <a 
-              class="page-link" 
-              href="#" 
+          <li v-else class="page-item" :class="{ active: page === currentPage }">
+            <a
+              class="page-link"
+              href="#"
               @click.prevent="goToPage(page)"
               :aria-current="page === currentPage ? 'page' : undefined"
             >
@@ -82,9 +78,9 @@
 
         <!-- Bouton Suivant -->
         <li class="page-item" :class="{ disabled: currentPage >= totalPages }">
-          <a 
-            class="page-link" 
-            href="#" 
+          <a
+            class="page-link"
+            href="#"
             @click.prevent="nextPage"
             :tabindex="currentPage >= totalPages ? -1 : 0"
             title="Page suivante"
@@ -95,9 +91,9 @@
 
         <!-- Bouton Dernière page -->
         <li class="page-item" :class="{ disabled: currentPage >= totalPages }">
-          <a 
-            class="page-link" 
-            href="#" 
+          <a
+            class="page-link"
+            href="#"
             @click.prevent="goToPage(totalPages)"
             :tabindex="currentPage >= totalPages ? -1 : 0"
             title="Dernière page"
@@ -118,9 +114,9 @@
         :min="1"
         :max="totalPages"
         @keyup.enter="jumpToPage"
-        style="width: 70px;"
+        style="width: 70px"
       />
-      <button 
+      <button
         class="btn btn-sm btn-outline-secondary ms-1"
         @click="jumpToPage"
         :disabled="!isValidPageJump"
@@ -139,27 +135,27 @@ const props = defineProps({
   totalItems: {
     type: Number,
     required: true,
-    validator: (value) => value >= 0
+    validator: (value) => value >= 0,
   },
   itemsPerPage: {
     type: Number,
     default: 10,
-    validator: (value) => value > 0
+    validator: (value) => value > 0,
   },
   modelValue: {
     type: Number,
     default: 1,
-    validator: (value) => value > 0
+    validator: (value) => value > 0,
   },
   itemsPerPageOptions: {
     type: Array,
-    default: () => [10, 15, 20, 30, 50]
+    default: () => [10, 15, 20, 30, 50],
   },
   maxVisiblePages: {
     type: Number,
     default: 7, // Nombre max de pages visibles avant d'afficher des ellipses
-    validator: (value) => value >= 5 && value % 2 === 1 // Doit être impair et >= 5
-  }
+    validator: (value) => value >= 5 && value % 2 === 1, // Doit être impair et >= 5
+  },
 });
 
 // Émissions
@@ -203,7 +199,7 @@ const displayedPages = computed(() => {
 
   // Logique avec ellipses
   const halfVisible = Math.floor(maxVisible / 2);
-  
+
   // Toujours afficher la première page
   pages.push(1);
 

@@ -100,18 +100,22 @@
         <div class="modal-content shadow-lg">
           <div class="modal-header bg-danger text-white">
             <h5 class="modal-title">Confirmation de suppression</h5>
-            <button type="button" class="btn-close btn-close-white" @click="closeDeleteConfirm"></button>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              @click="closeDeleteConfirm"
+            ></button>
           </div>
 
           <div class="modal-body">
-            <p>Voulez-vous vraiment supprimer le cycle <strong>{{ item.designation }}</strong> ?</p>
+            <p>
+              Voulez-vous vraiment supprimer le cycle <strong>{{ item.designation }}</strong> ?
+            </p>
           </div>
 
           <div class="modal-footer">
             <button class="btn btn-secondary" @click="closeDeleteConfirm">Annuler</button>
-            <button class="btn btn-danger" @click="confirmDelete">
-              Supprimer
-            </button>
+            <button class="btn btn-danger" @click="confirmDelete">Supprimer</button>
           </div>
         </div>
       </div>

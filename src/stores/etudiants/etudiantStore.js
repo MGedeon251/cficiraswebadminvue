@@ -11,13 +11,17 @@ import { getAnneesAcademiques, getFilieres, getClasses } from '@/api/academique/
 import { useMessageStore } from '@/stores/messages/messageStore';
 
 function setCache(key, data) {
-  localStorage.setItem(key, JSON.stringify({
-    data,
-    timestamp: Date.now()
-  }));
+  localStorage.setItem(
+    key,
+    JSON.stringify({
+      data,
+      timestamp: Date.now(),
+    })
+  );
 }
 
-function getCache(key, ttl = 5 * 60 * 1000) { // TTL par défaut : 5 minutes
+function getCache(key, ttl = 5 * 60 * 1000) {
+  // TTL par défaut : 5 minutes
   const cached = localStorage.getItem(key);
   if (!cached) return null;
 
@@ -182,7 +186,6 @@ export const useEtudiantStore = defineStore('etudiantStore', {
         this.loading = false;
       }
     },
-
 
     // Récupérer les étudiants par classe, filière et année académique
     async fetchEtudiantsByClasseFiliereAnnee(classeId, filiereId, anneeAcademiqueId) {

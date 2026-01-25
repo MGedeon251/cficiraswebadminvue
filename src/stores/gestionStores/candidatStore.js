@@ -96,7 +96,7 @@ export const useCandidatStore = defineStore('candidatStore', {
         this.saveToLocalStorage();
       } catch (e) {
         // Essayer de trouver le candidat dans les données locales
-        const localCandidat = this.candidatures.find(c => c.id === id);
+        const localCandidat = this.candidatures.find((c) => c.id === id);
         if (localCandidat) {
           this.candidatureDetail = localCandidat;
           console.info('Candidat chargé depuis le cache local');
@@ -114,7 +114,7 @@ export const useCandidatStore = defineStore('candidatStore', {
       try {
         const response = await createCandidature(data);
         notifySuccess(response?.message || 'Candidat ajouté avec succès.');
-        
+
         // Actualiser depuis l'API
         if (response.concours_id) {
           await this.fetchCandidatures(response.concours_id);
@@ -136,7 +136,7 @@ export const useCandidatStore = defineStore('candidatStore', {
       try {
         const response = await addOrUpdatesNotes(data);
         notifySuccess(response?.message || 'Notes mises a jour avec succès.');
-        
+
         // Actualiser depuis l'API
         if (response.concours_id) {
           await this.fetchCandidatures(response.concours_id);
@@ -154,9 +154,9 @@ export const useCandidatStore = defineStore('candidatStore', {
       try {
         const response = await updateCandidature(id, data);
         notifySuccess(response?.message || 'Candidature mise à jour avec succès.');
-        
+
         // Mettre à jour localement
-        const index = this.candidatures.findIndex(c => c.id === id);
+        const index = this.candidatures.findIndex((c) => c.id === id);
         if (index !== -1 && response.data) {
           this.candidatures[index] = { ...this.candidatures[index], ...response.data };
           this.saveToLocalStorage();
@@ -174,9 +174,9 @@ export const useCandidatStore = defineStore('candidatStore', {
       try {
         const response = await deleteCandidature(id);
         notifySuccess(response?.message || 'Candidat supprimé avec succès.');
-        
+
         // Supprimer localement
-        this.candidatures = this.candidatures.filter(c => c.id !== id);
+        this.candidatures = this.candidatures.filter((c) => c.id !== id);
         if (this.candidatureDetail?.id === id) {
           this.candidatureDetail = null;
         }

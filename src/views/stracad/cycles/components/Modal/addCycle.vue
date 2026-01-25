@@ -160,7 +160,6 @@ import { useCycleStore } from '@/stores/academiqueStore/cycleStore';
 
 const cycleStore = useCycleStore();
 
-
 // Props
 const props = defineProps({
   cycleToEdit: {
@@ -209,7 +208,6 @@ watch(
   { immediate: true }
 );
 
-
 // Méthodes
 const resetForm = () => {
   form.value = {
@@ -225,7 +223,6 @@ const resetForm = () => {
   successMessage.value = '';
   isEdit.value = false;
 };
-
 
 const validateForm = () => {
   // Vérifier les champs obligatoires
@@ -274,8 +271,7 @@ const submitCycle = async () => {
       duree_annees: form.value.duree_annees,
       credits_total: form.value.credits_total,
       statut: form.value.statut,
-};
-
+    };
 
     if (isEdit.value) {
       await cycleStore.editCycle(form.value.id, dataToSend);
@@ -297,7 +293,6 @@ const submitCycle = async () => {
     loading.value = false;
   }
 };
-
 
 const closeModal = () => {
   const modalEl = document.getElementById('cycleModal');

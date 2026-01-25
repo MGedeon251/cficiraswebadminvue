@@ -40,12 +40,7 @@
               <span class="badge bg-secondary">{{ cycle.credits_total }}</span>
             </td>
             <td>
-              <ItemActions
-                :item="cycle"
-                :showAdd="false"
-                @edit="editCycle"
-                @delete="deleteCycle"
-              />
+              <ItemActions :item="cycle" :showAdd="false" @edit="editCycle" @delete="deleteCycle" />
             </td>
           </tr>
         </tbody>
@@ -80,6 +75,4 @@ onMounted(async () => {
 const deleteCycle = async (id) => {
   await cycleStore.removeCycle(id);
 };
-
-
 </script>

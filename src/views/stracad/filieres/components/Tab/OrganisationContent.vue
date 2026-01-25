@@ -53,19 +53,17 @@
               </td>
             </tr>
             <tr v-if="loading">
-            <td colspan="6" class="text-center py-4">
-              Chargement en cours...
-            </td>
-          </tr>
+              <td colspan="6" class="text-center py-4">Chargement en cours...</td>
+            </tr>
 
-          <tr v-else-if="organisationFilieres.length === 0">
-            <td colspan="6" class="text-center py-4">
-              <div class="d-flex flex-column align-items-center">
-                <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
-                <div class="text-pr">Aucune donnée</div>
-              </div>
-            </td>
-          </tr>
+            <tr v-else-if="organisationFilieres.length === 0">
+              <td colspan="6" class="text-center py-4">
+                <div class="d-flex flex-column align-items-center">
+                  <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
+                  <div class="text-pr">Aucune donnée</div>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

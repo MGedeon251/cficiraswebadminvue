@@ -16,47 +16,42 @@
           </tr>
         </thead>
         <tbody>
-  <tr v-if="loading">
-    <td colspan="6" class="text-center py-4">
-      Chargement en cours...
-    </td>
-  </tr>
+          <tr v-if="loading">
+            <td colspan="6" class="text-center py-4">Chargement en cours...</td>
+          </tr>
 
-  <tr v-else-if="organisations.length === 0">
-    <td colspan="6" class="text-center py-4">
-      <div class="d-flex flex-column align-items-center">
-        <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
-        <div class="text-pr">Aucune donnée</div>
-      </div>
-    </td>
-  </tr>
+          <tr v-else-if="organisations.length === 0">
+            <td colspan="6" class="text-center py-4">
+              <div class="d-flex flex-column align-items-center">
+                <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
+                <div class="text-pr">Aucune donnée</div>
+              </div>
+            </td>
+          </tr>
 
-  <tr v-else v-for="item in organisations" :key="item.cycle_id">
-    <td>{{ item.cycle_designation }}</td>
-    <td>{{ item.filieres_disponibles }}</td>
-    <td>{{ item.effectifs }}</td>
-    <td>{{ item.capacite_totale }}</td>
-    <td>
-      <span v-if="item.capacite_totale > 0">
-        {{ item.taux_remplissage }} %
-      </span>
-      <span v-else>-</span>
-    </td>
-    <td>
-      <span
-        class="badge"
-        :class="{
-          'bg-success': item.statut === 'Complet',
-          'bg-warning': item.statut === 'Partiel',
-          'bg-secondary': item.statut === 'Vide' || item.statut === 'Aucune capacité'
-        }"
-      >
-        {{ item.statut }}
-      </span>
-    </td>
-  </tr>
-</tbody>
-
+          <tr v-else v-for="item in organisations" :key="item.cycle_id">
+            <td>{{ item.cycle_designation }}</td>
+            <td>{{ item.filieres_disponibles }}</td>
+            <td>{{ item.effectifs }}</td>
+            <td>{{ item.capacite_totale }}</td>
+            <td>
+              <span v-if="item.capacite_totale > 0"> {{ item.taux_remplissage }} % </span>
+              <span v-else>-</span>
+            </td>
+            <td>
+              <span
+                class="badge"
+                :class="{
+                  'bg-success': item.statut === 'Complet',
+                  'bg-warning': item.statut === 'Partiel',
+                  'bg-secondary': item.statut === 'Vide' || item.statut === 'Aucune capacité',
+                }"
+              >
+                {{ item.statut }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
@@ -82,7 +77,6 @@ onMounted(() => {
   loadOrganisation();
 });
 </script>
-
 
 <style scoped>
 .stat-card {

@@ -60,7 +60,7 @@
                 :src="item.photo || '/img/default-avatar.png'"
                 alt="Photo de profil"
                 class="rounded-circle shadow"
-                style="width: 120px; height: 120px; object-fit: cover;"
+                style="width: 120px; height: 120px; object-fit: cover"
               />
               <h5 class="mt-3">{{ item.nom }} {{ item.prenom }}</h5>
               <span class="badge bg-info">{{ item.matricule }}</span>
@@ -70,7 +70,9 @@
               <!-- Identité -->
               <div class="col-md-6">
                 <div class="info-card mb-3">
-                  <h6 class="info-title"><i class="mdi mdi-card-account-details me-2"></i> Identité</h6>
+                  <h6 class="info-title">
+                    <i class="mdi mdi-card-account-details me-2"></i> Identité
+                  </h6>
                   <div class="info-content">
                     <div class="info-item">
                       <span class="info-label">Sexe:</span>
@@ -174,7 +176,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 defineProps({
   item: Object,
@@ -186,22 +188,22 @@ defineProps({
     type: String,
     default: '#exampleModal-edit',
   },
-})
+});
 
-const isDetailsVisible = ref(false)
+const isDetailsVisible = ref(false);
 
 const closeDetails = () => {
-  isDetailsVisible.value = false
-}
+  isDetailsVisible.value = false;
+};
 
 const formatDate = (date) => {
-  if (!date) return ''
+  if (!date) return '';
   return new Date(date).toLocaleDateString('fr-FR', {
     day: '2-digit',
     month: 'long',
     year: 'numeric',
-  })
-}
+  });
+};
 </script>
 
 <style scoped>
