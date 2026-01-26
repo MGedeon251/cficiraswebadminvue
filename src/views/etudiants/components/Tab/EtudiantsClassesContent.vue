@@ -12,7 +12,7 @@
         <button class="btn btn-outline-dark me-2" @click="exportExcel" :disabled="!hasData">
           <i class="mdi mdi-file-excel-outline me-1"></i> Exporter Excel
         </button>
-        <button class="btn btn-outline-dark" @click="exportPDF" :disabled="!hasData">
+        <button class="btn btn-outline-dark" @click="handleExport" :disabled="!hasData">
           <i class="mdi mdi-file-pdf-box me-1"></i> Exporter PDF
         </button>
       </div>
@@ -185,9 +185,8 @@ import { useClasseStore } from '@/stores/academiqueStore/classeStore';
 import { useEtudiantStore } from '@/stores/etudiants/etudiantStore';
 import Pagination from '@/components/shared/Pagination.vue';
 import * as XLSX from 'xlsx';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import logoCFI from '@/assets/logoBase64'
+import { exportPDF } from '@/utils/exportPDF';
 
 export default {
   name: 'EtudiantsParClasse',
@@ -311,93 +310,39 @@ export default {
       XLSX.utils.book_append_sheet(wb, ws, 'Étudiants');
       XLSX.writeFile(wb, 'etudiants_par_classes.xlsx');
     };
-    const exportPDF = () => {
-      const doc = new jsPDF();
 
-      // Dimensions
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const pageHeight = doc.internal.pageSize.getHeight();
-      // Image logo occupant toute la largeur
-      doc.addImage(logoCFI, 'PNG', 0, 0, pageWidth, 50);
-      // === TITRE DU DOCUMENT ===
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
-      doc.setTextColor(0, 0, 0);
-      doc.text('LISTE DES ÉTUDIANTS PAR CLASSE', pageWidth / 2, 60, { align: 'center' });
 
-      // === INFORMATIONS DE FILTRAGE ===
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(9);
-      doc.setTextColor(80, 80, 80);
+const handleExport = () => {
+  const anneeText =
+    anneesAcademiques.value.find((a) => a.id === selectedAnnee.value)?.code || '-';
+  const filiereText =
+    filieres.value.find((f) => f.id === selectedFiliere.value)?.designation || '-';
+  const classeText = classes.value.find((c) => c.id === selectedClasse.value)?.code || '-';
 
-      const anneeText =
-        anneesAcademiques.value.find((a) => a.id === selectedAnnee.value)?.code || '-';
-      const filiereText =
-        filieres.value.find((f) => f.id === selectedFiliere.value)?.designation || '-';
-      const classeText = classes.value.find((c) => c.id === selectedClasse.value)?.code || '-';
-
-      doc.text(`Année académique: ${anneeText}`, 14, 68);
-      doc.text(`Filière: ${filiereText}`, 14, 73);
-      doc.text(`Classe: ${classeText}`, 14, 78);
-      doc.text(`Total étudiants: ${filteredEtudiants.value.length}`, pageWidth - 14, 68, {
-        align: 'right',
-      });
-      doc.text(`Date d'édition: ${new Date().toLocaleDateString('fr-FR')}`, pageWidth - 14, 73, {
-        align: 'right',
-      });
-
-      // === TABLEAU ===
-      autoTable(doc, {
-        startY: 83,
-        head: [['N°', 'Matricule', 'Nom', 'Prénom', 'Sexe', 'Année', 'Filière', 'Classe']],
-        body: filteredEtudiants.value.map((e, index) => [
-          index + 1,
-          e.matricule,
-          e.nom,
-          e.prenom,
-          e.sexe,
-          e.annee_academique,
-          e.filiere,
-          e.classe,
-        ]),
-        headStyles: {
-          fillColor: [41, 128, 185],
-          textColor: 255,
-          fontSize: 9,
-          fontStyle: 'bold',
-          halign: 'center',
-        },
-        bodyStyles: {
-          fontSize: 8,
-          textColor: 50,
-        },
-        alternateRowStyles: {
-          fillColor: [245, 245, 245],
-        },
-        columnStyles: {
-          0: { halign: 'center', cellWidth: 10 },
-          1: { halign: 'center', cellWidth: 25 },
-          4: { halign: 'center', cellWidth: 15 },
-        },
-        margin: { top: 83, left: 14, right: 14 },
-        didDrawPage: (data) => {
-          // Pied de page
-          const pageCount = doc.internal.pages.length - 1;
-          doc.setFontSize(8);
-          doc.setTextColor(128);
-          doc.text(
-            `Page ${doc.internal.getCurrentPageInfo().pageNumber} / ${pageCount}`,
-            pageWidth / 2,
-            pageHeight - 10,
-            { align: 'center' }
-          );
-        },
-      });
-
-      // Sauvegarde
-      const fileName = `etudiants_${classeText}_${anneeText}_${new Date().getTime()}.pdf`;
-      doc.save(fileName);
-    };
+  exportPDF({
+    logoBase64 : logoCFI,
+    title: 'LISTE DES ÉTUDIANTS PAR CLASSE',
+    filters: [
+      { label: 'Année académique', value: anneeText },
+      { label: 'Filière', value: filiereText },
+      { label: 'Classe', value: classeText },
+      { label: 'Total étudiants', value: filteredEtudiants.value.length },
+      { label: 'Date d\'édition', value: new Date().toLocaleDateString('fr-FR') }
+    ],
+    columns: ['N°', 'Matricule', 'Nom', 'Prénom', 'Sexe', 'Année', 'Filière', 'Classe'],
+    rows: filteredEtudiants.value.map((e, index) => [
+      index + 1,
+      e.matricule,
+      e.nom,
+      e.prenom,
+      e.sexe,
+      e.annee_academique,
+      e.filiere,
+      e.classe,
+    ]),
+    fileName: `etudiants_${classeText}_${anneeText}_${new Date().getTime()}.pdf`
+  });
+};
 
     // Lifecycle
     onMounted(async () => {
@@ -437,6 +382,7 @@ export default {
       onClasseChange,
       exportExcel,
       exportPDF,
+      handleExport
     };
   },
 };
