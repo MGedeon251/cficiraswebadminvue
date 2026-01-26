@@ -9,7 +9,7 @@
       </div>
       <!-- Bouton Export -->
       <div>
-        <button class="btn btn-outline-dark me-2" @click="exportExcel" :disabled="!hasData">
+        <button class="btn btn-outline-dark me-2" @click="handleExportExcel" :disabled="!hasData">
           <i class="mdi mdi-file-excel-outline me-1"></i> Exporter Excel
         </button>
         <button class="btn btn-outline-dark" @click="handleExport" :disabled="!hasData">
@@ -184,9 +184,9 @@ import { useFiliereStore } from '@/stores/academiqueStore/filiereStore';
 import { useClasseStore } from '@/stores/academiqueStore/classeStore';
 import { useEtudiantStore } from '@/stores/etudiants/etudiantStore';
 import Pagination from '@/components/shared/Pagination.vue';
-import * as XLSX from 'xlsx';
 import logoCFI from '@/assets/logoBase64'
 import { exportPDF } from '@/utils/exportPDF';
+import { exportExcel } from '@/utils/exportExcel';
 
 export default {
   name: 'EtudiantsParClasse',
@@ -294,22 +294,25 @@ export default {
       }
     };
 
-    const exportExcel = () => {
-      const data = filteredEtudiants.value.map((e) => ({
-        Matricule: e.matricule,
-        Nom: e.nom,
-        Prénom: e.prenom,
-        Sexe: e.sexe,
-        Année: e.annee_academique,
-        Filière: e.filiere,
-        Classe: e.classe,
-      }));
 
-      const ws = XLSX.utils.json_to_sheet(data);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Étudiants');
-      XLSX.writeFile(wb, 'etudiants_par_classes.xlsx');
-    };
+  const handleExportExcel = () => {
+    const data = filteredEtudiants.value.map((e) => ({
+      Matricule: e.matricule,
+      Nom: e.nom,
+      Prénom: e.prenom,
+      Sexe: e.sexe,
+      Année: e.annee_academique,
+      Filière: e.filiere,
+      Classe: e.classe,
+    }));
+
+  exportExcel({
+    data,
+    sheetName: 'Étudiants',
+    fileName: `etudiants_${new Date().getTime()}.xlsx`
+  });
+};
+
 
 
 const handleExport = () => {
@@ -380,8 +383,7 @@ const handleExport = () => {
       onAnneeChange,
       onFiliereChange,
       onClasseChange,
-      exportExcel,
-      exportPDF,
+      handleExportExcel,
       handleExport
     };
   },
