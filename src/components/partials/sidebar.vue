@@ -9,20 +9,49 @@
         </a>
       </li>
 
+      <!-- Structure Académique (NOUVEAU) -->
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          data-bs-toggle="collapse"
+          href="#structure-academique"
+          aria-expanded="false"
+        >
+          <i class="mdi mdi-sitemap menu-icon"></i>
+          <span class="menu-title">Structure Académique</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="structure-academique">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item">
+              <a class="nav-link" href="/annees-academiques">Années académiques</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/cycles-academiques">Cycles</a></li>
+            <li class="nav-item"><a class="nav-link" href="/filieres-academiques">Filières</a></li>
+            <li class="nav-item"><a class="nav-link" href="/classes-niveaux">Classes</a></li>
+            <li class="nav-item"><a class="nav-link" href="/semestres">Semestres</a></li>
+          </ul>
+        </div>
+      </li>
+
       <!-- Scolarité -->
       <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#scolarite" aria-expanded="false">
-          <i class="mdi mdi-domain menu-icon"></i>
+          <i class="mdi mdi-account-group menu-icon"></i>
           <span class="menu-title">Scolarité</span>
           <i class="menu-arrow"></i>
         </a>
         <div class="collapse" id="scolarite">
           <ul class="nav flex-column sub-menu">
-            <li class="nav-item"><a class="nav-link" href="/etudiants">Étudiants</a></li>
-            <li class="nav-item"><a class="nav-link" href="/modules">Modules / UV</a></li>
-            <li class="nav-item"><a class="nav-link" href="/parcours">Parcours académique</a></li>
-            <li class="nav-item"><a class="nav-link" href="/notes">Notes et Résultats</a></li>
-            <li class="nav-item"><a class="nav-link" href="/supcours">Support & cours</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="/etudiants">Gestion des étudiants</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/dossiers-scolaires">Dossiers scolaires</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/absences">Absences & Présences</a></li>
+            <li class="nav-item"><a class="nav-link" href="/notes">Évaluations & Notes</a></li>
+            <li class="nav-item"><a class="nav-link" href="/deliberations">Délibérations</a></li>
           </ul>
         </div>
       </li>
@@ -162,8 +191,9 @@
         </a>
         <div class="collapse" id="coordination">
           <ul class="nav flex-column sub-menu">
-            <li class="nav-item"><a class="nav-link" href="/cycles">Cycles & niveaux</a></li>
-            <li class="nav-item"><a class="nav-link" href="/memoires">Thèmes & mémoires</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="/themes-memoires">Thèmes & mémoires</a>
+            </li>
             <li class="nav-item"><a class="nav-link" href="/soutenances">Soutenances</a></li>
             <li class="nav-item"><a class="nav-link" href="/statut">Statut étudiant</a></li>
           </ul>

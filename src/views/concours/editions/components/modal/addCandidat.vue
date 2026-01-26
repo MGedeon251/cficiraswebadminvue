@@ -3,201 +3,225 @@
     class="modal fade"
     id="exampleModal"
     tabindex="-1"
-    role="dialog"
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
+        <!-- Header -->
         <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title" id="exampleModalLabel">Ajouter candidat</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Ajouter un candidat</h5>
           <button type="button" class="btn-close btn-close-white" @click="closeDetails"></button>
         </div>
+
+        <!-- Body -->
         <div class="modal-body">
           <a-tabs v-model:activeKey="activeKey">
-            <a-tab-pane key="1" tab="Donnees personnelles">
+            <!-- ================= ONGLET 1 ================= -->
+            <a-tab-pane key="1" tab="Données personnelles">
               <form @submit.prevent="submitForm">
                 <div class="row">
-                  <p class="text-muted">Photo format profil</p>
-                  <div class="col-md-3 text-center">
+                  <!-- PHOTO -->
+                  <div class="col-md-3 text-center mb-4">
+                    <label class="form-label fw-semibold">Photo du candidat</label>
                     <div
-                      class="avatar bg-warning text-white d-flex align-items-center justify-content-center"
+                      class="avatar bg-light text-secondary d-flex align-items-center justify-content-center mx-auto"
                     >
-                      <!-- Si la photo existe, on l'affiche, sinon on montre les initiales -->
                       <img
                         v-if="previewImage"
                         :src="previewImage"
                         alt="Photo du candidat"
                         class="avatar-img"
                       />
-                      <span v-else class="fs-1">{{
-                        getInitials(candidat.nom, candidat.prenom)
-                      }}</span>
+                      <span v-else class="fs-2">
+                        {{ getInitials(candidat.nom, candidat.prenom) }}
+                      </span>
+
                       <input
                         type="file"
                         ref="fileInput"
-                        @change="handleFileUpload"
-                        accept="image/*"
                         class="d-none"
+                        accept="image/*"
+                        @change="handleFileUpload"
                       />
                     </div>
+
                     <button
                       type="button"
                       class="btn btn-sm btn-outline-primary mt-2"
                       @click="triggerFileInput"
                     >
-                      {{ candidat.photourl ? 'Changer' : 'Ajouter' }} photo
+                      {{ candidat.photourl ? 'Changer la photo' : 'Ajouter une photo' }}
                     </button>
+
+                    <small class="text-muted d-block mt-1">
+                      Photo format identité (jpg, png)
+                    </small>
                   </div>
+
+                  <!-- INFORMATIONS -->
                   <div class="col-md-9">
+                    <!-- Nom / Prénom -->
                     <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="nom">Noms</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="nom"
-                            v-model="candidat.nom"
-                            required
-                          />
-                        </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label"> Nom <span class="text-danger">*</span> </label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Ex : NGOMA"
+                          v-model="candidat.nom"
+                          required
+                        />
+                        <small class="text-muted">Nom de famille officiel</small>
                       </div>
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="prenom">Prénoms</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="prenom"
-                            v-model="candidat.prenom"
-                            required
-                          />
-                        </div>
+
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                          Prénoms <span class="text-danger">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Ex : Jean Pierre"
+                          v-model="candidat.prenom"
+                          required
+                        />
+                        <small class="text-muted">Tous les prénoms du candidat</small>
                       </div>
                     </div>
+
+                    <!-- Naissance -->
                     <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="datenais">Date de naissance</label>
-                          <input
-                            type="date"
-                            class="form-control"
-                            id="datenais"
-                            v-model="candidat.datenais"
-                            required
-                            :max="maxBirthDate"
-                          />
-                        </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                          Date de naissance <span class="text-danger">*</span>
+                        </label>
+                        <input
+                          type="date"
+                          class="form-control"
+                          v-model="candidat.datenais"
+                          :max="maxBirthDate"
+                          required
+                        />
                       </div>
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="lieunais">Lieu de naissance</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="lieunais"
-                            v-model="candidat.lieunais"
-                            required
-                          />
-                        </div>
+
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                          Lieu de naissance <span class="text-danger">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Ex : Brazzaville"
+                          v-model="candidat.lieunais"
+                          required
+                        />
                       </div>
                     </div>
+
+                    <!-- Sexe / Téléphone -->
                     <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="sexe">Sexe</label>
-                          <select class="form-select" id="sexe" v-model="candidat.sexe" required>
-                            <option value="">Sélectionner</option>
-                            <option value="M">Masculin</option>
-                            <option value="F">Féminin</option>
-                          </select>
-                        </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label"> Sexe <span class="text-danger">*</span> </label>
+                        <select class="form-select" v-model="candidat.sexe" required>
+                          <option value="">-- Sélectionner --</option>
+                          <option value="M">Masculin</option>
+                          <option value="F">Féminin</option>
+                        </select>
                       </div>
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="tel">Téléphone</label>
-                          <input
-                            type="tel"
-                            class="form-control"
-                            id="tel"
-                            v-model="candidat.tel"
-                            placeholder="+242066034357"
-                            required
-                          />
-                        </div>
+
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                          Téléphone <span class="text-danger">*</span>
+                        </label>
+                        <input
+                          type="tel"
+                          class="form-control"
+                          placeholder="+242 06 603 43 57"
+                          v-model="candidat.tel"
+                          required
+                        />
+                        <small class="text-muted">Numéro joignable du candidat</small>
                       </div>
                     </div>
+
+                    <!-- Email / Ville -->
                     <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="email">Email</label>
-                          <input
-                            type="email"
-                            class="form-control"
-                            id="email"
-                            v-model="candidat.email"
-                          />
-                        </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Email</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          placeholder="exemple@email.com"
+                          v-model="candidat.email"
+                        />
                       </div>
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="ville">Ville</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="ville"
-                            v-model="candidat.ville"
-                            required
-                          />
-                        </div>
+
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label"> Ville <span class="text-danger">*</span> </label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Ville de résidence"
+                          v-model="candidat.ville"
+                          required
+                        />
                       </div>
                     </div>
+
+                    <!-- Adresse / Filière -->
                     <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="adresse">Adresse</label>
-                          <input
-                            class="form-control"
-                            id="adresse"
-                            v-model="candidat.adresse"
-                            rows="2"
-                          />
-                        </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Adresse</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Quartier, rue, référence..."
+                          v-model="candidat.adresse"
+                        />
                       </div>
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="filiere">Filière</label>
-                          <select
-                            class="form-select"
-                            id="filiere"
-                            v-model="candidat.filiere"
-                            required
-                          >
-                            <option value="">Sélectionner une filière</option>
-                            <option value="LAP">ADMINISTRATION PUBLIQUE</option>
-                            <option value="INF">INFORMATIQUE</option>
-                            <option value="DUT">DUT</option>
-                            <option value="AM">AM</option>
-                            <option value="MT">MT</option>
-                            <option value="ING">ING</option>
-                          </select>
-                        </div>
+
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                          Filière choisie <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select" v-model="candidat.filiere" required>
+                          <option value="">-- Sélectionner une filière --</option>
+                          <option value="LAP">ADMINISTRATION PUBLIQUE</option>
+                          <option value="INF">INFORMATIQUE</option>
+                          <option value="DUT">DUT</option>
+                          <option value="AM">AM</option>
+                          <option value="MT">MT</option>
+                          <option value="ING">ING</option>
+                        </select>
                       </div>
                     </div>
                   </div>
                 </div>
+
+                <!-- Footer -->
                 <div class="modal-footer">
-                  <button type="submit" class="btn btn-success" :disabled="isSubmitting">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    @click="closeDetails"
+                    :disabled="isSubmitting"
+                  >
+                    Annuler
+                  </button>
+
+                  <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
                     <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
                     Enregistrer
                   </button>
-                  <button type="button" class="btn btn-light" @click="closeDetails">Annuler</button>
                 </div>
               </form>
             </a-tab-pane>
+
+            <!-- ================= ONGLET 2 ================= -->
             <a-tab-pane key="2" tab="Dossier" force-render>
-              <p class="text-muted">Déposer les pièces justificatives</p>
+              <p class="text-muted mb-3">Déposez les pièces justificatives du candidat</p>
+
               <div v-for="docType in dossierTypes" :key="docType.key" class="mb-3">
                 <label class="form-label">{{ docType.label }}</label>
                 <input
@@ -206,16 +230,17 @@
                   :accept="docType.accept"
                   @change="(e) => handleDossierUpload(e, docType.key)"
                 />
+                <small class="text-muted"> Formats acceptés : {{ docType.accept }} </small>
               </div>
 
-              <ul class="list-group">
+              <ul class="list-group mt-3">
                 <li
                   v-for="doc in candidat.dossiers"
                   :key="doc.nom"
                   class="list-group-item d-flex justify-content-between align-items-center"
                 >
                   {{ doc.nom }}
-                  <span class="badge bg-secondary">{{ (doc.taille / 1024).toFixed(2) }} KB</span>
+                  <span class="badge bg-secondary"> {{ (doc.taille / 1024).toFixed(2) }} KB </span>
                 </li>
               </ul>
             </a-tab-pane>

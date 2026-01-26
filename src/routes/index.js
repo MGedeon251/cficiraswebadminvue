@@ -7,6 +7,12 @@ import Home from '../views/dashboard/Dashboard.vue'; // Page d'accueil
 import Login from '../views/auth/Login.vue'; // Page de login
 import Register from '../views/auth/Register.vue'; // Page de login
 
+// Structure academique
+import AnneeAcademiqueHeader from '@/views/stracad/anneeac/AnneeAcademique.vue';
+import CyclesAcademiqueHeader from '@/views/stracad/cycles/Cycle.vue';
+import FiliereHeader from '@/views/stracad/filieres/Filiere.vue';
+import Classes from '@/views/stracad/classes/Classes.vue';
+import Semestre from '@/views/stracad/semestres/Semestre.vue';
 //Tableau de bord
 import Dashboard from '../views/dashboard/Dashboard.vue'; // Page du tableau de bord
 // Notification
@@ -81,7 +87,7 @@ const routes = [
       {
         path: '/etudiants/:id',
         name: 'EtudiantDetails',
-        component: () => import('@/views/etudiants/details/DetailEtudiant.vue'),
+        component: () => import('@/views/etudiants/components/details/DetailEtudiant.vue'),
         props: true,
       },
       { path: '/modules', name: 'Modules', component: Modules },
@@ -92,7 +98,7 @@ const routes = [
         props: true,
       },
       { path: '/notes', name: 'Notes', component: Notes },
-      { path: '/parcours', name: 'Parcours', component: Parcours },
+      { path: '/dossiers-scolaires', name: 'dossiers-scolaires', component: Parcours },
       { path: '/supcours', name: 'Support', component: Support },
       { path: '/settings', name: 'Settings', component: Settings },
       { path: '/enseignants', name: 'Formateur', component: Formateur },
@@ -117,6 +123,31 @@ const routes = [
       { path: '/calendrier-examens', name: 'CalendrierExamens', component: Calendrier },
       { path: '/salles-horaires', name: 'SallesExamens', component: Salles },
       { path: '/rapport-examens', name: 'RapportExamens', component: RapportExamens },
+      {
+        path: '/annees-academiques',
+        name: 'AnneeAcademiqueHeader',
+        component: AnneeAcademiqueHeader,
+      },
+      {
+        path: '/cycles-academiques',
+        name: 'CyclesAcademiqueHeader',
+        component: CyclesAcademiqueHeader,
+      },
+      {
+        path: '/filieres-academiques',
+        name: 'FiliereHeader',
+        component: FiliereHeader,
+      },
+      {
+        path: '/classes-niveaux',
+        name: 'ClassesNiveaux',
+        component: Classes,
+      },
+      {
+        path: '/semestres',
+        name: 'Semestres',
+        component: Semestre,
+      },
     ],
   },
 ];
