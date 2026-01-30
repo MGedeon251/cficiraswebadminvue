@@ -4,12 +4,12 @@
       <div
         class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100"
       >
-        <a class="navbar-brand brand-logo" href="/home">
-          <img src="/img/photo-format.ico" alt="logo" />
-        </a>
-        <a class="navbar-brand brand-logo-mini" href="/home">
-          <img src="/img/logo1.ico" alt="logo" />
-        </a>
+        <a class="navbar-brand brand-logo" href="/home"
+          ><img src="/img/photo-format.ico" alt="logo"
+        /></a>
+        <a class="navbar-brand brand-logo-mini" href="/home"
+          ><img src="/img/logo1.ico" alt="logo"
+        /></a>
         <button
           class="navbar-toggler navbar-toggler align-self-center"
           type="button"
@@ -19,9 +19,7 @@
         </button>
       </div>
     </div>
-
     <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-      <!-- Barre de recherche -->
       <ul class="navbar-nav mr-lg-4 w-100">
         <li class="nav-item nav-search d-none d-lg-block w-100">
           <div class="input-group">
@@ -40,10 +38,24 @@
           </div>
         </li>
       </ul>
-
-      <!-- Menu droite -->
       <ul class="navbar-nav navbar-nav-right">
-        <!-- Notifications -->
+        <li class="nav-item dropdown me-1">
+          <a
+            class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center"
+            id="messageDropdown"
+            href="#"
+            data-bs-toggle="dropdown"
+          >
+            <i class="mdi mdi-message-text mx-0"></i>
+            <span class="count"></span>
+          </a>
+          <div
+            class="dropdown-menu dropdown-menu-right navbar-dropdown"
+            aria-labelledby="messageDropdown"
+          >
+            <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
+          </div>
+        </li>
         <li class="nav-item dropdown me-4">
           <a
             class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center notification-dropdown"
@@ -61,9 +73,7 @@
             <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
           </div>
         </li>
-
-        <!-- Profil -->
-        <li class="nav-item nav-profile dropdown" v-if="isAuthenticated">
+        <li class="nav-item nav-profile dropdown">
           <a
             class="nav-link dropdown-toggle"
             href="#"
@@ -71,9 +81,7 @@
             id="profileDropdown"
           >
             <img src="/img/faces/face29.png" alt="profile" />
-            <span class="nav-profile-name">
-              {{ user?.username || user?.email || 'Utilisateur' }}
-            </span>
+            <span class="nav-profile-name">Gedeon LEKOUNDA</span>
           </a>
           <div
             class="dropdown-menu dropdown-menu-right navbar-dropdown"
@@ -81,11 +89,7 @@
           >
             <a class="dropdown-item">
               <i class="mdi mdi-settings text-primary"></i>
-              Paramètres
-            </a>
-            <a @click="handleLogout" class="dropdown-item">
-              <i class="mdi mdi-logout text-primary"></i>
-              Déconnexion
+              Settings
             </a>
             <a @click="handleLogout" class="dropdown-item">
               <i class="mdi mdi-logout text-primary"></i>
@@ -93,15 +97,7 @@
             </a>
           </div>
         </li>
-
-        <!-- Si pas connecté -->
-        <li class="nav-item" v-else>
-          <router-link to="/auth/login" class="nav-link">
-            <i class="mdi mdi-login"></i> Connexion
-          </router-link>
-        </li>
       </ul>
-
       <button
         class="navbar-toggler navbar-toggler-right d-lg-none align-self-center"
         type="button"
@@ -112,7 +108,6 @@
     </div>
   </nav>
 </template>
-
 <script setup>
 import { useAuthStore } from '@/stores/authStore/authStore';
 import { storeToRefs } from 'pinia';
