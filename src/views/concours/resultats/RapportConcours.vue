@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="row">
-      <ConcourHeader />
+      <RapportHeader />
     </div>
     <div class="row">
       <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
           <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1" />
           <div v-else class="card-body dashboard-tabs p-0">
-            <ConcoursTab />
+            <RapportTab />
           </div>
         </div>
       </div>
@@ -19,11 +19,12 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import SkeletonLoader from '@/components/SkeletonLoader.vue';
-import ConcourHeader from './components/ConcourHeader.vue';
-import ConcoursTab from './components/ConcoursTab.vue';
+import RapportHeader from './components/RapportHeader.vue';
+import RapportTab from './components/RapportTab.vue';
 
 const loading = ref(true);
 const formateurs = ref([]);
+
 onMounted(() => {
   setTimeout(() => {
     formateurs.value = [

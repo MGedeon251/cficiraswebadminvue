@@ -44,7 +44,7 @@
               data-bs-toggle="modal"
               data-bs-target="#addEtudiantModal"
             >
-              Ajouter un étudiant
+              + Ajouter un nouveau
             </button>
             <!-- Dropdown -->
             <button

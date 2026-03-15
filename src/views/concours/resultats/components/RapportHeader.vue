@@ -4,13 +4,14 @@
       <div class="d-flex justify-content-between flex-wrap">
         <div class="d-flex align-items-end flex-wrap">
           <div class="me-md-3 me-xl-5">
-            <h2>Resultats de concours</h2>
-            <p class="mb-md-0">Resultats et publications concours</p>
+            <h2>Rapports des Concours</h2>
+            <p class="mb-md-0">Attributions des notes de concours et examens</p>
+            <p class="mb-md-0"></p>
           </div>
           <div class="d-flex">
             <i class="mdi mdi-home text-muted hover-cursor"></i>
-            <p class="text-muted mb-0 hover-cursor">&nbsp;/&nbsp;Concours&nbsp;/&nbsp;</p>
-            <p class="text-primary mb-0 hover-cursor">Resultats</p>
+            <p class="text-muted mb-0 hover-cursor">&nbsp;/&nbsp;Examens&nbsp;/&nbsp;</p>
+            <p class="text-primary mb-0 hover-cursor">rapports</p>
           </div>
         </div>
         <div class="d-flex justify-content-between align-items-end aflex-wrap">
@@ -23,7 +24,7 @@
           <button type="button" class="btn btn-light bg-white btn-icon me-3 mt-2 mt-xl-0">
             <i class="mdi mdi-plus text-muted"></i>
           </button>
-          <button class="btn btn-primary mt-2 mt-xl-0">Publier des resultats</button>
+          <button class="btn btn-primary mt-2 mt-xl-0">Générer un rapport</button>
         </div>
       </div>
     </div>

@@ -68,7 +68,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import TabDetail from '../tabs/TabDetail.vue';
+import TabDetail from '../tabs/Tabdetails.vue';
 import SkeletonLoader from '@/components/SkeletonLoader.vue';
 </script>
 

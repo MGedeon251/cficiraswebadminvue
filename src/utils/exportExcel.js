@@ -10,7 +10,7 @@ import * as XLSX from 'xlsx';
 export const exportExcel = ({
   data = [],
   sheetName = 'Feuille1',
-  fileName = `export_${new Date().getTime()}.xlsx`
+  fileName = `export_${new Date().getTime()}.xlsx`,
 }) => {
   // Créer une feuille à partir des données JSON
   const ws = XLSX.utils.json_to_sheet(data);

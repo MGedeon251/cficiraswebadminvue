@@ -23204,18 +23204,6 @@ dl li {
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
 }
-
-.sidebar .nav .nav-item.active > .nav-link {
-  background: initial;
-  position: relative;
-}
-
-.sidebar .nav .nav-item.active > .nav-link i,
-.sidebar .nav .nav-item.active > .nav-link .menu-title,
-.sidebar .nav .nav-item.active > .nav-link .menu-arrow {
-  color: #4d83ff;
-}
-
 .sidebar .nav:not(.sub-menu) {
   margin-top: 0.3rem;
 }
@@ -23229,16 +23217,11 @@ dl li {
   margin: 0;
 }
 
-.sidebar .nav:not(.sub-menu) > .nav-item:hover > .nav-link {
-  background: transparent;
-  color: #4d83ff;
-}
-
 .sidebar .nav.sub-menu {
   margin-bottom: 0;
   margin-top: 0;
   list-style: none;
-  padding: 0.25rem 0 0.6rem 3.55rem;
+  padding: 0.25rem 0 0.6rem 1.2rem;
 }
 
 .sidebar .nav.sub-menu .nav-item {
@@ -23246,13 +23229,7 @@ dl li {
 }
 
 .sidebar .nav.sub-menu .nav-item::before {
-  content: '';
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #000;
-  margin-top: 15px;
+  display: none;
 }
 
 .sidebar .nav.sub-menu .nav-item .nav-link {
@@ -23263,15 +23240,6 @@ dl li {
   line-height: 1;
   height: auto;
   border-top: 0;
-}
-
-.sidebar .nav.sub-menu .nav-item .nav-link:hover {
-  color: #000000;
-}
-
-.sidebar .nav.sub-menu .nav-item .nav-link.active {
-  color: #000000;
-  background: transparent;
 }
 
 .sidebar .nav.sub-menu .nav-item:hover {
