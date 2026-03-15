@@ -184,7 +184,7 @@ import { useFiliereStore } from '@/stores/academiqueStore/filiereStore';
 import { useClasseStore } from '@/stores/academiqueStore/classeStore';
 import { useEtudiantStore } from '@/stores/etudiants/etudiantStore';
 import Pagination from '@/components/shared/Pagination.vue';
-import logoCFI from '@/assets/logoBase64'
+import logoCFI from '@/assets/logoBase64';
 import { exportPDF } from '@/utils/exportPDF';
 import { exportExcel } from '@/utils/exportExcel';
 
@@ -294,58 +294,55 @@ export default {
       }
     };
 
+    const handleExportExcel = () => {
+      const data = filteredEtudiants.value.map((e) => ({
+        Matricule: e.matricule,
+        Nom: e.nom,
+        Prénom: e.prenom,
+        Sexe: e.sexe,
+        Année: e.annee_academique,
+        Filière: e.filiere,
+        Classe: e.classe,
+      }));
 
-  const handleExportExcel = () => {
-    const data = filteredEtudiants.value.map((e) => ({
-      Matricule: e.matricule,
-      Nom: e.nom,
-      Prénom: e.prenom,
-      Sexe: e.sexe,
-      Année: e.annee_academique,
-      Filière: e.filiere,
-      Classe: e.classe,
-    }));
+      exportExcel({
+        data,
+        sheetName: 'Étudiants',
+        fileName: `etudiants_${new Date().getTime()}.xlsx`,
+      });
+    };
 
-  exportExcel({
-    data,
-    sheetName: 'Étudiants',
-    fileName: `etudiants_${new Date().getTime()}.xlsx`
-  });
-};
+    const handleExport = () => {
+      const anneeText =
+        anneesAcademiques.value.find((a) => a.id === selectedAnnee.value)?.code || '-';
+      const filiereText =
+        filieres.value.find((f) => f.id === selectedFiliere.value)?.designation || '-';
+      const classeText = classes.value.find((c) => c.id === selectedClasse.value)?.code || '-';
 
-
-
-const handleExport = () => {
-  const anneeText =
-    anneesAcademiques.value.find((a) => a.id === selectedAnnee.value)?.code || '-';
-  const filiereText =
-    filieres.value.find((f) => f.id === selectedFiliere.value)?.designation || '-';
-  const classeText = classes.value.find((c) => c.id === selectedClasse.value)?.code || '-';
-
-  exportPDF({
-    logoBase64 : logoCFI,
-    title: 'LISTE DES ÉTUDIANTS PAR CLASSE',
-    filters: [
-      { label: 'Année académique', value: anneeText },
-      { label: 'Filière', value: filiereText },
-      { label: 'Classe', value: classeText },
-      { label: 'Total étudiants', value: filteredEtudiants.value.length },
-      { label: 'Date d\'édition', value: new Date().toLocaleDateString('fr-FR') }
-    ],
-    columns: ['N°', 'Matricule', 'Nom', 'Prénom', 'Sexe', 'Année', 'Filière', 'Classe'],
-    rows: filteredEtudiants.value.map((e, index) => [
-      index + 1,
-      e.matricule,
-      e.nom,
-      e.prenom,
-      e.sexe,
-      e.annee_academique,
-      e.filiere,
-      e.classe,
-    ]),
-    fileName: `etudiants_${classeText}_${anneeText}_${new Date().getTime()}.pdf`
-  });
-};
+      exportPDF({
+        logoBase64: logoCFI,
+        title: 'LISTE DES ÉTUDIANTS PAR CLASSE',
+        filters: [
+          { label: 'Année académique', value: anneeText },
+          { label: 'Filière', value: filiereText },
+          { label: 'Classe', value: classeText },
+          { label: 'Total étudiants', value: filteredEtudiants.value.length },
+          { label: "Date d'édition", value: new Date().toLocaleDateString('fr-FR') },
+        ],
+        columns: ['N°', 'Matricule', 'Nom', 'Prénom', 'Sexe', 'Année', 'Filière', 'Classe'],
+        rows: filteredEtudiants.value.map((e, index) => [
+          index + 1,
+          e.matricule,
+          e.nom,
+          e.prenom,
+          e.sexe,
+          e.annee_academique,
+          e.filiere,
+          e.classe,
+        ]),
+        fileName: `etudiants_${classeText}_${anneeText}_${new Date().getTime()}.pdf`,
+      });
+    };
 
     // Lifecycle
     onMounted(async () => {
@@ -384,7 +381,7 @@ const handleExport = () => {
       onFiliereChange,
       onClasseChange,
       handleExportExcel,
-      handleExport
+      handleExport,
     };
   },
 };

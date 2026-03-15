@@ -74,8 +74,8 @@ const routes = [
   {
     path: '/',
     component: DefaultLayout, // Enveloppe tout le contenu avec le DefaultLayout
-    linkActiveClass: 'active',        // remplace router-link-active
-    linkExactActiveClass: 'active',   // remplace router-link-exact-active
+    linkActiveClass: 'active', // remplace router-link-active
+    linkExactActiveClass: 'active', // remplace router-link-exact-active
     meta: { requiresAuth: true }, // Toutes les routes enfants hériteront de ce meta
     children: [
       { path: '', name: 'root', component: Home },

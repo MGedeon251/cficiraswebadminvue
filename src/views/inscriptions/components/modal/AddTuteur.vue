@@ -72,13 +72,19 @@
 
         <!-- Footer -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            Annuler
+          </button>
           <button
             class="btn btn-primary"
             :disabled="!tuteursData.length || isLoading"
             @click="submitTuteurs"
           >
-            <span v-if="isLoading" class="spinner-border spinner-border-sm me-1" role="status"></span>
+            <span
+              v-if="isLoading"
+              class="spinner-border spinner-border-sm me-1"
+              role="status"
+            ></span>
             {{ isLoading ? 'Importation...' : 'Importer' }}
           </button>
         </div>
@@ -88,8 +94,8 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import * as XLSX from "xlsx";
+import { ref } from 'vue';
+import * as XLSX from 'xlsx';
 
 const tuteursData = ref([]);
 const isLoading = ref(false);
@@ -110,17 +116,17 @@ const processFile = (file) => {
   const reader = new FileReader();
   reader.onload = (e) => {
     const data = new Uint8Array(e.target.result);
-    const workbook = XLSX.read(data, { type: "array" });
+    const workbook = XLSX.read(data, { type: 'array' });
     const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
     const jsonData = XLSX.utils.sheet_to_json(firstSheet);
 
     // Mapping des colonnes
     tuteursData.value = jsonData.map((row) => ({
-      etudiant: row.etudiant || "",
-      tuteur: row.tuteur || "",
-      tel: row.tel || "",
-      email: row.email || "",
-      adresse: row.adresse || "",
+      etudiant: row.etudiant || '',
+      tuteur: row.tuteur || '',
+      tel: row.tel || '',
+      email: row.email || '',
+      adresse: row.adresse || '',
     }));
 
     isLoading.value = false;
@@ -129,12 +135,12 @@ const processFile = (file) => {
 };
 
 const submitTuteurs = () => {
-  console.log("Tuteurs importés:", tuteursData.value);
+  console.log('Tuteurs importés:', tuteursData.value);
   // Envoie vers API ici
 
   // Reset
   tuteursData.value = [];
-  if (fileInput.value) fileInput.value.value = "";
+  if (fileInput.value) fileInput.value.value = '';
 };
 </script>
 
