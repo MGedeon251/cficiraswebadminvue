@@ -46,27 +46,7 @@
             </div>
           </div>
           <div class="d-flex justify-content-between align-items-end flex-wrap">
-            <button class="btn btn-outline-dark me-2">Exporter</button>
-            <div class="btn-group">
-              <button
-                class="btn btn-primary mt-2 mt-xl-0"
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModal3"
-              >
-                + Ajouter
-              </button>
-              <button
-                class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                data-bs-toggle="dropdown"
-              >
-                <span class="visually-hidden">Toggle Dropdown</span>
-              </button>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="#drag-drop-area">Importer fichier</a>
-                </li>
-              </ul>
-            </div>
+            
           </div>
         </div>
         <div class="table-responsive mt-3">
