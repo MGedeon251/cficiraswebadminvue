@@ -341,16 +341,23 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
-// Vérifie si la route courante correspond à l'un des enfants
 const isParentActive = (childRoutes) => {
-  return childRoutes.includes(route.path)
+  return childRoutes.some(routePath => route.path.startsWith(routePath))
 }
 </script>
 
 <style scoped>
-.sidebar .sub-menu .nav-link.active {
+.nav-link.active-parent {
+  background-color: #f0f8ff;
+  color: #4d83ff !important;
+  font-weight: 600;
+  border-left: 3px solid #4d83ff;
+}
+
+.sidebar .sub-menu .router-link-exact-active {
   color: #000 !important;
   font-weight: 600;
-  background-color: #fff;
+  background-color: #f8f9fa;
+  border-left: 3px solid #000;
 }
 </style>
