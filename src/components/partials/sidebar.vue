@@ -367,4 +367,26 @@ const isParentActive = (childRoutes) => {
   background-color: #f8f9fa;
   border-left: 3px solid #4d83ff;
 }
+
+/* Hover effects */
+.sidebar .nav-link:hover {
+  background-color: #f0f8ff;
+  color: #4d83ff !important;
+  border-left: 2px solid #4d83ff;
+  transition: all 0.2s ease;
+}
+
+.sidebar .sub-menu .nav-link:hover {
+  background-color: #f8f9fa;
+  color: #000 !important;
+  border-left: 2px solid #000;
+  transition: all 0.2s ease;
+}
+
+/* Click effect */
+.sidebar .nav-link:active {
+  background-color: #e6f3ff;
+  transform: scale(0.98);
+  transition: all 0.1s ease;
+}
 </style>
