@@ -360,4 +360,11 @@ const isParentActive = (childRoutes) => {
   background-color: #f8f9fa;
   border-left: 3px solid #000;
 }
+
+.nav-link.router-link-exact-active {
+  color: #4d83ff !important;
+  font-weight: 600;
+  background-color: #f8f9fa;
+  border-left: 3px solid #4d83ff;
+}
 </style>
