@@ -5,7 +5,7 @@
       <li class="nav-item">
         <router-link class="nav-link" to="/home">
           <i class="mdi mdi-home menu-icon"></i>
-          <span class="menu-title">Tableau de Bord</span>
+          <span class="menu-title d-none d-md-inline">Tableau de Bord</span>
         </router-link>
       </li>
 
