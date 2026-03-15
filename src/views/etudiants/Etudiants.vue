@@ -1,137 +1,100 @@
 <template>
-  <div class="row">
-    <div class="col-md-12 grid-margin">
-      <div class="d-flex justify-content-between flex-wrap">
-        <div class="d-flex align-items-end flex-wrap">
-          <div class="me-md-3 me-xl-5">
-            <h2>Gestion des etudiants</h2>
-            <p class="mb-md-0">Gestion des etudiants</p>
-          </div>
-          <div class="d-flex">
-            <i class="mdi mdi-home text-muted hover-cursor"></i>
-            <p class="text-muted mb-0 hover-cursor">&nbsp;/&nbsp;Portail&nbsp;/&nbsp;</p>
-            <p class="text-primary mb-0 hover-cursor">Etudiants</p>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between align-items-end flex-wrap">
-          <button class="btn btn-outline-dark me-2" @click="exportToExcel">Exporter</button>
-          <div class="btn-group">
-            <button
-              type="button"
-              class="btn btn-primary mt-2 mt-xl-0"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-              aria-hidden="true"
-              data-bs-backdrop="static"
-              data-bs-keyboard="false"
-            >
-              + Ajouter
-            </button>
-            <button
-              type="button"
-              class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <span class="visually-hidden">Toggle Dropdown</span>
-            </button>
-            <ul class="dropdown-menu">
-              <li>
-                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#importModal"
-                  >Importer fichier</a
-                >
-              </li>
-            </ul>
-            <div
-              class="modal fade"
-              id="importModal"
-              tabindex="-1"
-              role="dialog"
-              aria-labelledby="importModalLabel"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog modal-xl" role="document">
-                <ImportList @import-complete="handleImport" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          class="modal fade"
-          id="exampleModal"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog modal-lg" role="document">
-            <addEtudiant />
+  <div>
+    <!-- Header -->
+    <div class="row">
+      <EtudiantHeader />
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="row">
+      <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+          <!-- Loader -->
+          <SkeletonLoader v-if="loading" type="table" :rows="5" :columns="1" />
+
+          <!-- Tabs -->
+          <div v-else class="card-body dashboard-tabs p-0">
+            <EtudiantTab />
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-12 grid-margin stretch-card">
-      <div class="card">
-        <div class="card-body">
-          <h4 class="card-title">Informations & Details</h4>
-          <ATableData ref="tableDataRef"></ATableData>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-12 grid-margin stretch-card">
-      <TabContent></TabContent>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import * as XLSX from 'xlsx';
-import TableData from './tab/TableData.vue';
-import ATableData from './tab/ATableData.vue';
-import TabContent from './tab/TabContent.vue';
-import addEtudiant from './addEtudiant.vue';
-import ImportList from './ImportList.vue';
-const tableDataRef = ref(null);
+import { ref, onMounted } from 'vue';
+import SkeletonLoader from '@/components/SkeletonLoader.vue';
+import EtudiantHeader from './components/EtudiantHeader.vue';
+import EtudiantTab from './components/EtudiantTab.vue';
+// ⚠️ Prévoir un store Pinia pour gérer les étudiants
+// import { useEtudiantStore } from '@/stores/academiqueStore/etudiantStore';
 
-const exportToExcel = async () => {
-  try {
-    // Récupère les données des étudiants depuis le composant TableData
-    const etudiants = await tableDataRef.value.getTableData();
+const loading = ref(true);
+const etudiants = ref([]);
 
-    if (!etudiants || !etudiants.length) {
-      return alert('Aucune donnée à exporter.');
-    }
-
-    // Transforme les données en format JSON plat
-    const data = etudiants.map((etudiant) => ({
-      ID: etudiant.id,
-      Matricule: etudiant.matricule,
-      Nom: etudiant.nom,
-      Prénom: etudiant.prenom,
-      Sexe: etudiant.sexe,
-      Classe: etudiant.classe,
-      Filière: etudiant.filiere,
-    }));
-    // Crée le fichier Excel
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Étudiants');
-    XLSX.writeFile(workbook, 'etudiants.xlsx');
-  } catch (error) {
-    console.error("Erreur lors de l'export:", error);
-    alert("Une erreur est survenue lors de l'export");
-  }
-};
-
-const handleImport = (data) => {
-  console.log('Données validées:', data);
-  // Tu peux maintenant les envoyer à une API, ou insérer dans ton store/table
-};
+// Simulation de chargement (à remplacer par store.fetchEtudiants())
+onMounted(() => {
+  setTimeout(() => {
+    etudiants.value = [
+      {
+        id: 1,
+        matricule: 'E001',
+        nom: 'Diallo',
+        prenom: 'Mamadou',
+        email: 'mamadou@example.com',
+        telephone: '770000000',
+        classe: 'L1-INFO-A',
+        filiere: 'Informatique',
+      },
+      {
+        id: 2,
+        matricule: 'E002',
+        nom: 'Ndiaye',
+        prenom: 'Awa',
+        email: 'awa@example.com',
+        telephone: '780000000',
+        classe: 'L2-INFO-B',
+        filiere: 'Informatique',
+      },
+    ];
+    loading.value = false;
+  }, 2000);
+});
 </script>
+
+<style scoped>
+body {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+.card {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+}
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: #fff;
+}
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004080;
+}
+.status-badge {
+  padding: 0.5em 1em;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #fff;
+}
+.status-draft {
+  background-color: #6c757d;
+}
+.status-active {
+  background-color: #0d6efd;
+}
+.table thead th {
+  border-bottom: 2px solid #dee2e6;
+}
+</style>
