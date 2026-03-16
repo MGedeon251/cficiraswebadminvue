@@ -16,8 +16,7 @@
               <th>Code</th>
               <th>Filière</th>
               <th>Niveau</th>
-              <th>Nb. étudiants</th>
-              <th>Actions</th>
+              <th></th>
             </tr>
           </thead>
 
@@ -35,14 +34,12 @@
               <td>
                 <span class="badge bg-secondary">{{ classe.niveau_code }}</span>
               </td>
-              <td>
-                <span class="badge bg-primary">{{ classe.nombre_etudiants ?? 0 }}</span>
-              </td>
+
               <td>
                 <div class="d-flex gap-2 align-items-center">
                   <!-- Bouton importer étudiants -->
                   <button
-                    class="btn btn-sm btn-outline-success"
+                    class="btn btn-sm btn-outline-secondary"
                     title="Importer des étudiants"
                     @click="openImport(classe)"
                   >
@@ -55,7 +52,7 @@
                     title="Voir les étudiants"
                     @click="voirEtudiants(classe)"
                   >
-                    <i class="bi bi-people me-1"></i> Details
+                    <i class="bi bi-people me-1"></i> Views
                   </button>
                 </div>
               </td>
