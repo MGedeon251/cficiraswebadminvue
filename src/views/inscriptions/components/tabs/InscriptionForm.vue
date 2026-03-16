@@ -200,5 +200,11 @@ const resetFilters = () => {
   selectedYear.value = ''
   selectedStatut.value = ''
 }
+
+const stats = computed(() => ({
+  validees: inscriptions.value.filter(i => i.statut === 'validée').length,
+  enAttente: inscriptions.value.filter(i => i.statut === 'en attente').length,
+  annulees: inscriptions.value.filter(i => i.statut === 'annulée').length
+}))
 </script>
 
