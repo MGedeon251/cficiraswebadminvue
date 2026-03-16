@@ -80,21 +80,12 @@
     </div>
 
     <!-- ===================== Modal Import ===================== -->
-    <div class="d-flex gap-2 align-items-center">
-      <button class="btn btn-sm btn-outline-success" @click="openImport(classe)">
-        <i class="bi bi-upload me-1"></i> Importer
-      </button>
-      <button class="btn btn-sm btn-outline-primary" @click="voirEtudiants(classe)">
-        <i class="bi bi-people me-1"></i> Étudiants
-      </button>
-      <ItemActions :item="classe" concourRoute="/edition-concours/"
-        :showAdd="false" @edit="editClasse" @delete="confirmDelete" />
-    </div>
+ 
 
     <!-- ===== Modal Import ===== -->
     <Teleport to="body">
       <div v-if="showModalImport" class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,.5)">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">
@@ -104,6 +95,15 @@
               <button type="button" class="btn-close" @click="closeImport"></button>
             </div>
             <div class="modal-body">
+              <!-- Recommandations -->
+          <div class="alert alert-info">
+            <h6>Recommandations :</h6>
+            <ul>
+              <li>Le fichier doit être au format <strong>.csv</strong> ou <strong>.xlsx</strong>.</li>
+              <li>Colonnes obligatoires : <code>matricule</code>,<code>nom</code>, <code>prenom</code>,<code>code_classe</code>,<code>annee_academique</code>.</li>
+              <li>Chaque ligne correspond à un enregistrement unique.</li>
+            </ul>
+          </div>
               <p class="text-muted small">
                 Importez un fichier Excel (.xlsx) ou CSV contenant la liste des étudiants.
               </p>
@@ -198,7 +198,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useClasseStore } from '@/stores/academiqueStore/classeStore';
-import ItemActions from '../details/ItemActions.vue';
 
 const classeStore = useClasseStore();
 

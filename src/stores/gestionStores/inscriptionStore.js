@@ -7,6 +7,33 @@ import {
   deleteInscription,
 } from '@/api/gestions/gestionApi';
 import { useMessageStore } from '@/stores/messages/messageStore';
+import { useNotifier } from '@/stores/messages/useNotifier';
+import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
+
+/* =====================
+   Helpers cache
+===================== */
+function setCache(key, data) {
+  localStorage.setItem(
+    key,
+    JSON.stringify({
+      data,
+      timestamp: Date.now(),
+    })
+  );
+}
+
+function getCache(key, ttl = 5 * 60 * 1000) {
+  const cached = localStorage.getItem(key);
+  if (!cached) return null;
+
+  const parsed = JSON.parse(cached);
+  if (Date.now() - parsed.timestamp > ttl) {
+    localStorage.removeItem(key);
+    return null;
+  }
+  return parsed.data;
+}
 
 export const useInscriptionStore = defineStore('inscriptionStore', {
   state: () => ({
@@ -18,12 +45,19 @@ export const useInscriptionStore = defineStore('inscriptionStore', {
   actions: {
     // Récupérer toutes les inscriptions
     async fetchInscriptions() {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
-        const response = await getInscriptions();
-        this.inscriptions = response.data;
+        const cached = getCache('inscriptions');
+        if (cached) {
+          this.inscriptions = cached;
+        } else {
+          const response = await getInscriptions();
+          this.inscriptions = response.data;
+          setCache('inscriptions', response.data);
+        }
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la récupération des inscriptions.');
+        notifyError(extractErrorMessage(error, 'Erreur lors de la récupération des inscriptions.'));
       } finally {
         this.loading = false;
       }
@@ -31,12 +65,13 @@ export const useInscriptionStore = defineStore('inscriptionStore', {
 
     // Récupérer une inscription par ID
     async fetchInscriptionById(id) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         const response = await getInscriptionById(id);
         this.inscription = response.data;
       } catch (error) {
-        useMessageStore().addError("Erreur lors de la récupération de l'inscription.");
+        notifyError(extractErrorMessage(error, "Erreur lors de la récupération de l'inscription."));
       } finally {
         this.loading = false;
       }
@@ -44,13 +79,15 @@ export const useInscriptionStore = defineStore('inscriptionStore', {
 
     // Ajouter une nouvelle inscription
     async addInscription(data) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         await createInscription(data);
         useMessageStore().addSuccess('Inscription créée avec succès.');
+        localStorage.removeItem('inscriptions'); // Invalider le cache
         this.fetchInscriptions();
       } catch (error) {
-        useMessageStore().addError("Erreur lors de la création de l'inscription.");
+        notifyError(extractErrorMessage(error, "Erreur lors de la création de l'inscription."));
       } finally {
         this.loading = false;
       }
@@ -58,13 +95,15 @@ export const useInscriptionStore = defineStore('inscriptionStore', {
 
     // Modifier une inscription existante
     async editInscription(id, data) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         await updateInscription(id, data);
         useMessageStore().addSuccess('Inscription mise à jour avec succès.');
+        localStorage.removeItem('inscriptions'); // Invalider le cache
         this.fetchInscriptions();
       } catch (error) {
-        useMessageStore().addError("Erreur lors de la mise à jour de l'inscription.");
+        notifyError(extractErrorMessage(error, "Erreur lors de la mise à jour de l'inscription."));
       } finally {
         this.loading = false;
       }
@@ -72,13 +111,15 @@ export const useInscriptionStore = defineStore('inscriptionStore', {
 
     // Supprimer une inscription
     async removeInscription(id) {
+      const { notifyError } = useNotifier();
       this.loading = true;
       try {
         await deleteInscription(id);
         useMessageStore().addSuccess('Inscription supprimée avec succès.');
+        localStorage.removeItem('inscriptions'); // Invalider le cache
         this.fetchInscriptions();
       } catch (error) {
-        useMessageStore().addError("Erreur lors de la suppression de l'inscription.");
+        notifyError(extractErrorMessage(error, "Erreur lors de la suppression de l'inscription."));
       } finally {
         this.loading = false;
       }

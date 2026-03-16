@@ -6,7 +6,7 @@
       <div class="mb-4">
         <h3>Inscription des étudiants</h3>
         <p class="text-muted">
-          Gestion des inscriptions et réinscriptions par année académique
+          Gestion des inscriptions et réinscriptions par filière
         </p>
       </div>
 
@@ -25,17 +25,17 @@
               />
             </div>
 
-            <div class="col-md-3">
-              <label class="form-label">Année académique</label>
-              <select class="form-select" v-model="selectedYear">
+            <div class="col-md-4">
+              <label class="form-label">Filière</label>
+              <select class="form-select" v-model="selectedFiliere">
                 <option value="">Toutes</option>
-                <option v-for="year in academicYears" :key="year">
-                  {{ year }}
+                <option v-for="filiere in filieres" :key="filiere">
+                  {{ filiere }}
                 </option>
               </select>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-4">
               <label class="form-label">Statut</label>
               <select class="form-select" v-model="selectedStatut">
                 <option value="">Tous</option>
@@ -43,12 +43,6 @@
                 <option value="validée">Validée</option>
                 <option value="annulée">Annulée</option>
               </select>
-            </div>
-
-            <div class="col-md-2 d-flex align-items-end">
-              <button class="btn btn-outline-secondary w-100" @click="resetFilters">
-                Réinitialiser
-              </button>
             </div>
 
           </div>
@@ -71,7 +65,7 @@
               <th>Nom</th>
               <th>Prénom</th>
               <th>Classe</th>
-              <th>Année</th>
+              <th>Filière</th>
               <th>Statut</th>
               <th class="text-end">Actions</th>
             </tr>
@@ -84,12 +78,9 @@
               <td>{{ inscription.nom }}</td>
               <td>{{ inscription.prenom }}</td>
               <td>{{ inscription.classe }}</td>
-              <td>{{ inscription.annee }}</td>
+              <td>{{ inscription.filiere }}</td>
               <td>
-                <span
-                  class="badge"
-                  :class="statutClass(inscription.statut)"
-                >
+                <span class="badge" :class="statutClass(inscription.statut)">
                   {{ inscription.statut }}
                 </span>
               </td>
@@ -97,7 +88,7 @@
                 <button class="btn btn-sm btn-outline-primary me-1">
                   Détails
                 </button>
-                <button class="btn btn-sm btn-outline-danger">
+                <button class="btn btn-sm btn-outline-danger" @click="store.removeInscription(inscription.id)">
                   Annuler
                 </button>
               </td>
@@ -116,71 +107,43 @@
     </div>
   </div>
 </template>
+
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useInscriptionStore } from '@/stores/gestionStores/inscriptionStore'
 
-import InscriptionClasse from '../modal/InscriptionClasse.vue'
-import AjouterTuteur from '../modal/AddTuteur.vue'
+/* =====================
+   Store
+===================== */
+const store = useInscriptionStore()
+
+onMounted(() => {
+  store.fetchInscriptions()
+})
 
 /* =====================
    États
 ===================== */
-const inscriptions = ref([])
 const searchQuery = ref('')
-const selectedYear = ref('')
+const selectedFiliere = ref('')
 const selectedStatut = ref('')
 
-const academicYears = ['2022-2023', '2023-2024', '2024-2025']
-
-/* =====================
-   Données simulées (alignées SQL)
-===================== */
-onMounted(() => {
-  inscriptions.value = [
-    {
-      id: 1,
-      matricule: 'ETU2025001',
-      nom: 'Kouadio',
-      prenom: 'Eric',
-      classe: 'L1 Informatique',
-      annee: '2024-2025',
-      statut: 'validée'
-    },
-    {
-      id: 2,
-      matricule: 'ETU2025002',
-      nom: 'Yao',
-      prenom: 'Marie',
-      classe: 'L2 Informatique',
-      annee: '2024-2025',
-      statut: 'en attente'
-    },
-    {
-      id: 3,
-      matricule: 'ETU2025003',
-      nom: 'Koffi',
-      prenom: 'Serge',
-      classe: 'L3 Informatique',
-      annee: '2023-2024',
-      statut: 'annulée'
-    }
-  ]
-})
+const filieres = ['Informatique', 'Mathématiques', 'Gestion']
 
 /* =====================
    Computed
 ===================== */
 const filteredInscriptions = computed(() => {
-  return inscriptions.value.filter(i => {
+  return store.inscriptions.filter(i => {
     const matchSearch =
       i.nom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       i.prenom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       i.matricule.toLowerCase().includes(searchQuery.value.toLowerCase())
 
-    const matchYear = !selectedYear.value || i.annee === selectedYear.value
+    const matchFiliere = !selectedFiliere.value || i.filiere === selectedFiliere.value
     const matchStatut = !selectedStatut.value || i.statut === selectedStatut.value
 
-    return matchSearch && matchYear && matchStatut
+    return matchSearch && matchFiliere && matchStatut
   })
 })
 
@@ -194,17 +157,4 @@ const statutClass = (statut) => {
     'bg-danger': statut === 'annulée'
   }
 }
-
-const resetFilters = () => {
-  searchQuery.value = ''
-  selectedYear.value = ''
-  selectedStatut.value = ''
-}
-
-const stats = computed(() => ({
-  validees: inscriptions.value.filter(i => i.statut === 'validée').length,
-  enAttente: inscriptions.value.filter(i => i.statut === 'en attente').length,
-  annulees: inscriptions.value.filter(i => i.statut === 'annulée').length
-}))
 </script>
-
