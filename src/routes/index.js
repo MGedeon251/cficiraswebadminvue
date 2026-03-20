@@ -66,6 +66,9 @@ import FinancePaiement from '../views/finances/paiements/Paiements.vue';
 import FinanceFacture from '../views/finances/facturations/Facturation.vue';
 import FinanceRapport from '../views/finances/rapports/RapportFinances.vue';
 
+// Assistant IA
+import AssistantAi from '@/views/prompt/AssistantAi.vue';
+
 //PAGE  Not Found (ERREUR 404)
 import NotFound from '../views/errors/NotFound.vue';
 
@@ -115,6 +118,7 @@ const routes = [
       { path: '/factures-finances', name: 'FinanceFacture', component: FinanceFacture },
       { path: '/factures-finances', name: 'FinanceFacture', component: FinanceFacture },
       { path: '/rapports-financiers', name: 'RapportsFinanciers', component: FinanceRapport },
+      { path: '/assistant-ai', name: 'AssistantAI', component: AssistantAi },
 
       { path: '/notification', name: 'Notification', component: NotificationView },
 
