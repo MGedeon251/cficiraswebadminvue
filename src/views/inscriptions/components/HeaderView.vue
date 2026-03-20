@@ -15,7 +15,7 @@
             </div>
           </div>
           <div class="d-flex justify-content-between align-items-end aflex-wrap">
-                        <div class="dropdown me-2">
+            <div class="dropdown me-2">
               <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
                 <i class="mdi mdi-dots-vertical"></i>
               </button>
@@ -52,18 +52,28 @@
               </button>
               <ul class="dropdown-menu">
                 <li>
-                  <a class="dropdown-item" href="#inscription-par-classe" data-bs-toggle="modal" data-bs-target="#inscriptionClasseModal">
+                  <a
+                    class="dropdown-item"
+                    href="#inscription-par-classe"
+                    data-bs-toggle="modal"
+                    data-bs-target="#inscriptionClasseModal"
+                  >
                     Inscription par classe
                   </a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#ajouter-tuteur" data-bs-toggle="modal" data-bs-target="#ajouterTuteurModal">
+                  <a
+                    class="dropdown-item"
+                    href="#ajouter-tuteur"
+                    data-bs-toggle="modal"
+                    data-bs-target="#ajouterTuteurModal"
+                  >
                     Ajouter tuteur étudiant
                   </a>
                 </li>
               </ul>
             </div>
-        </div>
+          </div>
         </div>
       </div>
     </div>
