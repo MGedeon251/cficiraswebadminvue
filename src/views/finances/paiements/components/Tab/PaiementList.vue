@@ -35,9 +35,11 @@
             </select>
           </div>
           <div class="col-md-3">
-            <select v-model="filters.niveau" class="form-select">
-              <option value="">Tous les Niveaux</option>
-              <option v-for="n in niveaux" :key="n" :value="n">Niveau {{ n }}</option>
+            <select v-model="filters.mois" class="form-select">
+              <option value="">Tous les Mois</option>
+              <option v-for="(nom, index) in moisListe" :key="index" :value="index + 1">
+                {{ nom }}
+              </option>
             </select>
           </div>
           <div class="col-md-3">
@@ -106,21 +108,24 @@
 <script setup>
 import { ref, computed } from 'vue';
 
-// Listes pour les filtres (Peuvent être chargées via API)
+// 1. Définir la liste des mois pour le sélecteur
+const moisListe = [
+  'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+  'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+];
+
 const cycles = ['Licence', 'Master', 'Doctorat'];
 const filieres = ['Informatique', 'Génie Civil', 'Management', 'Droit'];
-const niveaux = ['1', '2', '3'];
 const classes = ['L1-A', 'L1-B', 'M1-JV', 'M2-FI'];
 
-// État des filtres
+// 2. Mettre à jour l'objet filters (remplacer niveau par mois)
 const filters = ref({
   cycle: '',
   filiere: '',
-  niveau: '',
+  mois: '', // Stockera le numéro du mois (1 à 12)
   classe: ''
 });
 
-// Données fictives
 const paiements = ref([
   { 
     id: 1, matricule: 'ETU-2024-001', nom: 'DIOP', prenom: 'Moussa', 
@@ -132,37 +137,34 @@ const paiements = ref([
     montant: 75000, type: 'Inscription', statut: 'Partiel', 
     date: '22/10/2023', mode: 'Espèces', cycle: 'Master', filiere: 'Management', classe: 'M1-JV' 
   },
-  // Ajouter d'autres données ici...
 ]);
 
-// Logique de filtrage
+// 3. Adapter la logique de filtrage
 const filteredPaiements = computed(() => {
   return paiements.value.filter(p => {
+    // Extraction du mois de la chaîne de date "JJ/MM/AAAA"
+    const partieDate = p.date.split('/'); // donne ["20", "10", "2023"]
+    const moisPaiement = parseInt(partieDate[1]); // donne 10 (Octobre)
+
     return (filters.value.cycle === '' || p.cycle === filters.value.cycle) &&
            (filters.value.filiere === '' || p.filiere === filters.value.filiere) &&
-           (filters.value.niveau === '' || p.classe.includes(filters.value.niveau)) &&
-           (filters.value.classe === '' || p.classe === filters.value.classe);
+           (filters.value.classe === '' || p.classe === filters.value.classe) &&
+           (filters.value.mois === '' || moisPaiement === parseInt(filters.value.mois));
   });
 });
 
-// Formattage monétaire
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('fr-FR').format(value) + ' FCFA';
 };
 
-// Actions
 const generateReceipt = (p) => {
-  console.log("Impression du reçu pour:", p.matricule);
-  // Logique d'impression (ex: window.print() ou génération PDF dédiée)
   alert(`Génération du reçu pour ${p.prenom} ${p.nom} en cours...`);
 };
 
 const exportData = (format) => {
-  console.log(`Exportation au format ${format} des données filtrées...`);
-  // Ici vous intégrerez vos outils d'exportation (ex: ExcelJS, jsPDF)
+  console.log(`Exportation au format ${format}...`);
 };
 </script>
-
 <style scoped>
 .table thead th {
   border-top: none;

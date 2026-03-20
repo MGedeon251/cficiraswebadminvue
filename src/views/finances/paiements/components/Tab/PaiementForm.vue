@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="col-12 mt-4 d-flex gap-2">
-                  <button type="submit" class="btn btn-primary px-4">
+                  <button type="submit" class="btn btn-secondary px-4">
                     <i class="mdi mdi-check-circle me-1"></i> Valider & Imprimer Reçu
                   </button>
                   <button type="button" @click="resetForm" class="btn btn-light px-4">Annuler</button>
