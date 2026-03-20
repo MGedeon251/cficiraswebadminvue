@@ -1,20 +1,16 @@
 <template>
   <div class="row">
     <div class="col-12 grid-margin">
-
       <!-- Header -->
       <div class="mb-4">
         <h3>Inscription des étudiants</h3>
-        <p class="text-muted">
-          Gestion des inscriptions et réinscriptions par année académique
-        </p>
+        <p class="text-muted">Gestion des inscriptions et réinscriptions par année académique</p>
       </div>
 
       <!-- Filtres -->
       <div class="card mb-4">
         <div class="card-body">
           <div class="row g-3">
-
             <div class="col-md-4">
               <label class="form-label">Recherche</label>
               <input
@@ -50,7 +46,6 @@
                 Réinitialiser
               </button>
             </div>
-
           </div>
         </div>
       </div>
@@ -86,20 +81,13 @@
               <td>{{ inscription.classe }}</td>
               <td>{{ inscription.annee }}</td>
               <td>
-                <span
-                  class="badge"
-                  :class="statutClass(inscription.statut)"
-                >
+                <span class="badge" :class="statutClass(inscription.statut)">
                   {{ inscription.statut }}
                 </span>
               </td>
               <td class="text-end">
-                <button class="btn btn-sm btn-outline-primary me-1">
-                  Détails
-                </button>
-                <button class="btn btn-sm btn-outline-danger">
-                  Annuler
-                </button>
+                <button class="btn btn-sm btn-outline-primary me-1">Détails</button>
+                <button class="btn btn-sm btn-outline-danger">Annuler</button>
               </td>
             </tr>
 
@@ -112,25 +100,24 @@
           </tbody>
         </table>
       </div>
-
     </div>
   </div>
 </template>
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue';
 
-import InscriptionClasse from '../modal/InscriptionClasse.vue'
-import AjouterTuteur from '../modal/AddTuteur.vue'
+import InscriptionClasse from '../modal/InscriptionClasse.vue';
+import AjouterTuteur from '../modal/AddTuteur.vue';
 
 /* =====================
    États
 ===================== */
-const inscriptions = ref([])
-const searchQuery = ref('')
-const selectedYear = ref('')
-const selectedStatut = ref('')
+const inscriptions = ref([]);
+const searchQuery = ref('');
+const selectedYear = ref('');
+const selectedStatut = ref('');
 
-const academicYears = ['2022-2023', '2023-2024', '2024-2025']
+const academicYears = ['2022-2023', '2023-2024', '2024-2025'];
 
 /* =====================
    Données simulées (alignées SQL)
@@ -144,7 +131,7 @@ onMounted(() => {
       prenom: 'Eric',
       classe: 'L1 Informatique',
       annee: '2024-2025',
-      statut: 'validée'
+      statut: 'validée',
     },
     {
       id: 2,
@@ -153,7 +140,7 @@ onMounted(() => {
       prenom: 'Marie',
       classe: 'L2 Informatique',
       annee: '2024-2025',
-      statut: 'en attente'
+      statut: 'en attente',
     },
     {
       id: 3,
@@ -162,27 +149,27 @@ onMounted(() => {
       prenom: 'Serge',
       classe: 'L3 Informatique',
       annee: '2023-2024',
-      statut: 'annulée'
-    }
-  ]
-})
+      statut: 'annulée',
+    },
+  ];
+});
 
 /* =====================
    Computed
 ===================== */
 const filteredInscriptions = computed(() => {
-  return inscriptions.value.filter(i => {
+  return inscriptions.value.filter((i) => {
     const matchSearch =
       i.nom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       i.prenom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      i.matricule.toLowerCase().includes(searchQuery.value.toLowerCase())
+      i.matricule.toLowerCase().includes(searchQuery.value.toLowerCase());
 
-    const matchYear = !selectedYear.value || i.annee === selectedYear.value
-    const matchStatut = !selectedStatut.value || i.statut === selectedStatut.value
+    const matchYear = !selectedYear.value || i.annee === selectedYear.value;
+    const matchStatut = !selectedStatut.value || i.statut === selectedStatut.value;
 
-    return matchSearch && matchYear && matchStatut
-  })
-})
+    return matchSearch && matchYear && matchStatut;
+  });
+});
 
 /* =====================
    Helpers
@@ -191,14 +178,13 @@ const statutClass = (statut) => {
   return {
     'bg-success': statut === 'validée',
     'bg-warning text-dark': statut === 'en attente',
-    'bg-danger': statut === 'annulée'
-  }
-}
+    'bg-danger': statut === 'annulée',
+  };
+};
 
 const resetFilters = () => {
-  searchQuery.value = ''
-  selectedYear.value = ''
-  selectedStatut.value = ''
-}
+  searchQuery.value = '';
+  selectedYear.value = '';
+  selectedStatut.value = '';
+};
 </script>
-
