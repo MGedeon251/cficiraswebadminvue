@@ -10,16 +10,16 @@
         <button @click="exportData('csv')" class="btn btn-sm btn-outline-dark">
           <i class="mdi mdi-file-csv"></i> CSV
         </button>
-        <button @click="exportData('excel')" class="btn btn-sm btn-outline-success mx-1">
+        <button @click="exportData('excel')" class="btn btn-sm btn-outline-dark mx-1">
           <i class="mdi mdi-file-excel"></i> Excel
         </button>
-        <button @click="exportData('pdf')" class="btn btn-sm btn-outline-danger">
+        <button @click="exportData('pdf')" class="btn btn-sm btn-outline-dark">
           <i class="mdi mdi-file-pdf"></i> PDF
         </button>
       </div>
     </div>
 
-    <div class="card mb-4 border-0 shadow-sm">
+    <div class="card mb-4 border-0">
       <div class="card-body bg-light rounded">
         <div class="row g-3">
           <div class="col-md-3">
@@ -164,7 +164,13 @@ const exportData = (format) => {
 </script>
 
 <style scoped>
-
+.table thead th {
+  border-top: none;
+  font-weight: 600;
+  color: #4a4a4a;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
 
 .btn-inverse-primary {
   background-color: rgba(75, 73, 172, 0.1);
