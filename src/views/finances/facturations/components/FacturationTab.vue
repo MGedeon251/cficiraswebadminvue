@@ -27,7 +27,7 @@
           aria-controls="nouveau"
           aria-selected="false"
         >
-          Nouvelle Facture
+          Etats honoraires
         </a>
       </li>
 
@@ -42,7 +42,7 @@
           aria-controls="archives"
           aria-selected="false"
         >
-          Archives
+          Transactions
         </a>
       </li>
     </ul>
