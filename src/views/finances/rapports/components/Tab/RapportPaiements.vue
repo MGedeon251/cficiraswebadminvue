@@ -37,26 +37,27 @@
     </div>
 
     <!-- Graphiques -->
-      <div>
-          <h3 class="mb-4">Rapport des Paiements</h3>
+    <div>
+      <h3 class="mb-4">Rapport des Paiements</h3>
 
-          <!-- Graphiques -->
-          <div class="row">
-            <!-- Camembert : répartition par mode de paiement -->
-            <div class="col-md-6">
-              <canvas id="chartModePaiement"></canvas>
-            </div>
+      <!-- Graphiques -->
+      <div class="row">
+        <!-- Camembert : répartition par mode de paiement -->
+        <div class="col-md-6">
+          <canvas id="chartModePaiement"></canvas>
+        </div>
 
-            <!-- Histogramme : montants encaissés par mois -->
-            <div class="col-md-6">
-              <canvas id="chartMontants"></canvas>
-            </div>
-          </div>
+        <!-- Histogramme : montants encaissés par mois -->
+        <div class="col-md-6">
+          <canvas id="chartMontants"></canvas>
+        </div>
       </div>
-      </div>
+    </div>
+  </div>
 </template>
 
-<<script setup>
+<
+<script setup>
 import { ref, onMounted } from 'vue';
 import Chart from 'chart.js/auto';
 

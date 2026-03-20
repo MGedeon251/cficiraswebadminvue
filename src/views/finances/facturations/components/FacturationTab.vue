@@ -59,22 +59,12 @@
       </div>
 
       <!-- Formulaire de création -->
-      <div
-        class="tab-pane fade"
-        id="nouveau"
-        role="tabpanel"
-        aria-labelledby="nouveau-tab"
-      >
+      <div class="tab-pane fade" id="nouveau" role="tabpanel" aria-labelledby="nouveau-tab">
         <FacturationForm />
       </div>
 
       <!-- Historique / Archives -->
-      <div
-        class="tab-pane fade"
-        id="archives"
-        role="tabpanel"
-        aria-labelledby="archives-tab"
-      >
+      <div class="tab-pane fade" id="archives" role="tabpanel" aria-labelledby="archives-tab">
         <FacturationArchives />
       </div>
     </div>
@@ -87,9 +77,7 @@ import FacturationForm from './Tab/FacturationForm.vue';
 import FacturationArchives from './Tab/FacturationArchives.vue';
 </script>
 
-
 <style scoped>
-
 body {
   background-color: #f8f9fa;
   color: #212529;

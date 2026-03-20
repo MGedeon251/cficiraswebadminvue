@@ -59,22 +59,12 @@
       </div>
 
       <!-- Rapport des factures -->
-      <div
-        class="tab-pane fade"
-        id="factures"
-        role="tabpanel"
-        aria-labelledby="factures-tab"
-      >
+      <div class="tab-pane fade" id="factures" role="tabpanel" aria-labelledby="factures-tab">
         <RapportFactures />
       </div>
 
       <!-- Bilans financiers -->
-      <div
-        class="tab-pane fade"
-        id="bilans"
-        role="tabpanel"
-        aria-labelledby="bilans-tab"
-      >
+      <div class="tab-pane fade" id="bilans" role="tabpanel" aria-labelledby="bilans-tab">
         <RapportBilans />
       </div>
     </div>
@@ -86,7 +76,6 @@ import RapportPaiements from './Tab/RapportPaiements.vue';
 import RapportFactures from './Tab/RapportFactures.vue';
 import RapportBilans from './Tab/RapportBilans.vue';
 </script>
-
 
 <style scoped>
 .drag-drop-area {

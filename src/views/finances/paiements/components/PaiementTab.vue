@@ -54,22 +54,12 @@
       </div>
 
       <!-- Formulaire d'ajout -->
-      <div
-        class="tab-pane fade"
-        id="nouveau"
-        role="tabpanel"
-        aria-labelledby="nouveau-tab"
-      >
+      <div class="tab-pane fade" id="nouveau" role="tabpanel" aria-labelledby="nouveau-tab">
         <PaiementForm />
       </div>
 
       <!-- Historique / Archives -->
-      <div
-        class="tab-pane fade"
-        id="archives"
-        role="tabpanel"
-        aria-labelledby="archives-tab"
-      >
+      <div class="tab-pane fade" id="archives" role="tabpanel" aria-labelledby="archives-tab">
         <PaiementArchives />
       </div>
     </div>
@@ -82,9 +72,7 @@ import PaiementForm from './Tab/PaiementForm.vue';
 import PaiementArchives from './Tab/PaiementArchives.vue';
 </script>
 
-
 <style scoped>
-
 body {
   background-color: #f8f9fa;
   color: #212529;

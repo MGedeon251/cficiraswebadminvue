@@ -47,10 +47,7 @@ import ResultatsDetails from '../views/concours/editions/components/details/Deta
 //Notes et résultats
 import ResultatsConcours from '../views/concours/resultats/RapportConcours.vue'; // Résultats des concours
 
-
-//Paiements et finances 
-
-
+//Paiements et finances
 
 import Notes from '../views/notes/Notes.vue'; // Page des notes
 import appNotes from '../views/notes/addNotes/main/notev1.vue';
@@ -66,10 +63,9 @@ import Formateur from '../views/formateurs/Formateur.vue';
 import Admins from '../views/admin/Administration.vue';
 //Finances et paiements
 import Finance from '../views/finances/Finance.vue';
-import FinancePaiement from '../views/finances/paiements/Paiements.vue'
+import FinancePaiement from '../views/finances/paiements/Paiements.vue';
 import FinanceFacture from '../views/finances/facturations/Facturation.vue';
 import FinanceRapport from '../views/finances/rapports/RapportFinances.vue';
-
 
 //PAGE  Not Found (ERREUR 404)
 import NotFound from '../views/errors/NotFound.vue';
@@ -120,9 +116,7 @@ const routes = [
       { path: '/paiements-finances', name: 'FinancePaiement', component: FinancePaiement },
       { path: '/factures-finances', name: 'FinanceFacture', component: FinanceFacture },
       { path: '/factures-finances', name: 'FinanceFacture', component: FinanceFacture },
-      { path: '/rapports-financiers', name: 'RapportsFinanciers', component: FinanceRapport},
-
-
+      { path: '/rapports-financiers', name: 'RapportsFinanciers', component: FinanceRapport },
 
       { path: '/notification', name: 'Notification', component: NotificationView },
 

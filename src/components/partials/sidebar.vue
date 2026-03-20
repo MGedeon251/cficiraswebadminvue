@@ -266,7 +266,13 @@
         </a>
         <div
           class="collapse"
-          :class="{ show: isParentActive(['/paiements-finances', '/factures-finances', '/rapports-financiers']) }"
+          :class="{
+            show: isParentActive([
+              '/paiements-finances',
+              '/factures-finances',
+              '/rapports-financiers',
+            ]),
+          }"
           id="finances"
         >
           <ul class="nav flex-column sub-menu">
