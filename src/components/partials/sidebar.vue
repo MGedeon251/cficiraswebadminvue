@@ -284,7 +284,7 @@
             </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/rapports-financiers"
-                >Historique & rapports</router-link
+                >Rapports</router-link
               >
             </li>
           </ul>

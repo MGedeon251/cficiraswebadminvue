@@ -62,7 +62,6 @@ import Formateur from '../views/formateurs/Formateur.vue';
 //Administration et gestion
 import Admins from '../views/admin/Administration.vue';
 //Finances et paiements
-import Finance from '../views/finances/Finance.vue';
 import FinancePaiement from '../views/finances/paiements/Paiements.vue';
 import FinanceFacture from '../views/finances/facturations/Facturation.vue';
 import FinanceRapport from '../views/finances/rapports/RapportFinances.vue';
@@ -112,7 +111,6 @@ const routes = [
       { path: '/settings', name: 'Settings', component: Settings },
       { path: '/enseignants', name: 'Formateur', component: Formateur },
       { path: '/administration', name: 'Administration', component: Admins },
-      { path: '/finance', name: 'Finance', component: Finance },
       { path: '/paiements-finances', name: 'FinancePaiement', component: FinancePaiement },
       { path: '/factures-finances', name: 'FinanceFacture', component: FinanceFacture },
       { path: '/factures-finances', name: 'FinanceFacture', component: FinanceFacture },
