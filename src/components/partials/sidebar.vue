@@ -266,15 +266,15 @@
         </a>
         <div
           class="collapse"
-          :class="{ show: isParentActive(['/paiements', '/facturation', '/rapports-financiers']) }"
+          :class="{ show: isParentActive(['/paiements-finances', '/factures-finances', '/rapports-financiers']) }"
           id="finances"
         >
           <ul class="nav flex-column sub-menu">
             <li class="nav-item">
-              <router-link class="nav-link" to="/paiements">Paiements & reçus</router-link>
+              <router-link class="nav-link" to="/paiements-finances">Paiements & reçus</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/facturation">Facturation</router-link>
+              <router-link class="nav-link" to="/factures-finances">Facturation</router-link>
             </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/rapports-financiers"

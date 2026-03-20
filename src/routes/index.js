@@ -47,6 +47,11 @@ import ResultatsDetails from '../views/concours/editions/components/details/Deta
 //Notes et résultats
 import ResultatsConcours from '../views/concours/resultats/RapportConcours.vue'; // Résultats des concours
 
+
+//Paiements et finances 
+
+
+
 import Notes from '../views/notes/Notes.vue'; // Page des notes
 import appNotes from '../views/notes/addNotes/main/notev1.vue';
 //Parcours et filières
@@ -61,6 +66,11 @@ import Formateur from '../views/formateurs/Formateur.vue';
 import Admins from '../views/admin/Administration.vue';
 //Finances et paiements
 import Finance from '../views/finances/Finance.vue';
+import FinancePaiement from '../views/finances/paiements/Paiements.vue'
+import FinanceFacture from '../views/finances/facturations/Facturation.vue';
+import FinanceRapport from '../views/finances/rapports/RapportFinances.vue';
+
+
 //PAGE  Not Found (ERREUR 404)
 import NotFound from '../views/errors/NotFound.vue';
 
@@ -107,6 +117,13 @@ const routes = [
       { path: '/enseignants', name: 'Formateur', component: Formateur },
       { path: '/administration', name: 'Administration', component: Admins },
       { path: '/finance', name: 'Finance', component: Finance },
+      { path: '/paiements-finances', name: 'FinancePaiement', component: FinancePaiement },
+      { path: '/factures-finances', name: 'FinanceFacture', component: FinanceFacture },
+      { path: '/factures-finances', name: 'FinanceFacture', component: FinanceFacture },
+      { path: '/rapports-financiers', name: 'RapportsFinanciers', component: FinanceRapport},
+
+
+
       { path: '/notification', name: 'Notification', component: NotificationView },
 
       { path: '/examens', name: 'Examens', component: Examens },
@@ -161,7 +178,7 @@ const router = createRouter({
   routes,
 });
 
-// Guard global: protège les routes qui nécessitent une authentification
+/* Guard global: protège les routes qui nécessitent une authentification
 router.beforeEach((to, from, next) => {
   const isPublic = to.matched.some((record) => record.meta && record.meta.public);
   const isLoggedIn = !!localStorage.getItem('token');
@@ -176,6 +193,6 @@ router.beforeEach((to, from, next) => {
   }
 
   return next();
-});
+});*/
 
 export default router;
