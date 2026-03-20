@@ -56,3 +56,11 @@ export const deleteSemestre = (id) => academiqueService.delete(`/semestres/${id}
 // Ajoutez ces nouvelles fonctions si elles n'existent pas
 export const getClassesByAnnee = (anneeId) => academiqueService.get(`/classes/annee/${anneeId}`);
 export const getFilieresByAnnee = (anneeId) => academiqueService.get(`/filieres/annee/${anneeId}`);
+
+// API pour gérer les inscriptions
+export const getInscriptions = () => academiqueService.get('/inscriptions/list');
+export const getInscriptionById = (id) => academiqueService.get(`/inscriptions/${id}`);
+export const createInscription = (data) => academiqueService.post('/inscriptions', data);
+export const updateInscription = (id, data) => academiqueService.put(`/inscriptions/${id}`, data);
+export const deleteInscription = (id) => academiqueService.delete(`/inscriptions/${id}`);
+

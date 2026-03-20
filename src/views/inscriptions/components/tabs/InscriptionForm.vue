@@ -77,8 +77,8 @@
               <td>{{ inscription.matricule }}</td>
               <td>{{ inscription.nom }}</td>
               <td>{{ inscription.prenom }}</td>
-              <td>{{ inscription.classe }}</td>
-              <td>{{ inscription.filiere }}</td>
+              <td>{{ inscription.classe_code }}</td>
+              <td>{{ inscription.filiere_code }}</td>
               <td>
                 <span class="badge" :class="statutClass(inscription.statut)">
                   {{ inscription.statut }}
@@ -110,7 +110,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useInscriptionStore } from '@/stores/gestionStores/inscriptionStore'
+import { useInscriptionStore } from '@/stores/academiqueStore/inscriptionStore'
 
 /* =====================
    Store
@@ -119,7 +119,16 @@ const store = useInscriptionStore()
 
 onMounted(() => {
   store.fetchInscriptions()
+// Charger les filières depuis le localStorage
+  const savedFilieres = localStorage.getItem('filieres')
+  if (savedFilieres) {
+    const parsed = JSON.parse(savedFilieres)
+    // Extraire uniquement les codes
+    filieres.value = parsed.data.map(f => f.code)
+  }
 })
+
+
 
 /* =====================
    États
@@ -128,7 +137,7 @@ const searchQuery = ref('')
 const selectedFiliere = ref('')
 const selectedStatut = ref('')
 
-const filieres = ['Informatique', 'Mathématiques', 'Gestion']
+const filieres = ref([])
 
 /* =====================
    Computed
