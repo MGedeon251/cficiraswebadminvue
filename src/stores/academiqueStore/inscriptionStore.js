@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import {
   getInscriptions,
   getInscriptionById,
+  importInscriptions,
   createInscription,
   updateInscription,
   deleteInscription,
@@ -40,6 +41,7 @@ export const useInscriptionStore = defineStore('inscriptionStore', {
     inscriptions: [],
     inscription: null,
     loading: false,
+    importing: false, // État spécifique pour ne pas bloquer toute l'UI pendant l'import
   }),
 
   actions: {
@@ -62,7 +64,7 @@ export const useInscriptionStore = defineStore('inscriptionStore', {
         this.loading = false;
       }
     },
-
+    
     // Récupérer une inscription par ID
     async fetchInscriptionById(id) {
       const { notifyError } = useNotifier();
@@ -99,7 +101,7 @@ export const useInscriptionStore = defineStore('inscriptionStore', {
       this.loading = true;
       try {
         await updateInscription(id, data);
-        useMessageStore().addSuccess('Inscription mise à jour avec succès.');
+        useMessageStore().addMessage('Inscription mise à jour avec succès.');
         localStorage.removeItem('inscriptions'); // Invalider le cache
         this.fetchInscriptions();
       } catch (error) {
@@ -108,7 +110,45 @@ export const useInscriptionStore = defineStore('inscriptionStore', {
         this.loading = false;
       }
     },
+    /**
+ * Importer des inscriptions via un fichier CSV/Excel
+ * @param {File} fichier - Le fichier brut issu de l'input
+ */
+async uploadInscriptions(fichier) {
+  const { notifyError } = useNotifier();
+  const messageStore = useMessageStore();
+  
+  // On utilise 'importing' pour le spinner du bouton et 'loading' pour le skeleton de la liste
+  this.importing = true; 
+  this.loading = true;
 
+  try {
+    // Idéalement, récupérez ceci depuis votre store d'authentification (ex: authStore.user.id)
+    const gestionnaireId = 1; 
+
+    // Note : On n'envoie plus 'classe' ici, le backend extrait tout du fichier
+    const response = await importInscriptions(fichier, gestionnaireId);
+
+    // Notification de succès avec le message dynamique du backend 
+    // (ex: "45 étudiants importés avec succès")
+    messageStore.addMessage(response.message || 'Importation réussie.');
+    // Invalidation du cache pour forcer la mise à jour des données
+    localStorage.removeItem('inscriptions');
+
+    // Rafraîchir la liste locale pour voir les nouveaux inscrits immédiatement
+    await this.fetchInscriptions();
+
+    return response; 
+  } catch (error) {
+    // Extraction du message d'erreur (ex: "Colonne matricule manquante")
+    const msg = extractErrorMessage(error, "Erreur lors de l'importation du fichier.");
+    notifyError(msg);
+    throw error; 
+  } finally {
+    this.importing = false;
+    this.loading = false;
+  }
+  },
     // Supprimer une inscription
     async removeInscription(id) {
       const { notifyError } = useNotifier();

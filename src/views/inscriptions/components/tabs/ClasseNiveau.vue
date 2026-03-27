@@ -36,23 +36,23 @@
               </td>
 
               <td>
-                <div class="d-flex gap-2 align-items-center">
-                  <!-- Bouton importer étudiants -->
+                <div class="btn-group shadow-sm" role="group" aria-label="Actions de classe">
                   <button
+                    type="button"
                     class="btn btn-sm btn-outline-secondary"
                     title="Importer des étudiants"
                     @click="openImport(classe)"
                   >
-                    <i class="bi bi-upload me-1"></i> Importer
+                    <i class="bi bi-upload me-1"></i> + Ajouter
                   </button>
 
-                  <!-- Bouton lister étudiants -->
                   <button
+                    type="button"
                     class="btn btn-sm btn-outline-primary"
                     title="Voir les étudiants"
                     @click="voirEtudiants(classe)"
                   >
-                    <i class="bi bi-people me-1"></i> Views
+                    <i class="bi bi-people me-1"></i> Voir
                   </button>
                 </div>
               </td>
