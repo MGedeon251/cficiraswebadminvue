@@ -1,10 +1,5 @@
 <template>
-  <div
-    class="modal fade"
-    id="importInscriptionsModal"
-    tabindex="-1"
-    ref="modalRef"
-  >
+  <div class="modal fade" id="importInscriptionsModal" tabindex="-1" ref="modalRef">
     <div class="modal-dialog modal-lg">
       <div class="modal-content shadow-lg border-0">
         <div class="modal-header bg-dark text-white">
@@ -41,7 +36,7 @@
               <span class="badge bg-secondary">{{ previewData.length }} lignes détectées</span>
             </div>
             <div class="table-responsive border rounded">
-              <table class="table table-sm table-hover mb-0" style="font-size: 0.85rem;">
+              <table class="table table-sm table-hover mb-0" style="font-size: 0.85rem">
                 <thead class="table-light">
                   <tr>
                     <th>Matricule</th>
@@ -53,7 +48,9 @@
                 </thead>
                 <tbody>
                   <tr v-for="(row, index) in previewData.slice(0, 5)" :key="index">
-                    <td><code class="text-primary">{{ row.matricule }}</code></td>
+                    <td>
+                      <code class="text-primary">{{ row.matricule }}</code>
+                    </td>
                     <td>{{ row.nom }} {{ row.prenom }}</td>
                     <td>{{ row.sexe }}</td>
                     <td>{{ row.code_classe }}</td>
@@ -66,23 +63,35 @@
         </div>
 
         <div class="modal-footer bg-light">
-          <button type="button" class="btn btn-link text-decoration-none me-auto" @click="downloadTemplate">
+          <button
+            type="button"
+            class="btn btn-link text-decoration-none me-auto"
+            @click="downloadTemplate"
+          >
             <i class="bi bi-download me-1"></i> Télécharger modèle
           </button>
-          
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" :disabled="inscriptionStore.importing">
+
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            :disabled="inscriptionStore.importing"
+          >
             Annuler
           </button>
-          
+
           <button
             type="button"
             class="btn btn-primary px-4"
             :disabled="!selectedFile || inscriptionStore.importing"
             @click="confirmImport"
           >
-            <span v-if="inscriptionStore.importing" class="spinner-border spinner-border-sm me-2"></span>
+            <span
+              v-if="inscriptionStore.importing"
+              class="spinner-border spinner-border-sm me-2"
+            ></span>
             <i v-else class="bi bi-check-circle me-1"></i>
-            {{ inscriptionStore.importing ? 'Importation...' : 'Lancer l\'importation' }}
+            {{ inscriptionStore.importing ? 'Importation...' : "Lancer l'importation" }}
           </button>
         </div>
       </div>
@@ -102,7 +111,7 @@ const modalRef = ref(null);
 
 // Propriété de la classe sélectionnée (Passée par le parent ou via une ref globale)
 const props = defineProps({
-  classe: { type: Object, required: true }
+  classe: { type: Object, required: true },
 });
 
 const handleFileUpload = (event) => {
@@ -130,16 +139,15 @@ const confirmImport = async () => {
 
   try {
     // Appel de l'action du store Pinia
-    await inscriptionStore.uploadInscriptions(props.classe, selectedFile.value);
-    
+    await inscriptionStore.uploadInscriptions(selectedFile.value);
+
     // Si succès, on réinitialise et on ferme le modal via Bootstrap
     previewData.value = [];
     selectedFile.value = null;
-    
+
     const modalElement = document.getElementById('importInscriptionsModal');
     const modalInstance = bootstrap.Modal.getInstance(modalElement);
     if (modalInstance) modalInstance.hide();
-
   } catch (error) {
     // L'erreur est déjà gérée par le notifyError du store
     console.error("Échec de l'import :", error);
@@ -148,16 +156,34 @@ const confirmImport = async () => {
 
 const downloadTemplate = () => {
   const headers = [
-    'matricule', 'nom', 'prenom', 'sexe', 'date_naissance', 
-    'lieu_naissance', 'telephone', 'email', 'ville', 
-    'filiere', 'code_classe', 'annee_academique'
+    'matricule',
+    'nom',
+    'prenom',
+    'sexe',
+    'date_naissance',
+    'lieu_naissance',
+    'telephone',
+    'email',
+    'ville',
+    'filiere',
+    'code_classe',
+    'annee_academique',
   ];
   const sampleRow = [
-    'ETU001', 'NOM', 'PRENOM', 'M', '2000-01-01', 
-    'VILLE', '00000000', 'test@example.com', 'VILLE', 
-    'FILIERE_CODE', props.classe.classe_code, '2024-2025'
+    'ETU001',
+    'NOM',
+    'PRENOM',
+    'M',
+    '2000-01-01',
+    'VILLE',
+    '00000000',
+    'test@example.com',
+    'VILLE',
+    'FILIERE_CODE',
+    props.classe.classe_code,
+    '2024-2025',
   ];
-  
+
   const worksheet = XLSX.utils.aoa_to_sheet([headers, sampleRow]);
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, 'Modèle');

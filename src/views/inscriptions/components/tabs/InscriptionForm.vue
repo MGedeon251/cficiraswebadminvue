@@ -1,20 +1,16 @@
 <template>
   <div class="row">
     <div class="col-12 grid-margin">
-
       <!-- Header -->
       <div class="mb-4">
         <h3>Inscription des étudiants</h3>
-        <p class="text-muted">
-          Gestion des inscriptions et réinscriptions par filière
-        </p>
+        <p class="text-muted">Gestion des inscriptions et réinscriptions par filière</p>
       </div>
 
       <!-- Filtres -->
       <div class="card mb-4">
         <div class="card-body">
           <div class="row g-3">
-
             <div class="col-md-4">
               <label class="form-label">Recherche</label>
               <input
@@ -44,7 +40,6 @@
                 <option value="annulée">Annulée</option>
               </select>
             </div>
-
           </div>
         </div>
       </div>
@@ -85,10 +80,11 @@
                 </span>
               </td>
               <td class="text-end">
-                <button class="btn btn-sm btn-outline-primary me-1">
-                  Détails
-                </button>
-                <button class="btn btn-sm btn-outline-danger" @click="store.removeInscription(inscription.id)">
+                <button class="btn btn-sm btn-outline-primary me-1">Détails</button>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  @click="store.removeInscription(inscription.id)"
+                >
                   Annuler
                 </button>
               </td>
@@ -103,58 +99,55 @@
           </tbody>
         </table>
       </div>
-
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useInscriptionStore } from '@/stores/academiqueStore/inscriptionStore'
+import { ref, computed, onMounted } from 'vue';
+import { useInscriptionStore } from '@/stores/academiqueStore/inscriptionStore';
 
 /* =====================
    Store
 ===================== */
-const store = useInscriptionStore()
+const store = useInscriptionStore();
 
 onMounted(() => {
-  store.fetchInscriptions()
-// Charger les filières depuis le localStorage
-  const savedFilieres = localStorage.getItem('filieres')
+  store.fetchInscriptions();
+  // Charger les filières depuis le localStorage
+  const savedFilieres = localStorage.getItem('filieres');
   if (savedFilieres) {
-    const parsed = JSON.parse(savedFilieres)
+    const parsed = JSON.parse(savedFilieres);
     // Extraire uniquement les codes
-    filieres.value = parsed.data.map(f => f.code)
+    filieres.value = parsed.data.map((f) => f.code);
   }
-})
-
-
+});
 
 /* =====================
    États
 ===================== */
-const searchQuery = ref('')
-const selectedFiliere = ref('')
-const selectedStatut = ref('')
+const searchQuery = ref('');
+const selectedFiliere = ref('');
+const selectedStatut = ref('');
 
-const filieres = ref([])
+const filieres = ref([]);
 
 /* =====================
    Computed
 ===================== */
 const filteredInscriptions = computed(() => {
-  return store.inscriptions.filter(i => {
+  return store.inscriptions.filter((i) => {
     const matchSearch =
       i.nom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       i.prenom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      i.matricule.toLowerCase().includes(searchQuery.value.toLowerCase())
+      i.matricule.toLowerCase().includes(searchQuery.value.toLowerCase());
 
-    const matchFiliere = !selectedFiliere.value || i.filiere === selectedFiliere.value
-    const matchStatut = !selectedStatut.value || i.statut === selectedStatut.value
+    const matchFiliere = !selectedFiliere.value || i.filiere === selectedFiliere.value;
+    const matchStatut = !selectedStatut.value || i.statut === selectedStatut.value;
 
-    return matchSearch && matchFiliere && matchStatut
-  })
-})
+    return matchSearch && matchFiliere && matchStatut;
+  });
+});
 
 /* =====================
    Helpers
@@ -163,7 +156,7 @@ const statutClass = (statut) => {
   return {
     'bg-success': statut === 'validée',
     'bg-warning text-dark': statut === 'en attente',
-    'bg-danger': statut === 'annulée'
-  }
-}
+    'bg-danger': statut === 'annulée',
+  };
+};
 </script>

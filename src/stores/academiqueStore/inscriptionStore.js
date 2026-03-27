@@ -64,7 +64,7 @@ export const useInscriptionStore = defineStore('inscriptionStore', {
         this.loading = false;
       }
     },
-    
+
     // Récupérer une inscription par ID
     async fetchInscriptionById(id) {
       const { notifyError } = useNotifier();
@@ -111,44 +111,44 @@ export const useInscriptionStore = defineStore('inscriptionStore', {
       }
     },
     /**
- * Importer des inscriptions via un fichier CSV/Excel
- * @param {File} fichier - Le fichier brut issu de l'input
- */
-async uploadInscriptions(fichier) {
-  const { notifyError } = useNotifier();
-  const messageStore = useMessageStore();
-  
-  // On utilise 'importing' pour le spinner du bouton et 'loading' pour le skeleton de la liste
-  this.importing = true; 
-  this.loading = true;
+     * Importer des inscriptions via un fichier CSV/Excel
+     * @param {File} fichier - Le fichier brut issu de l'input
+     */
+    async uploadInscriptions(fichier) {
+      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
 
-  try {
-    // Idéalement, récupérez ceci depuis votre store d'authentification (ex: authStore.user.id)
-    const gestionnaireId = 1; 
+      // On utilise 'importing' pour le spinner du bouton et 'loading' pour le skeleton de la liste
+      this.importing = true;
+      this.loading = true;
 
-    // Note : On n'envoie plus 'classe' ici, le backend extrait tout du fichier
-    const response = await importInscriptions(fichier, gestionnaireId);
+      try {
+        // Idéalement, récupérez ceci depuis votre store d'authentification (ex: authStore.user.id)
+        const gestionnaireId = 1;
 
-    // Notification de succès avec le message dynamique du backend 
-    // (ex: "45 étudiants importés avec succès")
-    messageStore.addMessage(response.message || 'Importation réussie.');
-    // Invalidation du cache pour forcer la mise à jour des données
-    localStorage.removeItem('inscriptions');
+        // Note : On n'envoie plus 'classe' ici, le backend extrait tout du fichier
+        const response = await importInscriptions(fichier, gestionnaireId);
 
-    // Rafraîchir la liste locale pour voir les nouveaux inscrits immédiatement
-    await this.fetchInscriptions();
+        // Notification de succès avec le message dynamique du backend
+        // (ex: "45 étudiants importés avec succès")
+        messageStore.addMessage(response.message || 'Importation réussie.');
+        // Invalidation du cache pour forcer la mise à jour des données
+        localStorage.removeItem('inscriptions');
 
-    return response; 
-  } catch (error) {
-    // Extraction du message d'erreur (ex: "Colonne matricule manquante")
-    const msg = extractErrorMessage(error, "Erreur lors de l'importation du fichier.");
-    notifyError(msg);
-    throw error; 
-  } finally {
-    this.importing = false;
-    this.loading = false;
-  }
-  },
+        // Rafraîchir la liste locale pour voir les nouveaux inscrits immédiatement
+        await this.fetchInscriptions();
+
+        return response;
+      } catch (error) {
+        // Extraction du message d'erreur (ex: "Colonne matricule manquante")
+        const msg = extractErrorMessage(error, "Erreur lors de l'importation du fichier.");
+        notifyError(msg);
+        throw error;
+      } finally {
+        this.importing = false;
+        this.loading = false;
+      }
+    },
     // Supprimer une inscription
     async removeInscription(id) {
       const { notifyError } = useNotifier();

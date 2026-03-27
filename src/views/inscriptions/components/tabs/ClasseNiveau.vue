@@ -80,11 +80,15 @@
     </div>
 
     <!-- ===================== Modal Import ===================== -->
- 
 
     <!-- ===== Modal Import ===== -->
     <Teleport to="body">
-      <div v-if="showModalImport" class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,.5)">
+      <div
+        v-if="showModalImport"
+        class="modal d-block"
+        tabindex="-1"
+        style="background: rgba(0, 0, 0, 0.5)"
+      >
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
@@ -96,21 +100,31 @@
             </div>
             <div class="modal-body">
               <!-- Recommandations -->
-          <div class="alert alert-info">
-            <h6>Recommandations :</h6>
-            <ul>
-              <li>Le fichier doit être au format <strong>.csv</strong> ou <strong>.xlsx</strong>.</li>
-              <li>Colonnes obligatoires : <code>matricule</code>,<code>nom</code>, <code>prenom</code>,<code>code_classe</code>,<code>annee_academique</code>.</li>
-              <li>Chaque ligne correspond à un enregistrement unique.</li>
-            </ul>
-          </div>
+              <div class="alert alert-info">
+                <h6>Recommandations :</h6>
+                <ul>
+                  <li>
+                    Le fichier doit être au format <strong>.csv</strong> ou <strong>.xlsx</strong>.
+                  </li>
+                  <li>
+                    Colonnes obligatoires : <code>matricule</code>,<code>nom</code>,
+                    <code>prenom</code>,<code>code_classe</code>,<code>annee_academique</code>.
+                  </li>
+                  <li>Chaque ligne correspond à un enregistrement unique.</li>
+                </ul>
+              </div>
               <p class="text-muted small">
                 Importez un fichier Excel (.xlsx) ou CSV contenant la liste des étudiants.
               </p>
               <div class="mb-3">
                 <label class="form-label fw-semibold">Fichier à importer</label>
-                <input type="file" class="form-control" accept=".xlsx,.csv"
-                  ref="fileInput" @change="onFileChange" />
+                <input
+                  type="file"
+                  class="form-control"
+                  accept=".xlsx,.csv"
+                  ref="fileInput"
+                  @change="onFileChange"
+                />
               </div>
               <div v-if="fichierSelectionne" class="alert alert-info py-2 small">
                 <i class="bi bi-file-earmark-check me-1"></i>
@@ -122,8 +136,11 @@
             </div>
             <div class="modal-footer">
               <button class="btn btn-secondary btn-sm" @click="closeImport">Annuler</button>
-              <button class="btn btn-success btn-sm"
-                :disabled="!fichierSelectionne || importEnCours" @click="confirmerImport">
+              <button
+                class="btn btn-success btn-sm"
+                :disabled="!fichierSelectionne || importEnCours"
+                @click="confirmerImport"
+              >
                 <span v-if="importEnCours" class="spinner-border spinner-border-sm me-1"></span>
                 <i v-else class="bi bi-upload me-1"></i>
                 {{ importEnCours ? 'Importation...' : 'Importer' }}
@@ -136,22 +153,33 @@
 
     <!-- ===== Modal Étudiants ===== -->
     <Teleport to="body">
-      <div v-if="showModalEtudiants" class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,.5)">
+      <div
+        v-if="showModalEtudiants"
+        class="modal d-block"
+        tabindex="-1"
+        style="background: rgba(0, 0, 0, 0.5)"
+      >
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">
                 <i class="bi bi-people me-2 text-primary"></i>
                 Étudiants — <strong>{{ classeSelectionnee?.classe_code }}</strong>
-                <span class="badge bg-primary ms-2">{{ classeSelectionnee?.filiere_designation }}</span>
+                <span class="badge bg-primary ms-2">{{
+                  classeSelectionnee?.filiere_designation
+                }}</span>
                 <span class="badge bg-secondary ms-1">{{ classeSelectionnee?.niveau_code }}</span>
               </h5>
               <button type="button" class="btn-close" @click="closeEtudiants"></button>
             </div>
             <div class="modal-body">
               <div class="mb-3">
-                <input v-model="rechercheEtudiant" type="text" class="form-control"
-                  placeholder="Rechercher un étudiant..." />
+                <input
+                  v-model="rechercheEtudiant"
+                  type="text"
+                  class="form-control"
+                  placeholder="Rechercher un étudiant..."
+                />
               </div>
               <div v-if="loadingEtudiants" class="text-center py-4">
                 <div class="spinner-border text-primary" role="status"></div>
@@ -171,7 +199,11 @@
                   <tbody>
                     <tr v-for="(etudiant, i) in etudiantsFiltres" :key="etudiant.etudiant_id">
                       <td>{{ i + 1 }}</td>
-                      <td><span class="badge bg-light text-dark border">{{ etudiant.matricule }}</span></td>
+                      <td>
+                        <span class="badge bg-light text-dark border">{{
+                          etudiant.matricule
+                        }}</span>
+                      </td>
                       <td>{{ etudiant.prenom }} {{ etudiant.nom }}</td>
                       <td>{{ etudiant.email ?? '—' }}</td>
                       <td>{{ etudiant.telephone ?? '—' }}</td>
@@ -184,14 +216,15 @@
               </div>
             </div>
             <div class="modal-footer">
-              <span class="text-muted small me-auto">{{ etudiantsFiltres.length }} étudiant(s)</span>
+              <span class="text-muted small me-auto"
+                >{{ etudiantsFiltres.length }} étudiant(s)</span
+              >
               <button class="btn btn-secondary btn-sm" @click="closeEtudiants">Fermer</button>
             </div>
           </div>
         </div>
       </div>
     </Teleport>
-
   </div>
 </template>
 
@@ -231,7 +264,9 @@ const openImport = (classe) => {
   showModalImport.value = true;
 };
 
-const closeImport = () => { showModalImport.value = false; };
+const closeImport = () => {
+  showModalImport.value = false;
+};
 
 const onFileChange = (e) => {
   fichierSelectionne.value = e.target.files[0] ?? null;
@@ -283,12 +318,20 @@ const voirEtudiants = async (classe) => {
   }
 };
 
-const closeEtudiants = () => { showModalEtudiants.value = false; };
+const closeEtudiants = () => {
+  showModalEtudiants.value = false;
+};
 
 /* ===================== Actions existantes ===================== */
-const editClasse = (classe) => { console.log('Édition :', classe); };
-const confirmDelete = (classe) => { console.log('Suppression :', classe); };
+const editClasse = (classe) => {
+  console.log('Édition :', classe);
+};
+const confirmDelete = (classe) => {
+  console.log('Suppression :', classe);
+};
 
 /* ===================== Lifecycle ===================== */
-onMounted(() => { classeStore.fetchClassesDetails(); });
+onMounted(() => {
+  classeStore.fetchClassesDetails();
+});
 </script>

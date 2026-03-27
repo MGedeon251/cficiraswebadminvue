@@ -70,10 +70,12 @@ export const deleteInscription = (id) => academiqueService.delete(`/inscriptions
 
 export const importInscriptions = async (fichier, gestionnaireId) => {
   const formData = new FormData();
+
+  if (!(fichier instanceof File) && !(fichier instanceof Blob)) {
+    throw new Error("Le paramètre 'fichier' doit être un objet File.");
+  }
   formData.append('file', fichier);
-  formData.append('gestionnaire_id', gestionnaireId); // On ne garde que l'ID du user actuel
+  formData.append('gestionnaire_id', String(gestionnaireId));
 
-  const response = await academiqueFormApi.post('/inscriptions/import', formData);
-  return response.data;
+  return await academiqueFormService.post('/inscriptions/import', formData);
 };
-

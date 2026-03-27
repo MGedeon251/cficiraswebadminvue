@@ -53,7 +53,7 @@
         >
           Paiements
         </a>
-      </li>    
+      </li>
       <li class="nav-item">
         <a
           class="nav-link"
@@ -86,7 +86,7 @@
         <recherche-inscriptions />
       </div>
       <div class="tab-pane fade" id="gestion" role="tabpanel" aria-labelledby="gestion-tab">
-        <ClasseNiveau/>
+        <ClasseNiveau />
       </div>
       <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats-tab">
         <stats-rapports />

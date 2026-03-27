@@ -15,7 +15,7 @@
             </div>
           </div>
           <div class="d-flex justify-content-between align-items-end aflex-wrap">
-                        <div class="dropdown me-2">
+            <div class="dropdown me-2">
               <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
                 <i class="mdi mdi-dots-vertical"></i>
               </button>
@@ -36,20 +36,20 @@
                 </li>
               </ul>
             </div>
-             <button
-                class="btn btn-primary mt-2 mt-xl-0"
-                data-bs-toggle="modal"
-                data-bs-target="#importInscriptionsModal"
-              >
-                + Ajouter un nouveau
-              </button>
-              <ImportModal/>
-        </div>
+            <button
+              class="btn btn-primary mt-2 mt-xl-0"
+              data-bs-toggle="modal"
+              data-bs-target="#importInscriptionsModal"
+            >
+              + Ajouter un nouveau
+            </button>
+            <ImportModal />
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script setup="setup">
-import ImportModal from './modal/InscriptionsModal.vue' 
+import ImportModal from './modal/InscriptionsModal.vue';
 </script>
