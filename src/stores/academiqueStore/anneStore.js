@@ -6,7 +6,6 @@ import {
   deleteAnneeAcademique,
 } from '@/api/academique/academiqueApi';
 import { useMessageStore } from '@/stores/messages/messageStore';
-import { useNotifier } from '@/stores/messages/useNotifier';
 import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
 
 // Helpers pour gérer le cache
@@ -21,7 +20,6 @@ function setCache(key, data) {
 }
 
 function getCache(key, ttl = 5 * 60 * 1000) {
-  // TTL par défaut : 5 minutes
   const cached = localStorage.getItem(key);
   if (!cached) return null;
 
@@ -43,6 +41,7 @@ export const useAnneeStore = defineStore('anneeStore', {
   actions: {
     // Récupérer toutes les années académiques
     async fetchAnneesAcademiques() {
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         const cached = getCache('anneesAcademiques');
@@ -54,7 +53,7 @@ export const useAnneeStore = defineStore('anneeStore', {
           setCache('anneesAcademiques', response);
         }
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la récupération des années académiques.');
+        messageStore.notifyError('Erreur lors de la récupération des données.');
       } finally {
         this.loading = false;
       }
@@ -62,15 +61,16 @@ export const useAnneeStore = defineStore('anneeStore', {
 
     // Ajouter une nouvelle année académique
     async addAnneeAcademique(data) {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         await createAnneeAcademique(data);
-        useMessageStore().addMessage('Année académique créée avec succès.');
-        localStorage.removeItem('anneesAcademiques'); // Invalider le cache
-        this.fetchAnneesAcademiques();
+        messageStore.notifySuccess('Année académique créée avec succès.');
+        localStorage.removeItem('anneesAcademiques');
+        await this.fetchAnneesAcademiques();
       } catch (error) {
-        notifyError(extractErrorMessage(error, "Erreur lors de la création de l'année."));
+        const errorMsg = extractErrorMessage(error, "Erreur lors de la création de l'année.");
+        messageStore.notifyError(errorMsg);
       } finally {
         this.loading = false;
       }
@@ -78,14 +78,16 @@ export const useAnneeStore = defineStore('anneeStore', {
 
     // Modifier une année académique existante
     async editAnneeAcademique(id, data) {
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         await updateAnneeAcademique(id, data);
-        useMessageStore().addSuccess('Année académique mise à jour avec succès.');
-        localStorage.removeItem('anneesAcademiques'); // Invalider le cache
-        this.fetchAnneesAcademiques();
+        messageStore.notifySuccess('Année académique mise à jour avec succès.');
+        localStorage.removeItem('anneesAcademiques');
+        await this.fetchAnneesAcademiques();
       } catch (error) {
-        useMessageStore().addError("Erreur lors de la mise à jour de l'année académique.");
+        const errorMsg = extractErrorMessage(error, 'Erreur lors de la mise à jour.');
+        messageStore.notifyError(errorMsg);
       } finally {
         this.loading = false;
       }
@@ -93,14 +95,16 @@ export const useAnneeStore = defineStore('anneeStore', {
 
     // Supprimer une année académique
     async removeAnneeAcademique(id) {
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         await deleteAnneeAcademique(id);
-        useMessageStore().addSuccess('Année académique supprimée avec succès.');
-        localStorage.removeItem('anneesAcademiques'); // Invalider le cache
-        this.fetchAnneesAcademiques();
+        messageStore.notifySuccess('Année académique supprimée avec succès.');
+        localStorage.removeItem('anneesAcademiques');
+        await this.fetchAnneesAcademiques();
       } catch (error) {
-        useMessageStore().addError("Erreur lors de la suppression de l'année académique.");
+        const errorMsg = extractErrorMessage(error, 'Erreur lors de la suppression.');
+        messageStore.notifyError(errorMsg);
       } finally {
         this.loading = false;
       }

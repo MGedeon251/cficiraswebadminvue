@@ -19,13 +19,17 @@ export const useMessageStore = defineStore('messageStore', {
   }),
 
   actions: {
-    // ✅ Action centrale — toutes les autres l'appellent
     addMessage(message, type = 'success', options = {}) {
       if (!message) return;
+      const toastId = options.toastId || message;
 
       this.messages.push({ id: Date.now(), message, type });
 
-      const mergedOptions = { ...DEFAULT_OPTIONS, ...options };
+      const mergedOptions = {
+        ...DEFAULT_OPTIONS,
+        toastId,
+        ...options,
+      };
 
       if (TOAST_TYPES.includes(type)) {
         toast[type](message, mergedOptions);
@@ -33,8 +37,6 @@ export const useMessageStore = defineStore('messageStore', {
         toast(message, { ...mergedOptions, type: 'default' });
       }
     },
-
-    // ✅ Raccourcis expressifs
     notifySuccess(message, options = {}) {
       this.addMessage(message, 'success', options);
     },
@@ -47,14 +49,17 @@ export const useMessageStore = defineStore('messageStore', {
     notifyInfo(message, options = {}) {
       this.addMessage(message, 'info', options);
     },
-
-    // Toast persistant pour les erreurs critiques (ne se ferme pas)
     notifyCritical(message) {
-      this.addMessage(message, 'error', { autoClose: false, hideProgressBar: true });
+      this.addMessage(message, 'error', {
+        autoClose: false,
+        hideProgressBar: true,
+        toastId: 'critical-error-unique',
+      });
     },
 
     clearMessages() {
       this.messages = [];
+      toast.clearAll();
     },
   },
 });

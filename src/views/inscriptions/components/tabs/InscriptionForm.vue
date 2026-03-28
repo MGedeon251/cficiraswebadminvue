@@ -80,13 +80,16 @@
                 </span>
               </td>
               <td class="text-end">
-                <button class="btn btn-sm btn-outline-primary me-1">Détails</button>
-                <button
-                  class="btn btn-sm btn-outline-danger"
-                  @click="store.removeInscription(inscription.id)"
-                >
-                  Annuler
-                </button>
+                <div class="btn-group shadow-sm" role="group" aria-label="Actions de classe">
+                  <button class="btn btn-sm btn-outline-secondary">
+                    <i class="mdi mdi-information-outline"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-outline-danger"
+                    @click="store.removeInscription(inscription.id)"
+                  ><i class="mdi mdi-delete-outline"></i>
+                  </button>
+                </div>
               </td>
             </tr>
 
@@ -107,34 +110,23 @@
 import { ref, computed, onMounted } from 'vue';
 import { useInscriptionStore } from '@/stores/academiqueStore/inscriptionStore';
 
-/* =====================
-   Store
-===================== */
+
 const store = useInscriptionStore();
 
 onMounted(() => {
   store.fetchInscriptions();
-  // Charger les filières depuis le localStorage
   const savedFilieres = localStorage.getItem('filieres');
   if (savedFilieres) {
     const parsed = JSON.parse(savedFilieres);
-    // Extraire uniquement les codes
     filieres.value = parsed.data.map((f) => f.code);
   }
 });
-
-/* =====================
-   États
-===================== */
 const searchQuery = ref('');
 const selectedFiliere = ref('');
 const selectedStatut = ref('');
 
 const filieres = ref([]);
 
-/* =====================
-   Computed
-===================== */
 const filteredInscriptions = computed(() => {
   return store.inscriptions.filter((i) => {
     const matchSearch =
@@ -149,9 +141,6 @@ const filteredInscriptions = computed(() => {
   });
 });
 
-/* =====================
-   Helpers
-===================== */
 const statutClass = (statut) => {
   return {
     'bg-success': statut === 'validée',

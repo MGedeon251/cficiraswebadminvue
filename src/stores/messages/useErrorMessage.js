@@ -1,5 +1,4 @@
 // /composables/useErrorMessage.js
-
 export function extractErrorMessage(error, fallback = 'Une erreur est survenue.') {
   if (!error) return fallback;
 
