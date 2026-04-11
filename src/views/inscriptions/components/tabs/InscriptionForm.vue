@@ -50,64 +50,84 @@
         <AjouterTuteur />
       </div>
 
-      <!-- Table -->
       <div class="table-responsive">
-        <table class="table table-hover align-middle">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Matricule</th>
-              <th>Nom</th>
-              <th>Prénom</th>
-              <th>Classe</th>
-              <th>Filière</th>
-              <th>Statut</th>
-              <th class="text-end">Actions</th>
-            </tr>
-          </thead>
+  <table class="table table-hover align-middle">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Matricule</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Classe</th>
+        <th>Filière</th>
+        <th>Statut</th>
+        <th class="text-end">Actions</th>
+      </tr>
+    </thead>
 
-          <tbody>
-            <tr v-for="(inscription, index) in filteredInscriptions" :key="inscription.id">
-              <td>{{ index + 1 }}</td>
-              <td>{{ inscription.matricule }}</td>
-              <td>{{ inscription.nom }}</td>
-              <td>{{ inscription.prenom }}</td>
-              <td>{{ inscription.classe_code }}</td>
-              <td>{{ inscription.filiere_code }}</td>
-              <td>
-                <span class="badge" :class="statutClass(inscription.statut)">
-                  {{ inscription.statut }}
-                </span>
-              </td>
-              <td class="text-end">
-                <div class="btn-group shadow-sm" role="group" aria-label="Actions de classe">
-                  <button class="btn btn-sm btn-outline-secondary">
-                    <i class="mdi mdi-information-outline"></i>
-                  </button>
-                  <button
-                    class="btn btn-sm btn-outline-danger"
-                    @click="store.removeInscription(inscription.id)"
-                  ><i class="mdi mdi-delete-outline"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
+    <tbody>
+      <tr v-for="(inscription, index) in paginatedInscriptions" :key="inscription.id">
+        <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
+        <td>{{ inscription.matricule }}</td>
+        <td>{{ inscription.nom }}</td>
+        <td>{{ inscription.prenom }}</td>
+        <td>{{ inscription.classe_code }}</td>
+        <td>{{ inscription.filiere_code }}</td>
+        <td>
+          <span class="badge" :class="statutClass(inscription.statut)">
+            {{ inscription.statut }}
+          </span>
+        </td>
+        <td class="text-end">
+          <div class="btn-group shadow-sm" role="group" aria-label="Actions de classe">
+            <button
+              class="btn btn-sm btn-outline-secondary"
+              @click="openModal(inscription)"
+            >
+              <i class="mdi mdi-information-outline"></i>
+            </button>
+            <button
+              class="btn btn-sm btn-outline-danger"
+              @click="store.removeInscription(inscription.id)"
+            >
+              <i class="mdi mdi-delete-outline"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
 
-            <tr v-if="filteredInscriptions.length === 0">
-              <td colspan="8" class="text-center py-4">
-                <img src="/img/empty-box.svg" width="80" class="mb-2" />
-                <div class="text-muted">Aucune inscription trouvée</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <tr v-if="filteredInscriptions.length === 0">
+        <td colspan="8" class="text-center py-4">
+          <img src="/img/empty-box.svg" width="80" class="mb-2" />
+          <div class="text-muted">Aucune inscription trouvée</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <InscriptionDetailModal
+    v-model="showModal"
+    :inscription="selectedInscription"
+  />
+</div>
+
+<div class="d-flex justify-content-between align-items-center mt-4">
+  <div class="text-muted small">
+    Affichage de <b>{{ paginatedInscriptions.length }}</b> sur <b>{{ filteredInscriptions.length }}</b> inscriptions
+  </div>
+  <Pagination
+    v-model="currentPage"
+    :items-per-page="itemsPerPage"
+    :total-items="filteredInscriptions.length"
+  />
+</div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
+import InscriptionDetailModal from '../modal/InscriptionDetails.vue' 
 import { useInscriptionStore } from '@/stores/academiqueStore/inscriptionStore';
 
 
@@ -121,6 +141,8 @@ onMounted(() => {
     filieres.value = parsed.data.map((f) => f.code);
   }
 });
+
+
 const searchQuery = ref('');
 const selectedFiliere = ref('');
 const selectedStatut = ref('');
@@ -128,18 +150,28 @@ const selectedStatut = ref('');
 const filieres = ref([]);
 
 const filteredInscriptions = computed(() => {
-  return store.inscriptions.filter((i) => {
-    const matchSearch =
-      i.nom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      i.prenom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      i.matricule.toLowerCase().includes(searchQuery.value.toLowerCase());
 
-    const matchFiliere = !selectedFiliere.value || i.filiere === selectedFiliere.value;
+  const data = store.inscriptions || [];
+  
+  return data.filter((i) => {
+    const search = searchQuery.value.toLowerCase().trim();
+    const matchSearch = !search || 
+      (i.nom?.toLowerCase().includes(search)) ||
+      (i.prenom?.toLowerCase().includes(search)) ||
+      (i.matricule?.toLowerCase().includes(search));
+    const matchFiliere = !selectedFiliere.value || i.filiere_code === selectedFiliere.value;
     const matchStatut = !selectedStatut.value || i.statut === selectedStatut.value;
-
     return matchSearch && matchFiliere && matchStatut;
   });
 });
+
+const selectedInscription = ref(null);
+const showModal = ref(false);
+
+const openModal = (inscription) => {
+  selectedInscription.value = inscription;
+  showModal.value = true;
+};
 
 const statutClass = (statut) => {
   return {
@@ -148,4 +180,21 @@ const statutClass = (statut) => {
     'bg-danger': statut === 'annulée',
   };
 };
+
+// 1. État de la pagination
+const currentPage = ref(1);
+const itemsPerPage = ref(10); // Tu peux changer cette valeur
+
+// 2. Calcul des données paginées
+const paginatedInscriptions = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return filteredInscriptions.value.slice(start, end);
+});
+
+// 3. Reset de la page quand les filtres changent (Optionnel mais recommandé)
+// Si l'utilisateur est à la page 5 et filtre, il doit revenir à la page 1
+watch([searchQuery, selectedFiliere, selectedStatut], () => {
+  currentPage.value = 1;
+});
 </script>
