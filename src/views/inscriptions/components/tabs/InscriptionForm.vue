@@ -104,18 +104,11 @@
 
         <InscriptionDetailModal v-model="showModal" :inscription="selectedInscription" />
       </div>
-
-      <div class="d-flex justify-content-between align-items-center mt-4">
-        <div class="text-muted small">
-          Affichage de <b>{{ paginatedInscriptions.length }}</b> sur
-          <b>{{ filteredInscriptions.length }}</b> inscriptions
-        </div>
         <Pagination
           v-model="currentPage"
           :items-per-page="itemsPerPage"
           :total-items="filteredInscriptions.length"
         />
-      </div>
     </div>
   </div>
 </template>

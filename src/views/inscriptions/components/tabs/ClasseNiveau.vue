@@ -16,7 +16,7 @@
               <th>Code</th>
               <th>Filière</th>
               <th>Niveau</th>
-              <th></th>
+              <th>Actions</th>
             </tr>
           </thead>
 
@@ -32,7 +32,7 @@
               <td>{{ classe.classe_code }}</td>
               <td>{{ classe.filiere_designation }}</td>
               <td>
-                <span class="badge bg-secondary">{{ classe.niveau_code }}</span>
+                <span class="badge bg-secondary">{{ classe.cycle_code + classe.niveau_ordre }}</span>
               </td>
 
               <td>
