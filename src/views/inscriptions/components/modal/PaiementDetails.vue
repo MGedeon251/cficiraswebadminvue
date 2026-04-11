@@ -1,31 +1,31 @@
 <template>
   <teleport to="body">
     <transition name="fade">
-      <div
-        v-if="modelValue"
-        class="modal-mask"
-        @click.self="close"
-      >
+      <div v-if="modelValue" class="modal-mask" @click.self="close">
         <div class="modal-dialog modal-dialog-centered modal-lg">
           <div class="modal-content border-0 shadow-lg">
-            
             <div class="modal-header border-bottom-0 pb-0">
               <h5 class="modal-title fw-bold text-secondary">Détails de l'étudiant</h5>
               <button type="button" class="btn-close shadow-none" @click="close"></button>
             </div>
 
             <div class="modal-body p-4" v-if="inscription">
-              
               <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
                 <div class="avatar-circle me-3 bg-light text-primary">
                   {{ inscription.prenom[0] }}{{ inscription.nom[0] }}
                 </div>
                 <div>
                   <h4 class="mb-0 fw-bold">{{ inscription.nom }} {{ inscription.prenom }}</h4>
-                  <span class="text-muted small">Matricule: <span class="fw-medium text-dark">{{ inscription.matricule }}</span></span>
+                  <span class="text-muted small"
+                    >Matricule:
+                    <span class="fw-medium text-dark">{{ inscription.matricule }}</span></span
+                  >
                 </div>
                 <div class="ms-auto text-end">
-                  <span class="badge rounded-pill px-3 py-2" :class="statutClass(inscription.statut)">
+                  <span
+                    class="badge rounded-pill px-3 py-2"
+                    :class="statutClass(inscription.statut)"
+                  >
                     {{ inscription.statut.toUpperCase() }}
                   </span>
                 </div>
@@ -34,7 +34,9 @@
               <div class="row g-4">
                 <div class="col-md-6">
                   <div class="info-card">
-                    <label class="text-muted small text-uppercase fw-semibold mb-1 d-block">Cursus & Classe</label>
+                    <label class="text-muted small text-uppercase fw-semibold mb-1 d-block"
+                      >Cursus & Classe</label
+                    >
                     <div class="d-flex align-items-center">
                       <span class="info-icon me-2 text-info">🎓</span>
                       <span class="fw-bold">{{ inscription.classe_code }}</span>
@@ -46,7 +48,9 @@
 
                 <div class="col-md-6">
                   <div class="info-card">
-                    <label class="text-muted small text-uppercase fw-semibold mb-1 d-block">Année Académique</label>
+                    <label class="text-muted small text-uppercase fw-semibold mb-1 d-block"
+                      >Année Académique</label
+                    >
                     <div class="d-flex align-items-center">
                       <span class="info-icon me-2 text-success">📅</span>
                       <span class="fw-bold">{{ inscription.annee_code }}</span>
@@ -56,9 +60,13 @@
 
                 <div class="col-md-6">
                   <div class="info-card">
-                    <label class="text-muted small text-uppercase fw-semibold mb-1 d-block">Sexe</label>
+                    <label class="text-muted small text-uppercase fw-semibold mb-1 d-block"
+                      >Sexe</label
+                    >
                     <div class="d-flex align-items-center text-capitalize">
-                      <span class="info-icon me-2">{{ inscription.sexe === 'M' ? '♂️' : '♀️' }}</span>
+                      <span class="info-icon me-2">{{
+                        inscription.sexe === 'M' ? '♂️' : '♀️'
+                      }}</span>
                       <span>{{ inscription.sexe }}</span>
                     </div>
                   </div>
@@ -66,7 +74,9 @@
 
                 <div class="col-md-6">
                   <div class="info-card">
-                    <label class="text-muted small text-uppercase fw-semibold mb-1 d-block">Date d'inscription</label>
+                    <label class="text-muted small text-uppercase fw-semibold mb-1 d-block"
+                      >Date d'inscription</label
+                    >
                     <div class="d-flex align-items-center text-secondary">
                       <span class="info-icon me-2 text-warning">🕒</span>
                       <span>{{ formatDate(inscription.date_inscription) }}</span>
@@ -80,7 +90,6 @@
               <button class="btn btn-light px-4 fw-medium" @click="close">Fermer</button>
               <button class="btn btn-primary px-4 shadow-sm fw-medium">Imprimer le reçu</button>
             </div>
-
           </div>
         </div>
       </div>
@@ -130,10 +139,12 @@
 }
 
 /* Transition de la modal */
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.3s ease;
 }
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 
@@ -152,7 +163,7 @@ import { onMounted, onUnmounted } from 'vue';
 
 const props = defineProps({
   modelValue: Boolean,
-  inscription: Object
+  inscription: Object,
 });
 
 const emit = defineEmits(['update:modelValue']);

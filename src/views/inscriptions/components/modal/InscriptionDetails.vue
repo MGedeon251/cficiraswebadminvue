@@ -10,21 +10,15 @@
     >
       <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content shadow-md">
-
           <!-- Header -->
           <div class="modal-header bg-primary text-white">
             <h5 class="modal-title">Détails de l'inscription</h5>
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              @click="close"
-            ></button>
+            <button type="button" class="btn-close btn-close-white" @click="close"></button>
           </div>
 
           <!-- Body -->
           <div class="modal-body" v-if="inscription">
             <ul class="list-group list-group-flush">
-
               <li class="list-group-item d-flex justify-content-between">
                 <strong>Matricule :</strong>
                 <span class="fw-bold text-primary">
@@ -34,9 +28,7 @@
 
               <li class="list-group-item d-flex justify-content-between">
                 <strong>Nom complet :</strong>
-                <span>
-                  {{ inscription.nom }} {{ inscription.prenom }}
-                </span>
+                <span> {{ inscription.nom }} {{ inscription.prenom }} </span>
               </li>
 
               <li class="list-group-item d-flex justify-content-between">
@@ -78,17 +70,13 @@
                   {{ inscription.statut }}
                 </span>
               </li>
-
             </ul>
           </div>
 
           <!-- Footer -->
           <div class="modal-footer">
-            <button class="btn btn-secondary" @click="close">
-              Fermer
-            </button>
+            <button class="btn btn-secondary" @click="close">Fermer</button>
           </div>
-
         </div>
       </div>
     </div>
@@ -100,7 +88,7 @@ import { onMounted, onUnmounted } from 'vue';
 
 const props = defineProps({
   modelValue: Boolean,
-  inscription: Object
+  inscription: Object,
 });
 
 const emit = defineEmits(['update:modelValue']);

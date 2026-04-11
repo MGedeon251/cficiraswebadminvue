@@ -1,97 +1,114 @@
 <template>
-  <div class="modal fade" id="importInscriptionsModal" tabindex="-1" ref="modalRef">
+  <div class="modal fade" id="importInscriptionsModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
       <div class="modal-content shadow-lg border-0">
+        <!-- HEADER -->
         <div class="modal-header bg-dark text-white">
           <h5 class="modal-title">
-            <i class="bi bi-file-earmark-excel me-2"></i>Importer des inscriptions
+            <i class="bi bi-file-earmark-excel me-2"></i>
+            Importer des inscriptions
           </h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
 
+        <!-- BODY -->
         <div class="modal-body">
+          <!-- INFO -->
           <div class="alert alert-light border-start border-4 border-info shadow-sm mb-4">
             <h6 class="fw-bold text-info">Recommandations :</h6>
             <ul class="small mb-0">
-              <li>Format requis : <strong>.csv</strong> ou <strong>.xlsx</strong>.</li>
-              <li>Utilisez exactement les colonnes du modèle pour éviter les rejets.</li>
-              <li>L'<strong>année académique</strong> doit être active dans le système.</li>
+              <li>Format : .csv ou .xlsx</li>
+              <li>Respectez le modèle</li>
+              <li>Année académique valide</li>
             </ul>
           </div>
 
-          <div class="mb-3">
-            <label class="form-label fw-semibold">Sélectionner le fichier</label>
+          <!-- UPLOAD -->
+          <div
+            class="border rounded p-4 text-center bg-light position-relative"
+            style="cursor: pointer"
+          >
             <input
               type="file"
-              class="form-control"
+              class="position-absolute top-0 start-0 w-100 h-100 opacity-0"
               accept=".xlsx,.xls,.csv"
               @change="handleFileUpload"
-              :disabled="inscriptionStore.importing"
             />
+
+            <i class="bi bi-cloud-upload fs-1 text-primary"></i>
+            <p class="fw-semibold">Glisser ou cliquer</p>
           </div>
 
-          <div v-if="previewData.length" class="mt-4 animate__animated animate__fadeIn">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <h6 class="mb-0 fw-bold">Aperçu (5 premières lignes) :</h6>
-              <span class="badge bg-secondary">{{ previewData.length }} lignes détectées</span>
-            </div>
-            <div class="table-responsive border rounded">
-              <table class="table table-sm table-hover mb-0" style="font-size: 0.85rem">
-                <thead class="table-light">
-                  <tr>
-                    <th>Matricule</th>
-                    <th>Nom & Prénom</th>
-                    <th>Sexe</th>
-                    <th>Classe</th>
-                    <th>Année</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(row, index) in previewData.slice(0, 5)" :key="index">
-                    <td>
-                      <code class="text-primary">{{ row.matricule }}</code>
-                    </td>
-                    <td>{{ row.nom }} {{ row.prenom }}</td>
-                    <td>{{ row.sexe }}</td>
-                    <td>{{ row.code_classe }}</td>
-                    <td>{{ row.annee_academique }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <div v-if="selectedFile" class="mt-2 text-success small">✔ {{ selectedFile.name }}</div>
+
+          <!-- ERREUR GLOBAL -->
+          <div v-if="hasErrors" class="alert alert-danger mt-3">
+            Certaines lignes contiennent des erreurs.
+          </div>
+
+          <!-- PREVIEW -->
+          <div v-if="previewData.length" class="mt-4">
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr>
+                  <th>Matricule</th>
+                  <th>Nom</th>
+                  <th>Sexe</th>
+                  <th>Classe</th>
+                  <th>Année</th>
+                  <th>Statut</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr
+                  v-for="(row, index) in previewData.slice(0, 5)"
+                  :key="index"
+                  :class="{ 'table-danger': row._errors?.length }"
+                >
+                  <td>
+                    <code>{{ row.matricule }}</code>
+                  </td>
+
+                  <td>
+                    <div>{{ row.nom }}</div>
+                    <small>{{ row.prenom }}</small>
+                  </td>
+
+                  <td>{{ row.sexe }}</td>
+                  <td>{{ row.code_classe }}</td>
+                  <td>{{ row.annee_academique }}</td>
+
+                  <td>
+                    <span v-if="!row._errors.length" class="badge bg-success">OK</span>
+
+                    <div v-else>
+                      <span class="badge bg-danger">Erreur</span>
+                      <ul class="small text-danger mb-0">
+                        <li v-for="(e, i) in row._errors" :key="i">{{ e }}</li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <div class="modal-footer bg-light">
-          <button
-            type="button"
-            class="btn btn-link text-decoration-none me-auto"
-            @click="downloadTemplate"
-          >
-            <i class="bi bi-download me-1"></i> Télécharger modèle
+        <!-- FOOTER -->
+        <div class="modal-footer">
+          <button class="btn btn-outline-primary btn-sm me-auto" @click="downloadTemplate">
+            Télécharger modèle
           </button>
 
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-            :disabled="inscriptionStore.importing"
-          >
-            Annuler
-          </button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
 
           <button
-            type="button"
-            class="btn btn-primary px-4"
-            :disabled="!selectedFile || inscriptionStore.importing"
+            class="btn btn-primary"
+            :disabled="!selectedFile || hasErrors"
             @click="confirmImport"
           >
-            <span
-              v-if="inscriptionStore.importing"
-              class="spinner-border spinner-border-sm me-2"
-            ></span>
-            <i v-else class="bi bi-check-circle me-1"></i>
-            {{ inscriptionStore.importing ? 'Importation...' : "Lancer l'importation" }}
+            Importer
           </button>
         </div>
       </div>
@@ -101,92 +118,73 @@
 
 <script setup>
 import * as XLSX from 'xlsx';
-import { ref } from 'vue';
-import { useInscriptionStore } from '@/stores/academiqueStore/inscriptionStore'; // Ton store Pinia
+import { ref, computed } from 'vue';
+import { useInscriptionStore } from '@/stores/academiqueStore/inscriptionStore';
 
 const inscriptionStore = useInscriptionStore();
+
 const previewData = ref([]);
 const selectedFile = ref(null);
-const modalRef = ref(null);
 
-// Propriété de la classe sélectionnée (Passée par le parent ou via une ref globale)
 const props = defineProps({
-  classe: { type: Object, required: true },
+  classe: Object,
 });
 
-const handleFileUpload = (event) => {
-  const file = event.target.files[0];
+// VALIDATION
+const validateRows = (rows) => {
+  return rows.map((row) => {
+    const errors = [];
+
+    if (!row.matricule) errors.push('Matricule manquant');
+    if (!row.nom) errors.push('Nom manquant');
+    if (!row.prenom) errors.push('Prénom manquant');
+    if (!row.code_classe) errors.push('Classe manquante');
+    if (!row.annee_academique) errors.push('Année manquante');
+
+    return { ...row, _errors: errors };
+  });
+};
+
+const hasErrors = computed(() => previewData.value.some((r) => r._errors?.length));
+
+// UPLOAD
+const handleFileUpload = (e) => {
+  const file = e.target.files[0];
   if (!file) return;
 
-  selectedFile.value = file; // On garde le fichier brut pour l'upload
+  selectedFile.value = file;
 
-  // Lecture pour l'aperçu UI uniquement
   const reader = new FileReader();
   reader.onload = (e) => {
     const data = new Uint8Array(e.target.result);
     const workbook = XLSX.read(data, { type: 'array' });
-    const sheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[sheetName];
-    const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const json = XLSX.utils.sheet_to_json(sheet, { defval: '' });
 
-    previewData.value = jsonData;
+    previewData.value = validateRows(json);
   };
+
   reader.readAsArrayBuffer(file);
 };
 
+// IMPORT
 const confirmImport = async () => {
-  if (!selectedFile.value) return;
+  if (hasErrors.value) return;
 
-  try {
-    // Appel de l'action du store Pinia
-    await inscriptionStore.uploadInscriptions(selectedFile.value);
-
-    // Si succès, on réinitialise et on ferme le modal via Bootstrap
-    previewData.value = [];
-    selectedFile.value = null;
-
-    const modalElement = document.getElementById('importInscriptionsModal');
-    const modalInstance = bootstrap.Modal.getInstance(modalElement);
-    if (modalInstance) modalInstance.hide();
-  } catch (error) {
-    // L'erreur est déjà gérée par le notifyError du store
-    console.error("Échec de l'import :", error);
-  }
+  await inscriptionStore.uploadInscriptions(selectedFile.value);
 };
 
+// TEMPLATE
 const downloadTemplate = () => {
-  const headers = [
-    'matricule',
-    'nom',
-    'prenom',
-    'sexe',
-    'date_naissance',
-    'lieu_naissance',
-    'telephone',
-    'email',
-    'ville',
-    'filiere',
-    'code_classe',
-    'annee_academique',
-  ];
-  const sampleRow = [
-    'ETU001',
-    'NOM',
-    'PRENOM',
-    'M',
-    '2000-01-01',
-    'VILLE',
-    '00000000',
-    'test@example.com',
-    'VILLE',
-    'FILIERE_CODE',
-    props.classe.classe_code,
-    '2024-2025',
-  ];
+  const code = props.classe?.classe_code || 'CLASSE';
 
-  const worksheet = XLSX.utils.aoa_to_sheet([headers, sampleRow]);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Modèle');
-  XLSX.writeFile(workbook, `Template_Import_${props.classe.classe_code}.xlsx`);
+  const ws = XLSX.utils.aoa_to_sheet([
+    ['matricule', 'nom', 'prenom', 'sexe', 'code_classe', 'annee_academique'],
+    ['ETU001', 'NOM', 'PRENOM', 'M', code, '2024-2025'],
+  ]);
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Modele');
+  XLSX.writeFile(wb, `Template_${code}.xlsx`);
 };
 </script>
