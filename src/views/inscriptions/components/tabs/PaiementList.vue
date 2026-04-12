@@ -3,247 +3,205 @@
     <div class="col-12 grid-margin">
       <!-- Header -->
       <div class="mb-4">
-        <h3>Suivi des paiements</h3>
-        <p class="text-muted">Gestion des paiements pour les inscriptions académiques</p>
+        <h3>Validations inscriptions</h3>
+        <p class="text-muted">Gestion des inscriptions et réinscriptions par filière</p>
       </div>
-
       <!-- Filtres -->
-      <div class="card mb-3">
+      <div class="card mb-4">
         <div class="card-body">
           <div class="row g-3">
             <div class="col-md-4">
-              <label class="form-label">Rechercher</label>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Nom, matricule ou classe..."
-                v-model="searchQuery"
-              />
-            </div>
-
-            <div class="col-md-3">
-              <label class="form-label">Année académique</label>
-              <select class="form-select" v-model="selectedAnnee">
-                <option value="">Toutes</option>
-                <option v-for="year in academicYears" :key="year">{{ year }}</option>
-              </select>
-            </div>
-
-            <div class="col-md-3">
               <label class="form-label">Filière</label>
               <select class="form-select" v-model="selectedFiliere">
                 <option value="">Toutes</option>
-                <option v-for="f in filieres" :key="f">{{ f }}</option>
+                <option v-for="filiere in filieres" :key="filiere">
+                  {{ filiere }}
+                </option>
               </select>
             </div>
-
-            <div class="col-md-2 d-flex align-items-end">
-              <button class="btn btn-outline-secondary w-100" @click="resetFilters">
-                Réinitialiser
-              </button>
+            <div class="col-md-4">
+              <label class="form-label">Statut</label>
+              <select class="form-select" v-model="selectedStatut">
+                <option value="">Tous</option>
+                <option value="en attente">En attente</option>
+                <option value="validée">Validée</option>
+                <option value="annulée">Annulée</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Recherche</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Nom, prénom ou matricule..."
+                v-model="searchQuery"
+              />
             </div>
           </div>
         </div>
       </div>
 
       <!-- Actions -->
-      <div class="d-flex justify-content-end mb-3">
-        <button class="btn btn-outline-dark">+ Ajouter un paiement</button>
+      <div class="d-flex justify-content-end mb-3 gap-2">
+        <InscriptionClasse />
+        <AjouterTuteur />
       </div>
 
-      <!-- Table -->
       <div class="table-responsive">
         <table class="table table-hover align-middle">
           <thead>
             <tr>
-              <th><input type="checkbox" v-model="selectAll" @change="toggleAll" /></th>
-              <th>Étudiant</th>
+              <th>#</th>
+              <th>Matricule</th>
+              <th>Nom</th>
+              <th>Prénom</th>
               <th>Classe</th>
-              <th>Montant</th>
-              <th>Mode paiement</th>
+              <th>Filière</th>
               <th>Statut</th>
               <th class="text-end">Actions</th>
             </tr>
           </thead>
+
           <tbody>
-            <tr v-for="p in filteredPaiements" :key="p.id">
-              <td><input type="checkbox" :value="p.id" v-model="selectedIds" /></td>
-              <td>{{ p.nom }}</td>
-              <td>{{ p.classe }}</td>
-              <td>{{ p.montant.toLocaleString() }} FCFA</td>
-              <td>{{ p.mode }}</td>
+            <tr v-for="(inscription, index) in paginatedInscriptions" :key="inscription.id">
+              <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
+              <td>{{ inscription.matricule }}</td>
+              <td>{{ inscription.nom }}</td>
+              <td>{{ inscription.prenom }}</td>
+              <td>{{ inscription.classe_code }}</td>
+              <td>{{ inscription.filiere_code }}</td>
               <td>
-                <span :class="['status-badge', statutClass(p.statut)]">{{ p.statut }}</span>
+                <span class="badge" :class="statutClass(inscription.statut)">
+                  {{ inscription.statut }}
+                </span>
               </td>
               <td class="text-end">
-                <button class="btn btn-sm btn-outline-primary me-1">Détails</button>
-                <button class="btn btn-sm btn-outline-danger" @click="deletePaiement(p.id)">
-                  Supprimer
-                </button>
+                <div class="btn-group shadow-sm" role="group">
+                  <button 
+                    v-if="inscription.statut === 'en attente'"
+                    class="btn btn-sm btn-outline-success" 
+                    title="Valider l'inscription"
+                    @click="validerInscription(inscription.id)"
+                  >
+                    <i class="mdi mdi-check-circle-outline"></i>
+                  </button>
+
+                  <button class="btn btn-sm btn-outline-secondary" @click="openModal(inscription)">
+                    <i class="mdi mdi-information-outline"></i>
+                  </button>
+                  
+                  <button
+                    class="btn btn-sm btn-outline-danger"
+                    @click="store.removeInscription(inscription.id)"
+                  >
+                    <i class="mdi mdi-close"></i>
+                  </button>
+                </div>
               </td>
             </tr>
 
-            <tr v-if="filteredPaiements.length === 0">
-              <td colspan="7" class="text-center py-4">
+            <tr v-if="filteredInscriptions.length === 0">
+              <td colspan="8" class="text-center py-4">
                 <img src="/img/empty-box.svg" width="80" class="mb-2" />
-                <div class="text-muted">Aucun paiement trouvé</div>
+                <div class="text-muted">Aucune inscription trouvée</div>
               </td>
             </tr>
           </tbody>
         </table>
-      </div>
 
-      <!-- Barre d'actions flottante -->
-      <div v-if="selectedIds.length > 0" class="bulk-actions-bar">
-        <div>
-          <strong>{{ selectedIds.length }}</strong> paiement(s) sélectionné(s)
-        </div>
-        <div class="btn-group">
-          <button class="btn btn-success btn-sm" @click="validerSelection">✅ Valider</button>
-          <button class="btn btn-warning btn-sm" @click="exporterSelection">📤 Exporter</button>
-          <button class="btn btn-danger btn-sm" @click="deleteSelected">🗑 Supprimer</button>
-        </div>
+        <InscriptionDetailModal v-model="showModal" :inscription="selectedInscription" />
       </div>
+        <Pagination
+          v-model="currentPage"
+          :items-per-page="itemsPerPage"
+          :total-items="filteredInscriptions.length"
+        />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
+import InscriptionDetailModal from '../modal/InscriptionDetails.vue';
+import { useInscriptionStore } from '@/stores/academiqueStore/inscriptionStore';
 
-/* =====================
-   États
-===================== */
-const paiements = ref([
-  {
-    id: 1,
-    nom: 'Dupont Jean',
-    classe: 'L1 Info',
-    montant: 20000,
-    statut: 'confirmé',
-    mode: 'espece',
-    annee: '2024-2025',
-    filiere: 'Informatique',
-  },
-  {
-    id: 2,
-    nom: 'Mbala Marie',
-    classe: 'L2 Math',
-    montant: 0,
-    statut: 'en attente',
-    mode: 'mobile money',
-    annee: '2024-2025',
-    filiere: 'Mathématiques',
-  },
-  {
-    id: 3,
-    nom: 'Kouadio Alain',
-    classe: 'L1 Info',
-    montant: 10000,
-    statut: 'échoué',
-    mode: 'virement',
-    annee: '2023-2024',
-    filiere: 'Informatique',
-  },
-]);
+const store = useInscriptionStore();
 
-const selectedIds = ref([]);
-const selectAll = ref(false);
+onMounted(() => {
+  store.fetchInscriptions();
+  const savedFilieres = localStorage.getItem('filieres');
+  if (savedFilieres) {
+    const parsed = JSON.parse(savedFilieres);
+    filieres.value = parsed.data.map((f) => f.code);
+  }
+});
 
 const searchQuery = ref('');
-const selectedAnnee = ref('');
 const selectedFiliere = ref('');
+const selectedStatut = ref('');
 
-const academicYears = ['2022-2023', '2023-2024', '2024-2025'];
-const filieres = ['Informatique', 'Mathématiques', 'Physique'];
+const filieres = ref([]);
 
-/* =====================
-   Filtrage
-===================== */
-const filteredPaiements = computed(() => {
-  return paiements.value.filter((p) => {
+const filteredInscriptions = computed(() => {
+  const data = store.inscriptions || [];
+
+  return data.filter((i) => {
+    const search = searchQuery.value.toLowerCase().trim();
     const matchSearch =
-      p.nom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      p.classe.toLowerCase().includes(searchQuery.value.toLowerCase());
-    const matchYear = !selectedAnnee.value || p.annee === selectedAnnee.value;
-    const matchFiliere = !selectedFiliere.value || p.filiere === selectedFiliere.value;
-    return matchSearch && matchYear && matchFiliere;
+      !search ||
+      i.nom?.toLowerCase().includes(search) ||
+      i.prenom?.toLowerCase().includes(search) ||
+      i.matricule?.toLowerCase().includes(search);
+    const matchFiliere = !selectedFiliere.value || i.filiere_code === selectedFiliere.value;
+    const matchStatut = !selectedStatut.value || i.statut === selectedStatut.value;
+    return matchSearch && matchFiliere && matchStatut;
   });
 });
 
-/* =====================
-   Helpers
-===================== */
+const selectedInscription = ref(null);
+const showModal = ref(false);
+
+const validerInscription = async (id) => {
+
+  if (!confirm("Voulez-vous valider cette inscription et ajouter l'étudiant à la classe ?")) return;
+
+  try {
+    await store.confirmInscription(id); 
+    alert("Inscription validée ! L'étudiant est désormais inscrit au cursus.");
+    fetchInscriptions(); 
+  } catch (error) {
+    console.error("Erreur lors de la validation:", error);
+    alert("Erreur lors de la validation : " + error.message);
+  }
+};
+
+const openModal = (inscription) => {
+  selectedInscription.value = inscription;
+  showModal.value = true;
+};
+
+
+
 const statutClass = (statut) => {
-  return (
-    {
-      'bg-success': statut === 'confirmé',
-      'bg-warning text-dark': statut === 'en attente',
-      'bg-danger': statut === 'échoué',
-    }[statut] || 'bg-secondary'
-  );
+  return {
+    'bg-success': statut === 'validée',
+    'bg-warning text-dark': statut === 'en attente',
+    'bg-danger': statut === 'annulée',
+  };
 };
 
-const toggleAll = () => {
-  selectedIds.value = selectAll.value ? filteredPaiements.value.map((p) => p.id) : [];
-};
+// 1. État de la pagination
+const currentPage = ref(1);
+const itemsPerPage = ref(10); // Tu peux changer cette valeur
 
-watch(selectedIds, (newVal) => {
-  selectAll.value = newVal.length === filteredPaiements.value.length;
+// 2. Calcul des données paginées
+const paginatedInscriptions = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return filteredInscriptions.value.slice(start, end);
 });
 
-const resetFilters = () => {
-  searchQuery.value = '';
-  selectedAnnee.value = '';
-  selectedFiliere.value = '';
-};
-
-/* =====================
-   Actions groupées
-===================== */
-const deleteSelected = () => {
-  paiements.value = paiements.value.filter((p) => !selectedIds.value.includes(p.id));
-  selectedIds.value = [];
-};
-
-const validerSelection = () => console.log('Valider IDs :', selectedIds.value);
-const exporterSelection = () => console.log('Exporter IDs :', selectedIds.value);
-const deletePaiement = (id) => (paiements.value = paiements.value.filter((p) => p.id !== id));
+watch([searchQuery, selectedFiliere, selectedStatut], () => {
+  currentPage.value = 1;
+});
 </script>
-
-<style scoped>
-.status-badge {
-  padding: 0.3em 0.8em;
-  border-radius: 20px;
-  color: #fff;
-}
-.bg-success {
-  background-color: #28a745;
-}
-.bg-warning {
-  background-color: #ffc107;
-  color: #212529;
-}
-.bg-danger {
-  background-color: #dc3545;
-}
-.bg-secondary {
-  background-color: #6c757d;
-}
-
-/* Barre flottante */
-.bulk-actions-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #fff;
-  border-top: 2px solid #007bff;
-  padding: 0.8rem 1.2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1050;
-}
-</style>
