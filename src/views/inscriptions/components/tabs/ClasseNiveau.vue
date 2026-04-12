@@ -16,6 +16,7 @@
               <th>Code</th>
               <th>Filière</th>
               <th>Niveau</th>
+              <th>Cap Max</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -32,7 +33,12 @@
               <td>{{ classe.classe_code }}</td>
               <td>{{ classe.filiere_designation }}</td>
               <td>
-                <span class="badge bg-secondary">{{ classe.cycle_code + classe.niveau_ordre }}</span>
+                <span class="badge bg-secondary">{{
+                  classe.cycle_code + classe.niveau_ordre
+                }}</span>
+              </td>
+              <td>
+                <span class="badge bg-success">{{ classe.classe_capacite }}</span>
               </td>
 
               <td>
@@ -43,7 +49,20 @@
                     title="Importer des étudiants"
                     @click="openImport(classe)"
                   >
-                    <i class="bi bi-upload me-1"></i> + Ajouter
+                    <i class="bi bi-upload me-1"></i>
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M8 2v9M4 8l4 4 4-4M2 13h12" />
+                    </svg>
+                    Importer
                   </button>
 
                   <button
@@ -52,7 +71,21 @@
                     title="Voir les étudiants"
                     @click="voirEtudiants(classe)"
                   >
-                    <i class="bi bi-people me-1"></i> Voir
+                    <i class="bi bi-people me-1"></i>
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="8" cy="6" r="2.5" />
+                      <path d="M2 13c0-3.3 2.7-5 6-5s6 1.7 6 5" />
+                    </svg>
+                    Étudiants
                   </button>
                 </div>
               </td>

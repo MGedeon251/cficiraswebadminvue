@@ -104,11 +104,11 @@
 
         <InscriptionDetailModal v-model="showModal" :inscription="selectedInscription" />
       </div>
-        <Pagination
-          v-model="currentPage"
-          :items-per-page="itemsPerPage"
-          :total-items="filteredInscriptions.length"
-        />
+      <Pagination
+        v-model="currentPage"
+        :items-per-page="itemsPerPage"
+        :total-items="filteredInscriptions.length"
+      />
     </div>
   </div>
 </template>

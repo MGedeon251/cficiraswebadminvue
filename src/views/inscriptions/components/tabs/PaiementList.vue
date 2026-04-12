@@ -77,9 +77,9 @@
               </td>
               <td class="text-end">
                 <div class="btn-group shadow-sm" role="group">
-                  <button 
+                  <button
                     v-if="inscription.statut === 'en attente'"
-                    class="btn btn-sm btn-outline-success" 
+                    class="btn btn-sm btn-outline-success"
                     title="Valider l'inscription"
                     @click="validerInscription(inscription.id)"
                   >
@@ -89,7 +89,7 @@
                   <button class="btn btn-sm btn-outline-secondary" @click="openModal(inscription)">
                     <i class="mdi mdi-information-outline"></i>
                   </button>
-                  
+
                   <button
                     class="btn btn-sm btn-outline-danger"
                     @click="store.removeInscription(inscription.id)"
@@ -111,11 +111,11 @@
 
         <InscriptionDetailModal v-model="showModal" :inscription="selectedInscription" />
       </div>
-        <Pagination
-          v-model="currentPage"
-          :items-per-page="itemsPerPage"
-          :total-items="filteredInscriptions.length"
-        />
+      <Pagination
+        v-model="currentPage"
+        :items-per-page="itemsPerPage"
+        :total-items="filteredInscriptions.length"
+      />
     </div>
   </div>
 </template>
@@ -162,16 +162,15 @@ const selectedInscription = ref(null);
 const showModal = ref(false);
 
 const validerInscription = async (id) => {
-
   if (!confirm("Voulez-vous valider cette inscription et ajouter l'étudiant à la classe ?")) return;
 
   try {
-    await store.confirmInscription(id); 
+    await store.confirmInscription(id);
     alert("Inscription validée ! L'étudiant est désormais inscrit au cursus.");
-    fetchInscriptions(); 
+    fetchInscriptions();
   } catch (error) {
-    console.error("Erreur lors de la validation:", error);
-    alert("Erreur lors de la validation : " + error.message);
+    console.error('Erreur lors de la validation:', error);
+    alert('Erreur lors de la validation : ' + error.message);
   }
 };
 
@@ -179,8 +178,6 @@ const openModal = (inscription) => {
   selectedInscription.value = inscription;
   showModal.value = true;
 };
-
-
 
 const statutClass = (statut) => {
   return {

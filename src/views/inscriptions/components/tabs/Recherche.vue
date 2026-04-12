@@ -4,13 +4,19 @@
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h3 class="fw-bold">Réinscriptions {{ selectedAnnee || '' }}</h3>
-          <p class="text-muted">Gestion du passage des étudiants vers une nouvelle année académique.</p>
+          <p class="text-muted">
+            Gestion du passage des étudiants vers une nouvelle année académique.
+          </p>
         </div>
         <div class="d-flex gap-2">
           <button class="btn btn-outline-dark btn-sm">
             <i class="mdi mdi-export me-1"></i>Exporter
           </button>
-          <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#importModal">
+          <button
+            class="btn btn-primary btn-sm"
+            data-bs-toggle="modal"
+            data-bs-target="#importModal"
+          >
             <i class="mdi mdi-upload me-1"></i>Importer
           </button>
         </div>
@@ -45,12 +51,12 @@
                 <span class="input-group-text bg-white border-0">
                   <i class="mdi mdi-magnify text-muted"></i>
                 </span>
-                <input 
-                  type="text" 
-                  class="form-control border-0" 
-                  v-model="searchQuery" 
+                <input
+                  type="text"
+                  class="form-control border-0"
+                  v-model="searchQuery"
                   placeholder="Nom, prénom ou matricule..."
-                >
+                />
               </div>
             </div>
 
@@ -76,7 +82,9 @@
           </thead>
           <tbody>
             <tr v-for="etudiant in filteredCandidats" :key="etudiant.id">
-              <td><span class="fw-bold text-primary">{{ etudiant.matricule }}</span></td>
+              <td>
+                <span class="fw-bold text-primary">{{ etudiant.matricule }}</span>
+              </td>
               <td>
                 <div class="d-flex align-items-center">
                   <div class="avatar-soft-primary me-2">
@@ -93,12 +101,19 @@
                 <div class="small text-muted">{{ etudiant.annee }}</div>
               </td>
               <td>
-                <span class="badge rounded-pill" :class="etudiant.statut === 'Payé' ? 'bg-soft-success text-success' : 'bg-soft-warning text-warning'">
+                <span
+                  class="badge rounded-pill"
+                  :class="
+                    etudiant.statut === 'Payé'
+                      ? 'bg-soft-success text-success'
+                      : 'bg-soft-warning text-warning'
+                  "
+                >
                   {{ etudiant.statut }}
                 </span>
               </td>
               <td class="text-center">
-                <button 
+                <button
                   class="btn btn-sm btn-primary px-3 rounded-pill shadow-sm"
                   @click="openReinscriptionModal(etudiant)"
                 >
@@ -134,18 +149,19 @@ const candidats = ref([]);
 
 // Filtrage intelligent
 const filteredCandidats = computed(() => {
-  return candidats.value.filter(c => {
+  return candidats.value.filter((c) => {
     const matchYear = !selectedAnnee.value || c.annee === selectedAnnee.value;
     const matchFiliere = !selectedFiliere.value || c.filiere === selectedFiliere.value;
-    const matchSearch = !searchQuery.value || 
-                        c.nom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-                        c.matricule.toLowerCase().includes(searchQuery.value.toLowerCase());
+    const matchSearch =
+      !searchQuery.value ||
+      c.nom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      c.matricule.toLowerCase().includes(searchQuery.value.toLowerCase());
     return matchYear && matchFiliere && matchSearch;
   });
 });
 
 const openReinscriptionModal = (etudiant) => {
-  console.log("Ouverture modal pour réinscrire:", etudiant.nom);
+  console.log('Ouverture modal pour réinscrire:', etudiant.nom);
   // Ici vous appelleriez votre modal qui contient le formulaire
   // pour choisir la NOUVELLE classe et valider l'inscription.
 };
@@ -153,19 +169,57 @@ const openReinscriptionModal = (etudiant) => {
 onMounted(() => {
   // Simulation de chargement
   candidats.value = [
-    { id: 1, matricule: 'ETU2024001', nom: 'Kouadio', prenom: 'Eric', telephone: '0102030405', statut: 'Payé', annee: '2023-2024', classe: 'L1', filiere: 'Informatique' },
-    { id: 2, matricule: 'ETU2024002', nom: 'Yao', prenom: 'Marie', telephone: '0605040302', statut: 'Non payé', annee: '2023-2024', classe: 'L1', filiere: 'Gestion' },
-    { id: 3, matricule: 'ETU2024008', nom: 'Cissé', prenom: 'Awa', telephone: '0504030201', statut: 'Payé', annee: '2022-2023', classe: 'L2', filiere: 'Informatique' },
+    {
+      id: 1,
+      matricule: 'ETU2024001',
+      nom: 'Kouadio',
+      prenom: 'Eric',
+      telephone: '0102030405',
+      statut: 'Payé',
+      annee: '2023-2024',
+      classe: 'L1',
+      filiere: 'Informatique',
+    },
+    {
+      id: 2,
+      matricule: 'ETU2024002',
+      nom: 'Yao',
+      prenom: 'Marie',
+      telephone: '0605040302',
+      statut: 'Non payé',
+      annee: '2023-2024',
+      classe: 'L1',
+      filiere: 'Gestion',
+    },
+    {
+      id: 3,
+      matricule: 'ETU2024008',
+      nom: 'Cissé',
+      prenom: 'Awa',
+      telephone: '0504030201',
+      statut: 'Payé',
+      annee: '2022-2023',
+      classe: 'L2',
+      filiere: 'Informatique',
+    },
   ];
 });
 </script>
 
 <style scoped>
 /* Effet "Soft" sur les badges et avatars */
-.bg-soft-success { background-color: rgba(40, 167, 69, 0.1); }
-.bg-soft-warning { background-color: rgba(255, 193, 7, 0.1); }
-.text-success { color: #28a745 !important; }
-.text-warning { color: #ffc107 !important; }
+.bg-soft-success {
+  background-color: rgba(40, 167, 69, 0.1);
+}
+.bg-soft-warning {
+  background-color: rgba(255, 193, 7, 0.1);
+}
+.text-success {
+  color: #28a745 !important;
+}
+.text-warning {
+  color: #ffc107 !important;
+}
 
 .avatar-soft-primary {
   width: 32px;
@@ -179,7 +233,8 @@ onMounted(() => {
   font-weight: bold;
 }
 
-.form-select, .form-control {
+.form-select,
+.form-control {
   padding: 0.6rem 1rem;
   font-size: 0.9rem;
 }
