@@ -45,9 +45,7 @@
               </div>
             </div>
           </div>
-          <div class="d-flex justify-content-between align-items-end flex-wrap">
-            
-          </div>
+          <div class="d-flex justify-content-between align-items-end flex-wrap"></div>
         </div>
         <div class="table-responsive mt-3">
           <table class="table table-hover align-middle">
