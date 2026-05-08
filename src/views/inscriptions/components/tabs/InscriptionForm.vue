@@ -40,12 +40,6 @@
                 <option value="annulée">Annulée</option>
               </select>
             </div>
-
-            <div class="col-md-2 d-flex align-items-end">
-              <button class="btn btn-outline-secondary w-100" @click="resetFilters">
-                Réinitialiser
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -85,8 +79,17 @@
                 </span>
               </td>
               <td class="text-end">
-                <button class="btn btn-sm btn-outline-primary me-1">Détails</button>
-                <button class="btn btn-sm btn-outline-danger">Annuler</button>
+                <div class="btn-group shadow-sm" role="group" aria-label="Actions de classe">
+                  <button class="btn btn-sm btn-outline-secondary" @click="openModal(inscription)">
+                    <i class="mdi mdi-information-outline"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-outline-danger"
+                    @click="store.removeInscription(inscription.id)"
+                  >
+                    <i class="mdi mdi-delete-outline"></i>
+                  </button>
+                </div>
               </td>
             </tr>
 
@@ -98,19 +101,63 @@
             </tr>
           </tbody>
         </table>
+
+        <InscriptionDetailModal v-model="showModal" :inscription="selectedInscription" />
       </div>
+      <Pagination
+        v-model="currentPage"
+        :items-per-page="itemsPerPage"
+        :total-items="filteredInscriptions.length"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
+import InscriptionDetailModal from '../modal/InscriptionDetails.vue';
+import { useInscriptionStore } from '@/stores/academiqueStore/inscriptionStore';
 
-import InscriptionClasse from '../modal/InscriptionClasse.vue';
-import AjouterTuteur from '../modal/AddTuteur.vue';
+const store = useInscriptionStore();
 
-/* =====================
-   États
+onMounted(() => {
+  store.fetchInscriptions();
+  const savedFilieres = localStorage.getItem('filieres');
+  if (savedFilieres) {
+    const parsed = JSON.parse(savedFilieres);
+    filieres.value = parsed.data.map((f) => f.code);
+  }
+});
+
+const searchQuery = ref('');
+const selectedFiliere = ref('');
+const selectedStatut = ref('');
+
+const filieres = ref([]);
+
+const filteredInscriptions = computed(() => {
+  const data = store.inscriptions || [];
+
+  return data.filter((i) => {
+    const search = searchQuery.value.toLowerCase().trim();
+    const matchSearch =
+      !search ||
+      i.nom?.toLowerCase().includes(search) ||
+      i.prenom?.toLowerCase().includes(search) ||
+      i.matricule?.toLowerCase().includes(search);
+    const matchFiliere = !selectedFiliere.value || i.filiere_code === selectedFiliere.value;
+    const matchStatut = !selectedStatut.value || i.statut === selectedStatut.value;
+    return matchSearch && matchFiliere && matchStatut;
+  });
+});
+
+const selectedInscription = ref(null);
+const showModal = ref(false);
+
+const openModal = (inscription) => {
+  selectedInscription.value = inscription;
+  showModal.value = true;
+};
 
 const statutClass = (statut) => {
   return {
@@ -120,9 +167,20 @@ const statutClass = (statut) => {
   };
 };
 
-const resetFilters = () => {
-  searchQuery.value = '';
-  selectedYear.value = '';
-  selectedStatut.value = '';
-};
+// 1. État de la pagination
+const currentPage = ref(1);
+const itemsPerPage = ref(10); // Tu peux changer cette valeur
+
+// 2. Calcul des données paginées
+const paginatedInscriptions = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return filteredInscriptions.value.slice(start, end);
+});
+
+// 3. Reset de la page quand les filtres changent (Optionnel mais recommandé)
+// Si l'utilisateur est à la page 5 et filtre, il doit revenir à la page 1
+watch([searchQuery, selectedFiliere, selectedStatut], () => {
+  currentPage.value = 1;
+});
 </script>
