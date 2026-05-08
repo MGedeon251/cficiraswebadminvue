@@ -8,8 +8,7 @@
           <span class="menu-title d-none d-md-inline">Tableau de Bord</span>
         </router-link>
       </li>
-
-      <!-- Structure Académique -->
+         <!-- Structure Académique -->
       <li class="nav-item">
         <a
           class="nav-link"
@@ -266,19 +265,25 @@
         </a>
         <div
           class="collapse"
-          :class="{ show: isParentActive(['/paiements', '/facturation', '/rapports-financiers']) }"
+          :class="{
+            show: isParentActive([
+              '/paiements-finances',
+              '/factures-finances',
+              '/rapports-financiers',
+            ]),
+          }"
           id="finances"
         >
           <ul class="nav flex-column sub-menu">
             <li class="nav-item">
-              <router-link class="nav-link" to="/paiements">Paiements & reçus</router-link>
+              <router-link class="nav-link" to="/paiements-finances">Paiements & reçus</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/facturation">Facturation</router-link>
+              <router-link class="nav-link" to="/factures-finances">Facturations</router-link>
             </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/rapports-financiers"
-                >Historique & rapports</router-link
+                >Rapports</router-link
               >
             </li>
           </ul>
@@ -522,6 +527,14 @@
         <router-link class="nav-link" to="/statistiques">
           <i class="mdi mdi-chart-bar menu-icon"></i>
           <span class="menu-title">Statistiques</span>
+        </router-link>
+      </li>
+      <!-- Assistant AI -->
+         <li class="nav-item">
+        <router-link class="nav-link" to="/assistant-ai">
+          <i class="mdi mdi-robot menu-icon text-primary"></i>
+          <span class="menu-title fw-bold">Assistant AI</span>
+          <span class="badge badge-info ms-2 small" style="font-size: 10px;">Beta</span>
         </router-link>
       </li>
 

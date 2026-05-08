@@ -7,6 +7,7 @@ import {
   deleteModule,
 } from '@/api/academique/moduleApi';
 import { useMessageStore } from '@/stores/messages/messageStore';
+import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
 
 // Helpers pour gérer le cache
 function setCache(key, data) {
@@ -20,7 +21,6 @@ function setCache(key, data) {
 }
 
 function getCache(key, ttl = 5 * 60 * 1000) {
-  // TTL par défaut : 5 minutes
   const cached = localStorage.getItem(key);
   if (!cached) return null;
 
@@ -42,6 +42,7 @@ export const useModuleStore = defineStore('moduleStore', {
   actions: {
     // Récupérer tous les modules
     async fetchModules() {
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         const cached = getCache('modules');
@@ -53,7 +54,9 @@ export const useModuleStore = defineStore('moduleStore', {
           setCache('modules', response);
         }
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la récupération des modules.');
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors de la récupération des modules.')
+        );
       } finally {
         this.loading = false;
       }
@@ -61,6 +64,7 @@ export const useModuleStore = defineStore('moduleStore', {
 
     // Récupérer un module par ID
     async fetchModuleById(id) {
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         const cached = getCache(`module_${id}`);
@@ -72,7 +76,9 @@ export const useModuleStore = defineStore('moduleStore', {
           setCache(`module_${id}`, response);
         }
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la récupération du module.');
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors de la récupération du module.')
+        );
       } finally {
         this.loading = false;
       }
@@ -80,14 +86,17 @@ export const useModuleStore = defineStore('moduleStore', {
 
     // Ajouter un nouveau module
     async addModule(data) {
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         await createModule(data);
-        useMessageStore().addSuccess('Module créé avec succès.');
-        localStorage.removeItem('modules'); // Invalider le cache
-        this.fetchModules();
+        messageStore.notifySuccess('Module créé avec succès.');
+        localStorage.removeItem('modules');
+        await this.fetchModules();
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la création du module.');
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors de la création du module.')
+        );
       } finally {
         this.loading = false;
       }
@@ -95,15 +104,18 @@ export const useModuleStore = defineStore('moduleStore', {
 
     // Modifier un module existant
     async editModule(id, data) {
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         await updateModule(id, data);
-        useMessageStore().addSuccess('Module mis à jour avec succès.');
-        localStorage.removeItem('modules'); // Invalider le cache
+        messageStore.notifySuccess('Module mis à jour avec succès.');
+        localStorage.removeItem('modules');
         localStorage.removeItem(`module_${id}`);
-        this.fetchModules();
+        await this.fetchModules();
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la mise à jour du module.');
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors de la mise à jour du module.')
+        );
       } finally {
         this.loading = false;
       }
@@ -111,15 +123,18 @@ export const useModuleStore = defineStore('moduleStore', {
 
     // Supprimer un module
     async removeModule(id) {
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         await deleteModule(id);
-        useMessageStore().addSuccess('Module supprimé avec succès.');
-        localStorage.removeItem('modules'); // Invalider le cache
+        messageStore.notifySuccess('Module supprimé avec succès.');
+        localStorage.removeItem('modules');
         localStorage.removeItem(`module_${id}`);
-        this.fetchModules();
+        await this.fetchModules();
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la suppression du module.');
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors de la suppression du module.')
+        );
       } finally {
         this.loading = false;
       }
