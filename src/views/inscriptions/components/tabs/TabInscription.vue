@@ -51,7 +51,7 @@
           aria-controls="paiements"
           aria-selected="false"
         >
-          Gestions paiements
+          Frais paiements
         </a>
       </li>
       <li class="nav-item">
