@@ -162,6 +162,7 @@ const router = createRouter({
 });
 
 // Guard global: protège les routes qui nécessitent une authentification
+/*
 router.beforeEach((to, from, next) => {
   const isPublic = to.matched.some((record) => record.meta && record.meta.public);
   const isLoggedIn = !!localStorage.getItem('token');
@@ -177,5 +178,5 @@ router.beforeEach((to, from, next) => {
 
   return next();
 });
-
+*/
 export default router;
