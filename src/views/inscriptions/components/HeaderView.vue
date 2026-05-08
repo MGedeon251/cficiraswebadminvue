@@ -36,43 +36,14 @@
                 </li>
               </ul>
             </div>
-            <div class="btn-group">
-              <button
-                class="btn btn-primary mt-2 mt-xl-0"
-                data-bs-toggle="modal"
-                data-bs-target="#wizardModal"
-              >
-                + Inscription
-              </button>
-              <button
-                class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                data-bs-toggle="dropdown"
-              >
-                <span class="visually-hidden">Toggle Dropdown</span>
-              </button>
-              <ul class="dropdown-menu">
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="#inscription-par-classe"
-                    data-bs-toggle="modal"
-                    data-bs-target="#inscriptionClasseModal"
-                  >
-                    Inscription par classe
-                  </a>
-                </li>
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="#ajouter-tuteur"
-                    data-bs-toggle="modal"
-                    data-bs-target="#ajouterTuteurModal"
-                  >
-                    Ajouter tuteur étudiant
-                  </a>
-                </li>
-              </ul>
-            </div>
+            <button
+              class="btn btn-primary mt-2 mt-xl-0"
+              data-bs-toggle="modal"
+              data-bs-target="#importInscriptionsModal"
+            >
+              + Ajouter un nouveau
+            </button>
+            <ImportModal />
           </div>
         </div>
       </div>
