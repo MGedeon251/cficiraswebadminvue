@@ -7,7 +7,6 @@ import {
   deleteNiveau,
 } from '@/api/academique/academiqueApi';
 import { useMessageStore } from '@/stores/messages/messageStore';
-import { useNotifier } from '@/stores/messages/useNotifier';
 import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
 
 // Helpers pour gérer le cache
@@ -22,7 +21,6 @@ function setCache(key, data) {
 }
 
 function getCache(key, ttl = 5 * 60 * 1000) {
-  // TTL par défaut : 5 minutes
   const cached = localStorage.getItem(key);
   if (!cached) return null;
 
@@ -43,7 +41,7 @@ export const useNiveauStore = defineStore('niveauStore', {
   actions: {
     // Récupérer tous les niveaux
     async fetchNiveaux() {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         const cached = getCache('niveaux');
@@ -55,7 +53,9 @@ export const useNiveauStore = defineStore('niveauStore', {
           setCache('niveaux', response);
         }
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Échec lors du chargement des niveaux.')
+        );
       } finally {
         this.loading = false;
       }
@@ -63,15 +63,17 @@ export const useNiveauStore = defineStore('niveauStore', {
 
     // Ajouter un nouveau niveau
     async addNiveau(data) {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         await createNiveau(data);
-        useMessageStore().addMessage('Niveau créé avec succès.');
-        localStorage.removeItem('niveaux'); // Invalider le cache
-        this.fetchNiveaux();
+        messageStore.notifySuccess('Niveau créé avec succès.');
+        localStorage.removeItem('niveaux');
+        await this.fetchNiveaux();
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Échec lors de la création du niveau.')
+        );
       } finally {
         this.loading = false;
       }
@@ -79,15 +81,18 @@ export const useNiveauStore = defineStore('niveauStore', {
 
     // Modifier un niveau existant
     async editNiveau(id, data) {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         await updateNiveau(id, data);
-        useMessageStore().addSuccess('Niveau mis à jour avec succès.');
-        localStorage.removeItem('niveaux'); // Invalider le cache
-        this.fetchNiveaux();
+        messageStore.notifySuccess('Niveau mis à jour avec succès.');
+        localStorage.removeItem('niveaux');
+        localStorage.removeItem(`niveaux_cycle_${id}`);
+        await this.fetchNiveaux();
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Échec lors de la mise à jour du niveau.')
+        );
       } finally {
         this.loading = false;
       }
@@ -95,15 +100,18 @@ export const useNiveauStore = defineStore('niveauStore', {
 
     // Supprimer un niveau
     async removeNiveau(id) {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         await deleteNiveau(id);
-        useMessageStore().addSuccess('Niveau supprimé avec succès.');
-        localStorage.removeItem('niveaux'); // Invalider le cache
-        this.fetchNiveaux();
+        messageStore.notifySuccess('Niveau supprimé avec succès.');
+        localStorage.removeItem('niveaux');
+        localStorage.removeItem(`niveaux_cycle_${id}`);
+        await this.fetchNiveaux();
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Échec lors de la suppression du niveau.')
+        );
       } finally {
         this.loading = false;
       }
@@ -111,7 +119,7 @@ export const useNiveauStore = defineStore('niveauStore', {
 
     // Récupérer les niveaux par cycle
     async getNiveauByCycle(id) {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       const cacheKey = `niveaux_cycle_${id}`;
       try {
@@ -124,7 +132,9 @@ export const useNiveauStore = defineStore('niveauStore', {
           setCache(cacheKey, response);
         }
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Échec lors du chargement des niveaux par cycle.')
+        );
       } finally {
         this.loading = false;
       }

@@ -1,213 +1,245 @@
 <template>
-  <div>
-    <div class="row">
-      <div class="col-md-12 grid-margin">
-        <div class="d-flex align-items-end flex-wrap">
-          <div class="me-md-3 me-xl-5">
-            <h4>Reinscriptions nouvel année</h4>
-            <p>reinscription pour une année académique</p>
-          </div>
+  <div class="row">
+    <div class="col-12 grid-margin">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h3 class="fw-bold">Réinscriptions {{ selectedAnnee || '' }}</h3>
+          <p class="text-muted">
+            Gestion du passage des étudiants vers une nouvelle année académique.
+          </p>
         </div>
-        <div class="d-flex justify-content-between flex-wrap">
-          <div class="d-flex align-items-end flex-wrap">
-            <div class="me-md-4 me-xl-5">
-              <div class="filters d-flex gap-2 mb-3">
-                <a-select
-                  class="me-1 mt-1 mt-xl-0"
-                  v-model:value="selectedAnnee"
-                  placeholder="Année académique"
-                  style="width: 180px"
-                  :loading="loadingAnnees"
-                  allow-clear
-                >
-                  <a-select-option value="lucy">lucy</a-select-option>
-                </a-select>
-                <a-select
-                  v-model:value="selectedFiliere"
-                  placeholder="Filiere"
-                  style="width: 180px"
-                  :loading="loadingFilieres"
-                  allow-clear
-                >
-                  <a-select-option value="lucy">lucy</a-select-option>
-                </a-select>
-                <a-select
-                  v-model:value="selectedClasse"
-                  placeholder="Classe"
-                  style="width: 180px"
-                  :loading="loadingClasses"
-                  allow-clear
-                >
-                  <a-select-option value="lucy">lucy</a-select-option>
-                </a-select>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-dark btn-sm">
+            <i class="mdi mdi-export me-1"></i>Exporter
+          </button>
+          <button
+            class="btn btn-primary btn-sm"
+            data-bs-toggle="modal"
+            data-bs-target="#importModal"
+          >
+            <i class="mdi mdi-upload me-1"></i>Importer
+          </button>
+        </div>
+      </div>
+
+      <div class="card mb-4 border-0 shadow-sm bg-light">
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label class="form-label small fw-bold text-muted text-uppercase">Année Source</label>
+              <select class="form-select border-0 shadow-sm" v-model="selectedAnnee">
+                <option value="">Toutes les années</option>
+                <option v-for="year in academicYears" :key="year" :value="year">
+                  {{ year }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label small fw-bold text-muted text-uppercase">Filière</label>
+              <select class="form-select border-0 shadow-sm" v-model="selectedFiliere">
+                <option value="">Toutes les filières</option>
+                <option v-for="f in filieres" :key="f" :value="f">
+                  {{ f }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small fw-bold text-muted text-uppercase">Recherche</label>
+              <div class="input-group shadow-sm">
+                <span class="input-group-text bg-white border-0">
+                  <i class="mdi mdi-magnify text-muted"></i>
+                </span>
+                <input
+                  type="text"
+                  class="form-control border-0"
+                  v-model="searchQuery"
+                  placeholder="Nom, prénom ou matricule..."
+                />
               </div>
             </div>
-          </div>
-          <div class="d-flex justify-content-between align-items-end flex-wrap">
-            <button class="btn btn-outline-dark me-2">Exporter</button>
-            <div class="btn-group">
-              <button
-                class="btn btn-primary mt-2 mt-xl-0"
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModal3"
-              >
-                + Importer
+
+            <div class="col-md-2 d-flex align-items-end">
+              <button class="btn btn-dark w-100 shadow-sm" @click="resetFilters">
+                Réinitialiser
               </button>
-              <button
-                class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                data-bs-toggle="dropdown"
-              >
-                <span class="visually-hidden">Toggle Dropdown</span>
-              </button>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="#drag-drop-area">Importer fichier</a>
-                </li>
-              </ul>
             </div>
           </div>
         </div>
-        <div class="table-responsive mt-3">
-          <table class="table table-hover align-middle">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">matricule</th>
-                <th scope="col">noms</th>
-                <th scope="col">prenoms</th>
-                <th scope="col">filiere</th>
-                <th scope="col">classe</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="9" class="text-center py-4">
-                  <div class="d-flex flex-column align-items-center">
-                    <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th class="border-0">Matricule</th>
+              <th class="border-0">Étudiant</th>
+              <th class="border-0">Dernière Classe</th>
+              <th class="border-0">Paiement</th>
+              <th class="border-0 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="etudiant in filteredCandidats" :key="etudiant.id">
+              <td>
+                <span class="fw-bold text-primary">{{ etudiant.matricule }}</span>
+              </td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="avatar-soft-primary me-2">
+                    {{ etudiant.nom.charAt(0) }}
                   </div>
-                  <div class="text-pr">Aucune donnée</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                  <div class="d-flex flex-column">
+                    <span class="fw-bold">{{ etudiant.nom }} {{ etudiant.prenom }}</span>
+                    <small class="text-muted">{{ etudiant.telephone }}</small>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="text-dark">{{ etudiant.classe }}</span>
+                <div class="small text-muted">{{ etudiant.annee }}</div>
+              </td>
+              <td>
+                <span
+                  class="badge rounded-pill"
+                  :class="
+                    etudiant.statut === 'Payé'
+                      ? 'bg-soft-success text-success'
+                      : 'bg-soft-warning text-warning'
+                  "
+                >
+                  {{ etudiant.statut }}
+                </span>
+              </td>
+              <td class="text-center">
+                <button
+                  class="btn btn-sm btn-primary px-3 rounded-pill shadow-sm"
+                  @click="openReinscriptionModal(etudiant)"
+                >
+                  Réinscrire
+                </button>
+              </td>
+            </tr>
+
+            <tr v-if="filteredCandidats.length === 0">
+              <td colspan="5" class="text-center py-5">
+                <p class="text-muted mb-0">Aucun étudiant ne correspond à ces critères.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 </template>
 
-<script setup="setup">
-import { ref, onMounted } from 'vue';
-const candidats = ref([]);
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+
+// États des filtres
+const selectedAnnee = ref('2023-2024'); // On cherche les anciens de l'année passée
+const selectedFiliere = ref(null);
+const searchQuery = ref('');
+
+// Données Mock (À remplacer par vos appels API)
 const academicYears = ref(['2022-2023', '2023-2024', '2024-2025']);
-const classes = ref(['L1', 'L2', 'L3', 'M1', 'M2']);
-const selectedYear = ref('2024-2025');
-const selectedClass = ref('L1');
-const selectedPaymentStatus = ref('all');
+const filieres = ref(['Informatique', 'Gestion', 'Ressources Humaines']);
+const candidats = ref([]);
+
+// Filtrage intelligent
+const filteredCandidats = computed(() => {
+  return candidats.value.filter((c) => {
+    const matchYear = !selectedAnnee.value || c.annee === selectedAnnee.value;
+    const matchFiliere = !selectedFiliere.value || c.filiere === selectedFiliere.value;
+    const matchSearch =
+      !searchQuery.value ||
+      c.nom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      c.matricule.toLowerCase().includes(searchQuery.value.toLowerCase());
+    return matchYear && matchFiliere && matchSearch;
+  });
+});
+
+const openReinscriptionModal = (etudiant) => {
+  console.log('Ouverture modal pour réinscrire:', etudiant.nom);
+  // Ici vous appelleriez votre modal qui contient le formulaire
+  // pour choisir la NOUVELLE classe et valider l'inscription.
+};
 
 onMounted(() => {
+  // Simulation de chargement
   candidats.value = [
     {
       id: 1,
-      matricule: 'ETU2025001',
+      matricule: 'ETU2024001',
       nom: 'Kouadio',
       prenom: 'Eric',
       telephone: '0102030405',
       statut: 'Payé',
-      annee: '2024-2025',
+      annee: '2023-2024',
       classe: 'L1',
+      filiere: 'Informatique',
     },
     {
       id: 2,
-      matricule: 'ETU2025002',
+      matricule: 'ETU2024002',
       nom: 'Yao',
       prenom: 'Marie',
       telephone: '0605040302',
       statut: 'Non payé',
-      annee: '2024-2025',
-      classe: 'L2',
+      annee: '2023-2024',
+      classe: 'L1',
+      filiere: 'Gestion',
     },
     {
       id: 3,
-      matricule: 'ETU2025003',
-      nom: 'Koffi',
-      prenom: 'Serge',
-      telephone: '0708091011',
-      statut: 'Payé',
-      annee: '2023-2024',
-      classe: 'L3',
-    },
-    {
-      id: 4,
-      matricule: 'ETU2025004',
-      nom: 'N’Guessan',
-      prenom: 'Aline',
-      telephone: '0203040506',
-      statut: 'Non payé',
-      annee: '2022-2023',
-      classe: 'M1',
-    },
-    {
-      id: 5,
-      matricule: 'ETU2025005',
-      nom: 'Bamba',
-      prenom: 'Moussa',
-      telephone: '0807060504',
-      statut: 'Payé',
-      annee: '2024-2025',
-      classe: 'M2',
-    },
-    {
-      id: 6,
-      matricule: 'ETU2025006',
-      nom: 'Coulibaly',
-      prenom: 'Fatou',
-      telephone: '0908070605',
-      statut: 'Non payé',
-      annee: '2023-2024',
-      classe: 'L1',
-    },
-    {
-      id: 7,
-      matricule: 'ETU2025007',
-      nom: 'Fofana',
-      prenom: 'Salif',
-      telephone: '0302010405',
-      statut: 'Payé',
-      annee: '2022-2023',
-      classe: 'L2',
-    },
-    {
-      id: 8,
-      matricule: 'ETU2025008',
+      matricule: 'ETU2024008',
       nom: 'Cissé',
       prenom: 'Awa',
       telephone: '0504030201',
-      statut: 'Non payé',
-      annee: '2024-2025',
-      classe: 'L3',
-    },
-    {
-      id: 9,
-      matricule: 'ETU2025009',
-      nom: 'Sangaré',
-      prenom: 'Kader',
-      telephone: '0607080910',
       statut: 'Payé',
-      annee: '2023-2024',
-      classe: 'M1',
-    },
-    {
-      id: 10,
-      matricule: 'ETU2025010',
-      nom: 'Diabaté',
-      prenom: 'Aminata',
-      telephone: '0105060708',
-      statut: 'Non payé',
       annee: '2022-2023',
-      classe: 'M2',
+      classe: 'L2',
+      filiere: 'Informatique',
     },
   ];
 });
 </script>
+
+<style scoped>
+/* Effet "Soft" sur les badges et avatars */
+.bg-soft-success {
+  background-color: rgba(40, 167, 69, 0.1);
+}
+.bg-soft-warning {
+  background-color: rgba(255, 193, 7, 0.1);
+}
+.text-success {
+  color: #28a745 !important;
+}
+.text-warning {
+  color: #ffc107 !important;
+}
+
+.avatar-soft-primary {
+  width: 32px;
+  height: 32px;
+  background-color: rgba(75, 73, 172, 0.1);
+  color: #4b49ac;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.form-select,
+.form-control {
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+}
+
+.card {
+  border-radius: 15px;
+}
+</style>

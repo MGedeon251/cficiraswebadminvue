@@ -73,13 +73,6 @@ export const createCreneau = (data) => gestionService.post('/creneaux', data);
 export const updateCreneau = (id, data) => gestionService.put(`/creneaux/${id}`, data);
 export const deleteCreneau = (id) => gestionService.delete(`/creneaux/${id}`);
 
-// API pour gérer les inscriptions
-export const getInscriptions = () => gestionService.get('/inscriptions');
-export const getInscriptionById = (id) => gestionService.get(`/inscriptions/${id}`);
-export const createInscription = (data) => gestionService.post('/inscriptions', data);
-export const updateInscription = (id, data) => gestionService.put(`/inscriptions/${id}`, data);
-export const deleteInscription = (id) => gestionService.delete(`/inscriptions/${id}`);
-
 // API pour gérer les salles
 export const getSalles = () => gestionService.get('/salles');
 export const getSalleById = (id) => gestionService.get(`/salles/${id}`);

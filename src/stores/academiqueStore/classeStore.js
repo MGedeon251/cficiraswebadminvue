@@ -9,7 +9,6 @@ import {
   getClassesByFiliere,
 } from '@/api/academique/academiqueApi';
 import { useMessageStore } from '@/stores/messages/messageStore';
-import { useNotifier } from '@/stores/messages/useNotifier';
 import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
 
 // Helpers pour gérer le cache
@@ -24,7 +23,6 @@ function setCache(key, data) {
 }
 
 function getCache(key, ttl = 5 * 60 * 1000) {
-  // TTL par défaut : 5 minutes
   const cached = localStorage.getItem(key);
   if (!cached) return null;
 
@@ -46,7 +44,7 @@ export const useClasseStore = defineStore('classeStore', {
   actions: {
     // Récupérer toutes les classes
     async fetchClasses() {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         const cached = getCache('classes');
@@ -58,7 +56,9 @@ export const useClasseStore = defineStore('classeStore', {
           setCache('classes', response.data);
         }
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Échec lors du chargement des classes.')
+        );
       } finally {
         this.loading = false;
       }
@@ -66,7 +66,7 @@ export const useClasseStore = defineStore('classeStore', {
 
     // Récupérer les détails des classes
     async fetchClassesDetails() {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         const cached = getCache('classesDetails');
@@ -78,7 +78,9 @@ export const useClasseStore = defineStore('classeStore', {
           setCache('classesDetails', response);
         }
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Échec lors du chargement des détails.')
+        );
       } finally {
         this.loading = false;
       }
@@ -86,7 +88,7 @@ export const useClasseStore = defineStore('classeStore', {
 
     // Récupérer les classes par filière
     async fetchClassesByFiliere(id) {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       const cacheKey = `classes_filiere_${id}`;
       try {
@@ -99,7 +101,9 @@ export const useClasseStore = defineStore('classeStore', {
           setCache(cacheKey, response);
         }
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Échec lors du chargement des classes par filière.')
+        );
       } finally {
         this.loading = false;
       }
@@ -107,15 +111,15 @@ export const useClasseStore = defineStore('classeStore', {
 
     // Ajouter une nouvelle classe
     async addClasse(data) {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         await createClasse(data);
-        useMessageStore().addSuccess('Classe créée avec succès.');
-        localStorage.removeItem('classes'); // Invalider le cache
-        this.fetchClasses();
+        messageStore.notifySuccess('Classe créée avec succès.');
+        localStorage.removeItem('classes');
+        await this.fetchClasses();
       } catch (error) {
-        notifyError(extractErrorMessage(error, "Échec lors de l'ajout des données."));
+        messageStore.notifyError(extractErrorMessage(error, "Échec lors de l'ajout de la classe."));
       } finally {
         this.loading = false;
       }
@@ -123,16 +127,16 @@ export const useClasseStore = defineStore('classeStore', {
 
     // Modifier une classe existante
     async editClasse(id, data) {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         await updateClasse(id, data);
-        useMessageStore().addSuccess('Classe mise à jour avec succès.');
-        localStorage.removeItem('classes'); // Invalider le cache
+        messageStore.notifySuccess('Classe mise à jour avec succès.');
+        localStorage.removeItem('classes');
         localStorage.removeItem(`classes_filiere_${id}`);
-        this.fetchClasses();
+        await this.fetchClasses();
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        messageStore.notifyError(extractErrorMessage(error, 'Échec lors de la mise à jour.'));
       } finally {
         this.loading = false;
       }
@@ -140,22 +144,25 @@ export const useClasseStore = defineStore('classeStore', {
 
     // Supprimer une classe
     async removeClasse(id) {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         await deleteClasse(id);
-        useMessageStore().addMessage('Classe supprimée avec succès.');
-        localStorage.removeItem('classes'); // Invalider le cache
+        messageStore.notifySuccess('Classe supprimée avec succès.');
+        localStorage.removeItem('classes');
         localStorage.removeItem(`classes_filiere_${id}`);
-        this.fetchClasses();
+        await this.fetchClasses();
       } catch (error) {
-        useMessageStore().addError('Erreur lors de la suppression de la classe.');
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors de la suppression de la classe.')
+        );
       } finally {
         this.loading = false;
       }
     },
+
     async fetchOrganisationClasses() {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         const cached = getCache('organisation_classes');
@@ -167,7 +174,9 @@ export const useClasseStore = defineStore('classeStore', {
           setCache('organisation_classes', response);
         }
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        messageStore.notifyError(
+          extractErrorMessage(error, "Échec lors du chargement de l'organisation.")
+        );
       } finally {
         this.loading = false;
       }

@@ -4,7 +4,7 @@
       <!-- Header -->
       <div class="mb-4">
         <h3>Inscription des étudiants</h3>
-        <p class="text-muted">Gestion des inscriptions et réinscriptions par année académique</p>
+        <p class="text-muted">Gestion des inscriptions et réinscriptions par filière</p>
       </div>
 
       <!-- Filtres -->
@@ -21,17 +21,17 @@
               />
             </div>
 
-            <div class="col-md-3">
-              <label class="form-label">Année académique</label>
-              <select class="form-select" v-model="selectedYear">
+            <div class="col-md-4">
+              <label class="form-label">Filière</label>
+              <select class="form-select" v-model="selectedFiliere">
                 <option value="">Toutes</option>
-                <option v-for="year in academicYears" :key="year">
-                  {{ year }}
+                <option v-for="filiere in filieres" :key="filiere">
+                  {{ filiere }}
                 </option>
               </select>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-4">
               <label class="form-label">Statut</label>
               <select class="form-select" v-model="selectedStatut">
                 <option value="">Tous</option>
@@ -39,12 +39,6 @@
                 <option value="validée">Validée</option>
                 <option value="annulée">Annulée</option>
               </select>
-            </div>
-
-            <div class="col-md-2 d-flex align-items-end">
-              <button class="btn btn-outline-secondary w-100" @click="resetFilters">
-                Réinitialiser
-              </button>
             </div>
           </div>
         </div>
@@ -56,7 +50,6 @@
         <AjouterTuteur />
       </div>
 
-      <!-- Table -->
       <div class="table-responsive">
         <table class="table table-hover align-middle">
           <thead>
@@ -66,28 +59,37 @@
               <th>Nom</th>
               <th>Prénom</th>
               <th>Classe</th>
-              <th>Année</th>
+              <th>Filière</th>
               <th>Statut</th>
               <th class="text-end">Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr v-for="(inscription, index) in filteredInscriptions" :key="inscription.id">
-              <td>{{ index + 1 }}</td>
+            <tr v-for="(inscription, index) in paginatedInscriptions" :key="inscription.id">
+              <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
               <td>{{ inscription.matricule }}</td>
               <td>{{ inscription.nom }}</td>
               <td>{{ inscription.prenom }}</td>
-              <td>{{ inscription.classe }}</td>
-              <td>{{ inscription.annee }}</td>
+              <td>{{ inscription.classe_code }}</td>
+              <td>{{ inscription.filiere_code }}</td>
               <td>
                 <span class="badge" :class="statutClass(inscription.statut)">
                   {{ inscription.statut }}
                 </span>
               </td>
               <td class="text-end">
-                <button class="btn btn-sm btn-outline-primary me-1">Détails</button>
-                <button class="btn btn-sm btn-outline-danger">Annuler</button>
+                <div class="btn-group shadow-sm" role="group" aria-label="Actions de classe">
+                  <button class="btn btn-sm btn-outline-secondary" @click="openModal(inscription)">
+                    <i class="mdi mdi-information-outline"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-outline-danger"
+                    @click="store.removeInscription(inscription.id)"
+                  >
+                    <i class="mdi mdi-delete-outline"></i>
+                  </button>
+                </div>
               </td>
             </tr>
 
@@ -99,81 +101,64 @@
             </tr>
           </tbody>
         </table>
+
+        <InscriptionDetailModal v-model="showModal" :inscription="selectedInscription" />
       </div>
+      <Pagination
+        v-model="currentPage"
+        :items-per-page="itemsPerPage"
+        :total-items="filteredInscriptions.length"
+      />
     </div>
   </div>
 </template>
+
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
+import InscriptionDetailModal from '../modal/InscriptionDetails.vue';
+import { useInscriptionStore } from '@/stores/academiqueStore/inscriptionStore';
 
-import InscriptionClasse from '../modal/InscriptionClasse.vue';
-import AjouterTuteur from '../modal/AddTuteur.vue';
+const store = useInscriptionStore();
 
-/* =====================
-   États
-===================== */
-const inscriptions = ref([]);
-const searchQuery = ref('');
-const selectedYear = ref('');
-const selectedStatut = ref('');
-
-const academicYears = ['2022-2023', '2023-2024', '2024-2025'];
-
-/* =====================
-   Données simulées (alignées SQL)
-===================== */
 onMounted(() => {
-  inscriptions.value = [
-    {
-      id: 1,
-      matricule: 'ETU2025001',
-      nom: 'Kouadio',
-      prenom: 'Eric',
-      classe: 'L1 Informatique',
-      annee: '2024-2025',
-      statut: 'validée',
-    },
-    {
-      id: 2,
-      matricule: 'ETU2025002',
-      nom: 'Yao',
-      prenom: 'Marie',
-      classe: 'L2 Informatique',
-      annee: '2024-2025',
-      statut: 'en attente',
-    },
-    {
-      id: 3,
-      matricule: 'ETU2025003',
-      nom: 'Koffi',
-      prenom: 'Serge',
-      classe: 'L3 Informatique',
-      annee: '2023-2024',
-      statut: 'annulée',
-    },
-  ];
+  store.fetchInscriptions();
+  const savedFilieres = localStorage.getItem('filieres');
+  if (savedFilieres) {
+    const parsed = JSON.parse(savedFilieres);
+    filieres.value = parsed.data.map((f) => f.code);
+  }
 });
 
-/* =====================
-   Computed
-===================== */
+const searchQuery = ref('');
+const selectedFiliere = ref('');
+const selectedStatut = ref('');
+
+const filieres = ref([]);
+
 const filteredInscriptions = computed(() => {
-  return inscriptions.value.filter((i) => {
+  const data = store.inscriptions || [];
+
+  return data.filter((i) => {
+    const search = searchQuery.value.toLowerCase().trim();
     const matchSearch =
-      i.nom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      i.prenom.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      i.matricule.toLowerCase().includes(searchQuery.value.toLowerCase());
-
-    const matchYear = !selectedYear.value || i.annee === selectedYear.value;
+      !search ||
+      i.nom?.toLowerCase().includes(search) ||
+      i.prenom?.toLowerCase().includes(search) ||
+      i.matricule?.toLowerCase().includes(search);
+    const matchFiliere = !selectedFiliere.value || i.filiere_code === selectedFiliere.value;
     const matchStatut = !selectedStatut.value || i.statut === selectedStatut.value;
-
-    return matchSearch && matchYear && matchStatut;
+    return matchSearch && matchFiliere && matchStatut;
   });
 });
 
-/* =====================
-   Helpers
-===================== */
+const selectedInscription = ref(null);
+const showModal = ref(false);
+
+const openModal = (inscription) => {
+  selectedInscription.value = inscription;
+  showModal.value = true;
+};
+
 const statutClass = (statut) => {
   return {
     'bg-success': statut === 'validée',
@@ -182,9 +167,20 @@ const statutClass = (statut) => {
   };
 };
 
-const resetFilters = () => {
-  searchQuery.value = '';
-  selectedYear.value = '';
-  selectedStatut.value = '';
-};
+// 1. État de la pagination
+const currentPage = ref(1);
+const itemsPerPage = ref(10); // Tu peux changer cette valeur
+
+// 2. Calcul des données paginées
+const paginatedInscriptions = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return filteredInscriptions.value.slice(start, end);
+});
+
+// 3. Reset de la page quand les filtres changent (Optionnel mais recommandé)
+// Si l'utilisateur est à la page 5 et filtre, il doit revenir à la page 1
+watch([searchQuery, selectedFiliere, selectedStatut], () => {
+  currentPage.value = 1;
+});
 </script>

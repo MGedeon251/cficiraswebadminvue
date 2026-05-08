@@ -1,7 +1,8 @@
 import buildService from '../config/serviceApi';
-import { academiqueApi } from '../config/apiClients';
+import { academiqueApi, academiqueFormApi } from '../config/apiClients';
 
 const academiqueService = buildService(academiqueApi);
+const academiqueFormService = buildService(academiqueFormApi);
 
 // API pour gérer les années académiques
 export const getAnneesAcademiques = () => academiqueService.get('/annees');
@@ -56,3 +57,25 @@ export const deleteSemestre = (id) => academiqueService.delete(`/semestres/${id}
 // Ajoutez ces nouvelles fonctions si elles n'existent pas
 export const getClassesByAnnee = (anneeId) => academiqueService.get(`/classes/annee/${anneeId}`);
 export const getFilieresByAnnee = (anneeId) => academiqueService.get(`/filieres/annee/${anneeId}`);
+
+// API pour gérer les inscriptions
+
+export const getInscriptions = () => academiqueService.get('/inscriptions/list');
+export const getInscriptionById = (id) => academiqueService.get(`/inscriptions/${id}`);
+export const createInscription = (data) => academiqueService.post('/inscriptions', data);
+export const updateInscription = (id, data) => academiqueService.put(`/inscriptions/${id}`, data);
+export const deleteInscription = (id) => academiqueService.delete(`/inscriptions/${id}`);
+
+// api/academiqueApi.js (ou votre fichier de service)
+
+export const importInscriptions = async (fichier, gestionnaireId) => {
+  const formData = new FormData();
+
+  if (!(fichier instanceof File) && !(fichier instanceof Blob)) {
+    throw new Error("Le paramètre 'fichier' doit être un objet File.");
+  }
+  formData.append('file', fichier);
+  formData.append('gestionnaire_id', String(gestionnaireId));
+
+  return await academiqueFormService.post('/inscriptions/import', formData);
+};

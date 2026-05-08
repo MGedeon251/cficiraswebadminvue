@@ -52,7 +52,7 @@
 
 <script setup="setup">
 import { ref, onMounted } from 'vue';
-import AddConcour from '../modal/AddConcour.vue';
+import AddConcour from '../modal/InscriptionsModal.vue';
 const concours = ref([]);
 
 onMounted(() => {

@@ -8,7 +8,6 @@ import {
   deleteCycle,
 } from '@/api/academique/academiqueApi';
 import { useMessageStore } from '@/stores/messages/messageStore';
-import { useNotifier } from '@/stores/messages/useNotifier';
 import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
 
 // Helpers pour gérer le cache
@@ -23,7 +22,6 @@ function setCache(key, data) {
 }
 
 function getCache(key, ttl = 5 * 60 * 1000) {
-  // TTL par défaut : 5 minutes
   const cached = localStorage.getItem(key);
   if (!cached) return null;
 
@@ -45,7 +43,7 @@ export const useCycleStore = defineStore('cycleStore', {
   actions: {
     // Récupérer tous les cycles
     async fetchCycles() {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         const cached = getCache('cycles');
@@ -57,7 +55,9 @@ export const useCycleStore = defineStore('cycleStore', {
           setCache('cycles', response);
         }
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Échec lors du chargement des cycles.')
+        );
       } finally {
         this.loading = false;
       }
@@ -65,7 +65,7 @@ export const useCycleStore = defineStore('cycleStore', {
 
     // Récupérer les cycles par filière
     async fetchFiliereCycle() {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         const cached = getCache('filiereCycles');
@@ -77,34 +77,43 @@ export const useCycleStore = defineStore('cycleStore', {
           setCache('filiereCycles', this.Filierecycles);
         }
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Échec lors du chargement des filières.')
+        );
       } finally {
         this.loading = false;
       }
     },
+
     async fetchOrganisation() {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         const response = await getOrganisation();
         return response;
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        messageStore.notifyError(
+          extractErrorMessage(error, "Échec lors du chargement de l'organisation.")
+        );
       } finally {
         this.loading = false;
       }
     },
+
     // Ajouter un nouveau cycle
     async addCycle(data) {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         await createCycle(data);
-        useMessageStore().addMessage('Cycle créé avec succès.');
-        localStorage.removeItem('cycles'); // Invalider le cache
-        this.fetchCycles();
+        messageStore.notifySuccess('Cycle créé avec succès.');
+        localStorage.removeItem('cycles');
+        localStorage.removeItem('filiereCycles'); // On invalide aussi le cache lié
+        await this.fetchCycles();
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors de la création du cycle.')
+        );
       } finally {
         this.loading = false;
       }
@@ -112,15 +121,18 @@ export const useCycleStore = defineStore('cycleStore', {
 
     // Modifier un cycle existant
     async editCycle(id, data) {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         await updateCycle(id, data);
-        useMessageStore().addMessage('Cycle mis à jour avec succès.');
-        localStorage.removeItem('cycles'); // Invalider le cache
-        this.fetchCycles();
+        messageStore.notifySuccess('Cycle mis à jour avec succès.');
+        localStorage.removeItem('cycles');
+        localStorage.removeItem('filiereCycles');
+        await this.fetchCycles();
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors de la modification du cycle.')
+        );
       } finally {
         this.loading = false;
       }
@@ -128,15 +140,18 @@ export const useCycleStore = defineStore('cycleStore', {
 
     // Supprimer un cycle
     async removeCycle(id) {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         await deleteCycle(id);
-        useMessageStore().addMessage('Cycle supprimé avec succès.');
-        localStorage.removeItem('cycles'); // Invalider le cache
-        this.fetchCycles();
+        messageStore.notifySuccess('Cycle supprimé avec succès.');
+        localStorage.removeItem('cycles');
+        localStorage.removeItem('filiereCycles');
+        await this.fetchCycles();
       } catch (error) {
-        notifyError(extractErrorMessage(error, 'Échec lors du chargement des données.'));
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors de la suppression du cycle.')
+        );
       } finally {
         this.loading = false;
       }

@@ -18,14 +18,14 @@
       <li class="nav-item">
         <a
           class="nav-link"
-          id="paiements-tab"
+          id="gestion-tab"
           data-bs-toggle="tab"
-          href="#paiements"
+          href="#gestion"
           role="tab"
-          aria-controls="paiements"
+          aria-controls="gestion"
           aria-selected="false"
         >
-          Paiements
+          Gestions classes
         </a>
       </li>
       <li class="nav-item">
@@ -44,14 +44,14 @@
       <li class="nav-item">
         <a
           class="nav-link"
-          id="gestion-tab"
+          id="paiements-tab"
           data-bs-toggle="tab"
-          href="#gestion"
+          href="#paiements"
           role="tab"
-          aria-controls="gestion"
+          aria-controls="paiements"
           aria-selected="false"
         >
-          Classes & Niveaux
+          Gestions paiements
         </a>
       </li>
       <li class="nav-item">
@@ -86,7 +86,7 @@
         <recherche-inscriptions />
       </div>
       <div class="tab-pane fade" id="gestion" role="tabpanel" aria-labelledby="gestion-tab">
-        <gestion-inscriptions />
+        <ClasseNiveau />
       </div>
       <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats-tab">
         <stats-rapports />
@@ -99,6 +99,6 @@
 import InscriptionForm from './InscriptionForm.vue'; // Cas d’utilisation 1
 import PaiementList from './PaiementList.vue'; // Cas d’utilisation 2
 import RechercheInscriptions from './Recherche.vue'; // Cas d’utilisation 3
-import GestionInscriptions from './GestionInscriptions.vue'; // Cas d’utilisation 4
+import ClasseNiveau from './ClasseNiveau.vue'; // Cas d’utilisation 4
 import StatsRapports from './StatsRapports.vue'; // Cas d’utilisation 5
 </script>
