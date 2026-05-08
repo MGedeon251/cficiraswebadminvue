@@ -25,7 +25,7 @@
           aria-controls="gestion"
           aria-selected="false"
         >
-          Classes & Niveaux
+          Gestions classes
         </a>
       </li>
       <li class="nav-item">
