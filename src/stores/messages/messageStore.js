@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
-const DEFAULT_OPTIONS = {
+const defaultOptions = {
   autoClose: 3000,
   position: 'top-right',
   theme: 'light',
@@ -11,55 +11,41 @@ const DEFAULT_OPTIONS = {
   hideProgressBar: false,
 };
 
-const TOAST_TYPES = ['success', 'info', 'warning', 'error'];
-
 export const useMessageStore = defineStore('messageStore', {
   state: () => ({
     messages: [],
   }),
 
   actions: {
-    addMessage(message, type = 'success', options = {}) {
-      if (!message) return;
-      const toastId = options.toastId || message;
+    addMessage(message, type = 'success') {
+      const newMessage = {
+        id: Date.now(),
+        message,
+        type,
+      };
+      this.messages.push(newMessage);
 
-      this.messages.push({ id: Date.now(), message, type });
-
-      const mergedOptions = {
-        ...DEFAULT_OPTIONS,
-        toastId,
-        ...options,
+      const display = {
+        success: toast.success,
+        info: toast.info,
+        warning: toast.warning,
+        error: toast.error,
       };
 
-      if (TOAST_TYPES.includes(type)) {
-        toast[type](message, mergedOptions);
+      const toastFunc = display[type];
+
+      if (toastFunc) {
+        toastFunc(message, defaultOptions);
       } else {
-        toast(message, { ...mergedOptions, type: 'default' });
+        // fallback neutre
+        toast(message, {
+          ...defaultOptions,
+          type: 'default',
+        });
       }
     },
-    notifySuccess(message, options = {}) {
-      this.addMessage(message, 'success', options);
-    },
-    notifyError(message, options = {}) {
-      this.addMessage(message, 'error', options);
-    },
-    notifyWarning(message, options = {}) {
-      this.addMessage(message, 'warning', options);
-    },
-    notifyInfo(message, options = {}) {
-      this.addMessage(message, 'info', options);
-    },
-    notifyCritical(message) {
-      this.addMessage(message, 'error', {
-        autoClose: false,
-        hideProgressBar: true,
-        toastId: 'critical-error-unique',
-      });
-    },
-
     clearMessages() {
       this.messages = [];
-      toast.clearAll();
     },
   },
 });

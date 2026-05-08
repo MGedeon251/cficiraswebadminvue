@@ -76,129 +76,39 @@
                 </span>
               </td>
               <td class="text-end">
-                <div class="btn-group shadow-sm" role="group">
-                  <button
-                    v-if="inscription.statut === 'en attente'"
-                    class="btn btn-sm btn-outline-success"
-                    title="Valider l'inscription"
-                    @click="validerInscription(inscription.id)"
-                  >
-                    <i class="mdi mdi-check-circle-outline"></i>
-                  </button>
-
-                  <button class="btn btn-sm btn-outline-secondary" @click="openModal(inscription)">
-                    <i class="mdi mdi-information-outline"></i>
-                  </button>
-
-                  <button
-                    class="btn btn-sm btn-outline-danger"
-                    @click="store.removeInscription(inscription.id)"
-                  >
-                    <i class="mdi mdi-close"></i>
-                  </button>
-                </div>
+                <button class="btn btn-sm btn-outline-primary me-1">Détails</button>
+                <button class="btn btn-sm btn-outline-danger" @click="deletePaiement(p.id)">
+                  Supprimer
+                </button>
               </td>
             </tr>
 
-            <tr v-if="filteredInscriptions.length === 0">
-              <td colspan="8" class="text-center py-4">
+            <tr v-if="filteredPaiements.length === 0">
+              <td colspan="7" class="text-center py-4">
                 <img src="/img/empty-box.svg" width="80" class="mb-2" />
-                <div class="text-muted">Aucune inscription trouvée</div>
+                <div class="text-muted">Aucun paiement trouvé</div>
               </td>
             </tr>
           </tbody>
         </table>
 
-        <InscriptionDetailModal v-model="showModal" :inscription="selectedInscription" />
+      <!-- Barre d'actions flottante -->
+      <div v-if="selectedIds.length > 0" class="bulk-actions-bar">
+        <div>
+          <strong>{{ selectedIds.length }}</strong> paiement(s) sélectionné(s)
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-success btn-sm" @click="validerSelection">✅ Valider</button>
+          <button class="btn btn-warning btn-sm" @click="exporterSelection">📤 Exporter</button>
+          <button class="btn btn-danger btn-sm" @click="deleteSelected">🗑 Supprimer</button>
+        </div>
       </div>
-      <Pagination
-        v-model="currentPage"
-        :items-per-page="itemsPerPage"
-        :total-items="filteredInscriptions.length"
-      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
-import InscriptionDetailModal from '../modal/InscriptionDetails.vue';
-import { useInscriptionStore } from '@/stores/academiqueStore/inscriptionStore';
+import { ref, computed, watch } from 'vue';
 
-const store = useInscriptionStore();
-
-onMounted(() => {
-  store.fetchInscriptions();
-  const savedFilieres = localStorage.getItem('filieres');
-  if (savedFilieres) {
-    const parsed = JSON.parse(savedFilieres);
-    filieres.value = parsed.data.map((f) => f.code);
-  }
-});
-
-const searchQuery = ref('');
-const selectedFiliere = ref('');
-const selectedStatut = ref('');
-
-const filieres = ref([]);
-
-const filteredInscriptions = computed(() => {
-  const data = store.inscriptions || [];
-
-  return data.filter((i) => {
-    const search = searchQuery.value.toLowerCase().trim();
-    const matchSearch =
-      !search ||
-      i.nom?.toLowerCase().includes(search) ||
-      i.prenom?.toLowerCase().includes(search) ||
-      i.matricule?.toLowerCase().includes(search);
-    const matchFiliere = !selectedFiliere.value || i.filiere_code === selectedFiliere.value;
-    const matchStatut = !selectedStatut.value || i.statut === selectedStatut.value;
-    return matchSearch && matchFiliere && matchStatut;
-  });
-});
-
-const selectedInscription = ref(null);
-const showModal = ref(false);
-
-const validerInscription = async (id) => {
-  if (!confirm("Voulez-vous valider cette inscription et ajouter l'étudiant à la classe ?")) return;
-
-  try {
-    await store.confirmInscription(id);
-    alert("Inscription validée ! L'étudiant est désormais inscrit au cursus.");
-    fetchInscriptions();
-  } catch (error) {
-    console.error('Erreur lors de la validation:', error);
-    alert('Erreur lors de la validation : ' + error.message);
-  }
-};
-
-const openModal = (inscription) => {
-  selectedInscription.value = inscription;
-  showModal.value = true;
-};
-
-const statutClass = (statut) => {
-  return {
-    'bg-success': statut === 'validée',
-    'bg-warning text-dark': statut === 'en attente',
-    'bg-danger': statut === 'annulée',
-  };
-};
-
-// 1. État de la pagination
-const currentPage = ref(1);
-const itemsPerPage = ref(10); // Tu peux changer cette valeur
-
-// 2. Calcul des données paginées
-const paginatedInscriptions = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage.value;
-  const end = start + itemsPerPage.value;
-  return filteredInscriptions.value.slice(start, end);
-});
-
-watch([searchQuery, selectedFiliere, selectedStatut], () => {
-  currentPage.value = 1;
-});
-</script>
+/* =====================
+   États
