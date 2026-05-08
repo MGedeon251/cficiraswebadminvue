@@ -5,7 +5,7 @@
       @click="toggleChat"
       :class="{ 'pulse': !isOpen }"
     >
-      <i class="mdi" :class="isOpen ? 'mdi-close' : 'mdi-robot-outline'"></i>
+      <i class="mdi" :class="isOpen ? 'mdi-close' : 'mdi mdi-robot' "></i>
     </button>
 
     <Transition name="slide-up">
