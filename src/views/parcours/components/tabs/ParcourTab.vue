@@ -1,115 +1,134 @@
 <template>
   <div>
+    <!-- Navigation des onglets -->
     <ul class="nav nav-tabs px-4" role="tablist">
       <li class="nav-item">
         <a
           class="nav-link active"
-          id="overview-tab"
+          id="profil-tab"
           data-bs-toggle="tab"
-          href="#overview"
+          href="#profil"
           role="tab"
-          aria-controls="overview"
+          aria-controls="profil"
           aria-selected="true"
-          >Historiques academique</a
         >
+          Profil & Informations
+        </a>
       </li>
       <li class="nav-item">
         <a
           class="nav-link"
-          id="devoirf-tab"
+          id="parcours-tab"
           data-bs-toggle="tab"
-          href="#devoirf"
+          href="#parcours"
           role="tab"
-          aria-controls="devoirf"
+          aria-controls="parcours"
           aria-selected="false"
-          >Exportations</a
         >
+          Parcours & Notes
+        </a>
       </li>
       <li class="nav-item">
         <a
           class="nav-link"
-          id="sales-tab"
+          id="assiduite-tab"
           data-bs-toggle="tab"
-          href="#sales"
+          href="#assiduite"
           role="tab"
-          aria-controls="sales"
+          aria-controls="assiduite"
           aria-selected="false"
-          >Rapports</a
         >
+          Assiduité & Discipline
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          id="finance-tab"
+          data-bs-toggle="tab"
+          href="#finance"
+          role="tab"
+          aria-controls="finance"
+          aria-selected="false"
+        >
+          Situation Financière
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          id="documents-tab"
+          data-bs-toggle="tab"
+          href="#documents"
+          role="tab"
+          aria-controls="documents"
+          aria-selected="false"
+        >
+          Documents & Archives
+        </a>
       </li>
     </ul>
+
+    <!-- Contenu des onglets -->
     <div class="tab-content p-4">
+      <!-- 1. Profil : Infos personnelles, contacts d'urgence, statut d'inscription actuel -->
       <div
         class="tab-pane fade show active"
-        id="overview"
+        id="profil"
         role="tabpanel"
-        aria-labelledby="overview-tab"
+        aria-labelledby="profil-tab"
       >
-        <Overview />
+        <ProfilEtudiant />
       </div>
-      <div class="tab-pane fade" id="devoirf" role="tabpanel" aria-labelledby="devoirf-tab">
-        <Historiques />
+
+      <!-- 2. Parcours : Historique des classes, bulletins, relevés de notes, progression -->
+      <div 
+        class="tab-pane fade" 
+        id="parcours" 
+        role="tabpanel" 
+        aria-labelledby="parcours-tab"
+      >
+        <ParcoursAcademique />
       </div>
-      <div class="tab-pane fade" id="sales" role="tabpanel" aria-labelledby="sales-tab">
-        <Activity />
+
+      <!-- 3. Assiduité : Absences, retards, sanctions disciplinaires -->
+      <div 
+        class="tab-pane fade" 
+        id="assiduite" 
+        role="tabpanel" 
+        aria-labelledby="assiduite-tab"
+      >
+        <AssiduiteDiscipline />
       </div>
-      <div class="tab-pane fade" id="purchases" role="tabpanel" aria-labelledby="purchases-tab">
-        <StatsRapport />
+
+      <!-- 4. Finance : Suivi des paiements, mensualités, arriérés -->
+      <div 
+        class="tab-pane fade" 
+        id="finance" 
+        role="tabpanel" 
+        aria-labelledby="finance-tab"
+      >
+        <SituationFinanciere />
+      </div>
+
+      <!-- 5. Documents : Pièces d'identité, certificats médicaux, fiches d'engagement -->
+      <div 
+        class="tab-pane fade" 
+        id="documents" 
+        role="tabpanel" 
+        aria-labelledby="documents-tab"
+      >
+        <DocumentsArchives/>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import Overview from './Overview.vue';
-import Historiques from './Historique.vue';
-import Exportation from './Exportation.vue';
-import Activity from './Activity.vue';
+// Importation des sous-composants dédiés à chaque onglet
+import ProfilEtudiant from './ProfilEtudiant.vue';
+import ParcoursAcademique from './ParcoursAcademique.vue';
+import AssiduiteDiscipline from './AssiduiteDiscipline.vue';
+import SituationFinanciere from './SituationFinanciere.vue';
+import DocumentsArchives from './DocumentsArchives.vue';
 </script>
-
-<style scoped>
-.drag-drop-area {
-  background: #f8f9fa;
-  border: 2px dashed #007bff;
-  cursor: pointer;
-}
-.drag-drop-area.drag-over {
-  background: #e9ecef;
-}
-</style>
-
-<style scoped>
-body {
-  background-color: #f8f9fa;
-  color: #212529;
-}
-.card {
-  background-color: #ffffff;
-  border: 1px solid #dee2e6;
-  border-radius: 12px;
-}
-.btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
-  color: #fff;
-}
-.btn-primary:hover {
-  background-color: #0056b3;
-  border-color: #004080;
-}
-.status-badge {
-  padding: 0.5em 1em;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  color: #fff;
-}
-.status-draft {
-  background-color: #6c757d;
-}
-.status-active {
-  background-color: #0d6efd;
-}
-.table thead th {
-  border-bottom: 2px solid #dee2e6;
-}
-</style>

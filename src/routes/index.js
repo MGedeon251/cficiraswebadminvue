@@ -52,7 +52,7 @@ import ResultatsConcours from '../views/concours/resultats/RapportConcours.vue';
 import Notes from '../views/notes/Notes.vue'; // Page des notes
 import appNotes from '../views/notes/addNotes/main/notev1.vue';
 //Parcours et filières
-import Parcours from '../views/parcours/Parcours.vue';
+import Parcours from '../views/parcours/DossierAcademique.vue';
 // Cours et supports
 import Support from '../views/support/Support.vue';
 //Paramètres et configurations

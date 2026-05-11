@@ -132,7 +132,10 @@ onMounted(() => {
   const savedFilieres = localStorage.getItem('filieres');
   if (savedFilieres) {
     const parsed = JSON.parse(savedFilieres);
-    filieres.value = parsed.data.map((f) => f.code);
+    const items = Array.isArray(parsed) ? parsed : parsed?.data;
+    if (Array.isArray(items)) {
+      filieres.value = items.map((f) => f.code);
+    }
   }
 });
 
