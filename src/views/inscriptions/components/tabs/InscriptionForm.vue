@@ -104,14 +104,18 @@
                     </span>
                   </td>
                   <td class="text-end pe-4">
-                    <div class="btn-group shadow-sm border rounded-pill overflow-hidden">
-                      <button class="btn btn-sm btn-white px-3" title="Détails" @click="openModal(inscription)">
-                        <i class="mdi mdi-eye-outline text-primary"></i>
-                      </button>
-                      <button class="btn btn-sm btn-white px-3" title="Supprimer" @click="store.removeInscription(inscription.id)">
-                        <i class="mdi mdi-trash-can-outline text-danger"></i>
-                      </button>
-                    </div>
+                    <div class="btn-group shadow-sm" role="group">
+                  <button class="btn btn-sm btn-outline-secondary" @click="openModal(inscription)">
+                    <i class="mdi mdi-information-outline"></i>
+                  </button>
+
+                  <button
+                    class="btn btn-sm btn-outline-danger"
+                    @click="store.removeInscription(inscription.id)"
+                  >
+                    <i class="mdi mdi-delete-outline"></i>
+                  </button>
+                </div>
                   </td>
                 </tr>
 
@@ -214,7 +218,7 @@ const openModal = (inscription) => {
   showModal.value = true;
 };
 
-const statutClass = (statut) => {
+const statutBadgeStyle = (statut) => {
   return {
     'bg-success': statut === 'validée',
     'bg-warning text-dark': statut === 'en attente',
