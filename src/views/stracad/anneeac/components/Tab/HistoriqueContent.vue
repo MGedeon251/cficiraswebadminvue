@@ -6,9 +6,6 @@
         <h4 class="fw-bold mb-1">Historique des Années Académiques</h4>
         <p class="text-muted small mb-0">Consultez, gérez et archivez les cycles d'enseignement.</p>
       </div>
-      <button class="btn btn-primary shadow-sm rounded-pill px-4">
-        <i class="mdi mdi-plus me-1"></i> Ouvrir une nouvelle année
-      </button>
     </div>
 
     <!-- Filtres Optimisés (Style épuré) -->
