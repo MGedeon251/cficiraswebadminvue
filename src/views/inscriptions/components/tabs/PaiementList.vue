@@ -1,124 +1,190 @@
 <template>
   <div class="row">
     <div class="col-12 grid-margin">
-      <!-- Header -->
-      <div class="mb-4">
-        <h3>Validations inscriptions</h3>
-        <p class="text-muted">Gestion des inscriptions et réinscriptions par filière</p>
+      <!-- Header avec Résumé Financier Rapide -->
+      <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+          <h3 class="fw-bold mb-1">Validation & Frais d'Inscriptions</h3>
+          <p class="text-muted small mb-0">Suivi des paiements et validation administrative des dossiers.</p>
+        </div>
+        <div class="d-flex gap-3 text-end">
+          <div class="px-3 border-end">
+            <small class="text-muted d-block">Total Collecté</small>
+            <span class="fw-bold text-success">2,450,000 FCFA</span>
+          </div>
+          <div class="px-3">
+            <small class="text-muted d-block">En attente</small>
+            <span class="fw-bold text-warning">850,000 FCFA</span>
+          </div>
+        </div>
       </div>
-      <!-- Filtres -->
-      <div class="card mb-4">
-        <div class="card-body">
+
+      <!-- Filtres Modernisés -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body bg-light rounded">
           <div class="row g-3">
-            <div class="col-md-4">
-              <label class="form-label">Filière</label>
-              <select class="form-select" v-model="selectedFiliere">
-                <option value="">Toutes</option>
-                <option v-for="filiere in filieres" :key="filiere">
-                  {{ filiere }}
-                </option>
+            <div class="col-md-3">
+              <select class="form-select border-0 shadow-sm" v-model="selectedFiliere">
+                <option value="">Toutes les filières</option>
+                <option v-for="f in filieres" :key="f" :value="f">{{ f }}</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <select class="form-select border-0 shadow-sm" v-model="selectedStatut">
+                <option value="">Tous les statuts</option>
+                <option value="en attente">⏳ En attente</option>
+                <option value="validée">✅ Validée</option>
+                <option value="annulée">❌ Annulée</option>
               </select>
             </div>
             <div class="col-md-4">
-              <label class="form-label">Statut</label>
-              <select class="form-select" v-model="selectedStatut">
-                <option value="">Tous</option>
-                <option value="en attente">En attente</option>
-                <option value="validée">Validée</option>
-                <option value="annulée">Annulée</option>
-              </select>
+              <div class="input-group shadow-sm bg-white rounded">
+                <span class="input-group-text bg-white border-0"><i class="mdi mdi-magnify text-primary"></i></span>
+                <input type="text" class="form-control border-0" placeholder="Rechercher un étudiant..." v-model="searchQuery" />
+              </div>
             </div>
-            <div class="col-md-4">
-              <label class="form-label">Recherche</label>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Nom, prénom ou matricule..."
-                v-model="searchQuery"
-              />
+            <div class="col-md-2 text-end">
+              <button class="btn btn-white w-100 shadow-sm border-0" @click="resetFilters">
+                <i class="mdi mdi-filter-variant"></i> Filtrer
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Actions -->
-      <div class="d-flex justify-content-end mb-3 gap-2">
-        <InscriptionClasse />
-        <AjouterTuteur />
+      <!-- Actions Globales -->
+      <div class="d-flex justify-content-between mb-3 align-items-center">
+        <span class="text-muted small">Affichage de <b>{{ filteredInscriptions.length }}</b> dossiers</span>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-primary btn-sm px-3 shadow-sm bg-white">
+            <i class="mdi mdi-file-export-outline me-1"></i> Exporter
+          </button>
+          <InscriptionClasse />
+        </div>
       </div>
 
-      <div class="table-responsive">
-        <table class="table table-hover align-middle">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Matricule</th>
-              <th>Nom</th>
-              <th>Prénom</th>
-              <th>Classe</th>
-              <th>Filière</th>
-              <th>Statut</th>
-              <th class="text-end">Actions</th>
-            </tr>
-          </thead>
+      <!-- Tableau Financier -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="bg-light">
+                <tr>
+                  <th class="ps-4">Étudiant / Matricule</th>
+                  <th>Classe</th>
+                  <th>Frais Scolarité</th>
+                  <th>Montant Versé</th>
+                  <th>Reste</th>
+                  <th class="text-center">Statut</th>
+                  <th class="text-end pe-4">Actions</th>
+                </tr>
+              </thead>
 
-          <tbody>
-            <tr v-for="(inscription, index) in paginatedInscriptions" :key="inscription.id">
-              <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
-              <td>{{ inscription.matricule }}</td>
-              <td>{{ inscription.nom }}</td>
-              <td>{{ inscription.prenom }}</td>
-              <td>{{ inscription.classe_code }}</td>
-              <td>{{ inscription.filiere_code }}</td>
-              <td>
-                <span class="badge" :class="statutClass(inscription.statut)">
-                  {{ inscription.statut }}
-                </span>
-              </td>
-              <td class="text-end">
-                <div class="btn-group shadow-sm" role="group">
-                  <button
-                    v-if="inscription.statut === 'en attente'"
-                    class="btn btn-sm btn-outline-success"
-                    title="Valider l'inscription"
-                    @click="validerInscription(inscription.id)"
-                  >
-                    <i class="mdi mdi-check-circle-outline"></i>
-                  </button>
+              <tbody>
+                <tr v-for="ins in paginatedInscriptions" :key="ins.id">
+                  <td class="ps-4">
+                    <div class="d-flex align-items-center">
+                      <div class="avatar-initials me-3 bg-soft-primary text-primary fw-bold">
+                        {{ ins.nom[0] }}{{ ins.prenom[0] }}
+                      </div>
+                      <div>
+                        <div class="fw-bold text-dark">{{ ins.nom }} {{ ins.prenom }}</div>
+                        <small class="text-primary fw-semibold">{{ ins.matricule }}</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="badge bg-light text-dark border">{{ ins.classe_code }}</div>
+                    <div class="small text-muted mt-1">{{ ins.filiere_code }}</div>
+                  </td>
+                  <td><span class="fw-bold">450,000</span></td>
+                  <td>
+                    <span class="text-success fw-bold">250,000</span>
+                    <div class="small text-muted" style="font-size: 10px;">Via Orange Money</div>
+                  </td>
+                  <td>
+                    <span class="badge bg-soft-danger text-danger">-200,000</span>
+                  </td>
+                  <td class="text-center">
+                    <span :class="['badge rounded-pill px-3 py-2', statutClass(ins.statut)]">
+                      {{ ins.statut }}
+                    </span>
+                  </td>
+                  <td class="text-end pe-4">
+                    <div class="btn-group shadow-sm border rounded-pill bg-white">
+                      <button v-if="ins.statut === 'en attente'" 
+                              class="btn btn-sm btn-white text-success border-end" 
+                              @click="validerInscription(ins.id)">
+                        <i class="mdi mdi-check-bold"></i>
+                      </button>
+                      <button class="btn btn-sm btn-white text-info border-end" @click="imprimerRecu(ins)">
+                        <i class="mdi mdi-printer"></i>
+                      </button>
+                      <button class="btn btn-sm btn-white text-secondary" @click="openModal(ins)">
+                        <i class="mdi mdi-eye"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
 
-                  <button class="btn btn-sm btn-outline-secondary" @click="openModal(inscription)">
-                    <i class="mdi mdi-information-outline"></i>
-                  </button>
-
-                  <button
-                    class="btn btn-sm btn-outline-danger"
-                    @click="store.removeInscription(inscription.id)"
-                  >
-                    <i class="mdi mdi-close"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-
-            <tr v-if="filteredInscriptions.length === 0">
-              <td colspan="8" class="text-center py-4">
-                <img src="/img/empty-box.svg" width="80" class="mb-2" />
-                <div class="text-muted">Aucune inscription trouvée</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <InscriptionDetailModal v-model="showModal" :inscription="selectedInscription" />
+                <!-- État Vide -->
+                <tr v-if="filteredInscriptions.length === 0">
+                  <td colspan="7" class="text-center py-5">
+                    <img src="/img/empty-box.svg" width="100" class="mb-3 opacity-50" />
+                    <p class="text-muted">Aucune transaction trouvée.</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-      <Pagination
-        v-model="currentPage"
-        :items-per-page="itemsPerPage"
-        :total-items="filteredInscriptions.length"
-      />
+
+      <div class="mt-4">
+        <Pagination v-model="currentPage" :items-per-page="itemsPerPage" :total-items="filteredInscriptions.length" />
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.avatar-initials {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 0.85rem;
+}
+
+.bg-soft-primary { background: rgba(75, 73, 172, 0.1); }
+.bg-soft-success { background: rgba(25, 135, 84, 0.12); color: #198754; }
+.bg-soft-danger { background: rgba(220, 53, 69, 0.12); color: #dc3545; }
+.bg-soft-warning { background: rgba(255, 193, 7, 0.15); color: #997404; }
+
+.btn-white { background: #fff; border: none; }
+.btn-white:hover { background: #f8f9fa; }
+
+.table thead th {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #777;
+  border: none;
+  padding: 15px 10px;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid #f2f2f2;
+}
+
+/* Style spécifique pour les montants FCFA */
+td .fw-bold {
+  font-family: 'Inter', sans-serif;
+  color: #333;
+}
+</style>
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
