@@ -11,7 +11,7 @@
           <i class="mdi mdi-printer me-1"></i>Imprimer listes
         </button>
         <button class="btn btn-primary btn-sm px-3 shadow-sm">
-          <i class="mdi mdi-plus-circle me-1"></i>Nouvelle Classe
+          + Nouvelle Classe
         </button>
       </div>
     </div>
@@ -210,7 +210,7 @@
 }
 
 .rounded-4 {
-  border-radius: 1rem !important;
+  border-radius: 0.4rem !important;
 }
 
 /* Custom Modals Animation */
