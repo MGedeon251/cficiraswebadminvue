@@ -3,7 +3,9 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <h4 class="fw-bold">Gestion de la Facturation</h4>
-        <p class="text-muted small">Suivi des soldes, émission de factures et rappels de paiement.</p>
+        <p class="text-muted small">
+          Suivi des soldes, émission de factures et rappels de paiement.
+        </p>
       </div>
       <div class="d-flex gap-2">
         <button class="btn btn-outline-primary btn-sm" @click="triggerAutoGeneration">
@@ -38,7 +40,12 @@
       <div class="card-body bg-light rounded p-3">
         <div class="row g-2">
           <div class="col-md-6">
-            <input v-model="searchQuery" type="text" class="form-control" placeholder="Rechercher un étudiant ou N° facture...">
+            <input
+              v-model="searchQuery"
+              type="text"
+              class="form-control"
+              placeholder="Rechercher un étudiant ou N° facture..."
+            />
           </div>
           <div class="col-md-3">
             <select v-model="statusFilter" class="form-select">
@@ -89,13 +96,25 @@
                 </td>
                 <td class="text-center">
                   <div class="btn-group">
-                    <button class="btn btn-sm btn-outline-secondary" @click="downloadPDF(facture)" title="Télécharger PDF">
+                    <button
+                      class="btn btn-sm btn-outline-secondary"
+                      @click="downloadPDF(facture)"
+                      title="Télécharger PDF"
+                    >
                       <i class="mdi mdi-download"></i>
                     </button>
-                    <button class="btn btn-sm btn-outline-info" @click="sendEmail(facture)" title="Envoyer par Email">
+                    <button
+                      class="btn btn-sm btn-outline-info"
+                      @click="sendEmail(facture)"
+                      title="Envoyer par Email"
+                    >
                       <i class="mdi mdi-send"></i>
                     </button>
-                    <button class="btn btn-sm btn-outline-primary" @click="viewDetails(facture)" title="Détails">
+                    <button
+                      class="btn btn-sm btn-outline-primary"
+                      @click="viewDetails(facture)"
+                      title="Détails"
+                    >
                       <i class="mdi mdi-eye"></i>
                     </button>
                   </div>
@@ -103,7 +122,7 @@
               </tr>
               <tr v-if="filteredFactures.length === 0">
                 <td colspan="7" class="text-center py-5">
-                  <img src="/img/empty-box.svg" alt="Vide" width="60" class="mb-2 opacity-50">
+                  <img src="/img/empty-box.svg" alt="Vide" width="60" class="mb-2 opacity-50" />
                   <p class="text-muted">Aucune facture trouvée.</p>
                 </td>
               </tr>
@@ -122,25 +141,45 @@ const searchQuery = ref('');
 const statusFilter = ref('tous');
 
 const factures = ref([
-  { 
-    id: 1, numero: 'FAC-2024-001', etudiant: 'Amath Sarr', matricule: 'ETU045', 
-    totalDu: 500000, dejaPaye: 350000, solde: 150000, statut: 'Partiel' 
+  {
+    id: 1,
+    numero: 'FAC-2024-001',
+    etudiant: 'Amath Sarr',
+    matricule: 'ETU045',
+    totalDu: 500000,
+    dejaPaye: 350000,
+    solde: 150000,
+    statut: 'Partiel',
   },
-  { 
-    id: 2, numero: 'FAC-2024-002', etudiant: 'Fatima Ndiaye', matricule: 'ETU089', 
-    totalDu: 250000, dejaPaye: 250000, solde: 0, statut: 'Payé' 
+  {
+    id: 2,
+    numero: 'FAC-2024-002',
+    etudiant: 'Fatima Ndiaye',
+    matricule: 'ETU089',
+    totalDu: 250000,
+    dejaPaye: 250000,
+    solde: 0,
+    statut: 'Payé',
   },
-  { 
-    id: 3, numero: 'FAC-2024-003', etudiant: 'Modou Fall', matricule: 'ETU112', 
-    totalDu: 450000, dejaPaye: 0, solde: 450000, statut: 'Impayé' 
-  }
+  {
+    id: 3,
+    numero: 'FAC-2024-003',
+    etudiant: 'Modou Fall',
+    matricule: 'ETU112',
+    totalDu: 450000,
+    dejaPaye: 0,
+    solde: 450000,
+    statut: 'Impayé',
+  },
 ]);
 
 const filteredFactures = computed(() => {
-  return factures.value.filter(f => {
-    const matchesSearch = f.etudiant.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
-                          f.numero.includes(searchQuery.value);
-    const matchesStatus = statusFilter.value === 'tous' || f.statut.toLowerCase() === statusFilter.value;
+  return factures.value.filter((f) => {
+    const matchesSearch =
+      f.etudiant.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      f.numero.includes(searchQuery.value);
+    const matchesStatus =
+      statusFilter.value === 'tous' || f.statut.toLowerCase() === statusFilter.value;
     return matchesSearch && matchesStatus;
   });
 });
@@ -156,15 +195,31 @@ const getStatusBadge = (status) => {
 
 // Logique des actions
 const downloadPDF = (f) => alert(`Téléchargement de la facture ${f.numero} au format PDF...`);
-const sendEmail = (f) => alert(`Facture envoyée à l'adresse email liée au matricule ${f.matricule}`);
-const sendBulkReminders = () => alert("Envoi des emails de rappel pour toutes les factures impayées/partielles...");
-const triggerAutoGeneration = () => alert("Génération automatique des factures mensuelles pour le cycle en cours...");
+const sendEmail = (f) =>
+  alert(`Facture envoyée à l'adresse email liée au matricule ${f.matricule}`);
+const sendBulkReminders = () =>
+  alert('Envoi des emails de rappel pour toutes les factures impayées/partielles...');
+const triggerAutoGeneration = () =>
+  alert('Génération automatique des factures mensuelles pour le cycle en cours...');
 </script>
 
 <style scoped>
-.bg-soft-warning { background-color: #fff4e5; }
-.extra-small { font-size: 0.75rem; }
-.table thead th { border: none; font-size: 0.7rem; color: #888; }
-.badge { font-weight: 500; font-size: 0.75rem; }
-.btn-group .btn { padding: 0.25rem 0.5rem; }
+.bg-soft-warning {
+  background-color: #fff4e5;
+}
+.extra-small {
+  font-size: 0.75rem;
+}
+.table thead th {
+  border: none;
+  font-size: 0.7rem;
+  color: #888;
+}
+.badge {
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+.btn-group .btn {
+  padding: 0.25rem 0.5rem;
+}
 </style>

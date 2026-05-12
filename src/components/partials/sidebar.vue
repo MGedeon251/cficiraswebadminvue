@@ -8,7 +8,7 @@
           <span class="menu-title d-none d-md-inline">Tableau de Bord</span>
         </router-link>
       </li>
-         <!-- Structure Académique -->
+      <!-- Structure Académique -->
       <li class="nav-item">
         <a
           class="nav-link"
@@ -282,9 +282,7 @@
               <router-link class="nav-link" to="/factures-finances">Facturations</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/rapports-financiers"
-                >Rapports</router-link
-              >
+              <router-link class="nav-link" to="/rapports-financiers">Rapports</router-link>
             </li>
           </ul>
         </div>
@@ -530,11 +528,11 @@
         </router-link>
       </li>
       <!-- Assistant AI -->
-         <li class="nav-item">
+      <li class="nav-item">
         <router-link class="nav-link" to="/assistant-ai">
           <i class="mdi mdi-robot menu-icon text-primary"></i>
           <span class="menu-title fw-bold">Assistant AI</span>
-          <span class="badge badge-info ms-2 small" style="font-size: 10px;">Beta</span>
+          <span class="badge badge-info ms-2 small" style="font-size: 10px">Beta</span>
         </router-link>
       </li>
 

@@ -2,7 +2,9 @@
   <div class="container-fluid p-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h4 class="fw-bold">Répertoire des Étudiants</h4>
-      <button class="btn btn-primary"><i class="bi bi-person-plus me-2"></i>Inscrire un étudiant</button>
+      <button class="btn btn-primary">
+        <i class="bi bi-person-plus me-2"></i>Inscrire un étudiant
+      </button>
     </div>
 
     <!-- Filtres de recherche -->
@@ -10,7 +12,12 @@
       <div class="card-body">
         <div class="row g-3">
           <div class="col-md-4">
-            <input v-model="searchQuery" type="text" class="form-control" placeholder="Rechercher par nom ou matricule...">
+            <input
+              v-model="searchQuery"
+              type="text"
+              class="form-control"
+              placeholder="Rechercher par nom ou matricule..."
+            />
           </div>
           <div class="col-md-3">
             <select v-model="filtreClasse" class="form-select">
@@ -26,7 +33,9 @@
             </select>
           </div>
           <div class="col-md-2 text-end">
-            <button class="btn btn-outline-secondary w-100" @click="resetFilters">Réinitialiser</button>
+            <button class="btn btn-outline-secondary w-100" @click="resetFilters">
+              Réinitialiser
+            </button>
           </div>
         </div>
       </div>
@@ -47,10 +56,18 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="std in etudiantsFiltrés" :key="std.id" style="cursor: pointer" @click="voirDossier(std.id)">
+            <tr
+              v-for="std in etudiantsFiltrés"
+              :key="std.id"
+              style="cursor: pointer"
+              @click="voirDossier(std.id)"
+            >
               <td class="ps-4">
                 <div class="d-flex align-items-center">
-                  <div class="avatar me-3 bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px;">
+                  <div
+                    class="avatar me-3 bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                    style="width: 40px; height: 40px"
+                  >
                     {{ std.nom.charAt(0) }}{{ std.prenom.charAt(0) }}
                   </div>
                   <div>
@@ -60,15 +77,28 @@
                 </div>
               </td>
               <td>{{ std.classe }}</td>
-              <td><span class="fw-bold">{{ std.moyenne }}</span>/20</td>
               <td>
-                <div class="progress" style="height: 6px; width: 100px;">
-                  <div class="progress-bar bg-success" :style="{ width: std.tauxPaiement + '%' }"></div>
+                <span class="fw-bold">{{ std.moyenne }}</span
+                >/20
+              </td>
+              <td>
+                <div class="progress" style="height: 6px; width: 100px">
+                  <div
+                    class="progress-bar bg-success"
+                    :style="{ width: std.tauxPaiement + '%' }"
+                  ></div>
                 </div>
                 <small class="text-muted">{{ std.tauxPaiement }}% réglé</small>
               </td>
               <td>
-                <span :class="['badge rounded-pill', std.statut === 'Inscrit' ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning']">
+                <span
+                  :class="[
+                    'badge rounded-pill',
+                    std.statut === 'Inscrit'
+                      ? 'bg-success-subtle text-success'
+                      : 'bg-warning-subtle text-warning',
+                  ]"
+                >
                   {{ std.statut }}
                 </span>
               </td>
@@ -95,14 +125,43 @@ const filtreStatut = ref('');
 const classes = ['Licence 1', 'Licence 2', 'Licence 3', 'Master 1', 'Master 2'];
 
 const etudiants = ref([
-  { id: 1, matricule: 'STUD-001', nom: 'KABORE', prenom: 'Ousmane', classe: 'Licence 3', moyenne: 14.5, tauxPaiement: 70, statut: 'Inscrit' },
-  { id: 2, matricule: 'STUD-002', nom: 'DIOP', prenom: 'Fatou', classe: 'Licence 2', moyenne: 16.2, tauxPaiement: 100, statut: 'Inscrit' },
-  { id: 3, matricule: 'STUD-003', nom: 'TRAORE', prenom: 'Moussa', classe: 'Licence 3', moyenne: 11.0, tauxPaiement: 40, statut: 'En attente' },
+  {
+    id: 1,
+    matricule: 'STUD-001',
+    nom: 'KABORE',
+    prenom: 'Ousmane',
+    classe: 'Licence 3',
+    moyenne: 14.5,
+    tauxPaiement: 70,
+    statut: 'Inscrit',
+  },
+  {
+    id: 2,
+    matricule: 'STUD-002',
+    nom: 'DIOP',
+    prenom: 'Fatou',
+    classe: 'Licence 2',
+    moyenne: 16.2,
+    tauxPaiement: 100,
+    statut: 'Inscrit',
+  },
+  {
+    id: 3,
+    matricule: 'STUD-003',
+    nom: 'TRAORE',
+    prenom: 'Moussa',
+    classe: 'Licence 3',
+    moyenne: 11.0,
+    tauxPaiement: 40,
+    statut: 'En attente',
+  },
 ]);
 
 const etudiantsFiltrés = computed(() => {
-  return etudiants.value.filter(s => {
-    const matchSearch = (s.nom + s.prenom + s.matricule).toLowerCase().includes(searchQuery.value.toLowerCase());
+  return etudiants.value.filter((s) => {
+    const matchSearch = (s.nom + s.prenom + s.matricule)
+      .toLowerCase()
+      .includes(searchQuery.value.toLowerCase());
     const matchClasse = !filtreClasse.value || s.classe === filtreClasse.value;
     const matchStatut = !filtreStatut.value || s.statut === filtreStatut.value;
     return matchSearch && matchClasse && matchStatut;

@@ -3,9 +3,11 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <h4 class="fw-bold">Gestion des Paiements</h4>
-        <p class="text-muted small">Consultez, filtrez et exportez les rapports de paiement des étudiants.</p>
+        <p class="text-muted small">
+          Consultez, filtrez et exportez les rapports de paiement des étudiants.
+        </p>
       </div>
-      
+
       <div class="btn-group">
         <button @click="exportData('csv')" class="btn btn-sm btn-outline-dark">
           <i class="mdi mdi-file-csv"></i> CSV
@@ -75,15 +77,26 @@
                 <td>{{ formatCurrency(paiement.montant) }}</td>
                 <td>{{ paiement.type }}</td>
                 <td>
-                  <span :class="paiement.statut === 'Payé' ? 'text-success fw-bold' : 'text-warning fw-bold'">
-                    <i class="mdi" :class="paiement.statut === 'Payé' ? 'mdi-check-circle' : 'mdi-clock-outline'"></i>
+                  <span
+                    :class="
+                      paiement.statut === 'Payé' ? 'text-success fw-bold' : 'text-warning fw-bold'
+                    "
+                  >
+                    <i
+                      class="mdi"
+                      :class="paiement.statut === 'Payé' ? 'mdi-check-circle' : 'mdi-clock-outline'"
+                    ></i>
                     {{ paiement.statut }}
                   </span>
                 </td>
                 <td>{{ paiement.date }}</td>
                 <td>{{ paiement.mode }}</td>
                 <td class="text-center">
-                  <button @click="generateReceipt(paiement)" class="btn btn-inverse-primary btn-icon btn-sm" title="Imprimer le reçu">
+                  <button
+                    @click="generateReceipt(paiement)"
+                    class="btn btn-inverse-primary btn-icon btn-sm"
+                    title="Imprimer le reçu"
+                  >
                     <i class="mdi mdi-printer"></i>
                   </button>
                 </td>
@@ -110,8 +123,18 @@ import { ref, computed } from 'vue';
 
 // 1. Définir la liste des mois pour le sélecteur
 const moisListe = [
-  'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-  'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+  'Janvier',
+  'Février',
+  'Mars',
+  'Avril',
+  'Mai',
+  'Juin',
+  'Juillet',
+  'Août',
+  'Septembre',
+  'Octobre',
+  'Novembre',
+  'Décembre',
 ];
 
 const cycles = ['Licence', 'Master', 'Doctorat'];
@@ -123,33 +146,53 @@ const filters = ref({
   cycle: '',
   filiere: '',
   mois: '', // Stockera le numéro du mois (1 à 12)
-  classe: ''
+  classe: '',
 });
 
 const paiements = ref([
-  { 
-    id: 1, matricule: 'ETU-2024-001', nom: 'DIOP', prenom: 'Moussa', 
-    montant: 150000, type: 'Scolarité', statut: 'Payé', 
-    date: '20/10/2023', mode: 'Wave', cycle: 'Licence', filiere: 'Informatique', classe: 'L1-A' 
+  {
+    id: 1,
+    matricule: 'ETU-2024-001',
+    nom: 'DIOP',
+    prenom: 'Moussa',
+    montant: 150000,
+    type: 'Scolarité',
+    statut: 'Payé',
+    date: '20/10/2023',
+    mode: 'Wave',
+    cycle: 'Licence',
+    filiere: 'Informatique',
+    classe: 'L1-A',
   },
-  { 
-    id: 2, matricule: 'ETU-2024-042', nom: 'SOW', prenom: 'Fatou', 
-    montant: 75000, type: 'Inscription', statut: 'Partiel', 
-    date: '22/10/2023', mode: 'Espèces', cycle: 'Master', filiere: 'Management', classe: 'M1-JV' 
+  {
+    id: 2,
+    matricule: 'ETU-2024-042',
+    nom: 'SOW',
+    prenom: 'Fatou',
+    montant: 75000,
+    type: 'Inscription',
+    statut: 'Partiel',
+    date: '22/10/2023',
+    mode: 'Espèces',
+    cycle: 'Master',
+    filiere: 'Management',
+    classe: 'M1-JV',
   },
 ]);
 
 // 3. Adapter la logique de filtrage
 const filteredPaiements = computed(() => {
-  return paiements.value.filter(p => {
+  return paiements.value.filter((p) => {
     // Extraction du mois de la chaîne de date "JJ/MM/AAAA"
     const partieDate = p.date.split('/'); // donne ["20", "10", "2023"]
     const moisPaiement = parseInt(partieDate[1]); // donne 10 (Octobre)
 
-    return (filters.value.cycle === '' || p.cycle === filters.value.cycle) &&
-           (filters.value.filiere === '' || p.filiere === filters.value.filiere) &&
-           (filters.value.classe === '' || p.classe === filters.value.classe) &&
-           (filters.value.mois === '' || moisPaiement === parseInt(filters.value.mois));
+    return (
+      (filters.value.cycle === '' || p.cycle === filters.value.cycle) &&
+      (filters.value.filiere === '' || p.filiere === filters.value.filiere) &&
+      (filters.value.classe === '' || p.classe === filters.value.classe) &&
+      (filters.value.mois === '' || moisPaiement === parseInt(filters.value.mois))
+    );
   });
 });
 

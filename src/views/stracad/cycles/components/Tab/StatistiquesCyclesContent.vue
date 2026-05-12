@@ -7,28 +7,59 @@
       <p class="text-muted">Indicateurs globaux liés aux cycles et à l’activité académique.</p>
     </div>
 
-    <div class="table-responsive">
-      <table class="table table-bordered table-striped mb-5">
-        <thead>
-          <tr>
-            <th>cycles au total</th>
-            <th>cycles actif</th>
-            <th>filieres associées</th>
-            <th>etudiants inscrits</th>
-            <th>Notes saisies</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td colspan="9" class="text-center py-4">
-              <div class="d-flex flex-column align-items-center">
-                <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
-              </div>
-              <div class="text-pr">Aucune donnée</div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="table-responsive card border-light">
+      <table class="table align-middle mb-0 custom-table-robust">
+          <thead>
+            <tr>
+              <th class="ps-4">Code / Nom</th>
+              <th>Diplôme</th>
+              <th class="text-center">Filières</th>
+              <th class="text-center">Effectif</th>
+              <th class="text-center">Crédits</th>
+              <th class="text-end pe-4">Statut</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-if="filteredCycles.length === 0">
+              <td colspan="6" class="text-center py-5">
+                <div class="py-3">
+                  <i class="mdi mdi-folder-open-outline text-muted" style="font-size: 3rem; opacity: 0.3;"></i>
+                  <p class="text-muted mt-2">Aucune donnée statistique disponible</p>
+                </div>
+              </td>
+            </tr>
+            <tr v-for="cycle in filteredCycles" :key="cycle.id">
+              <td class="ps-4">
+                <div class="d-flex align-items-center">
+                  <span class="code-tag-blue me-3">{{ cycle.code }}</span>
+                  <div>
+                    <div class="fw-bold text-dark">{{ cycle.nom }}</div>
+                    <div class="x-small text-muted">{{ cycle.nomComplet }}</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="text-muted small fw-medium">{{ cycle.diplome }}</span>
+              </td>
+              <td class="text-center">
+                <span class="fw-bold">{{ cycle.nombreFilieres }}</span>
+              </td>
+              <td class="text-center">
+                <span class="badge rounded-pill bg-light text-dark border px-3">
+                  {{ cycle.nombreEtudiants }}
+                </span>
+              </td>
+              <td class="text-center fw-semibold text-muted">
+                {{ cycle.creditsECTS }} ECTS
+              </td>
+              <td class="text-end pe-4">
+                <span :class="getStatutClass(cycle.statut)" class="status-pill-robust">
+                   {{ getStatutLabel(cycle.statut) }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
     </div>
   </div>
 </template>
@@ -243,4 +274,46 @@ const enregistrerCycle = () => {
 .cycle-icon i {
   font-size: 20px;
 }
+
+/* Table Style Uniforme */
+.custom-table-robust thead th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 18px 12px;
+  border-bottom: 2px solid #eef2f7;
+}
+
+.custom-table-robust tbody td {
+  padding: 16px 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* Tags et Badges */
+.code-tag-blue {
+  background: #0ea5e9;
+  color: white;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.status-pill-robust {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.status-active { background: #ecfdf5; color: #059669; border: 1px solid #d1fae5; }
+
+.x-small { font-size: 0.7rem; }
 </style>

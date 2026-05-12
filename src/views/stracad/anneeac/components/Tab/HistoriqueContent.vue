@@ -1,170 +1,163 @@
 <template>
   <div class="row">
-    <!-- Filtres -->
-    <div class="card mb-4">
-      <div class="card-body">
-        <div class="row g-3">
-          <div class="col-md-4">
-            <label class="form-label">Rechercher</label>
-            <div class="input-group">
-              <span class="input-group-text"><i class="mdi mdi-magnify"></i></span>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Rechercher une année..."
-                v-model="searchQuery"
-              />
+    <!-- Header & Action -->
+    <div class="col-12 mb-4 d-flex justify-content-between align-items-center">
+      <div>
+        <h4 class="fw-bold mb-1">Historique des Années Académiques</h4>
+        <p class="text-muted small mb-0">Consultez, gérez et archivez les cycles d'enseignement.</p>
+      </div>
+    </div>
+
+    <!-- Filtres Optimisés (Style épuré) -->
+    <div class="col-12 mb-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body bg-light rounded">
+          <div class="row g-3">
+            <div class="col-md-5">
+              <div class="input-group bg-white rounded shadow-sm">
+                <span class="input-group-text bg-white border-0"
+                  ><i class="mdi mdi-magnify"></i
+                ></span>
+                <input
+                  v-model="searchQuery"
+                  type="text"
+                  class="form-control border-0"
+                  placeholder="Rechercher par code ou année (ex: 2024)..."
+                />
+              </div>
             </div>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">Statut</label>
-            <select class="form-select" v-model="filterStatut">
-              <option value="">Tous les statuts</option>
-              <option value="active">Active</option>
-              <option value="en_preparation">En préparation</option>
-              <option value="terminee">Terminée</option>
-              <option value="archivee">Archivée</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">Période</label>
-            <select class="form-select" v-model="filterPeriode">
-              <option value="">Toutes les périodes</option>
-              <option value="current">Année en cours</option>
-              <option value="previous">Années précédentes</option>
-              <option value="upcoming">Années à venir</option>
-            </select>
-          </div>
-          <div class="col-md-2 d-flex align-items-end">
-            <button class="btn btn-outline-secondary w-100" @click="resetFilters">
-              <i class="mdi mdi-refresh"></i> Réinitialiser
-            </button>
+            <div class="col-md-3">
+              <select v-model="filterStatut" class="form-select border-0 shadow-sm">
+                <option value="">Tous les statuts</option>
+                <option value="active">Année Active</option>
+                <option value="en_preparation">En préparation</option>
+                <option value="terminee">Terminée</option>
+                <option value="archivee">Archivée</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <select v-model="filterPeriode" class="form-select border-0 shadow-sm">
+                <option value="">Toutes périodes</option>
+                <option value="current">En cours</option>
+                <option value="previous">Passées</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-white w-100 shadow-sm border-0" @click="resetFilters">
+                <i class="mdi mdi-filter-off-outline me-1"></i> Reset
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>code</th>
-            <th>debut</th>
-            <th>fin</th>
-            <th>statut</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td colspan="9" class="text-center py-4">
-              <div class="d-flex flex-column align-items-center">
-                <img src="/img/empty-box.svg" alt="Aucune donnée" class="mb-2" />
+
+    <!-- Affichage en mode Chronologique (Timeline) -->
+    <div class="col-12">
+      <div v-if="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
+
+      <div v-else-if="anneesFiltrees.length > 0" class="timeline-container">
+        <div
+          v-for="annee in anneesFiltrees"
+          :key="annee.id"
+          class="annee-card mb-3 position-relative"
+        >
+          <div
+            class="card border-0 shadow-sm overflow-hidden"
+            :class="{ 'border-start border-4 border-success': annee.statut === 'active' }"
+          >
+            <div class="card-body p-3">
+              <div class="row align-items-center">
+                <!-- Date et Code -->
+                <div class="col-md-2 border-end d-flex flex-column align-items-center text-center">
+                  <span class="h5 fw-bold mb-0 text-primary">{{ annee.code }}</span>
+                  <small class="text-muted fw-semibold">Session</small>
+                </div>
+
+                <!-- Durée et Progression -->
+                <div class="col-md-4 px-4">
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="small fw-bold">{{ formatSimpleDate(annee.debut) }}</span>
+                    <span class="small fw-bold">{{ formatSimpleDate(annee.fin) }}</span>
+                  </div>
+                  <div class="progress" style="height: 6px">
+                    <div
+                      class="progress-bar"
+                      :class="getProgressBarClass(annee.statut)"
+                      :style="{ width: calculateProgress(annee) + '%' }"
+                    ></div>
+                  </div>
+                  <small class="text-muted mt-1 d-block text-center">Période académique</small>
+                </div>
+
+                <!-- Statut Badge -->
+                <div class="col-md-2 text-center">
+                  <span
+                    :class="getStatusBadgeClass(annee.statut)"
+                    class="badge px-3 py-2 rounded-pill"
+                  >
+                    {{ formatStatut(annee.statut) }}
+                  </span>
+                </div>
+
+                <!-- Stats rapides -->
+                <div class="col-md-2 text-muted small border-start px-3">
+                  <div><i class="mdi mdi-account-group me-1"></i> 1,240 Étudiants</div>
+                  <div><i class="mdi mdi-school me-1"></i> 45 Classes</div>
+                </div>
+
+                <!-- Actions -->
+                <div class="col-md-2 text-end">
+                  <div class="btn-group">
+                    <button class="btn btn-light btn-sm rounded-circle me-1" title="Détails">
+                      <i class="mdi mdi-eye text-primary"></i>
+                    </button>
+                    <button class="btn btn-light btn-sm rounded-circle me-1" title="Modifier">
+                      <i class="mdi mdi-pencil text-warning"></i>
+                    </button>
+                    <button class="btn btn-light btn-sm rounded-circle" title="Plus d'actions">
+                      <i class="mdi mdi-dots-vertical"></i>
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div class="text-pr">Aucune donnée</div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- State: Vide -->
+      <div v-else class="text-center py-5 bg-white rounded shadow-sm">
+        <img src="/img/empty-box.svg" alt="Vide" style="width: 120px" class="mb-3 opacity-50" />
+        <h5 class="text-muted">Aucune archive trouvée</h5>
+        <p class="text-muted small">Modifiez vos filtres ou créez une nouvelle année académique.</p>
+      </div>
     </div>
   </div>
 </template>
 <script setup>
 import { ref, computed } from 'vue';
 
-// Données
-const totalAnnees = ref(5);
-const joursRestants = ref(245);
-const totalEtudiants = ref(1250);
-
 const searchQuery = ref('');
 const filterStatut = ref('');
 const filterPeriode = ref('');
+const loading = ref(false);
 
-const anneesAcademiques = ref([
-  {
-    id: 1,
-    code: '2022-2023',
-    libelle: 'Année Académique 2022-2023',
-    dateDebut: '2022-09-01',
-    dateFin: '2023-07-31',
-    statut: 'archivee',
-    estActive: false,
-  },
-  {
-    id: 2,
-    code: '2023-2024',
-    libelle: 'Année Académique 2023-2024',
-    dateDebut: '2023-09-01',
-    dateFin: '2024-07-31',
-    statut: 'terminee',
-    estActive: false,
-  },
-  {
-    id: 3,
-    code: '2024-2025',
-    libelle: 'Année Académique 2024-2025',
-    dateDebut: '2024-09-01',
-    dateFin: '2025-07-31',
-    statut: 'active',
-    estActive: true,
-  },
+const annees = ref([
+  { id: 1, code: '2024-2025', debut: '2024-10-01', fin: '2025-07-31', statut: 'active' },
+  { id: 2, code: '2023-2024', debut: '2023-10-01', fin: '2024-07-31', statut: 'terminee' },
 ]);
 
-const formData = ref({
-  code: '',
-  libelle: '',
-  dateDebut: '',
-  dateFin: '',
-  description: '',
-  estActive: false,
-});
-
-// Computed
-const filteredAnnees = computed(() => {
-  return anneesAcademiques.value.filter((annee) => {
-    const matchSearch =
-      annee.code.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      annee.libelle.toLowerCase().includes(searchQuery.value.toLowerCase());
-    const matchStatut = !filterStatut.value || annee.statut === filterStatut.value;
-    return matchSearch && matchStatut;
+const anneesFiltrees = computed(() => {
+  return annees.value.filter((a) => {
+    return (
+      a.code.toLowerCase().includes(searchQuery.value.toLowerCase()) &&
+      (!filterStatut.value || a.statut === filterStatut.value)
+    );
   });
 });
-
-// Méthodes
-const formatDate = (date) => {
-  return new Date(date).toLocaleDateString('fr-FR', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  });
-};
-
-const calculerDuree = (debut, fin) => {
-  const d1 = new Date(debut);
-  const d2 = new Date(fin);
-  return Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
-};
-
-const getStatutClass = (statut) => {
-  const classes = {
-    active: 'badge bg-success',
-    en_preparation: 'badge bg-info',
-    terminee: 'badge bg-warning',
-    archivee: 'badge bg-secondary',
-  };
-  return classes[statut] || 'badge bg-secondary';
-};
-
-const getStatutLabel = (statut) => {
-  const labels = {
-    active: 'Active',
-    en_preparation: 'En préparation',
-    terminee: 'Terminée',
-    archivee: 'Archivée',
-  };
-  return labels[statut] || statut;
-};
 
 const resetFilters = () => {
   searchQuery.value = '';
@@ -172,29 +165,70 @@ const resetFilters = () => {
   filterPeriode.value = '';
 };
 
-const voirDetails = (annee) => {
-  console.log('Voir détails:', annee);
+// Fonctions utilitaires pour le nouveau design
+const formatSimpleDate = (date) =>
+  new Date(date).toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' });
+
+const getStatusBadgeClass = (statut) => {
+  const map = {
+    active: 'badge-soft-success',
+    en_preparation: 'badge-soft-warning',
+    terminee: 'badge-soft-secondary',
+    archivee: 'badge-soft-info',
+  };
+  return map[statut] || 'bg-light';
 };
 
-const modifierAnnee = (annee) => {
-  console.log('Modifier:', annee);
+const formatStatut = (s) => s.replace('_', ' ').toUpperCase();
+
+const calculateProgress = (annee) => {
+  if (annee.statut === 'terminee' || annee.statut === 'archivee') return 100;
+  if (annee.statut === 'en_preparation') return 0;
+  return 65; // Exemple pour l'année active
 };
 
-const activerAnnee = (annee) => {
-  console.log('Activer:', annee);
-};
-
-const archiverAnnee = (annee) => {
-  console.log('Archiver:', annee);
-};
-
-const supprimerAnnee = (annee) => {
-  if (confirm(`Êtes-vous sûr de vouloir supprimer l'année ${annee.code} ?`)) {
-    console.log('Supprimer:', annee);
-  }
-};
-
-const enregistrerAnnee = () => {
-  console.log('Enregistrer:', formData.value);
-};
+const getProgressBarClass = (statut) => (statut === 'active' ? 'bg-success' : 'bg-secondary');
 </script>
+<style scoped>
+/* Effet au survol des cartes */
+.annee-card {
+  transition: transform 0.2s ease;
+}
+.annee-card:hover {
+  transform: translateX(5px);
+}
+
+.bg-light {
+  background-color: #f8f9fa !important;
+}
+
+/* Styles spécifiques aux statuts */
+.badge-soft-success {
+  background: rgba(25, 135, 84, 0.1);
+  color: #198754;
+}
+.badge-soft-warning {
+  background: rgba(255, 193, 7, 0.1);
+  color: #ffc107;
+}
+.badge-soft-secondary {
+  background: rgba(108, 117, 125, 0.1);
+  color: #6c757d;
+}
+.badge-soft-info {
+  background: rgba(13, 110, 253, 0.1);
+  color: #0d6efd;
+}
+
+.btn-white {
+  background: #fff;
+}
+
+/* Custom Progress colors */
+.progress-bar-success {
+  background-color: #198754;
+}
+.progress-bar-warning {
+  background-color: #ffc107;
+}
+</style>

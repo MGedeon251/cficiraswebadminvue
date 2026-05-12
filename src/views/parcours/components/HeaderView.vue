@@ -33,24 +33,22 @@
           >
             <i class="mdi mdi-printer text-muted"></i>
           </button>
-            <!-- Ajouter -->
-            <button
-              type="button"
-              class="btn btn-primary"
-              data-bs-toggle="modal"
-              data-bs-target="#addEtudiantModal"
-            >
-              Generer un rapport
-            </button>
-          </div>
+          <!-- Ajouter -->
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#addEtudiantModal"
+          >
+            Generer un rapport
+          </button>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
-
 <script setup>
-
 const exportData = () => {
   console.log('Export des étudiants');
   // TODO: brancher vers store ou API pour exporter en Excel/PDF
@@ -59,6 +57,4 @@ const exportData = () => {
 const printData = () => {
   window.print();
 };
-
 </script>
-

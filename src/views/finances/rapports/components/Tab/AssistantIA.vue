@@ -1,18 +1,20 @@
 <template>
   <div class="ai-assistant-wrapper">
-    <button 
-      class="btn btn-dark rounded-circle shadow-lg ai-trigger" 
+    <button
+      class="btn btn-dark rounded-circle shadow-lg ai-trigger"
       @click="toggleChat"
-      :class="{ 'pulse': !isOpen }"
+      :class="{ pulse: !isOpen }"
     >
-      <i class="mdi" :class="isOpen ? 'mdi-close' : 'mdi mdi-robot' "></i>
+      <i class="mdi" :class="isOpen ? 'mdi-close' : 'mdi mdi-robot'"></i>
     </button>
 
     <Transition name="slide-up">
       <div v-if="isOpen" class="card ai-chat-window shadow-lg border-0">
-        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
+        <div
+          class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3"
+        >
           <div class="d-flex align-items-center">
-            <div class="bg-success rounded-circle me-2" style="width: 8px; height: 8px;"></div>
+            <div class="bg-success rounded-circle me-2" style="width: 8px; height: 8px"></div>
             <h6 class="mb-0 fw-bold">Assistant Business IA</h6>
           </div>
           <small class="opacity-75">Propulsé par Gemini</small>
@@ -21,14 +23,21 @@
         <div class="card-body chat-messages" ref="chatContainer">
           <div class="message assistant mb-3">
             <div class="bubble p-3 shadow-sm bg-light text-dark">
-              Bonjour ! Je suis votre analyste. Je peux analyser vos <strong>honoraires</strong>, 
-              vos <strong>dépenses</strong> ou extraire des insights sur les <strong>paiements étudiants</strong>. 
-              <br><em class="small mt-2 d-block">Posez-moi une question sur vos chiffres.</em>
+              Bonjour ! Je suis votre analyste. Je peux analyser vos <strong>honoraires</strong>,
+              vos <strong>dépenses</strong> ou extraire des insights sur les
+              <strong>paiements étudiants</strong>. <br /><em class="small mt-2 d-block"
+                >Posez-moi une question sur vos chiffres.</em
+              >
             </div>
           </div>
 
           <div v-for="(msg, index) in messages" :key="index" :class="['message mb-3', msg.role]">
-            <div :class="['bubble p-3 shadow-sm', msg.role === 'user' ? 'bg-dark text-white ms-auto' : 'bg-light text-dark']">
+            <div
+              :class="[
+                'bubble p-3 shadow-sm',
+                msg.role === 'user' ? 'bg-dark text-white ms-auto' : 'bg-light text-dark',
+              ]"
+            >
               {{ msg.text }}
             </div>
           </div>
@@ -36,11 +45,11 @@
 
         <div class="card-footer bg-white border-top-0 p-3">
           <div class="input-group">
-            <input 
-              v-model="userInput" 
+            <input
+              v-model="userInput"
               @keyup.enter="sendMessage"
-              type="text" 
-              class="form-control border-light bg-light" 
+              type="text"
+              class="form-control border-light bg-light"
               placeholder="Demander un insight..."
             />
             <button class="btn btn-dark" @click="sendMessage">
@@ -78,9 +87,9 @@ const sendMessage = async () => {
 
   // Simulation de réponse IA
   setTimeout(() => {
-    messages.value.push({ 
-      role: 'assistant', 
-      text: `Analyse en cours... Sur la base de vos données actuelles, vos dépenses opérationnelles ont augmenté de 12% ce mois-ci, principalement dû aux fournitures.` 
+    messages.value.push({
+      role: 'assistant',
+      text: `Analyse en cours... Sur la base de vos données actuelles, vos dépenses opérationnelles ont augmenté de 12% ce mois-ci, principalement dû aux fournitures.`,
     });
     scrollToBottom();
   }, 1000);
@@ -148,10 +157,12 @@ const scrollToBottom = () => {
 }
 
 /* Animations */
-.slide-up-enter-active, .slide-up-leave-active {
+.slide-up-enter-active,
+.slide-up-leave-active {
   transition: all 0.3s ease-out;
 }
-.slide-up-enter-from, .slide-up-leave-to {
+.slide-up-enter-from,
+.slide-up-leave-to {
   opacity: 0;
   transform: translateY(20px);
 }
@@ -161,8 +172,14 @@ const scrollToBottom = () => {
 }
 
 @keyframes pulse-animation {
-  0% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.4); }
-  70% { box-shadow: 0 0 0 15px rgba(0, 0, 0, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(0, 0, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
 }
 </style>
