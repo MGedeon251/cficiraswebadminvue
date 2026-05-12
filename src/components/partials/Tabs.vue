@@ -35,7 +35,12 @@ import PaiementArchives from './Tab/PaiementArchives.vue';
 // Configuration des onglets
 const tabs = [
   { id: 'paiement', label: 'Paiements', component: PaiementList, icon: 'mdi mdi-cash' },
-  { id: 'nouveau', label: 'Nouveau Paiement', component: PaiementForm, icon: 'mdi mdi-plus-circle' },
+  {
+    id: 'nouveau',
+    label: 'Nouveau Paiement',
+    component: PaiementForm,
+    icon: 'mdi mdi-plus-circle',
+  },
   { id: 'archives', label: 'Archives', component: PaiementArchives, icon: 'mdi mdi-archive' },
 ];
 
@@ -44,7 +49,7 @@ const activeTab = ref('paiement');
 
 // Calcul du composant à afficher
 const currentTabComponent = computed(() => {
-  return tabs.find(tab => tab.id === activeTab.value)?.component;
+  return tabs.find((tab) => tab.id === activeTab.value)?.component;
 });
 </script>
 

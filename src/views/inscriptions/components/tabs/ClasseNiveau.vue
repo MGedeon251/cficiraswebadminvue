@@ -4,15 +4,15 @@
     <div class="col-12 mb-4 d-flex justify-content-between align-items-center">
       <div>
         <h3 class="fw-bold mb-1">Gestion des Classes</h3>
-        <p class="text-muted small mb-0">Configuration académique et suivi des effectifs par section.</p>
+        <p class="text-muted small mb-0">
+          Configuration académique et suivi des effectifs par section.
+        </p>
       </div>
       <div class="d-flex gap-2">
         <button class="btn btn-white shadow-sm border btn-sm px-3">
           <i class="mdi mdi-printer me-1"></i>Imprimer listes
         </button>
-        <button class="btn btn-primary btn-sm px-3 shadow-sm">
-          + Nouvelle Classe
-        </button>
+        <button class="btn btn-secondary btn-sm px-3 shadow-sm">+ Nouvelle Classe</button>
       </div>
     </div>
 
@@ -68,8 +68,15 @@
           <div class="row g-3 align-items-center">
             <div class="col-md-8">
               <div class="input-group bg-white rounded shadow-sm">
-                <span class="input-group-text bg-white border-0"><i class="mdi mdi-magnify text-primary"></i></span>
-                <input type="text" class="form-control border-0" placeholder="Rechercher une classe ou une filière..." v-model="searchQuery" />
+                <span class="input-group-text bg-white border-0"
+                  ><i class="mdi mdi-magnify text-primary"></i
+                ></span>
+                <input
+                  type="text"
+                  class="form-control border-0"
+                  placeholder="Rechercher une classe ou une filière..."
+                  v-model="searchQuery"
+                />
               </div>
             </div>
             <div class="col-md-4">
@@ -108,7 +115,11 @@
                   </td>
                 </tr>
 
-                <tr v-for="(classe, index) in paginatedClasses" :key="classe.classe_id" class="transition-all">
+                <tr
+                  v-for="(classe, index) in paginatedClasses"
+                  :key="classe.classe_id"
+                  class="transition-all"
+                >
                   <td class="ps-4 text-muted small">{{ startIndex + index + 1 }}</td>
                   <td>
                     <span class="fw-bold text-dark">{{ classe.classe_code }}</span>
@@ -125,18 +136,47 @@
                   <td class="text-center">
                     <div class="d-flex align-items-center justify-content-center">
                       <span class="fw-bold me-2">{{ classe.classe_capacite }}</span>
-                      <div class="progress w-50" style="height: 4px;">
+                      <div class="progress w-50" style="height: 4px">
                         <div class="progress-bar bg-success" style="width: 70%"></div>
                       </div>
                     </div>
                   </td>
                   <td class="text-end pe-4">
-                    <div class="btn-group shadow-sm rounded-pill overflow-hidden border">
-                      <button class="btn btn-white btn-sm px-3 border-end" @click="voirEtudiants(classe)">
-                        <i class="mdi mdi-account-group text-primary me-1"></i> Étudiants
+                    <div class="btn-group shadow-sm" role="group">
+                      <button
+                        class="btn btn-sm btn-outline-secondary"
+                        @click="openModal(inscription)"
+                      >
+                        <!-- Account Group SVG -->
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          class="me-1"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M16 11C17.66 11 18.99 9.66 18.99 8S17.66 5 16 5 13 6.34 13 8 14.34 11 16 11M8 11C9.66 11 10.99 9.66 10.99 8S9.66 5 8 5 5 6.34 5 8 6.34 11 8 11M8 13C5.33 13 0 14.34 0 17V19H16V17C16 14.34 10.67 13 8 13M16 13C15.5 13 14.96 13.04 14.39 13.1C15.78 14.03 17 15.35 17 17V19H24V17C24 14.34 18.67 13 16 13Z"
+                          />
+                        </svg>
+                        Etudiants
                       </button>
-                      <button class="btn btn-white btn-sm px-3" @click="openImport(classe)">
-                        <i class="mdi mdi-upload text-success"></i>
+
+                      <button
+                        class="btn btn-sm btn-outline-success"
+                        @click="store.removeInscription(inscription.id)"
+                      >
+                        <!-- Upload SVG -->
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M5 20H19V18H5V20M19 9H15V3H9V9H5L12 16L19 9Z" />
+                        </svg>
                       </button>
                     </div>
                   </td>
@@ -153,7 +193,11 @@
           </div>
         </div>
         <div class="card-footer bg-white border-0 py-3">
-          <Pagination v-model="currentPage" :items-per-page="itemsPerPage" :total-items="classes.length" />
+          <Pagination
+            v-model="currentPage"
+            :items-per-page="itemsPerPage"
+            :total-items="classes.length"
+          />
         </div>
       </div>
     </div>
@@ -174,10 +218,18 @@
   justify-content: center;
 }
 
-.bg-soft-primary { background: rgba(13, 110, 253, 0.1); }
-.bg-soft-success { background: rgba(25, 135, 84, 0.1); }
-.bg-soft-warning { background: rgba(255, 193, 7, 0.1); }
-.bg-soft-info { background: rgba(13, 202, 240, 0.1); }
+.bg-soft-primary {
+  background: rgba(13, 110, 253, 0.1);
+}
+.bg-soft-success {
+  background: rgba(25, 135, 84, 0.1);
+}
+.bg-soft-warning {
+  background: rgba(255, 193, 7, 0.1);
+}
+.bg-soft-info {
+  background: rgba(13, 202, 240, 0.1);
+}
 
 .btn-white {
   background: #fff;
@@ -216,6 +268,13 @@
 /* Custom Modals Animation */
 .modal.d-block {
   backdrop-filter: blur(4px);
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  vertical-align: middle;
 }
 </style>
 <script setup>

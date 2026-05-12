@@ -5,7 +5,9 @@
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h3 class="fw-bold mb-1">Inscription des étudiants</h3>
-          <p class="text-muted small mb-0">Gestion des inscriptions et réinscriptions par filière</p>
+          <p class="text-muted small mb-0">
+            Gestion des inscriptions et réinscriptions par filière
+          </p>
         </div>
         <div class="d-flex gap-2">
           <InscriptionClasse />
@@ -79,7 +81,11 @@
               </thead>
 
               <tbody>
-                <tr v-for="(inscription, index) in paginatedInscriptions" :key="inscription.id" class="transition-all">
+                <tr
+                  v-for="(inscription, index) in paginatedInscriptions"
+                  :key="inscription.id"
+                  class="transition-all"
+                >
                   <td class="ps-4 text-muted small">
                     {{ (currentPage - 1) * itemsPerPage + index + 1 }}
                   </td>
@@ -88,34 +94,48 @@
                   </td>
                   <td>
                     <div class="d-flex flex-column">
-                      <span class="fw-bold text-dark">{{ inscription.nom }} {{ inscription.prenom }}</span>
-                      <small class="text-muted" style="font-size: 11px;">Inscrit le 12/10/2024</small>
+                      <span class="fw-bold text-dark"
+                        >{{ inscription.nom }} {{ inscription.prenom }}</span
+                      >
+                      <small class="text-muted" style="font-size: 11px"
+                        >Inscrit le 12/10/2024</small
+                      >
                     </div>
                   </td>
                   <td>
                     <div class="d-flex align-items-center">
-                      <span class="badge bg-soft-info text-info me-2">{{ inscription.classe_code }}</span>
+                      <span class="badge bg-soft-info text-info me-2">{{
+                        inscription.classe_code
+                      }}</span>
                       <small class="text-muted">{{ inscription.filiere_code }}</small>
                     </div>
                   </td>
                   <td class="text-center">
-                    <span :class="['badge rounded-pill px-3 py-2', statutBadgeStyle(inscription.statut)]">
+                    <span
+                      :class="[
+                        'badge rounded-pill px-3 py-2',
+                        statutBadgeStyle(inscription.statut),
+                      ]"
+                    >
                       {{ inscription.statut }}
                     </span>
                   </td>
                   <td class="text-end pe-4">
                     <div class="btn-group shadow-sm" role="group">
-                  <button class="btn btn-sm btn-outline-secondary" @click="openModal(inscription)">
-                    <i class="mdi mdi-information-outline"></i>
-                  </button>
+                      <button
+                        class="btn btn-sm btn-outline-secondary"
+                        @click="openModal(inscription)"
+                      >
+                        <i class="mdi mdi-information-outline"></i>
+                      </button>
 
-                  <button
-                    class="btn btn-sm btn-outline-danger"
-                    @click="store.removeInscription(inscription.id)"
-                  >
-                    <i class="mdi mdi-delete-outline"></i>
-                  </button>
-                </div>
+                      <button
+                        class="btn btn-sm btn-outline-danger"
+                        @click="store.removeInscription(inscription.id)"
+                      >
+                        <i class="mdi mdi-delete-outline"></i>
+                      </button>
+                    </div>
                   </td>
                 </tr>
 
@@ -125,7 +145,9 @@
                     <div class="d-flex flex-column align-items-center">
                       <img src="/img/empty-box.svg" width="100" class="mb-3 opacity-50" />
                       <h6 class="text-muted">Aucune inscription ne correspond à vos critères</h6>
-                      <button class="btn btn-sm btn-outline-primary mt-2" @click="resetFilters">Voir tout</button>
+                      <button class="btn btn-sm btn-outline-primary mt-2" @click="resetFilters">
+                        Voir tout
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -150,16 +172,38 @@
 
 <style scoped>
 /* Couleurs douces pour les badges */
-.bg-soft-info { background: rgba(13, 202, 240, 0.12); color: #0dcaf0; }
-.bg-soft-success { background: rgba(25, 135, 84, 0.12); color: #198754; }
-.bg-soft-warning { background: rgba(255, 193, 7, 0.12); color: #997404; }
-.bg-soft-danger { background: rgba(220, 53, 69, 0.12); color: #dc3545; }
+.bg-soft-info {
+  background: rgba(13, 202, 240, 0.12);
+  color: #0dcaf0;
+}
+.bg-soft-success {
+  background: rgba(25, 135, 84, 0.12);
+  color: #198754;
+}
+.bg-soft-warning {
+  background: rgba(255, 193, 7, 0.12);
+  color: #997404;
+}
+.bg-soft-danger {
+  background: rgba(220, 53, 69, 0.12);
+  color: #dc3545;
+}
 
-.btn-white { background: #fff; border: none; }
-.btn-white:hover { background: #f8f9fa; }
+.btn-white {
+  background: #fff;
+  border: none;
+}
+.btn-white:hover {
+  background: #f8f9fa;
+}
 
-.transition-all { transition: all 0.2s ease; }
-.table tbody tr:hover { background-color: #fcfdfe; transform: scale(1.002); }
+.transition-all {
+  transition: all 0.2s ease;
+}
+.table tbody tr:hover {
+  background-color: #fcfdfe;
+  transform: scale(1.002);
+}
 
 .table thead th {
   border: none;

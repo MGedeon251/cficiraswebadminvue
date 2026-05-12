@@ -97,7 +97,9 @@
                         {{ etudiant.nom.charAt(0) }}{{ etudiant.prenom.charAt(0) }}
                       </div>
                       <div class="d-flex flex-column">
-                        <span class="fw-bold text-dark">{{ etudiant.nom }} {{ etudiant.prenom }}</span>
+                        <span class="fw-bold text-dark"
+                          >{{ etudiant.nom }} {{ etudiant.prenom }}</span
+                        >
                         <small class="text-muted">{{ etudiant.telephone }}</small>
                       </div>
                     </div>
@@ -105,15 +107,26 @@
                   <td>
                     <div class="d-flex flex-column">
                       <span class="text-dark fw-semibold">{{ etudiant.classe }}</span>
-                      <small class="text-muted">{{ etudiant.annee }} • {{ etudiant.filiere }}</small>
+                      <small class="text-muted"
+                        >{{ etudiant.annee }} • {{ etudiant.filiere }}</small
+                      >
                     </div>
                   </td>
                   <td class="text-center">
                     <span
                       class="badge rounded-pill px-3 py-2"
-                      :class="etudiant.statut === 'Payé' ? 'bg-soft-success text-success' : 'bg-soft-warning text-warning'"
+                      :class="
+                        etudiant.statut === 'Payé'
+                          ? 'bg-soft-success text-success'
+                          : 'bg-soft-warning text-warning'
+                      "
                     >
-                      <i class="mdi" :class="etudiant.statut === 'Payé' ? 'mdi-check-circle' : 'mdi-alert-circle'"></i>
+                      <i
+                        class="mdi"
+                        :class="
+                          etudiant.statut === 'Payé' ? 'mdi-check-circle' : 'mdi-alert-circle'
+                        "
+                      ></i>
                       {{ etudiant.statut }}
                     </span>
                   </td>
@@ -133,7 +146,9 @@
                     <div class="py-4">
                       <i class="mdi mdi-account-search-outline display-4 text-muted opacity-25"></i>
                       <p class="text-muted mt-2">Aucun étudiant trouvé pour ces filtres.</p>
-                      <button class="btn btn-sm btn-link" @click="resetFilters">Réinitialiser les filtres</button>
+                      <button class="btn btn-sm btn-link" @click="resetFilters">
+                        Réinitialiser les filtres
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -148,8 +163,14 @@
 
 <style scoped>
 /* Couleurs Soft et Design Moderne */
-.bg-soft-success { background-color: rgba(25, 135, 84, 0.12); color: #198754 !important; }
-.bg-soft-warning { background-color: rgba(255, 193, 7, 0.12); color: #997404 !important; }
+.bg-soft-success {
+  background-color: rgba(25, 135, 84, 0.12);
+  color: #198754 !important;
+}
+.bg-soft-warning {
+  background-color: rgba(255, 193, 7, 0.12);
+  color: #997404 !important;
+}
 
 .avatar-soft-primary {
   width: 40px;
@@ -164,8 +185,13 @@
   font-size: 0.85rem;
 }
 
-.btn-white { background-color: #fff; border: 1px solid #e9ecef; }
-.btn-white:hover { background-color: #f8f9fa; }
+.btn-white {
+  background-color: #fff;
+  border: 1px solid #e9ecef;
+}
+.btn-white:hover {
+  background-color: #f8f9fa;
+}
 
 .btn-reassign {
   transition: all 0.3s ease;
@@ -264,5 +290,3 @@ onMounted(() => {
   ];
 });
 </script>
-
-

@@ -17,7 +17,9 @@
     <div class="col-12 mb-4">
       <div class="card border-0 shadow-sm">
         <div class="card-header bg-white border-0 py-3">
-          <h6 class="mb-0 fw-bold"><i class="mdi mdi-filter-variant me-2 text-primary"></i>1. Filtrer les données</h6>
+          <h6 class="mb-0 fw-bold">
+            <i class="mdi mdi-filter-variant me-2 text-primary"></i>1. Filtrer les données
+          </h6>
         </div>
         <div class="card-body bg-light rounded-bottom">
           <div class="row g-3">
@@ -58,16 +60,18 @@
     <div class="col-12">
       <div class="card border-0 shadow-sm">
         <div class="card-header bg-white border-0 py-3">
-          <h6 class="mb-0 fw-bold"><i class="mdi mdi-file-check me-2 text-primary"></i>2. Choisir le format et exporter</h6>
+          <h6 class="mb-0 fw-bold">
+            <i class="mdi mdi-file-check me-2 text-primary"></i>2. Choisir le format et exporter
+          </h6>
         </div>
         <div class="card-body">
           <div class="row g-3">
             <!-- Option Excel -->
             <div class="col-md-4">
-              <div 
+              <div
                 @click="exportExcel"
                 class="d-flex align-items-center p-3 border rounded cursor-pointer hover-shadow transition-all"
-                style="cursor: pointer;"
+                style="cursor: pointer"
               >
                 <div class="icon-box bg-success-lighten text-success p-3 rounded me-3">
                   <i class="mdi mdi-file-excel mdi-24px"></i>
@@ -81,10 +85,10 @@
 
             <!-- Option PDF -->
             <div class="col-md-4">
-              <div 
+              <div
                 @click="exportPDF"
                 class="d-flex align-items-center p-3 border rounded cursor-pointer hover-shadow transition-all"
-                style="cursor: pointer;"
+                style="cursor: pointer"
               >
                 <div class="icon-box bg-danger-lighten text-danger p-3 rounded me-3">
                   <i class="mdi mdi-file-pdf-box mdi-24px"></i>
@@ -98,10 +102,10 @@
 
             <!-- Option CSV -->
             <div class="col-md-4">
-              <div 
+              <div
                 @click="exportCSV"
                 class="d-flex align-items-center p-3 border rounded cursor-pointer hover-shadow transition-all"
-                style="cursor: pointer;"
+                style="cursor: pointer"
               >
                 <div class="icon-box bg-primary-lighten text-primary p-3 rounded me-3">
                   <i class="mdi mdi-file-delimited mdi-24px"></i>
@@ -115,7 +119,10 @@
           </div>
 
           <!-- Alert avec icône -->
-          <div v-if="successMessage" class="alert alert-success mt-4 border-0 shadow-sm d-flex align-items-center">
+          <div
+            v-if="successMessage"
+            class="alert alert-success mt-4 border-0 shadow-sm d-flex align-items-center"
+          >
             <i class="mdi mdi-check-circle me-2"></i>
             {{ successMessage }}
           </div>
@@ -237,18 +244,23 @@ const exportCSV = () => {
 };
 </script>
 
-
 <style scoped>
 .hover-shadow:hover {
   background-color: #f8f9fa;
   border-color: var(--bs-primary) !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 .transition-all {
   transition: all 0.2s ease-in-out;
 }
-.bg-success-lighten { background-color: rgba(25, 135, 84, 0.1); }
-.bg-danger-lighten { background-color: rgba(220, 53, 69, 0.1); }
-.bg-primary-lighten { background-color: rgba(13, 110, 253, 0.1); }
+.bg-success-lighten {
+  background-color: rgba(25, 135, 84, 0.1);
+}
+.bg-danger-lighten {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+.bg-primary-lighten {
+  background-color: rgba(13, 110, 253, 0.1);
+}
 </style>

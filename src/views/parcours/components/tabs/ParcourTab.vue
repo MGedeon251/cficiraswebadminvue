@@ -82,43 +82,23 @@
       </div>
 
       <!-- 2. Parcours : Historique des classes, bulletins, relevés de notes, progression -->
-      <div 
-        class="tab-pane fade" 
-        id="parcours" 
-        role="tabpanel" 
-        aria-labelledby="parcours-tab"
-      >
+      <div class="tab-pane fade" id="parcours" role="tabpanel" aria-labelledby="parcours-tab">
         <ParcoursAcademique />
       </div>
 
       <!-- 3. Assiduité : Absences, retards, sanctions disciplinaires -->
-      <div 
-        class="tab-pane fade" 
-        id="assiduite" 
-        role="tabpanel" 
-        aria-labelledby="assiduite-tab"
-      >
+      <div class="tab-pane fade" id="assiduite" role="tabpanel" aria-labelledby="assiduite-tab">
         <AssiduiteDiscipline />
       </div>
 
       <!-- 4. Finance : Suivi des paiements, mensualités, arriérés -->
-      <div 
-        class="tab-pane fade" 
-        id="finance" 
-        role="tabpanel" 
-        aria-labelledby="finance-tab"
-      >
+      <div class="tab-pane fade" id="finance" role="tabpanel" aria-labelledby="finance-tab">
         <SituationFinanciere />
       </div>
 
       <!-- 5. Documents : Pièces d'identité, certificats médicaux, fiches d'engagement -->
-      <div 
-        class="tab-pane fade" 
-        id="documents" 
-        role="tabpanel" 
-        aria-labelledby="documents-tab"
-      >
-        <DocumentsArchives/>
+      <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents-tab">
+        <DocumentsArchives />
       </div>
     </div>
   </div>

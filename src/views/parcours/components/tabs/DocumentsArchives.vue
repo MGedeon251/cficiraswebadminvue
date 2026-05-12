@@ -5,7 +5,7 @@
       <div class="card border-0 shadow-sm mb-4">
         <div class="card-body">
           <h6 class="fw-bold mb-3">Ajouter un document</h6>
-          <div 
+          <div
             class="upload-zone border border-2 border-dashed rounded-3 p-4 text-center bg-light"
             @dragover.prevent
             @drop.prevent="handleDrop"
@@ -13,7 +13,7 @@
             <i class="bi bi-cloud-arrow-up fs-1 text-primary"></i>
             <p class="small text-muted mt-2">Glissez-déposez vos fichiers ici ou</p>
             <button class="btn btn-sm btn-primary">Parcourir</button>
-            <input type="file" class="d-none" ref="fileInput">
+            <input type="file" class="d-none" ref="fileInput" />
           </div>
           <div class="mt-3">
             <small class="text-muted italic text-center d-block">
@@ -25,8 +25,8 @@
 
       <!-- Filtres par catégorie -->
       <div class="list-group shadow-sm border-0">
-        <button 
-          v-for="cat in categories" 
+        <button
+          v-for="cat in categories"
           :key="cat.id"
           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 py-3"
           :class="{ active: filtreActif === cat.id }"
@@ -43,8 +43,8 @@
       <div class="card border-0 shadow-sm">
         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
           <h6 class="m-0 fw-bold">Documents archivés</h6>
-          <div class="input-group input-group-sm" style="width: 200px;">
-            <input type="text" class="form-control" placeholder="Rechercher...">
+          <div class="input-group input-group-sm" style="width: 200px">
+            <input type="text" class="form-control" placeholder="Rechercher..." />
             <span class="input-group-text"><i class="bi bi-search"></i></span>
           </div>
         </div>
@@ -71,7 +71,11 @@
                       </div>
                     </div>
                   </td>
-                  <td><span class="badge bg-light text-muted border text-uppercase">{{ doc.format }}</span></td>
+                  <td>
+                    <span class="badge bg-light text-muted border text-uppercase">{{
+                      doc.format
+                    }}</span>
+                  </td>
                   <td class="small">{{ doc.date }}</td>
                   <td class="small text-muted">{{ doc.taille }}</td>
                   <td class="text-end pe-4">
@@ -91,7 +95,7 @@
               </tbody>
             </table>
           </div>
-          
+
           <!-- État vide -->
           <div v-if="documentsFiltrés.length === 0" class="text-center py-5">
             <i class="bi bi-folder2-open display-4 text-light"></i>
@@ -116,24 +120,57 @@ const categories = ref([
 ]);
 
 const documents = ref([
-  { nom: "Extrait_Naissance.pdf", categorie: "identite", format: "pdf", date: "12/09/2025", taille: "1.2 Mo" },
-  { nom: "Photo_Identite.jpg", categorie: "identite", format: "jpg", date: "10/09/2025", taille: "450 Ko" },
-  { nom: "Baccalaureat_S.pdf", categorie: "scolaire", format: "pdf", date: "15/09/2025", taille: "2.1 Mo" },
-  { nom: "Certificat_Medical.pdf", categorie: "medical", format: "pdf", date: "16/09/2025", taille: "800 Ko" },
-  { nom: "Releve_Notes_L2.pdf", categorie: "scolaire", format: "pdf", date: "20/09/2025", taille: "1.5 Mo" },
+  {
+    nom: 'Extrait_Naissance.pdf',
+    categorie: 'identite',
+    format: 'pdf',
+    date: '12/09/2025',
+    taille: '1.2 Mo',
+  },
+  {
+    nom: 'Photo_Identite.jpg',
+    categorie: 'identite',
+    format: 'jpg',
+    date: '10/09/2025',
+    taille: '450 Ko',
+  },
+  {
+    nom: 'Baccalaureat_S.pdf',
+    categorie: 'scolaire',
+    format: 'pdf',
+    date: '15/09/2025',
+    taille: '2.1 Mo',
+  },
+  {
+    nom: 'Certificat_Medical.pdf',
+    categorie: 'medical',
+    format: 'pdf',
+    date: '16/09/2025',
+    taille: '800 Ko',
+  },
+  {
+    nom: 'Releve_Notes_L2.pdf',
+    categorie: 'scolaire',
+    format: 'pdf',
+    date: '20/09/2025',
+    taille: '1.5 Mo',
+  },
 ]);
 
 const documentsFiltrés = computed(() => {
   if (filtreActif.value === 'tous') return documents.value;
-  return documents.value.filter(doc => doc.categorie === filtreActif.value);
+  return documents.value.filter((doc) => doc.categorie === filtreActif.value);
 });
 
 const getIcon = (format) => {
   switch (format) {
-    case 'pdf': return 'bi-file-earmark-pdf text-danger';
+    case 'pdf':
+      return 'bi-file-earmark-pdf text-danger';
     case 'jpg':
-    case 'png': return 'bi-file-earmark-image text-success';
-    default: return 'bi-file-earmark-text text-primary';
+    case 'png':
+      return 'bi-file-earmark-image text-success';
+    default:
+      return 'bi-file-earmark-text text-primary';
   }
 };
 </script>

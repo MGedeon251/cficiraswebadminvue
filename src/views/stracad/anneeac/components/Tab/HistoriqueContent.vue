@@ -15,8 +15,15 @@
           <div class="row g-3">
             <div class="col-md-5">
               <div class="input-group bg-white rounded shadow-sm">
-                <span class="input-group-text bg-white border-0"><i class="mdi mdi-magnify"></i></span>
-                <input v-model="searchQuery" type="text" class="form-control border-0" placeholder="Rechercher par code ou année (ex: 2024)...">
+                <span class="input-group-text bg-white border-0"
+                  ><i class="mdi mdi-magnify"></i
+                ></span>
+                <input
+                  v-model="searchQuery"
+                  type="text"
+                  class="form-control border-0"
+                  placeholder="Rechercher par code ou année (ex: 2024)..."
+                />
               </div>
             </div>
             <div class="col-md-3">
@@ -52,8 +59,15 @@
       </div>
 
       <div v-else-if="anneesFiltrees.length > 0" class="timeline-container">
-        <div v-for="annee in anneesFiltrees" :key="annee.id" class="annee-card mb-3 position-relative">
-          <div class="card border-0 shadow-sm overflow-hidden" :class="{'border-start border-4 border-success': annee.statut === 'active'}">
+        <div
+          v-for="annee in anneesFiltrees"
+          :key="annee.id"
+          class="annee-card mb-3 position-relative"
+        >
+          <div
+            class="card border-0 shadow-sm overflow-hidden"
+            :class="{ 'border-start border-4 border-success': annee.statut === 'active' }"
+          >
             <div class="card-body p-3">
               <div class="row align-items-center">
                 <!-- Date et Code -->
@@ -68,18 +82,22 @@
                     <span class="small fw-bold">{{ formatSimpleDate(annee.debut) }}</span>
                     <span class="small fw-bold">{{ formatSimpleDate(annee.fin) }}</span>
                   </div>
-                  <div class="progress" style="height: 6px;">
-                    <div class="progress-bar" 
-                         :class="getProgressBarClass(annee.statut)" 
-                         :style="{width: calculateProgress(annee) + '%'}">
-                    </div>
+                  <div class="progress" style="height: 6px">
+                    <div
+                      class="progress-bar"
+                      :class="getProgressBarClass(annee.statut)"
+                      :style="{ width: calculateProgress(annee) + '%' }"
+                    ></div>
                   </div>
                   <small class="text-muted mt-1 d-block text-center">Période académique</small>
                 </div>
 
                 <!-- Statut Badge -->
                 <div class="col-md-2 text-center">
-                  <span :class="getStatusBadgeClass(annee.statut)" class="badge px-3 py-2 rounded-pill">
+                  <span
+                    :class="getStatusBadgeClass(annee.statut)"
+                    class="badge px-3 py-2 rounded-pill"
+                  >
                     {{ formatStatut(annee.statut) }}
                   </span>
                 </div>
@@ -112,7 +130,7 @@
 
       <!-- State: Vide -->
       <div v-else class="text-center py-5 bg-white rounded shadow-sm">
-        <img src="/img/empty-box.svg" alt="Vide" style="width: 120px;" class="mb-3 opacity-50">
+        <img src="/img/empty-box.svg" alt="Vide" style="width: 120px" class="mb-3 opacity-50" />
         <h5 class="text-muted">Aucune archive trouvée</h5>
         <p class="text-muted small">Modifiez vos filtres ou créez une nouvelle année académique.</p>
       </div>
@@ -129,13 +147,15 @@ const loading = ref(false);
 
 const annees = ref([
   { id: 1, code: '2024-2025', debut: '2024-10-01', fin: '2025-07-31', statut: 'active' },
-  { id: 2, code: '2023-2024', debut: '2023-10-01', fin: '2024-07-31', statut: 'terminee' }
+  { id: 2, code: '2023-2024', debut: '2023-10-01', fin: '2024-07-31', statut: 'terminee' },
 ]);
 
 const anneesFiltrees = computed(() => {
-  return annees.value.filter(a => {
-    return a.code.toLowerCase().includes(searchQuery.value.toLowerCase()) &&
-           (!filterStatut.value || a.statut === filterStatut.value);
+  return annees.value.filter((a) => {
+    return (
+      a.code.toLowerCase().includes(searchQuery.value.toLowerCase()) &&
+      (!filterStatut.value || a.statut === filterStatut.value)
+    );
   });
 });
 
@@ -146,14 +166,15 @@ const resetFilters = () => {
 };
 
 // Fonctions utilitaires pour le nouveau design
-const formatSimpleDate = (date) => new Date(date).toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' });
+const formatSimpleDate = (date) =>
+  new Date(date).toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' });
 
 const getStatusBadgeClass = (statut) => {
   const map = {
     active: 'badge-soft-success',
     en_preparation: 'badge-soft-warning',
     terminee: 'badge-soft-secondary',
-    archivee: 'badge-soft-info'
+    archivee: 'badge-soft-info',
   };
   return map[statut] || 'bg-light';
 };
@@ -166,7 +187,7 @@ const calculateProgress = (annee) => {
   return 65; // Exemple pour l'année active
 };
 
-const getProgressBarClass = (statut) => statut === 'active' ? 'bg-success' : 'bg-secondary';
+const getProgressBarClass = (statut) => (statut === 'active' ? 'bg-success' : 'bg-secondary');
 </script>
 <style scoped>
 /* Effet au survol des cartes */
@@ -177,17 +198,37 @@ const getProgressBarClass = (statut) => statut === 'active' ? 'bg-success' : 'bg
   transform: translateX(5px);
 }
 
-.bg-light { background-color: #f8f9fa !important; }
+.bg-light {
+  background-color: #f8f9fa !important;
+}
 
 /* Styles spécifiques aux statuts */
-.badge-soft-success { background: rgba(25, 135, 84, 0.1); color: #198754; }
-.badge-soft-warning { background: rgba(255, 193, 7, 0.1); color: #ffc107; }
-.badge-soft-secondary { background: rgba(108, 117, 125, 0.1); color: #6c757d; }
-.badge-soft-info { background: rgba(13, 110, 253, 0.1); color: #0d6efd; }
+.badge-soft-success {
+  background: rgba(25, 135, 84, 0.1);
+  color: #198754;
+}
+.badge-soft-warning {
+  background: rgba(255, 193, 7, 0.1);
+  color: #ffc107;
+}
+.badge-soft-secondary {
+  background: rgba(108, 117, 125, 0.1);
+  color: #6c757d;
+}
+.badge-soft-info {
+  background: rgba(13, 110, 253, 0.1);
+  color: #0d6efd;
+}
 
-.btn-white { background: #fff; }
+.btn-white {
+  background: #fff;
+}
 
 /* Custom Progress colors */
-.progress-bar-success { background-color: #198754; }
-.progress-bar-warning { background-color: #ffc107; }
+.progress-bar-success {
+  background-color: #198754;
+}
+.progress-bar-warning {
+  background-color: #ffc107;
+}
 </style>

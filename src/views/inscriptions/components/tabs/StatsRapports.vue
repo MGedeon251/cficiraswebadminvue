@@ -7,7 +7,9 @@
           <div class="d-flex align-items-end flex-wrap">
             <div class="me-md-3 me-xl-5">
               <h3 class="fw-bold mb-1">Statistiques et Rapports</h3>
-              <p class="mb-md-0 text-muted">Analyse en temps réel des inscriptions et performances financières</p>
+              <p class="mb-md-0 text-muted">
+                Analyse en temps réel des inscriptions et performances financières
+              </p>
             </div>
           </div>
           <div class="d-flex gap-2 pt-3 pt-md-0">
@@ -87,23 +89,33 @@
       <!-- Graphique Principal -->
       <div class="col-lg-8">
         <div class="card border-0 shadow-sm h-100">
-          <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+          <div
+            class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center"
+          >
             <h5 class="fw-bold mb-0">Flux des Inscriptions</h5>
             <div class="dropdown">
-              <button class="btn btn-sm btn-light border-0" type="button">Mensuel <i class="mdi mdi-chevron-down"></i></button>
+              <button class="btn btn-sm btn-light border-0" type="button">
+                Mensuel <i class="mdi mdi-chevron-down"></i>
+              </button>
             </div>
           </div>
           <div class="card-body">
             <!-- Placeholder pour un graphique (ex: Chart.js ou ApexCharts) -->
-            <div class="chart-container d-flex align-items-end justify-content-between px-2" style="height: 250px;">
-              <div v-for="h in [40, 60, 45, 90, 65, 85, 100]" :key="h" 
-                   class="bg-soft-primary rounded-top" 
-                   :style="{ height: h + '%', width: '12%' }"
-                   v-tooltip="'Mois: ' + h + ' inscrits'">
-              </div>
+            <div
+              class="chart-container d-flex align-items-end justify-content-between px-2"
+              style="height: 250px"
+            >
+              <div
+                v-for="h in [40, 60, 45, 90, 65, 85, 100]"
+                :key="h"
+                class="bg-soft-primary rounded-top"
+                :style="{ height: h + '%', width: '12%' }"
+                v-tooltip="'Mois: ' + h + ' inscrits'"
+              ></div>
             </div>
             <div class="d-flex justify-content-between mt-3 text-muted small px-1">
-              <span>Jan</span><span>Fév</span><span>Mar</span><span>Avr</span><span>Mai</span><span>Juin</span><span>Juil</span>
+              <span>Jan</span><span>Fév</span><span>Mar</span><span>Avr</span><span>Mai</span
+              ><span>Juin</span><span>Juil</span>
             </div>
           </div>
         </div>
@@ -121,8 +133,11 @@
                 <span class="fw-bold small text-dark">{{ filiere.name }}</span>
                 <span class="small fw-bold text-primary">{{ filiere.count }}</span>
               </div>
-              <div class="progress rounded-pill" style="height: 8px;">
-                <div class="progress-bar bg-primary rounded-pill" :style="{ width: filiere.percent + '%' }"></div>
+              <div class="progress rounded-pill" style="height: 8px">
+                <div
+                  class="progress-bar bg-primary rounded-pill"
+                  :style="{ width: filiere.percent + '%' }"
+                ></div>
               </div>
             </div>
           </div>
@@ -133,17 +148,17 @@
 </template>
 
 <script setup>
-const currentYear = "Année Académique 2024-2025";
+const currentYear = 'Année Académique 2024-2025';
 
 const topFilieres = [
-  { name: "Informatique de Gestion", count: 450, percent: 85 },
-  { name: "Génie Logiciel", count: 320, percent: 65 },
-  { name: "Ressources Humaines", count: 210, percent: 45 },
-  { name: "Communication", count: 180, percent: 35 }
+  { name: 'Informatique de Gestion', count: 450, percent: 85 },
+  { name: 'Génie Logiciel', count: 320, percent: 65 },
+  { name: 'Ressources Humaines', count: 210, percent: 45 },
+  { name: 'Communication', count: 180, percent: 35 },
 ];
 
 const downloadReport = () => {
-  console.log("Génération du rapport...");
+  console.log('Génération du rapport...');
 };
 </script>
 
@@ -198,8 +213,16 @@ const downloadReport = () => {
 }
 
 /* Couleurs Soft */
-.bg-soft-success { background-color: rgba(25, 135, 84, 0.12); }
-.bg-soft-warning { background-color: rgba(255, 193, 7, 0.12); }
-.bg-soft-danger  { background-color: rgba(220, 53, 69, 0.12); }
-.bg-soft-info    { background-color: rgba(13, 202, 240, 0.12); }
+.bg-soft-success {
+  background-color: rgba(25, 135, 84, 0.12);
+}
+.bg-soft-warning {
+  background-color: rgba(255, 193, 7, 0.12);
+}
+.bg-soft-danger {
+  background-color: rgba(220, 53, 69, 0.12);
+}
+.bg-soft-info {
+  background-color: rgba(13, 202, 240, 0.12);
+}
 </style>

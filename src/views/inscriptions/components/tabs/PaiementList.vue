@@ -5,7 +5,9 @@
       <div class="d-flex justify-content-between align-items-end mb-4">
         <div>
           <h3 class="fw-bold mb-1">Validation & Frais d'Inscriptions</h3>
-          <p class="text-muted small mb-0">Suivi des paiements et validation administrative des dossiers.</p>
+          <p class="text-muted small mb-0">
+            Suivi des paiements et validation administrative des dossiers.
+          </p>
         </div>
         <div class="d-flex gap-3 text-end">
           <div class="px-3 border-end">
@@ -39,8 +41,15 @@
             </div>
             <div class="col-md-4">
               <div class="input-group shadow-sm bg-white rounded">
-                <span class="input-group-text bg-white border-0"><i class="mdi mdi-magnify text-primary"></i></span>
-                <input type="text" class="form-control border-0" placeholder="Rechercher un étudiant..." v-model="searchQuery" />
+                <span class="input-group-text bg-white border-0"
+                  ><i class="mdi mdi-magnify text-primary"></i
+                ></span>
+                <input
+                  type="text"
+                  class="form-control border-0"
+                  placeholder="Rechercher un étudiant..."
+                  v-model="searchQuery"
+                />
               </div>
             </div>
             <div class="col-md-2 text-end">
@@ -54,7 +63,9 @@
 
       <!-- Actions Globales -->
       <div class="d-flex justify-content-between mb-3 align-items-center">
-        <span class="text-muted small">Affichage de <b>{{ filteredInscriptions.length }}</b> dossiers</span>
+        <span class="text-muted small"
+          >Affichage de <b>{{ filteredInscriptions.length }}</b> dossiers</span
+        >
         <div class="d-flex gap-2">
           <button class="btn btn-outline-primary btn-sm px-3 shadow-sm bg-white">
             <i class="mdi mdi-file-export-outline me-1"></i> Exporter
@@ -100,7 +111,7 @@
                   <td><span class="fw-bold">450,000</span></td>
                   <td>
                     <span class="text-success fw-bold">250,000</span>
-                    <div class="small text-muted" style="font-size: 10px;">Via Orange Money</div>
+                    <div class="small text-muted" style="font-size: 10px">Via Orange Money</div>
                   </td>
                   <td>
                     <span class="badge bg-soft-danger text-danger">-200,000</span>
@@ -112,12 +123,17 @@
                   </td>
                   <td class="text-end pe-4">
                     <div class="btn-group shadow-sm border rounded-pill bg-white">
-                      <button v-if="ins.statut === 'en attente'" 
-                              class="btn btn-sm btn-white text-success border-end" 
-                              @click="validerInscription(ins.id)">
+                      <button
+                        v-if="ins.statut === 'en attente'"
+                        class="btn btn-sm btn-white text-success border-end"
+                        @click="validerInscription(ins.id)"
+                      >
                         <i class="mdi mdi-check-bold"></i>
                       </button>
-                      <button class="btn btn-sm btn-white text-info border-end" @click="imprimerRecu(ins)">
+                      <button
+                        class="btn btn-sm btn-white text-info border-end"
+                        @click="imprimerRecu(ins)"
+                      >
                         <i class="mdi mdi-printer"></i>
                       </button>
                       <button class="btn btn-sm btn-white text-secondary" @click="openModal(ins)">
@@ -141,7 +157,11 @@
       </div>
 
       <div class="mt-4">
-        <Pagination v-model="currentPage" :items-per-page="itemsPerPage" :total-items="filteredInscriptions.length" />
+        <Pagination
+          v-model="currentPage"
+          :items-per-page="itemsPerPage"
+          :total-items="filteredInscriptions.length"
+        />
       </div>
     </div>
   </div>
@@ -158,13 +178,29 @@
   font-size: 0.85rem;
 }
 
-.bg-soft-primary { background: rgba(75, 73, 172, 0.1); }
-.bg-soft-success { background: rgba(25, 135, 84, 0.12); color: #198754; }
-.bg-soft-danger { background: rgba(220, 53, 69, 0.12); color: #dc3545; }
-.bg-soft-warning { background: rgba(255, 193, 7, 0.15); color: #997404; }
+.bg-soft-primary {
+  background: rgba(75, 73, 172, 0.1);
+}
+.bg-soft-success {
+  background: rgba(25, 135, 84, 0.12);
+  color: #198754;
+}
+.bg-soft-danger {
+  background: rgba(220, 53, 69, 0.12);
+  color: #dc3545;
+}
+.bg-soft-warning {
+  background: rgba(255, 193, 7, 0.15);
+  color: #997404;
+}
 
-.btn-white { background: #fff; border: none; }
-.btn-white:hover { background: #f8f9fa; }
+.btn-white {
+  background: #fff;
+  border: none;
+}
+.btn-white:hover {
+  background: #f8f9fa;
+}
 
 .table thead th {
   font-size: 11px;

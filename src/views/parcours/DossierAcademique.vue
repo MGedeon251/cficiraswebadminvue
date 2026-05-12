@@ -8,7 +8,7 @@
         <div class="card">
           <SkeletonLoader v-if="loading" type="table" :rows="3" :columns="1" />
           <div v-else class="card-body dashboard-tabs p-0">
-            <DossierTab/>
+            <DossierTab />
           </div>
         </div>
       </div>

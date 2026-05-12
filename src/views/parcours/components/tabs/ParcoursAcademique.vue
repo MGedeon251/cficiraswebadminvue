@@ -8,25 +8,33 @@
         </div>
         <div class="card-body">
           <div class="timeline">
-            <div 
-              v-for="(annee, index) in historique" 
-              :key="index" 
+            <div
+              v-for="(annee, index) in historique"
+              :key="index"
               class="timeline-item pb-3 border-start ps-3 position-relative"
-              :class="{'border-primary': index === 0, 'border-light-subtle': index !== 0}"
+              :class="{ 'border-primary': index === 0, 'border-light-subtle': index !== 0 }"
             >
-              <div 
+              <div
                 class="dot position-absolute start-0 translate-middle-x rounded-circle"
                 :class="index === 0 ? 'bg-primary' : 'bg-secondary'"
-                style="width: 12px; height: 12px; margin-left: -1px; margin-top: 6px;"
+                style="width: 12px; height: 12px; margin-left: -1px; margin-top: 6px"
               ></div>
               <div class="mb-1">
-                <span class="badge" :class="index === 0 ? 'bg-primary-subtle text-primary' : 'bg-light text-muted'">
+                <span
+                  class="badge"
+                  :class="index === 0 ? 'bg-primary-subtle text-primary' : 'bg-light text-muted'"
+                >
                   {{ annee.periode }}
                 </span>
               </div>
               <h6 class="fw-bold mb-0">{{ annee.classe }}</h6>
-              <p class="text-muted small mb-0">{{ annee.resultat }} • Moyenne: {{ annee.moyenne }}/20</p>
-              <button class="btn btn-link btn-sm p-0 text-decoration-none mt-1" @click="selectionnerAnnee(annee)">
+              <p class="text-muted small mb-0">
+                {{ annee.resultat }} • Moyenne: {{ annee.moyenne }}/20
+              </p>
+              <button
+                class="btn btn-link btn-sm p-0 text-decoration-none mt-1"
+                @click="selectionnerAnnee(annee)"
+              >
                 Voir détails
               </button>
             </div>
@@ -97,11 +105,17 @@
                   <td class="text-center">{{ matiere.credits }}</td>
                   <td class="text-center text-muted">{{ matiere.cc }}</td>
                   <td class="text-center text-muted">{{ matiere.exam }}</td>
-                  <td class="text-center fw-bold" :class="matiere.moyenne < 10 ? 'text-danger' : 'text-success'">
+                  <td
+                    class="text-center fw-bold"
+                    :class="matiere.moyenne < 10 ? 'text-danger' : 'text-success'"
+                  >
                     {{ matiere.moyenne }}
                   </td>
                   <td class="text-center">
-                    <i v-if="matiere.moyenne >= 10" class="bi bi-check-circle-fill text-success"></i>
+                    <i
+                      v-if="matiere.moyenne >= 10"
+                      class="bi bi-check-circle-fill text-success"
+                    ></i>
                     <i v-else class="bi bi-exclamation-triangle-fill text-danger"></i>
                   </td>
                 </tr>
@@ -118,35 +132,56 @@
 import { ref } from 'vue';
 
 const historique = ref([
-  { 
-    periode: "2025-2026", 
-    classe: "Licence 3 - Génie Logiciel", 
-    moyenne: "14.50", 
-    resultat: "En cours",
+  {
+    periode: '2025-2026',
+    classe: 'Licence 3 - Génie Logiciel',
+    moyenne: '14.50',
+    resultat: 'En cours',
     matieres: [
-      { nom: "Architecture Microservices", code: "CS-401", credits: 6, cc: 14, exam: 15, moyenne: 14.6 },
-      { nom: "Deep Learning & Vision", code: "AI-402", credits: 6, cc: 16, exam: 12, moyenne: 13.6 },
-      { nom: "Base de données NoSQL", code: "DB-403", credits: 4, cc: 18, exam: 17, moyenne: 17.4 },
-      { nom: "Anglais Technique", code: "LAN-401", credits: 2, cc: 8, exam: 9, moyenne: 8.6 }
-    ]
+      {
+        nom: 'Architecture Microservices',
+        code: 'CS-401',
+        credits: 6,
+        cc: 14,
+        exam: 15,
+        moyenne: 14.6,
+      },
+      {
+        nom: 'Deep Learning & Vision',
+        code: 'AI-402',
+        credits: 6,
+        cc: 16,
+        exam: 12,
+        moyenne: 13.6,
+      },
+      { nom: 'Base de données NoSQL', code: 'DB-403', credits: 4, cc: 18, exam: 17, moyenne: 17.4 },
+      { nom: 'Anglais Technique', code: 'LAN-401', credits: 2, cc: 8, exam: 9, moyenne: 8.6 },
+    ],
   },
-  { 
-    periode: "2024-2025", 
-    classe: "Licence 2 - Informatique", 
-    moyenne: "13.85", 
-    resultat: "Admis",
+  {
+    periode: '2024-2025',
+    classe: 'Licence 2 - Informatique',
+    moyenne: '13.85',
+    resultat: 'Admis',
     matieres: [
-      { nom: "Algorithmique Avancée", code: "CS-301", credits: 6, cc: 12, exam: 14, moyenne: 13.2 },
-      { nom: "Systèmes d'exploitation", code: "OS-302", credits: 6, cc: 13, exam: 11, moyenne: 11.8 }
-    ]
+      { nom: 'Algorithmique Avancée', code: 'CS-301', credits: 6, cc: 12, exam: 14, moyenne: 13.2 },
+      {
+        nom: "Systèmes d'exploitation",
+        code: 'OS-302',
+        credits: 6,
+        cc: 13,
+        exam: 11,
+        moyenne: 11.8,
+      },
+    ],
   },
-  { 
-    periode: "2023-2024", 
-    classe: "Licence 1 - Tronc Commun", 
-    moyenne: "12.20", 
-    resultat: "Admis",
-    matieres: []
-  }
+  {
+    periode: '2023-2024',
+    classe: 'Licence 1 - Tronc Commun',
+    moyenne: '12.20',
+    resultat: 'Admis',
+    matieres: [],
+  },
 ]);
 
 const anneeSelectionnee = ref(historique.value[0]);

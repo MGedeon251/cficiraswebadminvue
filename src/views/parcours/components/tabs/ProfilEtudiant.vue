@@ -6,16 +6,18 @@
         <div class="card-body text-center">
           <div class="mb-3">
             <!-- Placeholder pour la photo de l'étudiant -->
-            <img 
-              src="https://tse3.mm.bing.net/th/id/OIP.i4YH9hPP_yM3nXMIQDDkQwHaLL?pid=ImgDet&w=474&h=715&rs=1&o=7&rm=3" 
-              alt="Photo de l'étudiant" 
+            <img
+              src="https://tse3.mm.bing.net/th/id/OIP.i4YH9hPP_yM3nXMIQDDkQwHaLL?pid=ImgDet&w=474&h=715&rs=1&o=7&rm=3"
+              alt="Photo de l'étudiant"
               class="rounded-circle img-thumbnail"
-              style="width: 150px; height: 150px; object-fit: cover;"
-            >
+              style="width: 150px; height: 150px; object-fit: cover"
+            />
           </div>
           <h4 class="fw-bold mb-1">{{ etudiant.nom }} {{ etudiant.prenom }}</h4>
-          <p class="text-muted small mb-3">Matricule : <span class="badge bg-primary">{{ etudiant.matricule }}</span></p>
-          
+          <p class="text-muted small mb-3">
+            Matricule : <span class="badge bg-primary">{{ etudiant.matricule }}</span>
+          </p>
+
           <div class="d-grid gap-2">
             <button class="btn btn-outline-primary btn-sm">Modifier la photo</button>
           </div>
@@ -75,7 +77,9 @@
       <!-- Informations Académiques Actuelles -->
       <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-white py-3">
-          <h6 class="m-0 fw-bold"><i class="bi bi-mortarboard me-2"></i>Inscription Actuelle (2025-2026)</h6>
+          <h6 class="m-0 fw-bold">
+            <i class="bi bi-mortarboard me-2"></i>Inscription Actuelle (2025-2026)
+          </h6>
         </div>
         <div class="card-body">
           <div class="row text-center">
@@ -130,22 +134,32 @@ import { ref } from 'vue';
 
 // Ces données viendront normalement d'un Fetch API ou d'un Store Pinia
 const etudiant = ref({
-  matricule: "STUD-2025-0042",
-  nom: "KABORE",
-  prenom: "Ousmane",
-  date_naissance: "12/05/2005",
-  lieu_naissance: "Dakar",
-  sexe: "Masculin",
-  nationalite: "Sénégalaise",
-  email: "o.kabore@student.com",
-  telephone: "+221 77 000 00 00",
-  adresse: "Mermoz, Rue 10, Dakar, Sénégal",
-  filiere: "Génie Logiciel",
-  classe_actuelle: "Licence 3",
+  matricule: 'STUD-2025-0042',
+  nom: 'KABORE',
+  prenom: 'Ousmane',
+  date_naissance: '12/05/2005',
+  lieu_naissance: 'Dakar',
+  sexe: 'Masculin',
+  nationalite: 'Sénégalaise',
+  email: 'o.kabore@student.com',
+  telephone: '+221 77 000 00 00',
+  adresse: 'Mermoz, Rue 10, Dakar, Sénégal',
+  filiere: 'Génie Logiciel',
+  classe_actuelle: 'Licence 3',
   tuteurs: [
-    { nom_complet: "KABORE Ibrahim", lien: "Père", telephone: "+221 77 111 22 33", email: "i.kabore@gmail.com" },
-    { nom_complet: "DIOP Aminata", lien: "Mère", telephone: "+221 70 444 55 66", email: "a.diop@gmail.com" }
-  ]
+    {
+      nom_complet: 'KABORE Ibrahim',
+      lien: 'Père',
+      telephone: '+221 77 111 22 33',
+      email: 'i.kabore@gmail.com',
+    },
+    {
+      nom_complet: 'DIOP Aminata',
+      lien: 'Mère',
+      telephone: '+221 70 444 55 66',
+      email: 'a.diop@gmail.com',
+    },
+  ],
 });
 </script>
 

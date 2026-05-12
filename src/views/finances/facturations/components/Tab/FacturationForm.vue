@@ -7,17 +7,28 @@
       </div>
       <div class="d-flex gap-2">
         <div class="btn-group btn-group-sm mr-2" role="group">
-          <input type="radio" v-model="viewType" value="mois" class="btn-check" id="v-mois" checked>
+          <input
+            type="radio"
+            v-model="viewType"
+            value="mois"
+            class="btn-check"
+            id="v-mois"
+            checked
+          />
           <label class="btn btn-outline-primary" for="v-mois">Mensuel</label>
 
-          <input type="radio" v-model="viewType" value="trimestre" class="btn-check" id="v-trim">
+          <input type="radio" v-model="viewType" value="trimestre" class="btn-check" id="v-trim" />
           <label class="btn btn-outline-primary" for="v-trim">Trimestriel</label>
 
-          <input type="radio" v-model="viewType" value="annuel" class="btn-check" id="v-ann">
+          <input type="radio" v-model="viewType" value="annuel" class="btn-check" id="v-ann" />
           <label class="btn btn-outline-primary" for="v-ann">Annuel</label>
         </div>
 
-        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#importFormateurModal">
+        <button
+          class="btn btn-primary btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#importFormateurModal"
+        >
           <i class="mdi mdi-upload me-1"></i> Charger Liste (CSV/Excel)
         </button>
       </div>
@@ -89,16 +100,25 @@
             <div class="upload-zone p-5 border-dashed rounded mb-3">
               <i class="mdi mdi-file-excel mdi-48px text-success"></i>
               <p class="mt-2">Glissez votre fichier ici ou cliquez pour parcourir</p>
-              <input type="file" @change="handleFileChange" class="form-control form-control-sm mt-3" accept=".xlsx, .csv">
+              <input
+                type="file"
+                @change="handleFileChange"
+                class="form-control form-control-sm mt-3"
+                accept=".xlsx, .csv"
+              />
             </div>
             <div class="text-start">
               <p class="small text-muted mb-1 fw-bold">Colonnes requises :</p>
-              <code class="extra-small">matricule, nom, prenom, heures_faites, taux_horaire, mois</code>
+              <code class="extra-small"
+                >matricule, nom, prenom, heures_faites, taux_horaire, mois</code
+              >
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
-            <button type="button" class="btn btn-primary" @click="processImport">Lancer l'importation</button>
+            <button type="button" class="btn btn-primary" @click="processImport">
+              Lancer l'importation
+            </button>
           </div>
         </div>
       </div>
@@ -111,9 +131,33 @@ import { ref, computed } from 'vue';
 
 const viewType = ref('mois');
 const honoraires = ref([
-  { id: 1, matricule: 'PRF-001', nom: 'BA', prenom: 'Abdoulaye', modules: 'Maths, Algorithmique', heures: 45, taux: 15000 },
-  { id: 2, matricule: 'PRF-042', nom: 'FALL', prenom: 'Moussa', modules: 'Base de données', heures: 30, taux: 12000 },
-  { id: 3, matricule: 'PRF-009', nom: 'NDIAYE', prenom: 'Astou', modules: 'Comptabilité Générale', heures: 20, taux: 10000 },
+  {
+    id: 1,
+    matricule: 'PRF-001',
+    nom: 'BA',
+    prenom: 'Abdoulaye',
+    modules: 'Maths, Algorithmique',
+    heures: 45,
+    taux: 15000,
+  },
+  {
+    id: 2,
+    matricule: 'PRF-042',
+    nom: 'FALL',
+    prenom: 'Moussa',
+    modules: 'Base de données',
+    heures: 30,
+    taux: 12000,
+  },
+  {
+    id: 3,
+    matricule: 'PRF-009',
+    nom: 'NDIAYE',
+    prenom: 'Astou',
+    modules: 'Comptabilité Générale',
+    heures: 20,
+    taux: 10000,
+  },
 ]);
 
 const viewLabel = computed(() => {
@@ -123,13 +167,14 @@ const viewLabel = computed(() => {
 });
 
 const totalHonoraires = computed(() => {
-  return honoraires.value.reduce((acc, curr) => acc + (curr.heures * curr.taux), 0);
+  return honoraires.value.reduce((acc, curr) => acc + curr.heures * curr.taux, 0);
 });
 
 const formatPrice = (val) => new Intl.NumberFormat('fr-FR').format(val) + ' F';
 
-const handleFileChange = (e) => console.log("Fichier prêt :", e.target.files[0].name);
-const processImport = () => alert("Analyse du fichier et mise à jour des états honoraires terminée !");
+const handleFileChange = (e) => console.log('Fichier prêt :', e.target.files[0].name);
+const processImport = () =>
+  alert('Analyse du fichier et mise à jour des états honoraires terminée !');
 const viewFiche = (item) => alert(`Détail des vacations pour ${item.prenom} ${item.nom}`);
 </script>
 

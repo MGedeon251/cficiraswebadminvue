@@ -75,7 +75,7 @@
                 <tr>
                   <th class="ps-4 py-3">Désignation Filière</th>
                   <th class="text-center">Effectif</th>
-                  <th class="text-center" style="width: 250px;">Moyenne & Progression</th>
+                  <th class="text-center" style="width: 250px">Moyenne & Progression</th>
                   <th class="text-center">Statut</th>
                 </tr>
               </thead>
@@ -86,26 +86,33 @@
                     <small class="text-muted">ID: #FL-00{{ filiere.id }}</small>
                   </td>
                   <td class="text-center">
-                    <span class="badge rounded-pill bg-light text-dark px-3">{{ filiere.nb_etudiants }} étudiants</span>
+                    <span class="badge rounded-pill bg-light text-dark px-3"
+                      >{{ filiere.nb_etudiants }} étudiants</span
+                    >
                   </td>
                   <td class="text-center">
                     <div v-if="filiere.moyenne_generale">
                       <div class="d-flex justify-content-between mb-1">
                         <small class="fw-bold">{{ filiere.moyenne_generale }} / 20</small>
-                        <small class="text-muted">{{ (filiere.moyenne_generale * 5).toFixed(0) }}%</small>
+                        <small class="text-muted"
+                          >{{ (filiere.moyenne_generale * 5).toFixed(0) }}%</small
+                        >
                       </div>
-                      <div class="progress" style="height: 6px;">
-                        <div 
-                          class="progress-bar" 
+                      <div class="progress" style="height: 6px">
+                        <div
+                          class="progress-bar"
                           :class="getMoyenneColor(filiere.moyenne_generale)"
-                          :style="{ width: (filiere.moyenne_generale * 5) + '%' }">
-                        </div>
+                          :style="{ width: filiere.moyenne_generale * 5 + '%' }"
+                        ></div>
                       </div>
                     </div>
                     <span v-else class="text-muted italic small">Attente de délibération</span>
                   </td>
                   <td class="text-center">
-                    <span v-if="filiere.moyenne_generale" class="badge bg-soft-success text-success px-3">
+                    <span
+                      v-if="filiere.moyenne_generale"
+                      class="badge bg-soft-success text-success px-3"
+                    >
                       <i class="mdi mdi-check-circle-outline me-1"></i> Validé
                     </span>
                     <span v-else class="badge bg-soft-warning text-warning px-3">
@@ -117,8 +124,15 @@
               <tbody v-else>
                 <tr>
                   <td colspan="4" class="text-center py-5">
-                    <img src="/img/empty-box.svg" alt="Vide" style="width: 80px;" class="mb-3 opacity-50" />
-                    <p class="text-muted">Aucune donnée statistique disponible pour cette période.</p>
+                    <img
+                      src="/img/empty-box.svg"
+                      alt="Vide"
+                      style="width: 80px"
+                      class="mb-3 opacity-50"
+                    />
+                    <p class="text-muted">
+                      Aucune donnée statistique disponible pour cette période.
+                    </p>
                   </td>
                 </tr>
               </tbody>
@@ -171,12 +185,12 @@ const getMoyenneColor = (moyenne) => {
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .stat-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
 }
 
 .stat-icon {
@@ -189,7 +203,9 @@ const getMoyenneColor = (moyenne) => {
   flex-shrink: 0;
 }
 
-.stat-icon i { font-size: 1.8rem; }
+.stat-icon i {
+  font-size: 1.8rem;
+}
 
 .stat-content h3 {
   margin: 0;
@@ -205,14 +221,31 @@ const getMoyenneColor = (moyenne) => {
 }
 
 /* Couleurs Douces (Soft) */
-.bg-primary-soft { background: rgba(13, 110, 253, 0.1); }
-.bg-success-soft { background: rgba(25, 135, 84, 0.1); }
-.bg-info-soft    { background: rgba(13, 202, 240, 0.1); }
-.bg-warning-soft { background: rgba(255, 193, 7, 0.1); }
+.bg-primary-soft {
+  background: rgba(13, 110, 253, 0.1);
+}
+.bg-success-soft {
+  background: rgba(25, 135, 84, 0.1);
+}
+.bg-info-soft {
+  background: rgba(13, 202, 240, 0.1);
+}
+.bg-warning-soft {
+  background: rgba(255, 193, 7, 0.1);
+}
 
-.bg-soft-success { background: rgba(25, 135, 84, 0.15); color: #198754; }
-.bg-soft-warning { background: rgba(255, 193, 7, 0.15); color: #997404; }
-.bg-soft-primary { background: rgba(13, 110, 253, 0.1); color: #0d6efd; }
+.bg-soft-success {
+  background: rgba(25, 135, 84, 0.15);
+  color: #198754;
+}
+.bg-soft-warning {
+  background: rgba(255, 193, 7, 0.15);
+  color: #997404;
+}
+.bg-soft-primary {
+  background: rgba(13, 110, 253, 0.1);
+  color: #0d6efd;
+}
 
 /* Table Stylée */
 .table thead th {
@@ -227,7 +260,9 @@ const getMoyenneColor = (moyenne) => {
   transition: background 0.2s;
 }
 
-.table tbody tr:hover { background-color: #fcfdfe; }
+.table tbody tr:hover {
+  background-color: #fcfdfe;
+}
 
 .progress {
   background-color: #f0f2f4;
