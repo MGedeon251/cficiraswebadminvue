@@ -262,7 +262,7 @@
 }
 
 .rounded-4 {
-  border-radius: 0.4rem !important;
+  border-radius: 0.3rem !important;
 }
 
 /* Custom Modals Animation */

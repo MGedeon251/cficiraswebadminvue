@@ -1,17 +1,18 @@
 <template>
+  <!-- Retour à votre Dropdown d'origine -->
   <div class="dropdown">
     <button class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
       ...
     </button>
-    <ul class="dropdown-menu dropdown-menu-light">
+    <ul class="dropdown-menu dropdown-menu-light shadow-sm">
       <li>
         <button class="dropdown-item" @click="isDetailsVisible = true">
-          <i class="mdi mdi-information-outline me-2"></i> Détails
+          <i class="mdi mdi-information-outline me-2 text-info"></i> Détails
         </button>
       </li>
       <li v-if="showAdd">
         <button class="dropdown-item" @click="$emit('add', item)">
-          <i class="mdi mdi-plus-circle-outline me-2"></i> Ajouter
+          <i class="mdi mdi-plus-circle-outline me-2 text-success"></i> Ajouter
         </button>
       </li>
       <li>
@@ -21,7 +22,7 @@
           :data-bs-target="editModalTarget"
           @click="$emit('edit', item)"
         >
-          <i class="mdi mdi-pencil-outline me-2"></i> Modifier
+          <i class="mdi mdi-pencil-outline me-2 text-primary"></i> Modifier
         </button>
       </li>
       <li class="dropdown-divider"></li>
@@ -33,147 +34,161 @@
     </ul>
   </div>
 
-  <!-- Modal pour les détails -->
+  <!-- Modal Détails (Version Enrichie et Pro) -->
   <teleport to="body">
     <div
       v-if="isDetailsVisible"
-      class="modal fade show d-block"
-      tabindex="-1"
-      role="dialog"
-      style="background-color: rgba(0, 0, 0, 0.5)"
+      class="modal-backdrop-custom d-flex align-items-center justify-content-center"
       @click.self="closeDetails"
     >
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title">
-              <i class="mdi mdi-account-circle-outline me-2"></i>
-              Détails de l’étudiant
-            </h5>
-            <button type="button" class="btn-close btn-close-white" @click="closeDetails"></button>
+      <div class="modal-card shadow-lg animate-zoom">
+        <!-- Header Profil -->
+        <div class="profile-header text-center">
+          <button class="btn-close-modal" @click="closeDetails">×</button>
+          <div class="avatar-wrapper">
+            <img
+              :src="item.photo || '/img/default-avatar.png'"
+              class="profile-avatar shadow"
+              alt="Avatar"
+            />
           </div>
+          <h4 class="mt-3 fw-bold text-dark">{{ item.nom }} {{ item.prenom }}</h4>
+          <span class="badge bg-soft-primary text-primary rounded-pill px-3">{{ item.matricule }}</span>
+        </div>
 
-          <div class="modal-body">
-            <!-- Photo de profil -->
-            <div class="text-center mb-4">
-              <img
-                :src="item.photo || '/img/default-avatar.png'"
-                alt="Photo de profil"
-                class="rounded-circle shadow"
-                style="width: 120px; height: 120px; object-fit: cover"
-              />
-              <h5 class="mt-3">{{ item.nom }} {{ item.prenom }}</h5>
-              <span class="badge bg-info">{{ item.matricule }}</span>
-            </div>
-
-            <div class="row">
-              <!-- Identité -->
-              <div class="col-md-6">
-                <div class="info-card mb-3">
-                  <h6 class="info-title">
-                    <i class="mdi mdi-card-account-details me-2"></i> Identité
-                  </h6>
-                  <div class="info-content">
-                    <div class="info-item">
-                      <span class="info-label">Sexe:</span>
-                      <span class="info-value">{{ item.sexe }}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="info-label">Date de naissance:</span>
-                      <span class="info-value">{{ formatDate(item.date_naissance) }}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="info-label">Lieu de naissance:</span>
-                      <span class="info-value">{{ item.lieu_naissance }}</span>
-                    </div>
-                  </div>
+        <div class="modal-body-custom p-4">
+          <div class="row g-4">
+            <!-- Colonne 1: Infos Perso -->
+            <div class="col-md-6 border-end">
+              <h6 class="text-uppercase text-muted small fw-bold mb-3">Identité & Contact</h6>
+              <div class="info-group">
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted small">Sexe:</span>
+                  <span class="fw-semibold">{{ item.sexe }}</span>
                 </div>
-              </div>
-
-              <!-- Contact -->
-              <div class="col-md-6">
-                <div class="info-card mb-3">
-                  <h6 class="info-title"><i class="mdi mdi-phone me-2"></i> Contact</h6>
-                  <div class="info-content">
-                    <div class="info-item">
-                      <span class="info-label">Téléphone:</span>
-                      <span class="info-value">{{ item.telephone }}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="info-label">Email:</span>
-                      <span class="info-value">{{ item.email }}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="info-label">Ville:</span>
-                      <span class="info-value">{{ item.ville }}</span>
-                    </div>
-                  </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted small">Né(e) le:</span>
+                  <span class="fw-semibold">{{ formatDate(item.date_naissance) }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted small">Lieu:</span>
+                  <span class="fw-semibold">{{ item.lieu_naissance }}</span>
+                </div>
+                <hr class="my-3 opacity-25">
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted small">Téléphone:</span>
+                  <span class="fw-bold text-primary">{{ item.telephone }}</span>
+                </div>
+                <div class="text-truncate">
+                  <span class="text-muted small d-block">Email:</span>
+                  <span class="fw-semibold">{{ item.email }}</span>
                 </div>
               </div>
             </div>
 
-            <div class="row mt-3">
-              <!-- Académique -->
-              <div class="col-md-6">
-                <div class="info-card mb-3">
-                  <h6 class="info-title"><i class="mdi mdi-school me-2"></i> Académique</h6>
-                  <div class="info-content">
-                    <div class="info-item">
-                      <span class="info-label">Année académique:</span>
-                      <span class="info-value">{{ item.annee_academique }}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="info-label">Cycle:</span>
-                      <span class="info-value">{{ item.cycle }}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="info-label">Filière:</span>
-                      <span class="info-value">{{ item.filiere }}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="info-label">Niveau:</span>
-                      <span class="info-value">{{ item.niveau }}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="info-label">Classe:</span>
-                      <span class="info-value">{{ item.classe }}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="info-label">Statut:</span>
-                      <span class="badge bg-success">{{ item.statut }}</span>
-                    </div>
-                  </div>
+            <!-- Colonne 2: Académique -->
+            <div class="col-md-6">
+              <h6 class="text-uppercase text-muted small fw-bold mb-3">Parcours Scolaire</h6>
+              <div class="academic-box p-3 rounded-3 bg-light">
+                <div class="mb-3">
+                  <label class="text-muted x-small d-block text-uppercase">Filière</label>
+                  <span class="fw-bold text-dark">{{ item.filiere }}</span>
                 </div>
-              </div>
-
-              <!-- Inscription -->
-              <div class="col-md-6">
-                <div class="info-card mb-3">
-                  <h6 class="info-title"><i class="mdi mdi-calendar me-2"></i> Inscription</h6>
-                  <div class="info-content">
-                    <div class="info-item">
-                      <span class="info-label">Date d’inscription:</span>
-                      <span class="info-value">{{ formatDate(item.date_inscription) }}</span>
-                    </div>
-                  </div>
+                <div class="mb-3">
+                  <label class="text-muted x-small d-block text-uppercase">Niveau & Classe</label>
+                  <span class="fw-semibold">{{ item.niveau }} - {{ item.classe }}</span>
+                </div>
+                <div>
+                  <label class="text-muted x-small d-block text-uppercase">Année Académique</label>
+                  <span class="badge bg-white text-dark shadow-sm">{{ item.annee_academique }}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="modal-footer">
-            <button class="btn btn-secondary" @click="closeDetails">
-              <i class="mdi mdi-close me-2"></i> Fermer
-            </button>
-            <button class="btn btn-primary" @click="$emit('edit', item)">
-              <i class="mdi mdi-pencil me-2"></i> Modifier
-            </button>
+          <!-- Footer Modal -->
+          <div class="mt-4 pt-3 border-top d-flex justify-content-between align-items-center">
+            <span class="badge" :class="item.statut === 'Actif' ? 'bg-success' : 'bg-warning text-dark'">
+              Statut: {{ item.statut }}
+            </span>
+            <div class="d-flex gap-2">
+              <button class="btn btn-secondary btn-sm px-4" @click="closeDetails">Fermer</button>
+              <button class="btn btn-primary btn-sm px-4" @click="$emit('edit', item)">
+                Modifier
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </teleport>
 </template>
+
+<style scoped>
+/* Modal Overlay moderne */
+.modal-backdrop-custom {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1050;
+}
+
+.modal-card {
+  background: #fff;
+  width: 90%;
+  max-width: 650px;
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+}
+
+.profile-header {
+  background: #f8faff;
+  padding: 30px 20px;
+  border-bottom: 1px solid #edf2f9;
+}
+
+.avatar-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 20px; /* Style "Squircle" */
+  border: 4px solid #fff;
+  object-fit: cover;
+}
+
+.btn-close-modal {
+  position: absolute;
+  top: 15px; right: 15px;
+  border: none; background: none;
+  font-size: 1.5rem; color: #95aac9;
+  line-height: 1;
+}
+
+.academic-box {
+  border: 1px solid #e3ebf6;
+}
+
+.x-small { font-size: 0.7rem; letter-spacing: 0.5px; }
+
+.bg-soft-primary { background: rgba(75, 73, 172, 0.1); }
+
+/* Animation simple */
+.animate-zoom {
+  animation: zoomIn 0.2s ease-out;
+}
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* On garde vos styles de dropdown existants via Bootstrap */
+</style>
 
 <script setup>
 import { ref } from 'vue';
@@ -206,61 +221,3 @@ const formatDate = (date) => {
 };
 </script>
 
-<style scoped>
-.modal-content {
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-}
-
-.info-card {
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  padding: 15px;
-  height: 100%;
-}
-
-.info-title {
-  color: #495057;
-  font-weight: 600;
-  margin-bottom: 15px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #dee2e6;
-}
-
-.info-item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.info-label {
-  font-weight: 500;
-  color: #6c757d;
-}
-
-.info-value {
-  font-weight: 400;
-  color: #212529;
-  text-align: right;
-}
-
-.badge {
-  padding: 5px 10px;
-  border-radius: 50px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.btn-close:focus {
-  box-shadow: none;
-}
-
-.modal-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.modal-footer {
-  border-top: 1px solid #dee2e6;
-}
-</style>
