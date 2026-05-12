@@ -19,67 +19,66 @@
     </div>
 
     <!-- Filtres + Recherche -->
-    <div class="col-12 mb-3">
-      <div class="card">
-        <div class="card-body">
-          <div class="row g-3 align-items-end">
-            <!-- Année académique -->
-            <div class="col-md-3">
-              <label class="form-label">Année académique</label>
-              <select v-model="selectedAnnee" class="form-select" @change="onAnneeChange">
-                <option value="">Toutes</option>
-                <option v-for="annee in anneesAcademiques" :key="annee.id" :value="annee.id">
-                  {{ annee.code }}
-                </option>
-              </select>
-            </div>
+    <div class="col-12 mb-4">
+  <!-- On applique border-0 pour enlever les bordures et bg-light pour le fond gris clair -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-body bg-light rounded">
+      <div class="row g-3">
+        
+        <!-- Année académique -->
+        <div class="col-md-3">
+          <select v-model="selectedAnnee" class="form-select" @change="onAnneeChange">
+            <option value="">Toutes les Années</option>
+            <option v-for="annee in anneesAcademiques" :key="annee.id" :value="annee.id">
+              {{ annee.code }}
+            </option>
+          </select>
+        </div>
 
-            <!-- Filière -->
-            <div class="col-md-3">
-              <label class="form-label">Filière</label>
-              <select v-model="selectedFiliere" class="form-select" @change="onFiliereChange">
-                <option value="">Toutes</option>
-                <option v-for="f in filieres" :key="f.id" :value="f.id">
-                  {{ f.designation }}
-                </option>
-              </select>
-            </div>
+        <!-- Filière -->
+        <div class="col-md-3">
+          <select v-model="selectedFiliere" class="form-select" @change="onFiliereChange">
+            <option value="">Toutes les Filières</option>
+            <option v-for="f in filieres" :key="f.id" :value="f.id">
+              {{ f.designation }}
+            </option>
+          </select>
+        </div>
 
-            <!-- Classe -->
-            <div class="col-md-3">
-              <label class="form-label">Classe</label>
-              <select
-                v-model="selectedClasse"
-                :disabled="!selectedFiliere"
-                class="form-select"
-                @change="onClasseChange"
-              >
-                <option value="">Toutes</option>
-                <option v-for="c in classes" :key="c.id" :value="c.id">
-                  {{ c.code }}
-                </option>
-              </select>
-            </div>
+        <!-- Classe -->
+        <div class="col-md-3">
+          <select
+            v-model="selectedClasse"
+            :disabled="!selectedFiliere"
+            class="form-select"
+            @change="onClasseChange"
+          >
+            <option value="">Toutes les Classes</option>
+            <option v-for="c in classes" :key="c.id" :value="c.id">
+              {{ c.code }}
+            </option>
+          </select>
+        </div>
 
-            <!-- Barre de recherche -->
-            <div class="col-md-3">
-              <label class="form-label">Recherche</label>
-              <div class="input-group search-bar">
-                <span class="input-group-text bg-primary text-white">
-                  <i class="mdi mdi-magnify"></i>
-                </span>
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  class="form-control"
-                  placeholder="Matricule, nom ou prénom..."
-                />
-              </div>
-            </div>
+        <!-- Barre de recherche -->
+        <div class="col-md-3">
+          <div class="input-group">
+            <span class="input-group-text bg-primary text-white border-0">
+              <i class="mdi mdi-magnify"></i>
+            </span>
+            <input
+              v-model="searchQuery"
+              type="text"
+              class="form-control border-start-0"
+              placeholder="Rechercher (Matricule, nom...)"
+            />
           </div>
         </div>
+
       </div>
     </div>
+  </div>
+</div>
 
     <!-- Statistiques -->
     <div class="col-12 mb-3" v-if="hasData">
