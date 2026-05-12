@@ -6,7 +6,7 @@
         <div class="d-flex justify-content-between flex-wrap align-items-center">
           <div class="d-flex align-items-end flex-wrap">
             <div class="me-md-3 me-xl-5">
-              <h2 class="fw-bold text-dark">Statistiques et Rapports</h2>
+              <h3 class="fw-bold mb-1">Statistiques et Rapports</h3>
               <p class="mb-md-0 text-muted">Analyse en temps réel des inscriptions et performances financières</p>
             </div>
           </div>
