@@ -1,0 +1,132 @@
+# Render Blueprint — CFI CIRAS Web Admin (Vue 3 + Vite)
+# Spec: https://render.com/docs/blueprint-spec
+#
+# IMPORTANT : remplacer les URLs backend ci-dessous par les URLs Railway réelles
+# du cfibackend avant le commit.
+
+# Note : PR previews désactivées (réservées aux workspaces payants).
+# Pour les activer plus tard, ajouter :
+#   previews:
+#     generation: automatic
+
+services:
+  # -------------------------------------------------------------------
+  # ISOPROD — démo / staging miroir de la prod (branche develop)
+  # -------------------------------------------------------------------
+  - type: web
+    runtime: static
+    name: cficiraswebadmin-isoprod
+    branch: develop
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    autoDeployTrigger: commit
+
+    # SPA fallback — toutes les routes côté client → index.html
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+    headers:
+      - path: /*
+        name: Strict-Transport-Security
+        value: max-age=63072000; includeSubDomains; preload
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Permissions-Policy
+        value: camera=(), microphone=(), geolocation=(), interest-cohort=()
+      - path: /*
+        name: Content-Security-Policy
+        value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://cfibackend-isoprod.up.railway.app https://*.up.railway.app; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+
+    envVars:
+      - key: NODE_VERSION
+        value: 20.17.0
+      - key: NPM_CONFIG_PRODUCTION
+        value: 'false'
+      - key: NODE_ENV
+        value: production
+      - key: VITE_API_URL
+        value: https://cfibackend-production.up.railway.app
+      - key: VITE_APP_NAME
+        value: CFI CIRAS Web Admin — ISOPROD
+      - key: VITE_DEBUG
+        value: 'true'
+      - key: VITE_BASE_URL
+        value: /
+      - key: VITE_ENV
+        value: isoprod
+
+  # -------------------------------------------------------------------
+  # PROD — production (branche main)
+  # -------------------------------------------------------------------
+  - type: web
+    runtime: static
+    name: cficiraswebadmin-prod
+    branch: main
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    autoDeployTrigger: commit
+
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+    headers:
+      - path: /*
+        name: Strict-Transport-Security
+        value: max-age=63072000; includeSubDomains; preload
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Permissions-Policy
+        value: camera=(), microphone=(), geolocation=(), interest-cohort=()
+      - path: /*
+        name: Content-Security-Policy
+        value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://cfibackend.up.railway.app https://*.up.railway.app; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+
+    envVars:
+      - key: NODE_VERSION
+        value: 20.17.0
+      - key: NPM_CONFIG_PRODUCTION
+        value: 'false'
+      - key: NODE_ENV
+        value: production
+      - key: VITE_API_URL
+        value: https://cfibackend-production.up.railway.app
+      - key: VITE_APP_NAME
+        value: CFI CIRAS Web Admin
+      - key: VITE_DEBUG
+        value: 'false'
+      - key: VITE_BASE_URL
+        value: /
+      - key: VITE_ENV
+        value: production

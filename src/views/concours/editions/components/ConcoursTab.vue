@@ -10,7 +10,7 @@
           role="tab"
           aria-controls="editions"
           aria-selected="true"
-          >Listes concours</a
+          >Concours</a
         >
       </li>
       <li class="nav-item">
@@ -71,17 +71,6 @@ import editionsAnneesContent from './Tab/editionsContent.vue';
 import resultasContent from './Tab/resultasContent.vue';
 import HistoriqueContent from './Tab/HistoriqueContent.vue';
 </script>
-
-<style scoped>
-.drag-drop-area {
-  background: #f8f9fa;
-  border: 2px dashed #007bff;
-  cursor: pointer;
-}
-.drag-drop-area.drag-over {
-  background: #e9ecef;
-}
-</style>
 
 <style scoped>
 body {

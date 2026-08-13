@@ -18,20 +18,17 @@ export const changeConcoursStatut = (id, data) =>
 
 export const deleteConcours = (id) => gestionService.delete(`/concours/${id}`);
 
-export const getEpreuvesByConcours = (concoursId) => 
+export const getEpreuvesByConcours = (concoursId) =>
   gestionService.get(`/concours/${concoursId}/epreuves`);
 
-export const getEpreuveById = (id) => 
-  gestionService.get(`/concours/epreuves/${id}`);
+export const getEpreuveById = (id) => gestionService.get(`/concours/epreuves/${id}`);
 
-export const createEpreuve = (data) => 
-  gestionService.post('/concours/epreuves', data);
+export const createEpreuve = (data) => gestionService.post('/concours/epreuves', data);
 
-export const updateEpreuve = (id, data) => 
+export const updateEpreuve = (id, data) =>
   gestionService.put(`/gestions/concours/epreuves/${id}`, data);
 
-export const deleteEpreuve = (id) => 
-  gestionService.delete(`/gestions/concours/epreuves/${id}`);
+export const deleteEpreuve = (id) => gestionService.delete(`/gestions/concours/epreuves/${id}`);
 
 // Calculer moyennes et rangs
 export const calculerMoyennesEtRangs = (id) => gestionService.get(`/concours/${id}/moyennes-rangs`);
@@ -40,15 +37,17 @@ export const calculerMoyennesEtRangs = (id) => gestionService.get(`/concours/${i
 export const proclamerAdmissions = (id) => gestionService.patch(`/concours/${id}/proclamer`);
 
 // Télécharger liste des admis
-export const downloadAdmis = (id) =>
-  gestionService.get(`/concours/${id}/admis/export`, { responseType: 'blob' });
-
+export const downloadAdmis = (concoursId, format = 'pdf') => {
+  return gestionService.get(`/concours/${concoursId}/admis/export`, {
+    params: { format }, // Envoie ?format=pdf ou ?format=excel
+    responseType: 'blob',
+  });
+};
 // 1. Créer un candidat
 export const createCandidat = (data) => gestionService.post('/candidats', data);
 
 // 2. Ajouter une pièce justificative
-export const addPieceCandidat = (id, data) =>
-  gestionService.post(`/candidats/${id}/pieces`, data);
+export const addPieceCandidat = (id, data) => gestionService.post(`/candidats/${id}/pieces`, data);
 
 // Importation par lot des candidats
 export const importCandidats = (formData) => {
@@ -57,10 +56,8 @@ export const importCandidats = (formData) => {
 
 // Importation par lot des notes
 export const importNotesCandidats = (formData) => {
-  // 2. On utilise 'gestionFormService' et on passe directement le formData reçu
   return gestionFormService.post('/candidats/import/notes', formData);
 };
-
 
 // 3. Enregistrer une note d’épreuve
 export const addNoteEpreuve = (numTable, data) =>
@@ -73,4 +70,6 @@ export const getCandidatsByConcours = (concoursId) =>
 // 6. Récupérer un candidat par ID
 export const getCandidatById = (id) => gestionService.get(`/candidats/${id}`);
 
-
+// 7. Lister tous les candidats d’une épreuve spécifique
+export const getCandidatsByEpreuve = (concoursId, epreuve_code) =>
+  gestionService.get(`/candidats/concours/${concoursId}/epreuve`, { epreuve_code });

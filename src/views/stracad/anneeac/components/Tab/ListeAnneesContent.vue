@@ -6,7 +6,7 @@
       correspondant.
     </p>
 
-    <div class="table-responsive">
+    <div class="table">
       <table class="table table-striped">
         <thead>
           <tr>
@@ -53,6 +53,7 @@
                 :showAdd="false"
                 @edit="editAnnee"
                 @delete="confirmDelete"
+                @toggle-status="toggleAnneeStatus"
               />
             </td>
           </tr>
@@ -126,10 +127,13 @@ const saveAnnee = async () => {
   }
 };
 
+// Activation / Désactivation
+const toggleAnneeStatus = async (annee) => {
+  await anneeStore.activateAnnee(annee.id);
+};
+
 // Suppression
 const confirmDelete = async (annee) => {
-  if (confirm(`Voulez-vous vraiment supprimer l'année ${annee.code} ?`)) {
-    await anneeStore.removeAnneeAcademique(annee.id);
-  }
+  await anneeStore.removeAnneeAcademique(annee.id);
 };
 </script>

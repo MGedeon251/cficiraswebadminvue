@@ -5,6 +5,28 @@
         <h4>Liste des classes</h4>
         <p class="text-muted">Liste de toutes les classes académiques enregistrées.</p>
       </div>
+      <div class="btn-group">
+        <button
+          class="btn btn-outline-dark dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Exporter
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li>
+            <button class="dropdown-item" type="button" @click="exportClassesExcel">
+              <i class="mdi mdi-file-excel-box me-2"></i> Excel
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item" type="button" @click="exportClassesPDF">
+              <i class="mdi mdi-file-pdf-box me-2"></i> PDF
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <div class="col-12">
@@ -50,7 +72,7 @@
                 </span>
               </td>
               <td class="text-end pe-3">
-                <ItemActions
+                <ClassesItemActions
                   :item="classe"
                   concourRoute="/edition-concours/"
                   :showAdd="false"
@@ -85,7 +107,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useClasseStore } from '@/stores/academiqueStore/classeStore';
-import ItemActions from '../details/ItemActions.vue';
+import ClassesItemActions from '../details/ClassesItemActions.vue';
+import logoCFI from '@/assets/logoBase64';
+import { exportExcel } from '@/utils/exportExcel';
+import { exportPDF } from '@/utils/exportPDF';
 
 const classeStore = useClasseStore();
 
@@ -117,6 +142,53 @@ const editClasse = (classe) => {
 
 const confirmDelete = (classe) => {
   console.log('Suppression de la classe :', classe);
+};
+
+const getExportClassesData = () =>
+  classes.value.map((classe, index) => ({
+    Rang: index + 1,
+    Code: classe.code,
+    Filière: classe.filiere_nom || '-',
+    Niveau: classe.niveau_code || '-',
+    Émarge: classe.nb_etudiants ?? 0,
+    'Capacité max': classe.capacite_max ?? 0,
+  }));
+
+const exportClassesExcel = () => {
+  if (!classes.value.length) {
+    return;
+  }
+
+  exportExcel({
+    data: getExportClassesData(),
+    sheetName: 'Classes',
+    fileName: `classes_${new Date().getTime()}.xlsx`,
+  });
+};
+
+const exportClassesPDF = () => {
+  if (!classes.value.length) {
+    return;
+  }
+
+  exportPDF({
+    logoBase64: logoCFI,
+    title: 'Liste des classes',
+    filters: [
+      { label: 'Total classes', value: classes.value.length },
+      { label: 'Date', value: new Date().toLocaleDateString('fr-FR') },
+    ],
+    columns: ['Rang', 'Code', 'Filière', 'Niveau', 'Émarge', 'Capacité max'],
+    rows: classes.value.map((classe, index) => [
+      index + 1,
+      classe.code,
+      classe.filiere_nom || '-',
+      classe.niveau_code || '-',
+      classe.nb_etudiants ?? 0,
+      classe.capacite_max ?? 0,
+    ]),
+    fileName: `classes_${new Date().getTime()}.pdf`,
+  });
 };
 
 /* =====================

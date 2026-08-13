@@ -13,7 +13,7 @@ export default [
   {
     path: '/dossiers-scolaires',
     name: 'DossiersScolaires',
-    component: () => import('@/views/parcours/DossierAcademique.vue'),
+    component: () => import('@/views/parcours/DossierView.vue'),
   },
   {
     path: '/dossiers-scolaires/:id/global-informations',
@@ -21,9 +21,14 @@ export default [
     component: () => import('@/views/parcours/DossierAcademique.vue'),
   },
   {
+    path: '/absences',
+    name: 'Absences',
+    component: () => import('@/views/absence/AbscenceView.vue'),
+  },
+
+  {
     path: '/inscriptions',
     name: 'Inscriptions',
     component: () => import('@/views/inscriptions/Inscription.vue'),
   },
-
 ];

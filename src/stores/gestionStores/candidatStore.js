@@ -6,6 +6,7 @@ import {
   importNotesCandidats,
   addNoteEpreuve,
   getCandidatsByConcours,
+  getCandidatsByEpreuve,
   getCandidatById,
 } from '@/api/gestions/gestionApi';
 import { useMessageStore } from '@/stores/messages/messageStore';
@@ -64,16 +65,20 @@ export const useCandidatStore = defineStore('candidatStore', {
         this.loading = false;
       }
     },
-
     // Importer notes par lot
-    async importNotesFile(file) {
+    async importNotesFile(concoursId, file) {
       const messageStore = useMessageStore();
       this.loading = true;
       try {
-        await importNotesCandidats(file);
+        const formData = new FormData();
+        formData.append('concours_id', concoursId);
+        formData.append('file', file);
+        const response = await importNotesCandidats(formData);
         messageStore.notifySuccess('Import des notes réussi.');
+        return response.data;
       } catch (error) {
         messageStore.notifyError(extractErrorMessage(error, 'Erreur lors de l’import des notes.'));
+        throw error;
       } finally {
         this.loading = false;
       }
@@ -84,12 +89,14 @@ export const useCandidatStore = defineStore('candidatStore', {
       const messageStore = useMessageStore();
       this.loading = true;
       try {
-        await addNoteEpreuve(numTable, data);
+        const response = await addNoteEpreuve(numTable, data);
         messageStore.notifySuccess('Note enregistrée avec succès.');
+        return response.data;
       } catch (error) {
         messageStore.notifyError(
           extractErrorMessage(error, 'Erreur lors de l’enregistrement de la note.')
         );
+        throw error;
       } finally {
         this.loading = false;
       }
@@ -106,6 +113,22 @@ export const useCandidatStore = defineStore('candidatStore', {
         messageStore.notifyError(
           extractErrorMessage(error, 'Erreur lors du chargement des candidats.')
         );
+      } finally {
+        this.loading = false;
+      }
+    },
+    async fetchCandidatsByEpreuve(concoursId, epreuve_code) {
+      const messageStore = useMessageStore();
+      this.loading = true;
+
+      try {
+        const response = await getCandidatsByEpreuve(concoursId, epreuve_code);
+        this.candidats = response.data;
+      } catch (error) {
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors du chargement des candidats de l’épreuve.')
+        );
+        this.candidats = [];
       } finally {
         this.loading = false;
       }

@@ -1,21 +1,14 @@
 export default [
   { path: '/examens', name: 'Examens', component: () => import('@/views/examens/Examens.vue') },
   {
-    path: '/examens/planning/:id',
-    name: 'Planning',
-    component: () => import('@/views/examens/calendrier/sample.vue'),
-    props: true,
-  },
-  {
-    path: '/examens/planning/:id/calendrier/:semestreId',
-    name: 'Calendrier',
-    component: () => import('@/views/examens/calendrier/detail/DetailExamen.vue'),
-    props: true,
-  },
-  {
     path: '/planification-examens',
     name: 'PlanificationExamens',
     component: () => import('@/views/examens/planification/Planification.vue'),
+  },
+  {
+    path: '/planification-examens/:id/evaluations',
+    name: 'EvaluationsExamens',
+    component: () => import('@/views/examens/planification/components/tabs/PlanExamen.vue'),
   },
   {
     path: '/calendrier-examens',
