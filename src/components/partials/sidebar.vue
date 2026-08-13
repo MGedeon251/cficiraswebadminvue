@@ -253,11 +253,17 @@
         <a
           class="nav-link"
           :class="{
-            'active-parent': isParentActive(['/paiements', '/facturation', '/rapports-financiers']),
+            'active-parent': isParentActive([
+              '/paiements',
+              '/factures-finances',
+              '/rapports-financiers',
+            ]),
           }"
           data-bs-toggle="collapse"
           href="#finances"
-          :aria-expanded="isParentActive(['/paiements', '/facturation', '/rapports-financiers'])"
+          :aria-expanded="
+            isParentActive(['/paiements', '/factures-finances', '/rapports-financiers'])
+          "
         >
           <i class="mdi mdi-wallet menu-icon"></i>
           <span class="menu-title">Finances</span>
@@ -296,9 +302,9 @@
             'active-parent': isParentActive([
               '/enseignants',
               '/attribution-cours',
-              '/emplois',
-              '/conges',
-              '/programmes',
+              '/crenaux-horaires',
+              '/conges-replacement',
+              '/programmes-credits',
             ]),
           }"
           data-bs-toggle="collapse"
@@ -307,9 +313,9 @@
             isParentActive([
               '/enseignants',
               '/attribution-cours',
-              '/emplois',
-              '/conges',
-              '/programmes',
+              '/crenaux-horaires',
+              '/conges-replacement',
+              '/programmes-credits',
             ])
           "
         >
@@ -323,9 +329,9 @@
             show: isParentActive([
               '/enseignants',
               '/attribution-cours',
-              '/emplois',
-              '/conges',
-              '/programmes',
+              '/crenaux-horaires',
+              '/conges-replacement',
+              '/programmes-credits',
             ]),
           }"
           id="pedagogique"
@@ -340,13 +346,17 @@
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/emplois">Creneaux / Horaires</router-link>
+              <router-link class="nav-link" to="/crenaux-horaires">Creneaux / Horaires</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/conges">Congés & remplacements</router-link>
+              <router-link class="nav-link" to="/conges-replacement"
+                >Congés & remplacements</router-link
+              >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/programmes">Programmes / Crédits</router-link>
+              <router-link class="nav-link" to="/programmes-credits"
+                >Programmes / Crédits</router-link
+              >
             </li>
           </ul>
         </div>

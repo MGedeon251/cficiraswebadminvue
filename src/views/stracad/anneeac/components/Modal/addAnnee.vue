@@ -47,13 +47,17 @@
             </div>
 
             <div class="mb-3">
-              <label class="form-label">Description (optionnel)</label>
-              <textarea
-                v-model="form.description"
-                class="form-control"
-                rows="2"
-                placeholder="Description de l'année académique..."
-              ></textarea>
+              <label class="form-label"> Statut <span class="text-danger">*</span> </label>
+              <select 
+                v-model="form.statut" 
+                class="form-select" 
+                required
+              >
+                <option value="" disabled selected>Choisir un statut...</option>
+                <option value="PLANIFIEE">Planifiée</option>
+                <option value="OUVERTE">Ouverte</option>
+                <option value="CLOTUREE">Clôturée</option>
+              </select>
             </div>
 
             <div class="p-3 bg-light rounded mb-3">
@@ -110,10 +114,11 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useAnneeStore } from '@/stores/academiqueStore/anneStore';
 
 const anneeStore = useAnneeStore();
+const loading = computed(() => anneeStore.loading);
 
 // Props
 const props = defineProps({
@@ -126,21 +131,20 @@ const props = defineProps({
 // Emits
 const emit = defineEmits(['anneeCreated', 'anneeUpdated']);
 
-// État
+// État initial - On définit 'PLANIFIEE' par défaut pour les nouvelles créations
 const form = ref({
   code: '',
   date_debut: '',
   date_fin: '',
-  description: '',
+  statut: 'PLANIFIEE', 
   est_active: false,
 });
 
-const loading = ref(false);
 const errorMessage = ref('');
 const successMessage = ref('');
 const isEdit = ref(false);
 
-// Watch pour l'édition
+// Watch pour l'édition (Remplit le formulaire avec les données existantes)
 watch(
   () => props.anneeToEdit,
   (newVal) => {
@@ -151,20 +155,21 @@ watch(
         code: newVal.code,
         date_debut: newVal.date_debut,
         date_fin: newVal.date_fin,
-        description: newVal.description || '',
+        statut: newVal.statut || 'PLANIFIEE', // Récupère le statut de la BDD
         est_active: newVal.est_active || false,
       };
     }
-  }
+  },
+  { immediate: true }
 );
 
-// Méthodes
+// Réinitialisation du formulaire après fermeture ou création
 const resetForm = () => {
   form.value = {
     code: '',
     date_debut: '',
     date_fin: '',
-    description: '',
+    statut: 'PLANIFIEE',
     est_active: false,
   };
   errorMessage.value = '';
@@ -173,21 +178,20 @@ const resetForm = () => {
 };
 
 const validateForm = () => {
-  // Vérifier que les dates sont valides
+  if (!form.value.code.trim()) {
+    errorMessage.value = 'Le code est obligatoire.';
+    return false;
+  }
   if (!form.value.date_debut || !form.value.date_fin) {
     errorMessage.value = 'Veuillez remplir toutes les dates obligatoires.';
     return false;
   }
-
-  // Vérifier que la date de fin est après la date de début
   if (new Date(form.value.date_fin) <= new Date(form.value.date_debut)) {
     errorMessage.value = 'La date de fin doit être supérieure à la date de début.';
     return false;
   }
-
-  // Vérifier le format du code
-  if (!form.value.code.trim()) {
-    errorMessage.value = 'Le code est obligatoire.';
+  if (!form.value.statut) {
+    errorMessage.value = 'Le statut est obligatoire.';
     return false;
   }
 
@@ -201,33 +205,31 @@ const submitAnnee = async () => {
 
   if (!validateForm()) return;
 
-  loading.value = true;
-
   try {
     if (isEdit.value) {
-      // Edition
       await anneeStore.editAnneeAcademique(form.value.id, form.value);
       successMessage.value = 'Année académique modifiée avec succès !';
       emit('anneeUpdated', form.value);
     } else {
-      // Création
+      // Envoie l'objet contenant { code, date_debut, date_fin, statut, est_active } au store
       await anneeStore.addAnneeAcademique(form.value);
       successMessage.value = 'Année académique créée avec succès !';
       emit('anneeCreated', form.value);
     }
-    // Fermer le modal après succès
+
     setTimeout(() => {
-      closeModal();
-    }, 1000);
+      resetForm();
+      const modalElement = document.getElementById('anneeModal');
+      const modalInstance = bootstrap.Modal.getInstance(modalElement);
+      if (modalInstance) modalInstance.hide();
+    }, 1200);
+
   } catch (error) {
     console.error(error);
     errorMessage.value = error.message || "Une erreur est survenue lors de l'enregistrement.";
-  } finally {
-    loading.value = false;
   }
 };
 
-// Exposer les méthodes pour utilisation externe si nécessaire
 defineExpose({
   resetForm,
   openForEdit: (annee) => {

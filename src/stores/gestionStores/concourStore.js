@@ -4,228 +4,277 @@ import {
   getConcoursById,
   createConcours,
   updateConcours,
+  changeConcoursStatut,
   deleteConcours,
-  getEpreuvesConcours,
-  createEpreuves,
-  getResultatsConcours,
-  getPublicationConcours,
-  calculResultatConcour,
-  getResultatsStats,
-  getResultatsPubliees,
-  getStatistiqueConcoursGlobal,
-  getResultatsFinal,
+  getEpreuvesByConcours,
+  getEpreuveById,
+  createEpreuve,
+  updateEpreuve,
+  deleteEpreuve,
+  calculerMoyennesEtRangs,
+  proclamerAdmissions,
+  downloadAdmis,
 } from '@/api/gestions/gestionApi';
-
-import { useNotifier } from '@/stores/messages/useNotifier';
+import { useMessageStore } from '@/stores/messages/messageStore';
 import { extractErrorMessage } from '@/stores/messages/useErrorMessage';
 
-export const useConcourStore = defineStore('concourStore', {
+export const useConcoursStore = defineStore('concoursStore', {
   state: () => ({
-    concours: [],
-    concoursDetail: null,
-    epreuves: [],
-    resultats: [],
-    resultats_finaux: [],
-    publication: [],
-    statistiques: [],
+    concoursList: [],
+    concours: null,
+    epreuvesList: [], // Liste des épreuves du concours sélectionné
+    epreuve: null,     // Épreuve active pour consultation/édition
+    moyennesRangs: null,
     loading: false,
   }),
 
   actions: {
+    // =========================================================================
+    // ACTIONS CONCOURS
+    // =========================================================================
     async fetchConcours() {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         const response = await getConcours();
-        this.concours = response.data;
-      } catch (e) {
-        notifyError('Erreur lors de la récupération des concours.');
+        this.concoursList = response.data;
+      } catch (error) {
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors du chargement des concours.')
+        );
       } finally {
         this.loading = false;
       }
     },
 
     async fetchConcoursById(id) {
-      const { notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
         const response = await getConcoursById(id);
-        this.concoursDetail = response;
-      } catch (e) {
-        notifyError(e, 'Erreur lors de la récupération du concours.');
+        this.concours = response.data;
+      } catch (error) {
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors du chargement du concours.')
+        );
       } finally {
         this.loading = false;
       }
     },
 
     async addConcours(data) {
-      const { notifySuccess, notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
-        const response = await createConcours(data);
-        notifySuccess(response?.message || 'Concours créé avec succès.');
+        await createConcours(data);
+        messageStore.notifySuccess('Concours créé avec succès.');
         await this.fetchConcours();
-      } catch (e) {
-        notifyError(extractErrorMessage(e, 'Erreur lors de la création du concours.'));
+      } catch (error) {
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors de la création du concours.')
+        );
       } finally {
         this.loading = false;
       }
     },
 
     async editConcours(id, data) {
-      const { notifySuccess, notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
-        const response = await updateConcours(id, data);
-        notifySuccess(response?.message || 'Concours mis à jour avec succès.');
+        await updateConcours(id, data);
+        messageStore.notifySuccess('Concours mis à jour avec succès.');
         await this.fetchConcours();
-      } catch (e) {
-        notifyError('Erreur lors de la mise à jour du concours.');
+      } catch (error) {
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors de la mise à jour du concours.')
+        );
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async changeStatut(id, data) {
+      const messageStore = useMessageStore();
+      this.loading = true;
+      try {
+        await changeConcoursStatut(id, data);
+        messageStore.notifySuccess('Statut du concours modifié avec succès.');
+        await this.fetchConcoursById(id);
+      } catch (error) {
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors du changement de statut.')
+        );
       } finally {
         this.loading = false;
       }
     },
 
     async removeConcours(id) {
-      const { notifySuccess, notifyError } = useNotifier();
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
-        const response = await deleteConcours(id);
-        notifySuccess(response?.message || 'Concours supprimé avec succès.');
+        await deleteConcours(id);
+        messageStore.notifySuccess('Concours supprimé avec succès.');
         await this.fetchConcours();
-      } catch (e) {
-        notifyError('Erreur lors de la suppression du concours.');
+      } catch (error) {
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors de la suppression du concours.')
+        );
       } finally {
         this.loading = false;
       }
     },
 
-    async fetchEpreuvesConcours(concoursId) {
-      const { notifyError } = useNotifier();
+    // =========================================================================
+    // ACTIONS ÉPREUVES (Ajoutées pour s'aligner sur les routes)
+    // =========================================================================
+    
+    // Récupérer toutes les épreuves d'un concours spécifique
+    async fetchEpreuvesByConcours(concoursId) {
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
-        const response = await getEpreuvesConcours(concoursId);
-        this.epreuves = response.data;
-      } catch (e) {
-        notifyError('Erreur lors de la récupération des épreuves.');
+        const response = await getEpreuvesByConcours(concoursId);
+        this.epreuvesList = response.data;
+      } catch (error) {
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors du chargement des épreuves.')
+        );
       } finally {
         this.loading = false;
       }
     },
 
-    async addEpreuvesConcours(concoursId, data) {
-      const { notifySuccess, notifyError } = useNotifier();
+    // Récupérer une épreuve spécifique par son ID
+    async fetchEpreuveById(id) {
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
-        const response = await createEpreuves(concoursId, data);
-        notifySuccess(response?.message || 'Épreuves ajoutées avec succès.');
-        await this.fetchEpreuvesConcours(concoursId);
-      } catch (e) {
-        notifyError(extractErrorMessage(e, "Erreur lors de l'ajout des épreuves."));
-      } finally {
-        this.loading = false;
-      }
-    },
-    addEpreuveLocally() {
-      this.epreuves.push({
-        code: '',
-        designation: '',
-        coefficient: 1,
-        heure_debut: '',
-        heure_fin: '',
-        type_epreuve: 'écrit',
-        description: '',
-        ordre: 1,
-      });
-    },
-    removeEpreuveLocally(index) {
-      this.epreuves.splice(index, 1);
-    },
-
-    async fetchResultatsConcours(concoursId) {
-      const { notifyError } = useNotifier();
-      this.loading = true;
-      try {
-        const response = await getResultatsConcours(concoursId);
-        this.resultats = response;
-      } catch (e) {
-        notifyError('Erreur lors de la récupération des résultats.');
+        const response = await getEpreuveById(id);
+        this.epreuve = response.data;
+      } catch (error) {
+        messageStore.notifyError(
+          extractErrorMessage(error, "Erreur lors du chargement de l'épreuve.")
+        );
       } finally {
         this.loading = false;
       }
     },
 
-    async fetchPublicationConcours(concoursId) {
-      const { notifyError } = useNotifier();
+    // Créer une épreuve
+    // Note : Pense à passer le `concours_id` (ou concoursId) dans ton objet payload `data`
+    async addEpreuve(data) {
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
-        const response = await getPublicationConcours(concoursId);
-        this.publication = response.data;
-      } catch (e) {
-        notifyError('Erreur lors de la récupération de la publication.');
+        await createEpreuve(data);
+        messageStore.notifySuccess('Épreuve ajoutée avec succès.');
+        // Rafraîchit la liste si un concours est actuellement ciblé dans le payload
+        if (data.concoursId || data.concours_id) {
+          await this.fetchEpreuvesByConcours(data.concoursId || data.concours_id);
+        }
+      } catch (error) {
+        messageStore.notifyError(
+          extractErrorMessage(error, "Erreur lors de l'ajout de l'épreuve.")
+        );
       } finally {
         this.loading = false;
       }
     },
 
-    async calculerResultatConcour(concoursId, data) {
-      const { notifySuccess, notifyError } = useNotifier();
+    // Mettre à jour une épreuve
+    async editEpreuve(id, data) {
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
-        const response = await calculResultatConcour(concoursId, data);
-        this.resultats = response.data;
-        notifySuccess(response?.message || 'Calcul des résultats effectué.');
-      } catch (e) {
-        notifyError('Erreur lors du calcul des résultats.');
+        await updateEpreuve(id, data);
+        messageStore.notifySuccess('Épreuve mise à jour avec succès.');
+        // Rafraîchit la liste pour le concours ciblé
+        if (data.concoursId || data.concours_id) {
+          await this.fetchEpreuvesByConcours(data.concoursId || data.concours_id);
+        }
+      } catch (error) {
+        messageStore.notifyError(
+          extractErrorMessage(error, "Erreur lors de la modification de l'épreuve.")
+        );
       } finally {
         this.loading = false;
       }
     },
-    async fetchStatistiqueConcoursGlobal(concoursId) {
+
+    // Supprimer une épreuve
+    // `currentConcoursId` permet de recharger la liste des épreuves du concours parent juste après la suppression
+    async removeEpreuve(id, currentConcoursId = null) {
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
-        const response = await getStatistiqueConcoursGlobal(concoursId);
-        this.statistiques = response;
-        return response;
-      } catch (e) {
-        this.statistiques = null;
-        return [];
+        await deleteEpreuve(id);
+        messageStore.notifySuccess('Épreuve supprimée avec succès.');
+        if (currentConcoursId) {
+          await this.fetchEpreuvesByConcours(currentConcoursId);
+        }
+      } catch (error) {
+        messageStore.notifyError(
+          extractErrorMessage(error, "Erreur lors de la suppression de l'épreuve.")
+        );
       } finally {
         this.loading = false;
       }
     },
-    async fetchResultatsPubliee() {
-      const { notifyError } = useNotifier();
+
+    // =========================================================================
+    // ACTIONS CLASSEMENTS & RÉSULTATS
+    // =========================================================================
+    async fetchMoyennesRangs(id) {
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
-        const response = await getResultatsPubliees();
-        this.publication = response;
-      } catch (e) {
-        notifyError('Erreur lors de la récupération des concours.');
+        const response = await calculerMoyennesEtRangs(id);
+        this.moyennesRangs = response.data;
+      } catch (error) {
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors du calcul des moyennes et rangs.')
+        );
       } finally {
         this.loading = false;
       }
     },
-    async fetchStatsConcours(id) {
-      const { notifyError } = useNotifier();
+
+    async proclaimAdmissions(id) {
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
-        const response = await getResultatsStats(id);
-        this.statistiques = response;
-      } catch (e) {
-        notifyError('Erreur lors de la récupération des concours.');
+        await proclamerAdmissions(id);
+        messageStore.notifySuccess('Admissions proclamées avec succès.');
+        await this.fetchConcoursById(id);
+      } catch (error) {
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors de la proclamation des admissions.')
+        );
       } finally {
         this.loading = false;
       }
     },
-    async fetchResultatsFinaux(id) {
-      const { notifyError } = useNotifier();
+
+    async downloadAdmisList(id) {
+      const messageStore = useMessageStore();
       this.loading = true;
       try {
-        const response = await getResultatsFinal(id);
-        this.resultats_finaux = response;
-      } catch (e) {
-        notifyError('Erreur lors de la récupération des concours.');
+        const response = await downloadAdmis(id);
+        // Utilisation propre du blob pour forcer le téléchargement du PDF retourné
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `admis_concours_${id}.pdf`;
+        link.click();
+        window.URL.revokeObjectURL(url); // Libère la mémoire
+        messageStore.notifySuccess('Liste des admis téléchargée.');
+      } catch (error) {
+        messageStore.notifyError(
+          extractErrorMessage(error, 'Erreur lors du téléchargement de la liste des admis.')
+        );
       } finally {
         this.loading = false;
       }
