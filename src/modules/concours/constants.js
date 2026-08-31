@@ -1,0 +1,173 @@
+/** Constantes du module Concours. */
+
+export const CONCOURS_MODAL_ID = 'concoursModal';
+export const EPREUVE_MODAL_ID = 'epreuveConcoursModal';
+export const CANDIDAT_MODAL_ID = 'candidatConcoursModal';
+export const IMPORT_CANDIDATS_MODAL_ID = 'importCandidatsModal';
+export const IMPORT_NOTES_MODAL_ID = 'importNotesConcoursModal';
+
+/**
+ * Statuts d'un concours.
+ *
+ * Relevés sur la contrainte `CHECK` de la table `concours` :
+ * `statut IN ('PLANIFIE', 'OUVERT', 'CLOTURE', 'ANNULE')`.
+ *
+ * ⚠️ `TabDeliberation.vue` testait `statut === 'PROCLAMÉ'` pour savoir si les
+ * résultats étaient publiés. **Ce statut n'existe pas** : la condition était
+ * toujours fausse. La proclamation n'est d'ailleurs pas un statut de concours —
+ * elle écrit dans `admissions_concours`.
+ */
+export const STATUTS_CONCOURS = {
+  PLANIFIE: { code: 'PLANIFIE', label: 'Planifié', variant: 'secondary' },
+  OUVERT: { code: 'OUVERT', label: 'Ouvert', variant: 'primary' },
+  CLOTURE: { code: 'CLOTURE', label: 'Clôturé', variant: 'success' },
+  ANNULE: { code: 'ANNULE', label: 'Annulé', variant: 'danger' },
+};
+
+export const STATUT_CONCOURS_LIST = Object.values(STATUTS_CONCOURS);
+
+/** @param {string} raw @returns {{code: string, label: string, variant: string}} */
+export function statutConcoursInfo(raw) {
+  const code = String(raw ?? '')
+    .trim()
+    .toUpperCase();
+  return (
+    STATUTS_CONCOURS[code] ?? { code: 'INCONNU', label: raw || 'Inconnu', variant: 'secondary' }
+  );
+}
+
+/**
+ * Types de concours.
+ *
+ * `concours.type_concours` est une **clé étrangère** vers `types_concours(code)`.
+ * La table en contient **sept** ; le formulaire n'en proposait que **quatre**
+ * (`ENTREE`, `TEST`, `PASSERELLE`, `SPECIAL`). Les trois autres —
+ * `CONCOURS_INGE`, `CONCOURS_MASTER`, `CONCOURS_LICENCE` — étaient inaccessibles,
+ * alors qu'un concours existant les utilise : éditer le « Concours Ingénieur
+ * 2025 » lui aurait fait perdre son type.
+ *
+ * ⚠️ Aucun endpoint n'expose `types_concours`. La liste est donc figée ici, à
+ * l'image de la table. Un `GET /concours/types` la rendrait dynamique — voir
+ * §2.5 du point de reprise.
+ */
+export const TYPES_CONCOURS = [
+  { code: 'ENTREE', label: "Concours d'entrée" },
+  { code: 'TEST', label: 'Test' },
+  { code: 'PASSERELLE', label: 'Concours passerelle' },
+  { code: 'SPECIAL', label: 'Concours spécial' },
+  { code: 'CONCOURS_INGE', label: 'Concours Ingénieur' },
+  { code: 'CONCOURS_MASTER', label: 'Concours Master' },
+  { code: 'CONCOURS_LICENCE', label: 'Concours Licence' },
+];
+
+/**
+ * Types d'épreuve.
+ *
+ * `CHECK (type_epreuve IN ('ECRIT', 'ORAL', 'PRATIQUE'))`.
+ */
+export const TYPES_EPREUVE = [
+  { code: 'ECRIT', label: 'Écrit' },
+  { code: 'ORAL', label: 'Oral' },
+  { code: 'PRATIQUE', label: 'Pratique' },
+];
+
+/** @param {string} code @returns {string} */
+export const typeEpreuveLabel = (code) =>
+  TYPES_EPREUVE.find((type) => type.code === code)?.label ?? code ?? '—';
+
+/** Sexes acceptés : `CHECK (sexe IN ('M', 'F'))`. */
+export const SEXES = [
+  { code: 'M', label: 'Masculin' },
+  { code: 'F', label: 'Féminin' },
+];
+
+/** @param {string} code @returns {string} */
+export const sexeLabel = (code) => SEXES.find((sexe) => sexe.code === code)?.label ?? '—';
+
+/**
+ * Statuts d'un dossier de candidature.
+ *
+ * Relevés sur la contrainte `CHECK` de `dossiers_candidature` :
+ * `statut IN ('INCOMPLET', 'COMPLET', 'VERIFIE', 'REJETE')`. Un candidat peut
+ * n'avoir **aucun** dossier — la jointure est un `LEFT JOIN` : `statut_dossier`
+ * vaut alors `null`, ce qui n'est pas « incomplet » mais « non déposé ».
+ */
+export const STATUTS_DOSSIER = {
+  INCOMPLET: { code: 'INCOMPLET', label: 'Incomplet', variant: 'warning' },
+  COMPLET: { code: 'COMPLET', label: 'Complet', variant: 'info' },
+  VERIFIE: { code: 'VERIFIE', label: 'Vérifié', variant: 'success' },
+  REJETE: { code: 'REJETE', label: 'Rejeté', variant: 'danger' },
+};
+
+export const STATUT_DOSSIER_LIST = Object.values(STATUTS_DOSSIER);
+
+/** @param {string|null|undefined} raw @returns {{code: string, label: string, variant: string}} */
+export function statutDossierInfo(raw) {
+  const code = String(raw ?? '')
+    .trim()
+    .toUpperCase();
+
+  if (!code) return { code: 'ABSENT', label: 'Non déposé', variant: 'secondary' };
+
+  return STATUTS_DOSSIER[code] ?? { code: 'INCONNU', label: raw, variant: 'secondary' };
+}
+
+/**
+ * Règles de validation d'un candidat, portées par la **base** et non par le
+ * contrôleur : une saisie non conforme remonterait en erreur SQL brute
+ * (« violates check constraint »), illisible pour l'utilisateur.
+ *
+ * ```sql
+ * CHECK (email ~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$')
+ * CHECK (tel   ~  '^\+?[0-9]{10,15}$')
+ * CHECK (datenais > '1900-01-01')
+ * ```
+ */
+export const CANDIDAT_RULES = {
+  EMAIL: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+  TELEPHONE: /^\+?[0-9]{10,15}$/,
+  DATE_NAISSANCE_MIN: '1900-01-02',
+};
+
+/**
+ * Décisions du jury, telles qu'elles sont écrites dans `admissions_concours`.
+ *
+ * Relevées sur la contrainte `CHECK` — y compris `A_A_JOURNER`, dont
+ * l'orthographe est celle de la base et non une coquille de ce fichier :
+ * `decision_jury IN ('EN_ATTENTE', 'ADMIS', 'LISTE_ATTENTE', 'A_A_JOURNER')`.
+ *
+ * ⚠️ Ces décisions n'étaient **lisibles nulle part** : `proclamerAdmissions` les
+ * écrit, mais le classement ne les renvoyait pas et le seul autre accès était
+ * l'export binaire de la liste des admis. La jointure a été ajoutée côté backend
+ * (`getClassementConcours`).
+ */
+export const DECISIONS_JURY = {
+  ADMIS: { code: 'ADMIS', label: 'Admis', variant: 'success' },
+  LISTE_ATTENTE: { code: 'LISTE_ATTENTE', label: "Liste d'attente", variant: 'warning' },
+  A_A_JOURNER: { code: 'A_A_JOURNER', label: 'Ajourné', variant: 'danger' },
+  EN_ATTENTE: { code: 'EN_ATTENTE', label: 'En attente', variant: 'secondary' },
+};
+
+export const DECISION_JURY_LIST = Object.values(DECISIONS_JURY);
+
+/**
+ * @param {string|null|undefined} raw
+ * @returns {{code: string, label: string, variant: string}}
+ */
+export function decisionJuryInfo(raw) {
+  const code = String(raw ?? '')
+    .trim()
+    .toUpperCase();
+
+  // Un concours non proclamé n'a aucune décision : ce n'est pas « en attente »,
+  // c'est « pas encore délibéré ».
+  if (!code) return { code: 'NON_PROCLAME', label: 'Non proclamé', variant: 'light' };
+
+  return DECISIONS_JURY[code] ?? { code: 'INCONNU', label: raw, variant: 'secondary' };
+}
+
+/** Seuil d'admission par défaut, aligné sur celui du backend (`proclamerAdmissions`). */
+export const SEUIL_ADMISSION_DEFAUT = 10;
+
+/** Extensions acceptées par les imports. */
+export const IMPORT_ACCEPT = '.xlsx,.xls,.csv';

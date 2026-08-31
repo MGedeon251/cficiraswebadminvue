@@ -12,7 +12,7 @@
               <h6 class="font-weight-light">Ravi de vous revoir !</h6>
               <form class="pt-3">
                 <div class="form-group">
-                  <label for="exampleInputEmail">Email/username</label>
+                  <label for="loginUsername">Nom d'utilisateur</label>
                   <div class="input-group">
                     <div class="input-group-prepend bg-transparent">
                       <span class="input-group-text bg-transparent border-right-0">
@@ -20,11 +20,12 @@
                       </span>
                     </div>
                     <input
-                      v-model="credentials.email"
+                      id="loginUsername"
+                      v-model="credentials.username"
                       type="text"
                       class="form-control form-control-lg border-left-0"
-                      id="exampleInputEmail"
-                      placeholder="Username"
+                      placeholder="Nom d'utilisateur"
+                      autocomplete="username"
                     />
                   </div>
                 </div>
@@ -83,19 +84,26 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/authStore/authStore';
+import { useRoute, useRouter } from 'vue-router';
+import { useAuthStore } from '@/core/auth/authStore';
 
 const authStore = useAuthStore();
 const router = useRouter();
-const credentials = ref({ email: '', password: '' });
+const route = useRoute();
+
+// Le backend authentifie par `username`, pas par email : `POST /api/auth/login`
+// recherche l'utilisateur sur ce seul champ. Le formulaire envoyait `email`,
+// aucun utilisateur n'était donc jamais trouvé et la réponse était
+// invariablement « Identifiants incorrects ».
+const credentials = ref({ username: '', password: '' });
 
 const handleLogin = async () => {
-  await authStore.loginUser(credentials.value);
-  // Appelle isAuthenticated comme une fonction
-  // Accède à isAuthenticated directement comme une propriété, pas comme une fonction
-  if (authStore.isAuthenticated) {
-    router.push('/dashboard'); // Redirection après connexion réussie
-  }
+  const success = await authStore.loginUser(credentials.value);
+  if (!success) return;
+
+  // Le guard de navigation dépose la page demandée dans `redirect` quand un
+  // utilisateur non connecté tente d'y accéder : on l'y ramène après connexion.
+  const redirect = /** @type {string|undefined} */ (route.query.redirect);
+  router.push(redirect ?? '/dashboard');
 };
 </script>

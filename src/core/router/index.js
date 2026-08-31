@@ -1,0 +1,110 @@
+import { createRouter, createWebHistory } from 'vue-router';
+import DefaultLayout from '@/layouts/DefaultLayout.vue';
+import { onUnauthorized } from '@/core/api/httpClient';
+import { clearToken, getTokenScope } from '@/core/auth/tokenStorage';
+import { clearAllCache } from '@/shared/utils/cache';
+import { registerAuthGuard } from './guards';
+
+// ── Routes des modules migrés ────────────────────────────────────────────────
+// Chaque module possède son propre `routes.js` et est ajouté ici. C'est le seul
+// point du noyau à toucher pour brancher un nouveau module.
+import structureAcademiqueRoutes from '@/modules/structure-academique/routes';
+import etudiantsRoutes from '@/modules/etudiants/routes';
+import inscriptionsRoutes from '@/modules/inscriptions/routes';
+import matieresRoutes from '@/modules/matieres/routes';
+import scolariteRoutes from '@/modules/scolarite/routes';
+import examensRoutes from '@/modules/examens/routes';
+import concoursRoutes from '@/modules/concours/routes';
+import notesRoutes from '@/modules/notes/routes';
+import financesRoutes from '@/modules/finances/routes';
+import pedagogiesRoutes from '@/modules/pedagogies/routes';
+import dashboardRoutes from '@/modules/dashboard/routes';
+import statsRoutes from '@/modules/stats/routes';
+import assistantRoutes from '@/modules/assistant/routes';
+import assistantEspaceRoutes from '@/modules/assistant/espace/routes';
+import plateformeRoutes from '@/modules/plateforme/routes';
+import parametresRoutes from '@/modules/parametres/routes';
+import bibliothequeRoutes from '@/modules/bibliotheque/routes';
+import coordinationRoutes from '@/modules/coordination/routes';
+import documentsRoutes from '@/modules/documents/routes';
+import espaceNotesRoutes from '@/modules/espace-notes/routes';
+
+// ── Routes héritées, en attente de migration ─────────────────────────────────
+// Ces fichiers disparaîtront au fur et à mesure que les modules correspondants
+// rejoindront `src/modules/`. Voir docs/ARCHITECTURE.md § « Migration en cours ».
+import authRoutes from '@/routes/auth.routes';
+
+/** Routes internes, rendues dans le layout applicatif et protégées par le guard. */
+const protectedRoutes = [
+  ...dashboardRoutes,
+  ...statsRoutes,
+  ...plateformeRoutes,
+  ...parametresRoutes,
+  ...structureAcademiqueRoutes,
+  ...etudiantsRoutes,
+  ...inscriptionsRoutes,
+  ...matieresRoutes,
+  ...scolariteRoutes,
+  ...examensRoutes,
+  ...concoursRoutes,
+  ...notesRoutes,
+  ...financesRoutes,
+  ...pedagogiesRoutes,
+  ...bibliothequeRoutes,
+  ...coordinationRoutes,
+  ...documentsRoutes,
+  ...assistantRoutes,
+];
+
+const routes = [
+  ...authRoutes,
+  // L'espace notes s'ouvre dans une fenêtre à part : il ne passe **pas** par
+  // `DefaultLayout` (ni en-tête, ni menu de l'application) et porte sa propre
+  // coquille, sa propre session et sa propre garde. Voir son `routes.js`.
+  ...espaceNotesRoutes,
+  // L'espace de chat s'ouvre lui aussi dans un onglet à part, hors
+  // `DefaultLayout` : une conversation veut toute la hauteur de l'écran, que
+  // l'en-tête et le menu de l'application lui prendraient.
+  //
+  // Il **partage** en revanche la session de l'application — pas de portée de
+  // jeton distincte, pas de `meta.public` : la garde générale le protège comme
+  // n'importe quel écran interne. Voir `modules/assistant/espace/routes.js`.
+  ...assistantEspaceRoutes,
+  {
+    path: '/',
+    component: DefaultLayout,
+    children: protectedRoutes,
+  },
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+  // Revenir en haut de page à chaque navigation, sauf retour arrière navigateur.
+  scrollBehavior: (to, from, savedPosition) => savedPosition ?? { top: 0 },
+});
+
+registerAuthGuard(router);
+
+// Un 401 signifie que le jeton n'est plus valide côté serveur : on nettoie la
+// session locale et on renvoie vers la connexion. Le client HTTP ne connaît pas
+// le router (cela créerait un cycle d'imports), il expose donc ce point d'accroche.
+//
+// La porte de sortie dépend de la fenêtre : l'espace notes a sa propre session
+// et son propre écran de connexion. Y renvoyer vers `Login` afficherait
+// l'application dans une fenêtre qui n'en est pas une.
+onUnauthorized(() => {
+  clearToken();
+  clearAllCache();
+
+  const connexion = getTokenScope() === 'espace-notes' ? 'EspaceNotesConnexion' : 'Login';
+
+  if (router.currentRoute.value.name !== connexion) {
+    router.push({
+      name: connexion,
+      query: { redirect: router.currentRoute.value.fullPath },
+    });
+  }
+});
+
+export default router;

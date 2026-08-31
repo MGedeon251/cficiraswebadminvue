@@ -1,15 +1,32 @@
 <template>
-  <nav class="sidebar sidebar-offcanvas" id="sidebar" :class="{ active: mobileOpen }">
+  <!-- `sidebar-offcanvas` a été retiré : la classe déclenchait, sous 992 px, la
+       sortie d'écran prévue pour les téléphones — que plus aucun bouton ne
+       ramenait une fois le basculeur de la barre du haut supprimé. -->
+  <nav id="sidebar" class="sidebar">
+    <!-- Le basculeur n'est pas ici mais dans le bandeau de marque, à hauteur du
+         logo (`partials/header.vue`) : il commande la largeur de la colonne
+         entière, bandeau compris. -->
     <ul class="nav">
       <li class="nav-item">
-        <router-link class="nav-link" to="/home" :class="{ 'menu-active': isMenuActive('/home') }">
+        <router-link
+          class="nav-link"
+          to="/home"
+          :class="{ 'menu-active': isMenuActive('/home') }"
+          :title="repliee ? 'Tableau de Bord' : ''"
+        >
           <i class="mdi mdi-home menu-icon"></i>
           <span class="menu-title d-none d-md-inline">Tableau de Bord</span>
         </router-link>
       </li>
 
       <!-- Structure Académique -->
-      <li class="nav-item">
+      <li
+        class="nav-item"
+        :class="{ 'hover-open': survole === 'structure-academique' }"
+        @mouseenter="survolerGroupe('structure-academique')"
+        @mouseleave="survolerGroupe(null)"
+        @click="cliquerGroupe('structure-academique')"
+      >
         <a
           class="nav-link"
           :class="{ 'active-parent': isParentActive(menuGroups.structure) }"
@@ -23,9 +40,9 @@
         </a>
 
         <div
+          id="structure-academique"
           class="collapse"
           :class="{ show: isParentActive(menuGroups.structure) }"
-          id="structure-academique"
         >
           <ul class="nav flex-column sub-menu">
             <li class="nav-item">
@@ -82,7 +99,13 @@
       </li>
 
       <!-- Scolarité -->
-      <li class="nav-item">
+      <li
+        class="nav-item"
+        :class="{ 'hover-open': survole === 'scolarite' }"
+        @mouseenter="survolerGroupe('scolarite')"
+        @mouseleave="survolerGroupe(null)"
+        @click="cliquerGroupe('scolarite')"
+      >
         <a
           class="nav-link"
           :class="{ 'active-parent': isParentActive(menuGroups.scolarite) }"
@@ -96,9 +119,9 @@
         </a>
 
         <div
+          id="scolarite"
           class="collapse"
           :class="{ show: isParentActive(menuGroups.scolarite) }"
-          id="scolarite"
         >
           <ul class="nav flex-column sub-menu">
             <li class="nav-item">
@@ -121,15 +144,10 @@
               </router-link>
             </li>
 
-            <li class="nav-item">
-              <router-link
-                class="nav-link"
-                to="/absences"
-                :class="{ 'menu-active': isMenuActive('/absences') }"
-              >
-                Absences & Présences
-              </router-link>
-            </li>
+            <!-- « Absences & Présences » a été retiré : l'écran était intégralement
+                 simulé (il affichait « Fiche enregistrée avec succès » sans rien
+                 envoyer) et aucune route d'absence n'existe côté backend. À
+                 rétablir le jour où le serveur en expose. -->
 
             <li class="nav-item">
               <router-link
@@ -155,7 +173,13 @@
       </li>
 
       <!-- Examens -->
-      <li class="nav-item">
+      <li
+        class="nav-item"
+        :class="{ 'hover-open': survole === 'examens' }"
+        @mouseenter="survolerGroupe('examens')"
+        @mouseleave="survolerGroupe(null)"
+        @click="cliquerGroupe('examens')"
+      >
         <a
           class="nav-link"
           :class="{ 'active-parent': isParentActive(menuGroups.examens) }"
@@ -168,7 +192,7 @@
           <i class="menu-arrow"></i>
         </a>
 
-        <div class="collapse" :class="{ show: isParentActive(menuGroups.examens) }" id="examens">
+        <div id="examens" class="collapse" :class="{ show: isParentActive(menuGroups.examens) }">
           <ul class="nav flex-column sub-menu">
             <li class="nav-item">
               <router-link
@@ -214,7 +238,13 @@
       </li>
 
       <!-- Concours -->
-      <li class="nav-item">
+      <li
+        class="nav-item"
+        :class="{ 'hover-open': survole === 'concours' }"
+        @mouseenter="survolerGroupe('concours')"
+        @mouseleave="survolerGroupe(null)"
+        @click="cliquerGroupe('concours')"
+      >
         <a
           class="nav-link"
           :class="{ 'active-parent': isParentActive(menuGroups.concours) }"
@@ -227,7 +257,7 @@
           <i class="menu-arrow"></i>
         </a>
 
-        <div class="collapse" :class="{ show: isParentActive(menuGroups.concours) }" id="concours">
+        <div id="concours" class="collapse" :class="{ show: isParentActive(menuGroups.concours) }">
           <ul class="nav flex-column sub-menu">
             <li class="nav-item">
               <router-link
@@ -258,9 +288,25 @@
           class="nav-link"
           to="/inscriptions"
           :class="{ 'menu-active': isMenuActive('/inscriptions') }"
+          :title="repliee ? 'Inscriptions' : ''"
         >
           <i class="mdi mdi-view-headline menu-icon"></i>
           <span class="menu-title">Inscriptions</span>
+        </router-link>
+      </li>
+
+      <!-- Modules d'enseignement.
+           L'écran existait sous `views/matieres/` mais n'était référencé par
+           aucune route ni aucun menu : il était inaccessible. -->
+      <li class="nav-item">
+        <router-link
+          class="nav-link"
+          to="/modules"
+          :class="{ 'menu-active': isMenuActive('/modules') }"
+          :title="repliee ? 'Modules' : ''"
+        >
+          <i class="mdi mdi-book-open-page-variant menu-icon"></i>
+          <span class="menu-title">Modules</span>
         </router-link>
       </li>
 
@@ -270,6 +316,7 @@
           class="nav-link"
           to="/schedule"
           :class="{ 'menu-active': isMenuActive('/schedule') }"
+          :title="repliee ? 'Emploi du temps' : ''"
         >
           <i class="mdi mdi-calendar-clock menu-icon"></i>
           <span class="menu-title">Emploi du temps</span>
@@ -277,7 +324,13 @@
       </li>
 
       <!-- Finances -->
-      <li class="nav-item">
+      <li
+        class="nav-item"
+        :class="{ 'hover-open': survole === 'finances' }"
+        @mouseenter="survolerGroupe('finances')"
+        @mouseleave="survolerGroupe(null)"
+        @click="cliquerGroupe('finances')"
+      >
         <a
           class="nav-link"
           :class="{ 'active-parent': isParentActive(menuGroups.finances) }"
@@ -290,7 +343,7 @@
           <i class="menu-arrow"></i>
         </a>
 
-        <div class="collapse" :class="{ show: isParentActive(menuGroups.finances) }" id="finances">
+        <div id="finances" class="collapse" :class="{ show: isParentActive(menuGroups.finances) }">
           <ul class="nav flex-column sub-menu">
             <li class="nav-item">
               <router-link
@@ -326,7 +379,13 @@
       </li>
 
       <!-- Affaires pédagogiques -->
-      <li class="nav-item">
+      <li
+        class="nav-item"
+        :class="{ 'hover-open': survole === 'pedagogique' }"
+        @mouseenter="survolerGroupe('pedagogique')"
+        @mouseleave="survolerGroupe(null)"
+        @click="cliquerGroupe('pedagogique')"
+      >
         <a
           class="nav-link"
           :class="{ 'active-parent': isParentActive(menuGroups.pedagogique) }"
@@ -340,9 +399,9 @@
         </a>
 
         <div
+          id="pedagogique"
           class="collapse"
           :class="{ show: isParentActive(menuGroups.pedagogique) }"
-          id="pedagogique"
         >
           <ul class="nav flex-column sub-menu">
             <li class="nav-item">
@@ -378,16 +437,6 @@
             <li class="nav-item">
               <router-link
                 class="nav-link"
-                to="/conges-replacement"
-                :class="{ 'menu-active': isMenuActive('/conges-replacement') }"
-              >
-                Congés & remplacements
-              </router-link>
-            </li>
-
-            <li class="nav-item">
-              <router-link
-                class="nav-link"
                 to="/programmes-credits"
                 :class="{ 'menu-active': isMenuActive('/programmes-credits') }"
               >
@@ -398,70 +447,7 @@
         </div>
       </li>
 
-      <!-- Bibliothèque -->
-      <li class="nav-item">
-        <router-link
-          class="nav-link"
-          to="/bibliotheque"
-          :class="{ 'menu-active': isMenuActive('/bibliotheque') }"
-        >
-          <i class="mdi mdi-library menu-icon"></i>
-          <span class="menu-title">Bibliothèque</span>
-        </router-link>
-      </li>
-
       <!-- Ressources matérielles -->
-      <li class="nav-item">
-        <a
-          class="nav-link"
-          :class="{ 'active-parent': isParentActive(menuGroups.ressources) }"
-          data-bs-toggle="collapse"
-          href="#ressources"
-          :aria-expanded="isParentActive(menuGroups.ressources)"
-        >
-          <i class="mdi mdi-database menu-icon"></i>
-          <span class="menu-title">Ressources matérielles</span>
-          <i class="menu-arrow"></i>
-        </a>
-
-        <div
-          class="collapse"
-          :class="{ show: isParentActive(menuGroups.ressources) }"
-          id="ressources"
-        >
-          <ul class="nav flex-column sub-menu">
-            <li class="nav-item">
-              <router-link
-                class="nav-link"
-                to="/salles"
-                :class="{ 'menu-active': isMenuActive('/salles') }"
-              >
-                Salles & équipements
-              </router-link>
-            </li>
-
-            <li class="nav-item">
-              <router-link
-                class="nav-link"
-                to="/reservation"
-                :class="{ 'menu-active': isMenuActive('/reservation') }"
-              >
-                Réservation
-              </router-link>
-            </li>
-
-            <li class="nav-item">
-              <router-link
-                class="nav-link"
-                to="/disponibilites"
-                :class="{ 'menu-active': isMenuActive('/disponibilites') }"
-              >
-                Disponibilités
-              </router-link>
-            </li>
-          </ul>
-        </div>
-      </li>
 
       <!-- Services -->
       <li class="nav-item">
@@ -469,14 +455,34 @@
           class="nav-link"
           to="/administration"
           :class="{ 'menu-active': isMenuActive('/administration') }"
+          :title="repliee ? 'Services' : ''"
         >
           <i class="mdi mdi-briefcase menu-icon"></i>
           <span class="menu-title">Services</span>
         </router-link>
       </li>
 
-      <!-- Coordination académique -->
+      <!-- Bibliothèque -->
       <li class="nav-item">
+        <router-link
+          class="nav-link"
+          to="/bibliotheque"
+          :class="{ 'menu-active': isMenuActive('/bibliotheque') }"
+          :title="repliee ? 'Bibliothèque' : ''"
+        >
+          <i class="mdi mdi-library menu-icon"></i>
+          <span class="menu-title">Bibliothèque</span>
+        </router-link>
+      </li>
+
+      <!-- Coordination académique -->
+      <li
+        class="nav-item"
+        :class="{ 'hover-open': survole === 'coordination' }"
+        @mouseenter="survolerGroupe('coordination')"
+        @mouseleave="survolerGroupe(null)"
+        @click="cliquerGroupe('coordination')"
+      >
         <a
           class="nav-link"
           :class="{ 'active-parent': isParentActive(menuGroups.coordination) }"
@@ -490,9 +496,9 @@
         </a>
 
         <div
+          id="coordination"
           class="collapse"
           :class="{ show: isParentActive(menuGroups.coordination) }"
-          id="coordination"
         >
           <ul class="nav flex-column sub-menu">
             <li class="nav-item">
@@ -528,103 +534,20 @@
         </div>
       </li>
 
-      <!-- Diplômes -->
+      <!-- Diplômes & documents administratifs -->
       <li class="nav-item">
-        <a
+        <router-link
           class="nav-link"
-          :class="{ 'active-parent': isParentActive(menuGroups.diplomes) }"
-          data-bs-toggle="collapse"
-          href="#diplomes"
-          :aria-expanded="isParentActive(menuGroups.diplomes)"
+          to="/documents"
+          :class="{ 'menu-active': isMenuActive('/documents') }"
+          :title="repliee ? 'Diplômes & documents' : ''"
         >
           <i class="mdi mdi-certificate menu-icon"></i>
-          <span class="menu-title">Diplômes</span>
-          <i class="menu-arrow"></i>
-        </a>
-
-        <div class="collapse" :class="{ show: isParentActive(menuGroups.diplomes) }" id="diplomes">
-          <ul class="nav flex-column sub-menu">
-            <li class="nav-item">
-              <router-link
-                class="nav-link"
-                to="/demande-diplome"
-                :class="{ 'menu-active': isMenuActive('/demande-diplome') }"
-              >
-                Demande de diplôme
-              </router-link>
-            </li>
-
-            <li class="nav-item">
-              <router-link
-                class="nav-link"
-                to="/edition-diplome"
-                :class="{ 'menu-active': isMenuActive('/edition-diplome') }"
-              >
-                Édition & certification
-              </router-link>
-            </li>
-
-            <li class="nav-item">
-              <router-link
-                class="nav-link"
-                to="/historique-diplome"
-                :class="{ 'menu-active': isMenuActive('/historique-diplome') }"
-              >
-                Historique
-              </router-link>
-            </li>
-          </ul>
-        </div>
+          <span class="menu-title">Diplômes & documents</span>
+        </router-link>
       </li>
 
       <!-- Courrier -->
-      <li class="nav-item">
-        <a
-          class="nav-link"
-          :class="{ 'active-parent': isParentActive(menuGroups.courrier) }"
-          data-bs-toggle="collapse"
-          href="#courrier"
-          :aria-expanded="isParentActive(menuGroups.courrier)"
-        >
-          <i class="mdi mdi-email menu-icon"></i>
-          <span class="menu-title">Courrier & Notes</span>
-          <i class="menu-arrow"></i>
-        </a>
-
-        <div class="collapse" :class="{ show: isParentActive(menuGroups.courrier) }" id="courrier">
-          <ul class="nav flex-column sub-menu">
-            <li class="nav-item">
-              <router-link
-                class="nav-link"
-                to="/courriers"
-                :class="{ 'menu-active': isMenuActive('/courriers') }"
-              >
-                Courriers
-              </router-link>
-            </li>
-
-            <li class="nav-item">
-              <router-link
-                class="nav-link"
-                to="/notes-admin"
-                :class="{ 'menu-active': isMenuActive('/notes-admin') }"
-              >
-                Notes administratives
-              </router-link>
-            </li>
-
-            <li class="nav-item">
-              <router-link
-                class="nav-link"
-                to="/archivage"
-                :class="{ 'menu-active': isMenuActive('/archivage') }"
-              >
-                Archivage
-              </router-link>
-            </li>
-          </ul>
-        </div>
-      </li>
 
       <!-- Notifications -->
       <li class="nav-item">
@@ -632,6 +555,7 @@
           class="nav-link"
           to="/notification"
           :class="{ 'menu-active': isMenuActive('/notification') }"
+          :title="repliee ? 'Notifications' : ''"
         >
           <i class="mdi mdi-bell menu-icon"></i>
           <span class="menu-title">Notifications</span>
@@ -644,6 +568,7 @@
           class="nav-link"
           to="/statistiques"
           :class="{ 'menu-active': isMenuActive('/statistiques') }"
+          :title="repliee ? 'Statistiques' : ''"
         >
           <i class="mdi mdi-chart-bar menu-icon"></i>
           <span class="menu-title">Statistiques</span>
@@ -656,39 +581,102 @@
           class="nav-link"
           to="/assistant-ai"
           :class="{ 'menu-active': isMenuActive('/assistant-ai') }"
+          :title="repliee ? 'Assistant AI' : ''"
         >
           <i class="mdi mdi-robot menu-icon text-primary"></i>
           <span class="menu-title fw-bold">Assistant AI</span>
           <span class="badge badge-info ms-2 small" style="font-size: 10px"> Beta </span>
         </router-link>
       </li>
-
       <!-- Paramètres -->
       <li class="nav-item">
         <router-link
           class="nav-link"
           to="/settings"
           :class="{ 'menu-active': isMenuActive('/settings') }"
+          :title="repliee ? 'Paramètres' : ''"
         >
           <i class="mdi mdi-settings menu-icon"></i>
           <span class="menu-title">Paramètres</span>
         </router-link>
+      </li>
+      <!--
+        Espace de chat — un `a target="_blank"`, et non un `router-link`.
+
+        L'espace s'ouvre hors du layout applicatif, dans son propre onglet : une
+        conversation veut toute la hauteur de l'écran, que cette barre et
+        l'en-tête lui prendraient. Y naviguer depuis ici remplacerait
+        l'application par lui dans le même onglet — exactement ce qu'on ne veut
+        pas. Il partage en revanche la session : l'onglet s'ouvre connecté.
+      -->
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          href="/espace-chat"
+          target="_blank"
+          rel="noopener"
+          :title="repliee ? 'Espace de chat' : ''"
+        >
+          <i class="mdi mdi-forum-outline menu-icon text-primary"></i>
+          <span class="menu-title">Espace de chat</span>
+          <i class="mdi mdi-open-in-new ms-2 small text-muted"></i>
+        </a>
       </li>
     </ul>
   </nav>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { useRoute } from 'vue-router';
-const route = useRoute();
-defineProps({
-  mobileOpen: {
-    type: Boolean,
-    default: false,
-  },
-});
+import { useSidebarRepli } from '@/shared/composables/useSidebarRepli';
 
-defineEmits(['close-sidebar']);
+/**
+ * La barre latérale de navigation.
+ *
+ * ## Repliée, elle ouvre ses groupes au survol
+ *
+ * Sous 1440 px, elle se réduit à ses icônes (`useSidebarRepli`). Les
+ * sous-menus sont alors masqués par la feuille du gabarit — et sans rien de
+ * plus, **sept des dix rubriques deviendraient inatteignables** : leur entrée
+ * de premier niveau n'est pas une route, seulement l'en-tête d'un groupe.
+ *
+ * Le gabarit prévoyait ce cas : ses règles `.hover-open` sortent le titre et le
+ * sous-menu en surimpression, à droite de l'icône. Mais la classe était posée
+ * par un script jQuery (`public/js/hoverable-collapse.js`) qui la conditionne à
+ * `body.sidebar-icon-only`, là où l'application marque `.container-scroller` :
+ * il ne s'est jamais déclenché. C'est ce composant qui la pose désormais, au
+ * survol, et **seulement quand la barre est repliée** — déployée, les groupes
+ * s'ouvrent au clic, comme avant.
+ */
+const route = useRoute();
+
+const { repliee } = useSidebarRepli();
+
+/** Le groupe dont le sous-menu est ouvert en surimpression. */
+const survole = ref(null);
+
+/** @param {string|null} id Identifiant du groupe, ou `null` à la sortie. */
+const survolerGroupe = (id) => {
+  survole.value = repliee.value ? id : null;
+};
+
+/**
+ * Le clic sur un groupe replié ouvre lui aussi sa surimpression.
+ *
+ * S'en remettre au seul survol supposait une souris, et surtout que le
+ * déplacement soit assez lent pour que le navigateur émette l'événement. Un
+ * clic sur l'icône ne produisait, lui, aucun effet visible : `data-bs-toggle`
+ * dépliait bien le sous-menu, mais la feuille du gabarit le masque en mode
+ * icônes. Cliquer sans que rien ne bouge est ce qui donne l'impression que le
+ * menu ne répond plus.
+ *
+ * @param {string} id
+ */
+const cliquerGroupe = (id) => {
+  if (!repliee.value) return;
+  survole.value = survole.value === id ? null : id;
+};
 
 const menuGroups = {
   structure: [
@@ -699,7 +687,11 @@ const menuGroups = {
     '/semestres',
   ],
 
-  scolarite: ['/etudiants', '/dossiers-scolaires', '/absences', '/notes', '/deliberations'],
+  scolarite: ['/etudiants', '/dossiers-scolaires', '/notes', '/deliberations'],
+
+  // Les trois écrans de la coordination : attribution des thèmes, soutenances
+  // et suivi des finalistes. Le groupe s'ouvre dès que l'un d'eux est actif.
+  coordination: ['/themes-memoires', '/soutenances', '/statut'],
 
   examens: [
     '/planification-examens',
@@ -708,7 +700,7 @@ const menuGroups = {
     '/rapport-examens',
   ],
 
-  concours: ['/edition-concours', '/resultats-concours', '/rapport-concours'],
+  concours: ['/edition-concours', '/rapport-concours'],
 
   finances: ['/paiements-finances', '/factures-finances', '/rapports-financiers'],
 
@@ -716,17 +708,9 @@ const menuGroups = {
     '/enseignants',
     '/attribution-cours',
     '/crenaux-horaires',
-    '/conges-replacement',
     '/programmes-credits',
+    '/schedule',
   ],
-
-  ressources: ['/salles', '/reservation', '/disponibilites'],
-
-  coordination: ['/themes-memoires', '/soutenances', '/statut'],
-
-  diplomes: ['/demande-diplome', '/edition-diplome', '/historique-diplome'],
-
-  courrier: ['/courriers', '/notes-admin', '/archivage'],
 };
 
 const isMenuActive = (basePath) => {
@@ -741,6 +725,69 @@ const isParentActive = (childRoutes) => {
 </script>
 
 <style scoped>
+/*
+  ─── Les groupes, une fois la barre repliée ──────────────────────────────
+
+  Sept rubriques sur dix n'ont pas de route propre : leur entrée de premier
+  niveau n'est que l'en-tête d'un groupe. Repliées, elles ne sont atteignables
+  que par cette surimpression — si elle ne s'affiche pas, le menu ne répond
+  plus, et c'est ce qui a été constaté à l'usage.
+
+  La feuille du gabarit décrit bien un affichage de ce genre, mais il repose sur
+  ses propres hypothèses : `@media (min-width: 992px)`, `overflow` rétabli au
+  bon niveau, `position` posée sur le bon élément. Une seule qui saute et la
+  surimpression reste invisible, sans que rien ne l'indique. On la décrit donc
+  ici en entier : ces règles-ci sont *scopées*, donc plus spécifiques, et
+  gagnent quoi qu'il arrive.
+*/
+.sidebar-icon-only .sidebar .nav {
+  /* Sans quoi la surimpression est coupée net au bord des 70 px. */
+  overflow: visible;
+}
+
+.sidebar-icon-only .sidebar .nav > .nav-item {
+  /* Le repère à partir duquel la surimpression se positionne. */
+  position: relative;
+}
+
+/* Le libellé du groupe, sorti à droite de l'icône. */
+.sidebar-icon-only .sidebar .nav > .nav-item.hover-open > .nav-link .menu-title {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  left: 70px;
+  top: 0;
+  bottom: 0;
+  width: 220px;
+  padding: 0.5rem 1.4rem;
+  background: #ffffff;
+  color: #4d83ff;
+  text-align: left;
+  z-index: 12;
+  box-shadow: 4px 0 7px 0 rgba(182, 185, 189, 0.25);
+}
+
+/* Le sous-menu, juste en dessous. `display` doit l'emporter sur le `none` que
+   le gabarit applique à tout `.collapse` en mode icônes. */
+.sidebar-icon-only .sidebar .nav > .nav-item.hover-open > .collapse,
+.sidebar-icon-only .sidebar .nav > .nav-item.hover-open > .collapse.show {
+  display: block;
+  position: absolute;
+  left: 70px;
+  top: 100%;
+  width: 220px;
+  padding: 0.35rem 0;
+  background: #ffffff;
+  border-radius: 0 0 5px 0;
+  z-index: 12;
+  box-shadow: 4px 4px 7px 0 rgba(182, 185, 189, 0.25);
+}
+
+.sidebar-icon-only .sidebar .nav > .nav-item.hover-open .sub-menu .nav-link {
+  text-align: left;
+  padding-left: 1.4rem;
+}
+
 .nav-link.active-parent {
   background-color: #f0f8ff;
   color: #4d83ff !important;
@@ -786,55 +833,20 @@ const isParentActive = (childRoutes) => {
   transition: all 0.1s ease;
 }
 
-/* Repli desktop : garde seulement les icônes */
-@media (min-width: 992px) {
-  .sidebar-icon-only .sidebar {
-    width: 70px;
-  }
+/*
+  Le repli lui-même n'est pas décrit ici.
 
-  .sidebar-icon-only .sidebar .menu-title,
-  .sidebar-icon-only .sidebar .menu-arrow,
-  .sidebar-icon-only .sidebar .badge {
-    display: none !important;
-  }
+  Ce bloc en tenait une seconde version, incomplète et pour partie inopérante :
+  un style *scopé* n'ajoute son attribut qu'au dernier sélecteur, si bien que
+  `.sidebar-icon-only .main-panel` ne visait rien — `.main-panel` appartient à
+  `DefaultLayout`. La barre se réduisait à 70 px, le panneau restait calculé sur
+  257, et 187 px de blanc s'ouvraient entre les deux.
 
-  .sidebar-icon-only .main-panel {
-    width: calc(100% - 70px);
-  }
-
-  .sidebar-icon-only .sidebar .nav .nav-item .nav-link {
-    justify-content: center;
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  .sidebar-icon-only .sidebar .nav .nav-item .nav-link .menu-icon {
-    margin-right: 0;
-  }
-
-  .sidebar-icon-only .sidebar .collapse.show {
-    display: none;
-  }
-}
-
-/* Mobile : ouverture / fermeture de la sidebar */
-@media (max-width: 991px) {
-  .sidebar.sidebar-offcanvas {
-    position: fixed;
-    left: -260px;
-    top: 0;
-    bottom: 0;
-    width: 260px;
-    z-index: 1030;
-    transition: left 0.25s ease;
-  }
-
-  .sidebar.sidebar-offcanvas.active {
-    left: 0;
-  }
-
-  .main-panel {
-    width: 100%;
-  }
-}
+  La feuille du gabarit (`assets/css/style.css`, section « Layouts ») décrit
+  déjà ce mode en entier — largeur, bandeau de marque, panneau, et surtout les
+  sous-menus en surimpression au survol, que cette copie ne connaissait pas et
+  que sa règle `.collapse.show { display: none }` aurait de surcroît neutralisés.
+  On s'appuie dessus ; les seuls correctifs nécessaires sont dans
+  `DefaultLayout`, hors portée scopée, là où ils peuvent s'appliquer.
+*/
 </style>
